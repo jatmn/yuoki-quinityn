@@ -6,12 +6,14 @@ Date: 2026-10-07
     - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
     - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
     - Added local petrochemical research and Yuoki rocket component alternatives.
-    - Added 17 native Tips and Tricks progression chapters.
+    - Added 51 native Tips and Tricks progression chapters.
     - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
     - Added planet-exclusive science and infinite mining productivity / plasma damage research.
     - Added smog, slag districts, buried machinery and low pollution absorption.
     - Limited starting ore and made emergency resource conversions hand-crafting only.
   Changes:
+    - Anchored the field survey and Yuoki tree beneath planet discovery; require Quinityn science after Materials.
+    - Split bulk unlocks into production and machine upgrade tiers with representative research icons and guide entries.
     - Added independent unicomp coverage/scale, default-on cliffs and Quinityn enemy-base controls.
     - Enlarged the bottle badge for 32-pixel inventory readability.
     - Reworked coastlines into smaller organic, mostly connected industrial districts; removed the forced starter pond.
@@ -27,6 +29,7 @@ Date: 2026-10-07
     - Matched the hand-sorting recipe icon to its salvage input and added direct guide/tooltip links.
     - Added missing localized surface units and custom prototype/interface names.
   Compatibility:
+    - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.
     - Targets the pending Yuoki and Engines 1.3.0 Factorio 2.1 branches.
     - Preserves upstream unlock prerequisites and the heavy-oil conversion opt-out.

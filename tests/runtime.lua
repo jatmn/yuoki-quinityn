@@ -9,8 +9,6 @@ script.on_init(function()
   check(not force.technologies["quinityn-arrival"].researched,"arrival locked before landing")
   check(not force.recipes["y-crusher"].enabled,"Yuoki locked before landing")
   check(not force.recipes["ye_farm"].enabled,"Engines locked before landing")
-  force.technologies["planet-discovery-quinityn"].researched=true
-  check(not force.technologies["quinityn-arrival"].researched,"discovery alone does not unlock Yuoki")
   local surface=game.planets.quinityn.create_surface()
   surface.request_to_generate_chunks({0,0},12)
   surface.force_generate_chunk_requests()
@@ -36,6 +34,10 @@ script.on_init(function()
   local water=surface.find_tiles_filtered{area={{-300,-300},{300,300}},name={"water","deepwater","lava","oil-ocean-deep"}}
   check(#water==0,"all natural liquid tiles are unicomp")
   local character=surface.create_entity{name="character",position={0,0},force=force}
+  progression.arrive{valid=true,character=character,force=force,physical_surface=surface}
+  check(not force.technologies["quinityn-arrival"].researched,"physical presence without discovery cannot unlock survey")
+  force.technologies["planet-discovery-quinityn"].researched=true
+  check(not force.technologies["quinityn-arrival"].researched,"discovery alone does not unlock Yuoki")
   -- Headless cannot create LuaPlayer instances. Exercise the landing handler with
   -- a narrow player facade backed by real force/surface/character objects.
   progression.arrive{valid=true,character=character,force=force,
@@ -106,6 +108,17 @@ script.on_event(defines.events.on_tick,function(event)
     check(not other.technologies["quinityn-arrival"].researched and not other.recipes["y-crusher"].enabled,"new force remains locked")
     force.technologies["quinityn-materials"].researched=true
     check(force.recipes["y-crusher"].enabled,"materials research unlocks crusher")
+    check(force.recipes["y-crush-unicomp-raw"].enabled and not force.recipes["y-crush-blue_whead"].enabled,
+      "Materials enables plain crushing but not tool-assisted crushing")
+    check(not force.recipes["y_crusher2"].enabled,"Materials does not unlock the second crusher")
+    force.technologies["quinityn-excavation"].researched=true
+    check(force.recipes["y-digfdirt"].enabled and not force.recipes["y-digfdirt2"].enabled,
+      "Excavation enables plain digging but not drill-head digging")
+    force.technologies["quinityn-tooling"].researched=true
+    check(force.recipes["y-crush-blue_whead"].enabled and force.recipes["y-digfdirt2"].enabled,
+      "Tooling unlocks head-assisted production only at its separate tier")
+    force.technologies["quinityn-advanced-machining"].researched=true
+    check(force.recipes["y_crusher2"].enabled,"Advanced machining unlocks the second crusher")
     force.technologies["quinityn-oil-processing"].researched=true
     progression.research{research=force.technologies["quinityn-oil-processing"]}
     check(force.technologies["oil-processing"].researched,"local crude-oil milestone grants oil processing")

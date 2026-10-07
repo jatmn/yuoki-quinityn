@@ -34,7 +34,7 @@ for _, name in ipairs(names) do
       if not data.raw.technology[bridge] then
         data:extend({{type="technology",name=bridge,
           localised_name={"technology-name."..tech},
-          icon="__Yuoki__/graphics/icons/sign_tech_icon.png",icon_size=64,
+          icons=table.deepcopy(data.raw.technology[tech].icons),
           prerequisites={tech,prerequisite},research_trigger={type="scripted",trigger_description={"quinityn.bridge"}},
           effects={},hidden=true}})
       end

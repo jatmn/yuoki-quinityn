@@ -16,6 +16,8 @@ end
 function M.arrive(player)
   if not player or not player.valid or (not player.character and not player.cutscene_character and player.physical_controller_type ~= defines.controllers.character) or not is_quinityn(player.physical_surface) then return end
   local force=player.force
+  -- Discovery anchors this whole branch and must precede the scripted survey.
+  if not force.technologies["planet-discovery-quinityn"].researched then return end
   local tech=force.technologies["quinityn-arrival"]
   if tech and not tech.researched then
     force.script_trigger_research("quinityn-arrival")

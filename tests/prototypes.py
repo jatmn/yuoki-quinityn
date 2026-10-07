@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==17
+assert len(tips)==51
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 17 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 51 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -103,3 +103,27 @@ assert {p['name']:p['amount'] for p in sort['results']}=={'y-res1':2,'y-res2':2,
 assert unlocks['quinityn-hand-sort']==['quinityn-arrival']
 assert 'hand-crafting' in D['character']['character']['crafting_categories']
 print('PASS: planet-specific map control membership and visible salvage sorting identity/unlock')
+
+# Research is anchored beyond space travel, and only Materials bootstraps without local science.
+assert T['quinityn-arrival']['prerequisites']==['planet-discovery-quinityn']
+assert 'space-science-pack' in [i[0] for i in T['planet-discovery-quinityn']['unit']['ingredients']]
+for name,t in T.items():
+ if not name.startswith('quinityn-'):continue
+ assert 'planet-discovery-quinityn' in ancestry(name),name
+ if t.get('unit') and name!='quinityn-materials':
+  assert 'quinityn-research-data' in [i[0] for i in t['unit']['ingredients']],name
+ assert 'sign_tech_icon' not in str(t.get('icons',t.get('icon',''))),name
+for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fuel-raw','y-crush-green_whead'),
+ ('y-digfdirt','y-digfdirt2'),('y-pure-iron','y_pure_iron_wtool'),('y-pure-copper','y_pure_copper_wtool'),
+ ('y-water-gen','y-water-gen-e'),('y-crusher','y_crusher2'),('y-heat-form-press','y_formpress2'),('y-mining-drill','y-mining-drill-e2'),
+ ('y-accumulator-m','y-accumulator-m-t2'),('y-accumulator-b','y-accumulator-b-t2'),
+ ('y-accumulator-b-t2','y-accumulator-b-tx'),('ye_fassembly1','ye_fassembly2'),
+ ('y_turret_gun1f12','y_turret_gun2f12'),('yi_armor_gray','yi_armor_red'),('yi_armor_red','yi_armor_gold'),
+ ('yi_armor_gold','yi_walker_a'),('yi_walker_a','yi_walker_c'),
+ ('y-pink-module-1','y-pink-module-2'),('y-pink-module-2','y-pink-module-3'),
+ ('y-speed-module-1','y-speed-module-2'),('y-green-module-1','y-green-module-2'),
+ ('ye_dna_animal2','ye_dna_animal3'),('ye_dna_animal3','ye_dna_animal4'),
+ ('yi_construction-robot','j_construction2-robot'),('yi_logistic-robot','j_logistic2-robot')]:
+ a,b=unlocks[first][0],unlocks[upgrade][0]
+ assert a!=b and a in ancestry(b),(first,upgrade,a,b)
+print('PASS: discovery ancestry, mandatory post-Materials science, representative icons and ordered production tiers')

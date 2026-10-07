@@ -3,12 +3,14 @@ Yuoki ce7918f; Engines dd13f42
 Validated 2026-10-07
 
 PROTOTYPES
-PASS: 867 named upstream recipe gates; technology DAG; 17 guide chapters; foundations; science sinks; pollution
+PASS: 867 named upstream recipe gates; technology DAG; 51 guide chapters; foundations; science sinks; pollution
 PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons
 PASS: planet-specific map control membership and visible salvage sorting identity/unlock
+PASS: discovery ancestry, mandatory post-Materials science, representative icons and ordered production tiers
 
 REACHABILITY
-Closure: 512 items; 181 technologies; 85 machines; 22 iterations
+PASS: first Quinityn science producible after Materials, before Power
+Closure: 512 items; 216 technologies; 85 machines; 22 iterations
 low-density-structure : low-density-structure
 processing-unit : processing-unit
 quinityn-burner-separator : quinityn-burner-separator
@@ -17,15 +19,15 @@ quinityn-research-data : quinityn-research-data
 rocket-fuel : y_mixedfuel2rocketfuel
 rocket-silo : rocket-silo
 y-atomic-constructor : y-atomic-constructor
-PASS: local zero-inventory / zero-research rocket and infinite-research science dependency closure
+PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure
 
 BOOTSTRAP_BUDGET
-y-res1 6566 / 125000 starting units
-y-res2 3227 / 125000 starting units
+y-res1 6878 / 125000 starting units
+y-res2 3371 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 106 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 206 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
 Seed 420151202: land 59.2%, connected 82.7%, starter wrecks 300, outer wrecks 356, occupied districts 10/100
@@ -38,7 +40,6 @@ PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
 PASS: artificial starter pond removed
 PASS: dry landing plateau
 PASS: abundant clustered starter salvage
@@ -46,6 +47,8 @@ PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
 PASS: natural stockpile can be mined
 PASS: stockpile yields the sorting ingredient
@@ -61,7 +64,6 @@ PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
 PASS: artificial starter pond removed
 PASS: dry landing plateau
 PASS: abundant clustered starter salvage
@@ -69,6 +71,8 @@ PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
 PASS: natural stockpile can be mined
 PASS: stockpile yields the sorting ingredient
@@ -84,7 +88,6 @@ PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
 PASS: artificial starter pond removed
 PASS: dry landing plateau
 PASS: abundant clustered starter salvage
@@ -92,6 +95,8 @@ PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
 PASS: natural stockpile can be mined
 PASS: stockpile yields the sorting ingredient
@@ -112,6 +117,11 @@ PASS: separator selects water recipe
 PASS: offshore pump can be placed at unicomp inlet
 PASS: new force remains locked
 PASS: materials research unlocks crusher
+PASS: Materials enables plain crushing but not tool-assisted crushing
+PASS: Materials does not unlock the second crusher
+PASS: Excavation enables plain digging but not drill-head digging
+PASS: Tooling unlocks head-assisted production only at its separate tier
+PASS: Advanced machining unlocks the second crusher
 PASS: local crude-oil milestone grants oil processing
 PASS: rocket silo can be placed on Quinityn
 PASS: receiving platform created

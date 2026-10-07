@@ -57,6 +57,7 @@ All development updates remain **0.1.0** until `main` is stable for the initial 
 - `prototypes/planet.lua`: planet, navigation route, wasteland terrain, unicomp sea and generation controls.
 - `prototypes/production.lua`: bootstrap, science, foundations and orbital recipes.
 - `prototypes/technology.lua`: finite and infinite research.
+- `prototypes/research-tiers.lua`: explicit production upgrades, their prerequisites, representative icons and recipe assignments.
 - `prototypes/recipe-stages.lua`: upstream recipe ownership and progression families.
 - `data-final-fixes.lua`: final visit gates, preservation of prior unlock requirements and foundation compatibility.
 - `scripts/progression.lua`: physical arrival, research bridges, configuration reconciliation and limited starter patches.

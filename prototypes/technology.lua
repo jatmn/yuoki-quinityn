@@ -1,12 +1,19 @@
-local icon = "__Yuoki__/graphics/icons/sign_tech_icon.png"
+local function icons(name)
+  local item=data.raw.item[name] or data.raw.tool[name] or data.raw.armor[name] or data.raw.ammo[name] or data.raw.module[name]
+  assert(item,"Missing research icon item: "..name)
+  return item.icons and table.deepcopy(item.icons) or {{icon=item.icon,icon_size=item.icon_size or 64}}
+end
 local function unlock(name) return {type="unlock-recipe",recipe=name} end
 local discovery = table.deepcopy(data.raw.technology["planet-discovery-vulcanus"])
 discovery.name = "planet-discovery-quinityn"
-discovery.icon = "__space-age__/graphics/technology/fulgora.png"
+discovery.icon = nil
+discovery.icon_size = nil
+discovery.icons = table.deepcopy(data.raw.planet.quinityn.icons)
 discovery.effects = {{type="unlock-space-location",space_location="quinityn",use_icon_overlay_constant=true}}
 discovery.localised_name = {"technology-name.planet-discovery-quinityn"}
 discovery.localised_description = {"technology-description.planet-discovery-quinityn"}
-local landing = {type="technology",name="quinityn-arrival",icon=icon,icon_size=64,
+local landing = {type="technology",name="quinityn-arrival",icons=icons("quinityn-salvage"),
+  prerequisites={"planet-discovery-quinityn"},
   effects={}, research_trigger={type="scripted",trigger_description={"quinityn.land-to-unlock"}},
   order="y-a", essential=true}
 for _, name in ipairs({"hand-sort","iron","copper","carbon","stone","timber","burner-separator","water"}) do
@@ -15,27 +22,32 @@ end
 data:extend({discovery,landing})
 -- A single shared foundation followed by focused industrial disciplines.
 local stages = {
-  {"materials", "arrival", 30},
-  {"power", "materials", 60},
-  {"cimota", "power", 100},
-  {"engines", "cimota", 120},
-  {"refining", "engines", 150},
-  {"agriculture", "refining", 180},
-  {"logistics", "refining", 180},
-  {"defense", "power", 100},
-  {"quantum", "agriculture", 250},
-  {"trade", "quantum", 300},
-  {"mastery", "trade", 500},
-  {"orbital", "quantum", 200}
+  {"materials", {"arrival"}, 30, "y-crusher"},
+  {"power", {"materials"}, 60, "y-steam-turbine"},
+  {"cimota", {"power"}, 100, "y-atomic-constructor"},
+  {"engines", {"cimota"}, 120, "y-sfe"},
+  {"refining", {"engines","advanced-components"}, 150, "y_smelter"},
+  {"agriculture", {"refining"}, 180, "ye_farm"},
+  {"logistics", {"advanced-components"}, 100, "y-inserter-fast"},
+  {"defense", {"power","washing"}, 100, "y_turret_gun1f12"},
+  {"quantum", {"crystal-processing","energy-storage"}, 250, "y-atomic-quantum-composer"},
+  {"trade", {"quantum","packaging"}, 300, "y-stargate"},
+  {"mastery", {"trade","maintenance","reactors"}, 500, "y_trade_ultimate"},
+  {"orbital", {"quantum"}, 200, "rocket-silo"}
 }
+for _, tier in ipairs(require("prototypes.research-tiers")) do
+  stages[#stages+1]={tier.name,tier.prerequisites,tier.count,tier.icon}
+end
 for i, s in ipairs(stages) do
   local science = {{"automation-science-pack",1}}
   if s[1] ~= "materials" then table.insert(science,{"logistic-science-pack",1}) end
-  if s[1] ~= "materials" and s[1] ~= "power" and s[1] ~= "defense" then
+  if s[1] ~= "materials" then
     table.insert(science,{"quinityn-research-data",1})
   end
-  data:extend({{type="technology",name="quinityn-"..s[1],icon=icon,icon_size=64,
-    effects={},prerequisites={"quinityn-"..s[2]},
+  local prerequisites={}
+  for _, parent in ipairs(s[2]) do prerequisites[#prerequisites+1]="quinityn-"..parent end
+  data:extend({{type="technology",name="quinityn-"..s[1],icons=icons(s[4]),
+    effects={},prerequisites=prerequisites,
     unit={count=s[3],time=20,ingredients=science},order="y-"..string.format("%02d",i)}})
 end
 table.insert(data.raw.technology["quinityn-materials"].effects,unlock("quinityn-research-data"))
@@ -50,10 +62,10 @@ table.insert(orbital.prerequisites,"rocket-silo")
 table.insert(orbital.effects,unlock("quinityn-low-density-structure"))
 table.insert(orbital.effects,unlock("quinityn-processing-unit"))
 for _, definition in ipairs({
-  {name="quinityn-mining-productivity",effect={type="mining-drill-productivity-bonus",modifier=0.1}},
-  {name="quinityn-plasma-damage",effect={type="ammo-damage",ammo_category="plasma",modifier=0.1}}
+  {name="quinityn-mining-productivity",icon="y-mining-drill-e2",effect={type="mining-drill-productivity-bonus",modifier=0.1}},
+  {name="quinityn-plasma-damage",icon="y_ammo_plasma",effect={type="ammo-damage",ammo_category="plasma",modifier=0.1}}
 }) do
-  data:extend({{type="technology",name=definition.name,icon=icon,icon_size=64,
+  data:extend({{type="technology",name=definition.name,icons=icons(definition.icon),
     max_level="infinite",upgrade=true,
     prerequisites={"quinityn-mastery","quinityn-orbital","production-science-pack","utility-science-pack","space-science-pack"},
     effects={definition.effect},

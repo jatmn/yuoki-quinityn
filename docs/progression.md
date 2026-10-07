@@ -1,6 +1,6 @@
 # Quinityn progression
 
-The same progression is available inside Factorio through **17 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **51 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -17,7 +17,7 @@ The starting plateau provides **125,000–150,000 N4 and 125,000–150,000 F7**,
 5. Develop the native N4/F7 lines. Making reactor fuel awards Technic Signs. A Durotal block, compressed F7 and a sign produce five Quinityn research data packs in a Yuoki factory on Quinityn. Research vanilla Circuit network for the arithmetic combinator needed by the first factory; its recipe now unlocks with Materials. Only `ye_fassembly1`, `ye_fassembly2` and `ye_fassembly_sp` accept the new science category.
 6. Research Cimota reconstruction. Solidify ocean unicomp in a Cimota and use the **existing Yuoki recipes** for ordinary resources. This replaces manual ore dressing for sustained production.
 
-A constructive budget reserves 600 red packs, 400 green packs, 100 Quinityn data packs, two labs, the first Yuoki factory, a Cimota and 500 coal. The current material totals are recorded in [validation](validation.md), before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
+A constructive budget reserves 600 red packs, 400 green packs, 160 Quinityn data packs, two labs, the first Yuoki factory, a Cimota and 500 coal. The current material totals are recorded in [validation](validation.md), before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
 
 The new dedicated **Qualify a Technic Sign** recipe produces only one sign from 12 reinforced gears, 8 Durotal structures, 20 conductive wire and 4 basic Yuoki chips, with 30 seconds of recipe work. It unlocks with Materials and uses the same three factories on Quinityn. Reactor-fuel byproduct signs remain available and cheaper for the initial bootstrap.
 
@@ -27,45 +27,75 @@ The terrain uses warped coastlines and narrow connecting land corridors. There i
 
 ```mermaid
 flowchart TD
-  Discovery[Planet discovery] --> Travel[Travel from Nauvis]
-  Travel --> Arrival[Physical landing / field survey]
-  Arrival --> Materials[N4 and F7 processing]
-  Materials --> Power[Power and infrastructure]
+  Discovery[Planet discovery - space science] --> Arrival[Physical landing / field survey]
+  Arrival --> Materials[Materials - first factory and science]
+  Materials --> Power[Power - requires Quinityn science]
+  Materials --> Excavation[Plain excavation]
+  Materials --> Washing[Plain washing]
+  Excavation --> Tooling[Tool and drill-head processing]
+  Washing --> Tooling
+  Materials --> Machining[Second crusher and form press]
   Power --> Cimota[Cimota reconstruction]
-  Power --> Defense[Contract world defense]
-  Cimota --> Oil[Reconstructed crude oil / vanilla oil processing]
-  Cimota --> Engines[Mechanical Force engineering]
-  Engines --> Refining[Industrial refining]
-  Refining --> Foundation[Durotal foundations]
-  Refining --> Agriculture[Agronomy and biology]
-  Refining --> Logistics[Logistics]
-  Agriculture --> Quantum[Quantrinum and advanced electronics]
-  Quantum --> Trade[Laika trade network]
-  Trade --> Mastery[Mastercrafted industry]
+  Cimota --> Oil[Local crude oil milestone]
+  Oil --> Components[Advanced components]
+  Cimota --> Engines[Basic Mechanical Force]
+  Engines --> Refining[Refining]
+  Components --> Refining
+  Refining --> Crystals[Crystal processing]
+  Components --> Storage[First energy storage]
+  Crystals --> Quantum[Quantum materials]
+  Storage --> Quantum
+  Engines --> Factories[Advanced factories]
+  Machining --> Factories
+  Refining --> Crops[Crop production]
+  Crops --> Animals[Husbandry and later genetics]
+  Factories --> Animals
+  Quantum --> Trade[Trade and later mastery]
   Quantum --> Orbital[Orbital manufacturing]
-  VanillaRocket[Vanilla rocket-silo research] --> Orbital
-  Mastery --> Infinite[Infinite mining / plasma research]
-  Orbital --> Infinite
 ```
 
-| Discipline | What it teaches | Science / count |
-| --- | --- | --- |
-| Field survey | Manual recovery, separator and water | Physical landing |
-| Materials | Crushers, presses, N4/F7 refining, parts and local science | Red / 30 |
-| Power | Fuel, generators, accumulators, fluid infrastructure | Red + green / 60 |
-| Cimota | UC conversion and reconstruction | Red + green + Quinityn / 100 |
-| Engines | MF, motors, transmission and specialized machinery | Red + green + Quinityn / 120 |
-| Refining | Fluids, catalysts, byproducts and industrial smelting | Red + green + Quinityn / 150 |
-| Agriculture | Crops, biological products, DNA, animals and fish | Red + green + Quinityn / 180 |
-| Logistics | Yuoki inserters, storage and robots | Red + green + Quinityn / 180 |
-| Defense | Yuoki ammunition, walls, turrets and equipment | Red + green / 100 |
-| Quantum | Quantrinum, advanced electronics and related machinery | Red + green + Quinityn / 250 |
-| Trade | Merchant Signs, reputation, Laika and exports | Red + green + Quinityn / 300 |
-| Mastery | Mastercrafted and ultimate products | Red + green + Quinityn / 500 |
-| Foundations | Expansion across unicomp and exportable terrain support | Red + green + Quinityn / 200 |
-| Orbital | Yuoki alternative rocket-component recipes | Red + green + Quinityn / 200, plus rocket-silo prerequisite |
+The survey is a descendant of **Planet discovery Quinityn**, not an available starter technology. Discovery costs the normal space-age sciences and unlocks travel; only physical landing completes the survey. Materials costs 30 red packs and unlocks the first factory, basic components and Quinityn science. **Every subsequent pack-based Quinityn technology uses red, green and Quinityn packs** (infinite research also uses the standard advanced packs). Scripted and production-trigger milestones retain their earlier science-gated prerequisites.
 
-The tree unlocks **design families**. Some expensive machines within a family need ingredients developed later. The guide calls this out rather than suggesting that research alone supplies those ingredients. Existing non-Yuoki research requirements on upstream unlocks are retained through automatic prerequisite bridges. The engine-generated [recipe manifest](recipe-unlocks.json) records every assigned unlock for review.
+The broad base disciplines now cover their first usable production stage. Upgrades have separate research:
+
+| Research | Prerequisites within Quinityn | Packs of each required science |
+| --- | --- | --- |
+| Deep excavation | N4 and F7 processing | 50 |
+| Ore washing and residue recovery | N4 and F7 processing | 40 |
+| Tool-assisted processing | Deep excavation, Ore washing and residue recovery | 80 |
+| Advanced crushing and forming | N4 and F7 processing | 80 |
+| Advanced industrial components | Reconstructed petrochemistry | 100 |
+| Maintenance workshops | Tool-assisted processing, Advanced crushing and forming, Advanced industrial components, Yuoki logistics | 100 |
+| Industrial energy storage | Yuoki power and infrastructure, Ore washing and residue recovery, Advanced industrial components | 100 |
+| Crystal accumulator upgrades | Industrial energy storage, Quantrinum and advanced electronics | 160 |
+| Mixed-oxide reactor engineering | Yuoki industrial refining, Advanced industrial components, Contract world defense, Advanced electric generation | 160 |
+| Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering | 250 |
+| Industrial fluid handling | Mechanical force engineering | 80 |
+| Advanced Yuoki factories | Mechanical force engineering, Advanced crushing and forming | 140 |
+| Advanced Mechanical Force engines | Advanced Yuoki factories, Advanced industrial components | 180 |
+| Advanced transport tubes | Mechanical force engineering, Advanced industrial components | 120 |
+| Crystal and emulsion processing | Yuoki industrial refining, Ore washing and residue recovery | 150 |
+| Animal husbandry and aquaculture | Yuoki agronomy and biology, Advanced Yuoki factories, Industrial fluid handling | 160 |
+| First-generation industrial biology | Animal husbandry and aquaculture | 200 |
+| Second-generation industrial biology | First-generation industrial biology, Quantrinum and advanced electronics | 250 |
+| Third-generation industrial biology | Second-generation industrial biology | 300 |
+| Advanced industrial inserters | Yuoki logistics, Quantrinum and advanced electronics | 160 |
+| Yuoki robot networks | Yuoki logistics, Quantrinum and advanced electronics, Industrial energy storage | 180 |
+| Advanced Yuoki robots | Yuoki robot networks | 240 |
+| Advanced industrial defenses | Contract world defense, Advanced industrial components, Industrial energy storage | 160 |
+| Yuoki powered armor | Laika trade network, Advanced industrial defenses, Industrial energy storage | 200 |
+| Yuoki powered armor II | Yuoki powered armor, Crystal accumulator upgrades | 240 |
+| Yuoki powered armor III | Yuoki powered armor II | 300 |
+| Yuoki walker | Yuoki powered armor III, Mastercrafted industry | 400 |
+| Advanced Yuoki walker | Yuoki walker | 500 |
+| Industrial modules | Advanced industrial components | 100 |
+| Advanced industrial modules | Industrial modules, Quantrinum and advanced electronics | 180 |
+| Quantum module engineering | Advanced industrial modules | 250 |
+| Industrial packaging | Yuoki agronomy and biology, Industrial fluid handling | 120 |
+| Advanced electric generation | Yuoki power and infrastructure, Advanced industrial components, Mechanical force engineering, Yuoki industrial refining | 140 |
+| Industrial fluid and electric infrastructure | Yuoki power and infrastructure, Advanced industrial components | 80 |
+
+The tree separates **upgrades** while keeping related processing steps and same-tier variants together. For example, empty/charged battery cells are steps of one battery process; long, directional and underground transport variants are not successive machine tiers. Some optional products still need inputs from other industrial branches. Existing non-Yuoki research requirements on upstream unlocks are retained through automatic prerequisite bridges. The engine-generated [recipe manifest](recipe-unlocks.json) records every assigned unlock for review.
 
 ## Water and disposal
 
@@ -89,7 +119,7 @@ This is a separate item and tile. Its placement destinations inherit the normal 
 
 ## Local oil and rockets
 
-A true zero-research force would normally be stuck at Oil processing because that vanilla technology asks for crude-oil mining. Quinityn has no oil deposit. The alternate local technology instead requires crafting 80 crude oil after Cimota and Oil gathering; completing it grants the normal Oil processing technology.
+A local production run that conservatively withholds prior Oil processing would otherwise be stuck at Oil processing because that vanilla technology asks for crude-oil mining. Quinityn has no oil deposit. The alternate local technology instead requires crafting 80 crude oil after Cimota and Oil gathering; completing it grants the normal Oil processing technology.
 
 Follow the vanilla chemistry and rocket prerequisites with locally reconstructed resources. Steel, plastic, sulfuric acid, engines, circuits, concrete, low density structures, processing units and rocket fuel all have local production paths. Trade and incoming platform supplies are **not required** for the rocket-material dependency proof.
 
@@ -115,3 +145,7 @@ This development revision of 0.1.0 changes newly generated chunks. Already explo
 Adding the mod does not erase previously built Yuoki machines, items or ore patches from an existing save. Existing stock and queued machine crafting are not confiscated. For the intended discovery balance, use a save that has not already established Yuoki industry. The upstream optional starting suit is forced off because it bypasses the visit gate.
 
 The supported baseline is the required Yuoki/Engines/Space Age set. Other overhaul mods, separate Yuoki tech-tree mods, alternative-start mods and later dependency revisions need separate compatibility testing.
+
+### Updating an existing development save
+
+Completed technologies stay completed. Recipes moved into the new upgrade technologies require those new technologies to be researched; this deliberately replaces the old bulk unlocks. Existing buildings and items remain. Discovery and arrival are required for a new force; debug teleporting an undiscovered force is not a supported starting-planet mode.

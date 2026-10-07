@@ -29,7 +29,7 @@ def supply(name,amount,path=()):
  stock[name]-=amount
 # Reserve the original pre-Cimota research plus Circuit network for the first
 # factory arithmetic combinator, with margin for basic automation technologies.
-goals={'automation-science-pack':600,'logistic-science-pack':400,'quinityn-research-data':100,
+goals={'automation-science-pack':600,'logistic-science-pack':400,'quinityn-research-data':160,
  'stone-furnace':2,'boiler':1,'steam-engine':1,'offshore-pump':1,'small-electric-pole':10,
  'quinityn-burner-separator':1,'lab':2,'y-crusher':1,'y-heat-form-press':1,'y-atomic-constructor':1,
  'ye_fassembly1':1,'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}

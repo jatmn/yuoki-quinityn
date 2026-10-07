@@ -26,6 +26,31 @@ local overrides = {
   ["y-stargate"]="trade", ["ye_trade_node"]="agriculture",
   ["ye_fame"]="trade", ["ye_science_blue"]="quantum"
 }
+-- Explicit upgrades override broad upstream crafting-tab groups.
+for _, tier in ipairs(require("prototypes.research-tiers")) do
+  for _, name in ipairs(tier.recipes) do overrides[name]=tier.name end
+end
+overrides["y_turret_gun1f12"]="defense"
+overrides["y-weapon-ztt"]="quantum-power"
+overrides["ye_center"]="quantum"
+overrides["y-quantrinum-reactor"]="quantum-power"
+overrides["y-mf1-q1"]="quantum-power"
+overrides["y-mf1-q2"]="quantum-power"
+overrides["y-mf1-q3"]="quantum-power"
+overrides["ye_rheinsberg"]="quantum-power"
+overrides["ye_rheins_LT"]="quantum-power"
+overrides["ye_rheins_MT"]="quantum-power"
+overrides["ye_rheins_HT"]="quantum-power"
+overrides["y_hps_purecopper"]="refining"
+overrides["y_hps_pureiron"]="refining"
+overrides["y_hps_steel"]="refining"
+overrides["y-winding"]="engines"
+overrides["y-iron-case"]="engines"
+overrides["y-1stirling-engine"]="engines"
+overrides["y-repair-krakon"]="cimota"
+overrides["y_repair_quantrinum"]="quantum"
+overrides["y-fuel-cell-c"]="trade"
+overrides["yi_radar"]="plant-infrastructure"
 local M = {}
 function M.owned(r)
   local name=r.name
