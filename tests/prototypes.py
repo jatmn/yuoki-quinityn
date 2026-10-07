@@ -56,3 +56,32 @@ print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 17 guide
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
+
+# Exclusive factory manufacture and early factory access prevent a science deadlock.
+factories={'ye_fassembly1','ye_fassembly2','ye_fassembly_sp'}
+for name, machine in D['assembling-machine'].items():
+ assert ('quinityn-science' in machine.get('crafting_categories',[])) == (name in factories), name
+assert 'quinityn-science' not in D['character']['character']['crafting_categories']
+assert R['quinityn-research-data']['categories']==['quinityn-science']
+assert R['quinityn-technic-sign']['categories']==['quinityn-science']
+assert R['quinityn-technic-sign']['results']==[{'type':'item','name':'y_rwtechsign','amount':1}]
+assert R['quinityn-technic-sign']['energy_required']>=30
+assert unlocks['ye_fassembly1']==['quinityn-materials']
+assert 'quinityn-research-data' not in [i[0] for i in T['quinityn-materials']['unit']['ingredients']]
+separator=D['assembling-machine']['quinityn-burner-separator']
+assert separator['graphics_set']==D['assembling-machine']['y-atomic-constructor']['graphics_set']
+assert separator['crafting_speed']==0.5 and separator['energy_usage']=='180kW'
+assert separator['energy_source']['emissions_per_minute']['pollution']==6
+assert separator['module_slots']==0 and not separator['quality_affects_module_slots']
+assert I['y-res2']['fuel_value']=='1MJ' and I['wood']['fuel_value']=='2MJ'
+assert 'chemical' in I['y-res2']['fuel_categories']
+assert len(D['planet']['quinityn']['map_gen_settings']['autoplace_settings']['decorative']['settings'])>=5
+assert 'quinityn-unicomp-sea' not in I['landfill']['place_as_tile']['tile_condition']
+# PNG alpha, dimensions and prototype paths are checked independently of headless graphics loading.
+import struct
+for name,group in [('quinityn-salvage',I),('quinityn-research-data',D['tool'])]:
+ p=group[name];path=root/p['icon'].removeprefix('__yuoki-quinityn__/')
+ image=path.read_bytes();assert image[:8]==b'\x89PNG\r\n\x1a\n'
+ width,height,depth,color=struct.unpack('>IIBB',image[16:26])
+ assert width==height==p['icon_size']==256 and depth==8 and color==6
+print('PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons')

@@ -14,32 +14,40 @@ local function recipe(name, ingredients, results, categories, seconds)
 end
 data:extend({
   {type="item-subgroup",name="quinityn-fieldwork",group="yuoki",order="00"},
-  {type="recipe-category",name="quinityn-separation"}
+  {type="recipe-category",name="quinityn-separation"},
+  {type="recipe-category",name="quinityn-science"}
 })
-local separator = copy(data.raw["assembling-machine"]["chemical-plant"])
+local separator = copy(data.raw["assembling-machine"]["y-atomic-constructor"])
+-- Keep the existing entity/item ID so placed separators and blueprints survive.
+local old_separator = data.raw["assembling-machine"]["chemical-plant"]
+separator.max_health = old_separator.max_health
+separator.resistances = copy(old_separator.resistances)
 separator.name = "quinityn-burner-separator"
 separator.minable = {mining_time=0.2,result=separator.name}
 separator.crafting_categories = {"quinityn-separation"}
-separator.crafting_speed = 1
+separator.crafting_speed = 0.5
 separator.energy_usage = "180kW"
 separator.energy_source = {type="burner", fuel_categories={"chemical"}, fuel_inventory_size=1,
   effectivity=1, emissions_per_minute={pollution=6}}
 separator.module_slots = 0
+separator.quality_affects_module_slots = false
+separator.quality_affects_energy_usage = false
+separator.energy_usage_quality_multiplier = nil
 separator.allowed_effects = {}
 separator.next_upgrade = nil
 separator.fast_replaceable_group = nil
 separator.localised_name = {"entity-name.quinityn-burner-separator"}
-local separator_item = copy(data.raw.item["chemical-plant"])
+local separator_item = copy(data.raw.item["y-atomic-constructor"])
 separator_item.name = separator.name
 separator_item.place_result = separator.name
 separator_item.subgroup = "quinityn-fieldwork"
 separator_item.localised_name = {"entity-name.quinityn-burner-separator"}
-separator_item.icons = {{icon="__base__/graphics/icons/chemical-plant.png",icon_size=64,tint={0.8,0.45,1}}}
+separator_item.icons = {{icon="__Yuoki__/graphics/icons/cimota_64.png",icon_size=64,tint={0.8,0.45,1}}}
 separator_item.icon = nil
 data:extend({separator,separator_item,
-  {type="item",name="quinityn-salvage",icon="__space-age__/graphics/icons/scrap.png",icon_size=64,
+  {type="item",name="quinityn-salvage",icon="__yuoki-quinityn__/graphics/icons/quinityn-salvage.png",icon_size=256,
     subgroup="quinityn-fieldwork",stack_size=100,weight=1000},
-  {type="tool",name="quinityn-research-data",icon="__Yuoki__/graphics/icons/sign_tech_icon.png",icon_size=64,
+  {type="tool",name="quinityn-research-data",icon="__yuoki-quinityn__/graphics/icons/quinityn-science.png",icon_size=256,
     subgroup="science-pack",order="z[quinityn]",stack_size=200,durability=1,
     durability_description_key="description.science-pack-remaining-amount-key",
     durability_description_value="description.science-pack-remaining-amount-value"}
@@ -56,7 +64,17 @@ recipe(separator.name,{item("iron-plate",10),item("copper-plate",5),item("stone"
   {item(separator.name,1)},nil,5)
 recipe("quinityn-water",{fluid("y-liquid-uc2",1)},{fluid("water",100)}, {"quinityn-separation"},2)
 recipe("quinityn-research-data",{item("y-unicomp-raw",1),item("y-refined-yres2",1),item("y_rwtechsign",1)},
-  {item("quinityn-research-data",5)},nil,5)
+  {item("quinityn-research-data",5)},{"quinityn-science"},5)
+-- Dedicated technical qualification: material-intensive, with no fuel/byproduct output.
+recipe("quinityn-technic-sign",{item("y-bluegear",12),item("y_structure_element",8),
+  item("y-conductive-wire-1",20),item("y-chip-1",4)},
+  {item("y_rwtechsign",1)},{"quinityn-science"},30)
+for _, name in ipairs({"ye_fassembly1","ye_fassembly2","ye_fassembly_sp"}) do
+  table.insert(data.raw["assembling-machine"][name].crafting_categories,"quinityn-science")
+end
+-- Raw F7 is an emergency chemical fuel, below wood (2 MJ). Refine it for efficiency.
+data.raw.item["y-res2"].fuel_categories={"chemical"}
+data.raw.item["y-res2"].fuel_value="1MJ"
 -- Keep oil bootstrap in the Cimota chain; its existing UC -> crude-oil recipe supplies refineries.
 -- A local copper/iron/coal/stone economy can therefore manufacture every standard rocket ingredient.
 for _, lab in pairs(data.raw.lab) do
@@ -66,7 +84,7 @@ local wreck = copy(data.raw["simple-entity"]["fulgoran-ruin-small"])
 wreck.name = "quinityn-wreck"
 wreck.localised_name = {"entity-name.quinityn-wreck"}
 wreck.minable = {mining_time=1,results={item("quinityn-salvage",20)}}
-wreck.autoplace = {probability_expression="0.001 * (quinityn_elevation > 0) * (distance > 100)"}
+wreck.autoplace = {probability_expression="quinityn_stockpile_probability"}
 wreck.map_color = {0.58,0.41,0.68}
 data:extend({wreck})
 data.raw.planet.quinityn.map_gen_settings.autoplace_settings.entity.settings[wreck.name] = {}

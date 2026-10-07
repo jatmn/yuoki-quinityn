@@ -90,15 +90,38 @@ connection.length = 15000
 connection.order = "d"
 data:extend({
   {type = "surface-property", name = "quinityn-industry", default_value = 0},
-  {type = "noise-expression", name = "quinityn_elevation", expression = [[
-    min(sqrt((x-64)^2 + y^2) - 12, max(18 - distance / 6,
-      multioctave_noise{x=x, y=y, seed0=map_seed, seed1=912,
-        octaves=4, persistence=0.55, input_scale=0.003, output_scale=35} + 4))
+  -- Domain warping breaks up smooth coastlines; broad ridges keep districts joined.
+  {type="noise-expression",name="quinityn_warp_x",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=811,octaves=3,
+      persistence=0.55,input_scale=0.009,output_scale=38}
+  ]]},
+  {type="noise-expression",name="quinityn_warp_y",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=812,octaves=3,
+      persistence=0.55,input_scale=0.009,output_scale=38}
+  ]]},
+  {type="noise-expression",name="quinityn_continents",expression=[[
+    multioctave_noise{x=x+quinityn_warp_x,y=y+quinityn_warp_y,
+      seed0=map_seed,seed1=912,octaves=4,persistence=0.55,input_scale=0.007,output_scale=1}
+  ]]},
+  {type="noise-expression",name="quinityn_elevation",expression=[[
+    max(110-sqrt((x+18*sin(quinityn_warp_x/20))^2+(y+18*sin(quinityn_warp_y/20))^2),
+      28*(0.33-abs(quinityn_continents)))
+  ]]},
+  {type="noise-expression",name="quinityn_stockpile_noise",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=2171,octaves=3,
+      persistence=0.6,input_scale=0.009,output_scale=1}
+  ]]},
+  -- Fulgora-style layered density: sparse districts containing dense wreck clusters.
+  {type="noise-expression",name="quinityn_stockpile_probability",expression=[[
+    (quinityn_elevation > 0) * (distance > 80) * 0.06 * clamp(
+      max(quinityn_stockpile_noise-1.1,
+        1-((x+18*sin(quinityn_warp_x/20)-88)^2+(y+18*sin(quinityn_warp_y/20)-20)^2)/900,
+        1-((x+18*sin(quinityn_warp_x/20)+82)^2+(y+18*sin(quinityn_warp_y/20)+30)^2)/900) * 5,0,1)
   ]]},
   sea, land, planet, connection
 })
 -- Suppress native large starter patches on this surface only; finite hand-placed
--- deposits total at most 9,800 units per ore. Distant deposits remain configurable.
+-- deposits contain 125k–150k units per ore. Distant deposits remain configurable.
 for _, ore in ipairs({"y-res1", "y-res2"}) do
   local expression="quinityn_"..ore:gsub("-","_").."_probability"
   data:extend({{type="noise-expression",name=expression,
@@ -109,17 +132,19 @@ end
 -- Ruined industrial districts interrupt the basalt with slag and buried machinery.
 data:extend({{type="noise-expression",name="quinityn_industrial_noise",expression=[[
   multioctave_noise{x=x,y=y,seed0=map_seed,seed1=1717,octaves=3,
-    persistence=0.5,input_scale=0.015,output_scale=1}
+    persistence=0.5,input_scale=0.025,output_scale=1}
 ]]}})
-for _, spec in ipairs({
+for i, spec in ipairs({
   {name="quinityn-slag",source="volcanic-ash-cracks",threshold="quinityn_industrial_noise > 0.15"},
-  {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"}
+  {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"},
+  {name="quinityn-ash",source="volcanic-ash-light",threshold="quinityn_industrial_noise < -0.20"},
+  {name="quinityn-rubble",source="fulgoran-walls",threshold="quinityn_industrial_noise < -0.45"}
 }) do
   local tile=copy(data.raw.tile[spec.source])
   tile.name=spec.name
   tile.allowed_neighbors=nil
   tile.transition_merges_with_tile=nil
-  tile.autoplace={probability_expression="2000 * (quinityn_elevation >= 0) * (distance > 80) * ("..spec.threshold..")"}
+  tile.autoplace={probability_expression=(2000+i).." * (quinityn_elevation >= 0) * (distance > 12) * ("..spec.threshold..")"}
   tile.absorptions_per_second={pollution=0.000001}
   tile.tint={0.75,0.65,0.8}
   for _, tr in pairs(tile.transitions or {}) do
@@ -127,4 +152,20 @@ for _, spec in ipairs({
   end
   data:extend({tile})
   planet.map_gen_settings.autoplace_settings.tile.settings[spec.name]={}
+end
+
+-- Surface-local decorative clones use this world's masks, not another planet's noise.
+for _, spec in ipairs({
+  {"tiny-volcanic-rock",0.12}, {"small-volcanic-rock",0.025},
+  {"vulcanus-crack-decal",0.035}, {"pumice-relief-decal",0.018},
+  {"fulgoran-ruin-tiny",0.055}
+}) do
+  local decorative=copy(data.raw["optimized-decorative"][spec[1]])
+  decorative.name="quinityn-"..spec[1]
+  decorative.localised_name={"decorative-name."..decorative.name}
+  decorative.collision_mask={layers={water_tile=true},colliding_with_tiles_only=true}
+  decorative.autoplace={probability_expression=spec[2]..
+    " * (quinityn_elevation > 0) * clamp(0.5 + quinityn_industrial_noise,0.15,1)"}
+  data:extend({decorative})
+  planet.map_gen_settings.autoplace_settings.decorative.settings[decorative.name]={}
 end

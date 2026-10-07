@@ -8,16 +8,20 @@ Discovery is researched through the normal Space Age route. The connection runs 
 
 The world is an industrial wasteland: dark ash, cracked slag, buried machinery, scattered industrial salvage, purple unicomp seas and smog. There are no natural trees. Surface pollution absorption is extremely low. Your machines' existing pollution emissions therefore matter to the biter population. Pollution is not artificially multiplied on other worlds.
 
-The starting plateau provides **9,800 N4 and 9,800 F7**, each in a small 49-tile patch. There are no natural iron, copper, coal, stone or crude-oil deposits. Large native starting ore patches are suppressed inside a 200-tile radius; modest distant N4/F7 deposits remain. The intended long-term resource source is unicomp conversion, not mining larger starter fields.
+The starting plateau provides **125,000–150,000 N4 and 125,000–150,000 F7**, in larger irregular patches whose positions, outline and richness vary by map seed. There are no natural iron, copper, coal, stone or crude-oil deposits. Large native starting ore patches are suppressed inside a 200-tile radius; modest distant N4/F7 deposits remain. The intended long-term resource source is unicomp conversion, not mining larger starter fields.
 
 1. Mine N4/F7 or salvage. Hand-sort enough stone, carbon, iron ore, copper ore and emergency timber to build a furnace and early equipment. These emergency recipes are **hand-crafting only**.
 2. Smelt plates. A fresh force can trigger vanilla Steam power and Electronics by crafting plates, then build its first lab and make red science.
-3. Make the burner separator from 10 iron plates, 5 copper plates and 10 stone. Pump the purple ocean into it and fuel it with coal. It produces water without electricity.
+3. Make the burner separator from 10 iron plates, 5 copper plates and 10 stone. Pump the purple ocean into it and fuel it with raw F7 chunks (1 MJ each), wood or coal. It produces water without electricity.
 4. Feed that water to a boiler and steam engine. Build poles, labs, assemblers, a Yuoki crusher and a heat form press.
-5. Develop the native N4/F7 lines. Making reactor fuel awards Technic Signs. A Durotal block, compressed F7 and a sign produce five Quinityn research data packs.
+5. Develop the native N4/F7 lines. Making reactor fuel awards Technic Signs. A Durotal block, compressed F7 and a sign produce five Quinityn research data packs in a Yuoki factory on Quinityn. Research vanilla Circuit network for the arithmetic combinator needed by the first factory; its recipe now unlocks with Materials. Only `ye_fassembly1`, `ye_fassembly2` and `ye_fassembly_sp` accept the new science category.
 6. Research Cimota reconstruction. Solidify ocean unicomp in a Cimota and use the **existing Yuoki recipes** for ordinary resources. This replaces manual ore dressing for sustained production.
 
-A constructive budget reserves 450 red packs, 250 green packs, 100 Quinityn data packs, two labs, several early machines, a Cimota and 500 coal. It uses 4,784 N4 and 2,627 F7, before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
+A constructive budget reserves 600 red packs, 400 green packs, 100 Quinityn data packs, two labs, the first Yuoki factory, a Cimota and 500 coal. The current material totals are recorded in [validation](validation.md), before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
+
+The new dedicated **Qualify a Technic Sign** recipe produces only one sign from 12 reinforced gears, 8 Durotal structures, 20 conductive wire and 4 basic Yuoki chips, with 30 seconds of recipe work. It unlocks with Materials and uses the same three factories on Quinityn. Reactor-fuel byproduct signs remain available and cheaper for the initial bootstrap.
+
+The terrain uses warped coastlines and narrow connecting land corridors. There is no forced origin pond; find a natural shore for your first pump. Salvage forms dense clusters in sparse industrial districts, with two nearby starter clusters. Ash, rubble, cracked slag, buried machinery and five decorative types break up the basalt. Unicomp blocks walking biters and spitters like ordinary water.
 
 ## Technology map
 
@@ -65,7 +69,7 @@ The tree unlocks **design families**. Some expensive machines within a family ne
 
 ## Water and disposal
 
-The ocean is the actual `y-liquid-uc2` fluid. The separator converts 1 fluid into 100 water in 2 seconds at 180 kW of burner power. Water and unicomp networks must remain separate. Later machinery can scale or replace bootstrap infrastructure using the existing mod recipes.
+The ocean is the actual `y-liquid-uc2` fluid. The primitive Cimota converts 1 fluid into 100 water with a 2-second recipe at 0.5 crafting speed: 100 water every 4 seconds, at 180 kW of burner power. It uses the Cimota building and icon, with the previous separator identifier retained for save compatibility. Water and unicomp networks must remain separate. Later machinery can scale or replace bootstrap infrastructure using the existing mod recipes.
 
 Items dropped into unicomp are destroyed by the same native tile capability used by lava. A shore inserter can dispose of surplus. This gives no resource refund and does not reduce the sea. Filter disposal to protect science, fuel and seed reserves. Item quality does not prevent disposal.
 
@@ -105,6 +109,8 @@ Each level costs `1000 × 1.5^(level − 1)` units. Each unit takes 60 seconds a
 ## Existing saves and compatibility
 
 New and existing forces are reconciled on configuration changes. Already researched Quinityn unlocks are retained. Unrelated recipe flags are preserved. A force already physically on the planet receives its survey; a new or unvisited force remains gated. Native force-merge research behavior is followed.
+
+Updating to 0.1.1 changes newly generated chunks. Already explored terrain and existing ore amounts are preserved; generate a new map to evaluate the revised starter layout. Placed separators retain their IDs and become primitive Cimotas. Move science production into a Yuoki factory.
 
 Adding the mod does not erase previously built Yuoki machines, items or ore patches from an existing save. Existing stock and queued machine crafting are not confiscated. For the intended discovery balance, use a save that has not already established Yuoki industry. The upstream optional starting suit is forced off because it bypasses the visit gate.
 

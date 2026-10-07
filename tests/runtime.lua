@@ -14,11 +14,23 @@ script.on_init(function()
   local surface=game.planets.quinityn.create_surface()
   surface.request_to_generate_chunks({0,0},12)
   surface.force_generate_chunk_requests()
-  check(surface.get_tile(64,0).name=="quinityn-unicomp-sea","guaranteed unicomp inlet")
+  check(surface.get_tile(64,0).name~="quinityn-unicomp-sea","artificial starter pond removed")
   check(surface.get_tile(0,0).name=="quinityn-basalt","dry landing plateau")
-  check(surface.count_entities_filtered{name="y-res1",area={{-40,-30},{-16,-6}}}>0,"starter N4 patch")
-  check(surface.count_entities_filtered{name="y-res2",area={{16,-30},{40,-6}}}>0,"starter F7 patch")
-  check(surface.count_entities_filtered{name="quinityn-wreck"}>0,"salvage generates")
+
+  check(surface.count_entities_filtered{name="quinityn-wreck",area={{-160,-160},{160,160}}}>=15,"abundant clustered starter salvage")
+  check(#surface.find_decoratives_filtered{area={{-200,-200},{200,200}}}>100,"cosmetic decoratives generate")
+  local rows={}
+  local codes={["quinityn-unicomp-sea"]="~",["quinityn-basalt"]=".",["quinityn-slag"]="s",
+    ["quinityn-ruined-district"]="m",["quinityn-ash"]="a",["quinityn-rubble"]="r"}
+  for y=-360,358,2 do
+    local row={}
+    for x=-360,358,2 do row[#row+1]=codes[surface.get_tile(x,y).name] or "?" end
+    rows[#rows+1]=table.concat(row)
+  end
+  local wrecks={}
+  for _,e in pairs(surface.find_entities_filtered{name="quinityn-wreck"}) do wrecks[#wrecks+1]=e.position end
+  helpers.write_file("quinityn-map-"..surface.map_gen_settings.seed..".json",
+    helpers.table_to_json{seed=surface.map_gen_settings.seed,rows=rows,wrecks=wrecks},false)
   check(surface.count_entities_filtered{type="unit-spawner"}>0,"biter bases generate")
   check(surface.count_entities_filtered{name={"iron-ore","copper-ore","crude-oil"}}==0,"no imported vanilla deposits")
   local water=surface.find_tiles_filtered{area={{-300,-300},{300,300}},name={"water","deepwater","lava","oil-ocean-deep"}}
@@ -34,7 +46,12 @@ script.on_init(function()
   for _, name in ipairs({"y-res1","y-res2"}) do
     local amount=0
     for _, ore in pairs(surface.find_entities_filtered{name=name,area={{-100,-100},{100,100}}}) do amount=amount+ore.amount end
-    check(amount>0 and amount<=9800,"small starter deposit: "..name.."="..amount)
+    check(amount>=100000 and amount<=150000,"rich starter deposit: "..name.."="..amount)
+    local ores=surface.find_entities_filtered{name=name,area={{-100,-100},{100,100}}}
+    check(#ores>=180,"larger organic starter patch: "..name)
+    local x,y=0,0
+    for _,ore in pairs(ores) do x=x+ore.position.x; y=y+ore.position.y end
+    log("STARTER CENTROID "..name.." "..x/#ores.." "..y/#ores)
   end
 
 end)
@@ -50,15 +67,18 @@ script.on_event(defines.events.on_tick,function(event)
     local separator=surface.create_entity{name="quinityn-burner-separator",position={0,12},force=force}
     check(separator and separator.valid,"burner separator placement")
     check(separator.set_recipe("quinityn-water"),"separator selects water recipe")
-    separator.get_fuel_inventory().insert{name="coal",count=10}
+    separator.get_fuel_inventory().insert{name="y-res2",count=10}
     separator.insert_fluid{name="y-liquid-uc2",amount=100}
     storage.separator=separator
-    for x=48,54 do
-      for y=-2,2 do
-        for _, direction in ipairs({defines.direction.north,defines.direction.east,defines.direction.south,defines.direction.west}) do
-          local spec={name="offshore-pump",position={x+0.5,y+0.5},direction=direction,force=force,build_check_type=defines.build_check_type.manual}
-          if not storage.pump and surface.can_place_entity(spec) then storage.pump=surface.create_entity(spec) end
-        end
+    -- Search actual generated coastline; no fixture pond or fixed shoreline coordinates.
+    local sea=surface.find_tiles_filtered{area={{-250,-250},{250,250}},name="quinityn-unicomp-sea"}
+    for _, tile in ipairs(sea) do
+      if storage.pump then break end
+      for _, offset in ipairs({{0,1,defines.direction.north},{-1,0,defines.direction.east},
+        {0,-1,defines.direction.south},{1,0,defines.direction.west}}) do
+        local spec={name="offshore-pump",position={tile.position.x+offset[1]+0.5,tile.position.y+offset[2]+0.5},
+          direction=offset[3],force=force,build_check_type=defines.build_check_type.manual}
+        if not storage.pump and surface.can_place_entity(spec) then storage.pump=surface.create_entity(spec) end
       end
     end
     check(storage.pump and storage.pump.valid,"offshore pump can be placed at unicomp inlet")
@@ -89,11 +109,51 @@ script.on_event(defines.events.on_tick,function(event)
     end
     storage.platform=force.create_space_platform{name="Quinityn test receiver",planet="quinityn",starter_pack="space-platform-starter-pack"}
     check(storage.platform and storage.platform.apply_starter_pack(true),"receiving platform created")
+    -- Engine collision and pathfinding must reject a unicomp crossing.
+    local tiles={}
+    for x=280,320 do for y=280,320 do tiles[#tiles+1]={name="quinityn-unicomp-sea",position={x,y}} end end
+    surface.set_tiles(tiles)
+    for _,name in ipairs({"small-biter","medium-biter","big-biter","behemoth-biter","small-spitter"}) do
+      check(not surface.can_place_entity{name=name,position={300,300},build_check_type=defines.build_check_type.manual},name.." cannot occupy unicomp")
+    end
+    local island={}
+    for x=295,305 do for y=295,305 do island[#island+1]={name="quinityn-basalt",position={x,y}} end end
+    surface.set_tiles(island)
+    surface.set_tiles{{name="quinityn-basalt",position={275,300}}}
+    storage.biter_path=surface.request_path{bounding_box={{-0.2,-0.2},{0.2,0.2}},
+      collision_mask=prototypes.entity["small-biter"].collision_mask,start={300.5,300.5},goal={275.5,300.5},
+      force=game.forces.enemy,radius=0.5,pathfind_flags={allow_destroy_friendly_entities=false}}
+    storage.biter_path_land=surface.request_path{bounding_box={{-0.2,-0.2},{0.2,0.2}},
+      collision_mask=prototypes.entity["small-biter"].collision_mask,start={300.5,300.5},goal={303.5,300.5},
+      force=game.forces.enemy,radius=0.5,pathfind_flags={allow_destroy_friendly_entities=false}}
+    -- All three real factories operate both requested recipes. Vanilla assembler cannot select them.
+    storage.factories={}
+    for i,name in ipairs({"ye_fassembly1","ye_fassembly2","ye_fassembly_sp"}) do
+      local machine=surface.create_entity{name=name,position={-25+i*8,60},force=force}
+      check(machine.set_recipe("quinityn-technic-sign"),name.." selects dedicated signs recipe")
+      for _,ingredient in pairs(prototypes.recipe["quinityn-technic-sign"].ingredients) do machine.insert{name=ingredient.name,count=ingredient.amount} end
+      storage.factories[#storage.factories+1]=machine
+    end
+    local assembler=surface.create_entity{name="assembling-machine-3",position={30,60},force=force}
+    assembler.set_recipe("quinityn-research-data")
+    check(assembler.get_recipe()==nil,"vanilla assembler rejects planet science")
     -- Programmatic research setters do not necessarily emit finished events; checked separately below.
-  elseif event.tick==240 then
-    check(storage.separator.get_fluid_count("water")>0,"burner separator actually produces water without grid power")
+  elseif event.tick==480 then
+    check(storage.separator.get_fluid_count("water")>0,"primitive Cimota produces water burning raw F7 without grid power")
     check(storage.pump_pipe.get_fluid_count("y-liquid-uc2")>0,"offshore pump actually extracts Yuoki liquid unicomp")
+  elseif event.tick==1200 then
+    for _,machine in ipairs(storage.factories) do
+      check(machine.get_output_inventory().get_item_count("y_rwtechsign")==1,machine.name.." produces exactly one sign")
+      machine.get_output_inventory().clear()
+      check(machine.set_recipe("quinityn-research-data"),machine.name.." selects planet science")
+      for _,ingredient in pairs(prototypes.recipe["quinityn-research-data"].ingredients) do machine.insert{name=ingredient.name,count=ingredient.amount} end
+    end
   elseif event.tick==2400 then
+    for _,machine in ipairs(storage.factories) do
+      check(machine.get_output_inventory().get_item_count("quinityn-research-data")==5,machine.name.." produces science")
+    end
+    check(storage.biter_path_land_passed,"biter path succeeds on dry land control")
+    check(storage.biter_path_blocked,"biter path cannot cross unicomp moat")
     check(storage.chest.get_item_count("iron-plate")==0,"inserter discards into unicomp")
     check(storage.chest.get_item_count{name="iron-plate",quality="rare"}==0,"quality items also dissolve")
     check(surface.count_entities_filtered{type="item-entity",area={{8,28},{14,32}}}==0,"discarded items are destroyed")
@@ -120,6 +180,7 @@ script.on_event(defines.events.on_tick,function(event)
     force.cancel_current_research()
     check(force.add_research("quinityn-plasma-damage"),"infinite plasma research can be selected")
   end
+  for _,machine in ipairs(storage.factories or {}) do machine.energy=10000000 end
   if storage.lab and storage.lab.valid then
     storage.lab.energy=10000000
     for _, name in ipairs({"automation-science-pack","logistic-science-pack","chemical-science-pack",
@@ -143,5 +204,14 @@ script.on_event(defines.events.on_tick,function(event)
     check(force.get_ammo_damage_modifier("plasma")>storage.plasma_bonus,"Quinityn science grants native infinite plasma bonus")
     storage.runtime_tests_passed=true
     log("QUINITYN RUNTIME TESTS PASSED")
+  end
+end)
+
+script.on_event(defines.events.on_script_path_request_finished,function(e)
+  if e.id==storage.biter_path then
+    check(not e.try_again_later,"biter path request completed")
+    storage.biter_path_blocked=e.path==nil
+  elseif e.id==storage.biter_path_land then
+    storage.biter_path_land_passed=not e.try_again_later and e.path~=nil
   end
 end)

@@ -50,6 +50,8 @@ For the addon alone:
 python3 tools/package.py
 ```
 
+The current branch is 0.1.1; the existing v0.1.0 release is the earlier preview. Build this branch with the commands above to test the world-generation revision.
+
 ## Source layout
 
 - `prototypes/planet.lua`: planet, navigation route, wasteland terrain, unicomp sea and generation controls.
@@ -62,4 +64,4 @@ python3 tools/package.py
 - `tests/`: engine-backed contract tests and bootstrap analysis.
 - `docs/research.md`: historical sources, lore and adaptation boundaries.
 
-The addon references installed dependency/Space Age art rather than copying it. Planet icons and world graphics currently reuse and tint existing assets; bespoke art is not included. The mod has English localization; other languages can add the same localization keys.
+The addon references installed dependency/Space Age art rather than copying it. Planet/world graphics reuse and tint existing assets. Original salvage and science icons are included under `graphics/icons`; their prompts and references are recorded in `graphics/README.md`. The mod has English localization; other languages can add the same localization keys.

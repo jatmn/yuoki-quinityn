@@ -1,4 +1,22 @@
 ---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2026-10-07
+  Changes:
+    - Reworked coastlines into smaller organic, mostly connected industrial districts; removed the forced starter pond.
+    - Enlarged and randomized starting N4/F7 patches to 125,000–150,000 units each.
+    - Clustered collapsed stockpiles into sparse districts with useful starter salvage and reduced overall placement density.
+    - Added ash, rubble, rocks, cracks, pumice and machinery debris.
+    - Added original salvage and purple science-bottle icons with a larger, readable Technic Sign badge.
+    - Restricted planet science to the three Yuoki factories; moved the first factory to Materials to avoid a research deadlock.
+    - Added expensive factory-only Technic Sign qualification without byproducts.
+    - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
+  Fixes:
+    - Added missing localized surface units and custom prototype/interface names.
+  Testing:
+    - Added factory operation, F7 fuel, biter collision/pathfinding, localization and terrain-distribution checks.
+  Compatibility:
+    - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.
+---------------------------------------------------------------------------------------------------
 Version: 0.1.0
 Date: 2026-10-06
   Features:

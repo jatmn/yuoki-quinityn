@@ -39,6 +39,7 @@ for i, s in ipairs(stages) do
     unit={count=s[3],time=20,ingredients=science},order="y-"..string.format("%02d",i)}})
 end
 table.insert(data.raw.technology["quinityn-materials"].effects,unlock("quinityn-research-data"))
+table.insert(data.raw.technology["quinityn-materials"].effects,unlock("quinityn-technic-sign"))
 data:extend({{type="technology",name="quinityn-oil-processing",
   icon="__base__/graphics/technology/oil-processing.png",icon_size=256,
   prerequisites={"quinityn-cimota","oil-gathering"},

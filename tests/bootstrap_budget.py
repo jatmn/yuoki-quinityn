@@ -13,7 +13,7 @@ choice={
  'coal':'quinityn-carbon','wood':'quinityn-timber','water':'quinityn-water',
  'y-crush-yres1':'y-crush-unicomp-raw','y-crush-yres2':'y-crush-fuel-raw',
  'y-refined-yres1':'y-smelt-crush-res1','y-refined-yres2':'y-smelt-crush-res2',
- 'y_rwtechsign':'y-fuel-reactor'
+ 'y_rwtechsign':'y-fuel-reactor', 'y-richdust':'y-mixing-rich'
 }
 def supply(name,amount,path=()):
  if stock[name]>=amount:stock[name]-=amount;return
@@ -27,14 +27,14 @@ def supply(name,amount,path=()):
  for p in r['results']:
   if p.get('independent_probability',1)==1:stock[p['name']]+=count*p.get('amount',0)
  stock[name]-=amount
-# 365 red / 200 green is the actual science subtotal including Automation, Steel,
-# Logistic science, Automation 2 and the three Quinityn stages. Leave extra margin.
-goals={'automation-science-pack':450,'logistic-science-pack':250,'quinityn-research-data':100,
+# Reserve the original pre-Cimota research plus Circuit network for the first
+# factory arithmetic combinator, with margin for basic automation technologies.
+goals={'automation-science-pack':600,'logistic-science-pack':400,'quinityn-research-data':100,
  'stone-furnace':2,'boiler':1,'steam-engine':1,'offshore-pump':1,'small-electric-pole':10,
  'quinityn-burner-separator':1,'lab':2,'y-crusher':1,'y-heat-form-press':1,'y-atomic-constructor':1,
- 'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}
+ 'ye_fassembly1':1,'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}
 for name,amount in goals.items():supply(name,amount)
 for ore in ['y-res1','y-res2']:
- print(ore,math.ceil(used[ore]),'/ 9800 starting units')
- assert used[ore]<=9800,'Insufficient starter ore: '+ore
+ print(ore,math.ceil(used[ore]),'/ 125000 starting units')
+ assert used[ore]<=125000,'Insufficient starter ore: '+ore
 print('PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits')
