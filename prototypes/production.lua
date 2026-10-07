@@ -22,6 +22,9 @@ local separator = copy(data.raw["assembling-machine"]["y-atomic-constructor"])
 local old_separator = data.raw["assembling-machine"]["chemical-plant"]
 separator.max_health = old_separator.max_health
 separator.resistances = copy(old_separator.resistances)
+-- Retain ordinary circuit wiring with the primitive Cimota appearance.
+separator.circuit_connector = copy(old_separator.circuit_connector)
+separator.circuit_wire_max_distance = old_separator.circuit_wire_max_distance
 separator.name = "quinityn-burner-separator"
 separator.minable = {mining_time=0.2,result=separator.name}
 separator.crafting_categories = {"quinityn-separation"}

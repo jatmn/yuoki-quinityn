@@ -81,6 +81,16 @@ script.on_event(defines.events.on_tick,function(event)
     separator.get_fuel_inventory().insert{name="y-res2",count=10}
     separator.insert_fluid{name="y-liquid-uc2",amount=100}
     storage.separator=separator
+    local circuit_source=surface.create_entity{name="constant-combinator",position={4,12},force=force}
+    check(circuit_source and circuit_source.valid,"separator circuit source placement")
+    for _, wire in ipairs({{"red",defines.wire_connector_id.circuit_red},
+        {"green",defines.wire_connector_id.circuit_green}}) do
+      local connector=separator.get_wire_connector(wire[2],true)
+      local source=circuit_source.get_wire_connector(wire[2],true)
+      check(connector.connect_to(source,true),"separator accepts nearby "..wire[1].." circuit wire")
+      check(connector.disconnect_from(source),"separator disconnects "..wire[1].." circuit wire")
+      check(connector.connect_to(source,true),"separator reconnects nearby "..wire[1].." circuit wire")
+    end
     -- Search actual generated coastline; no fixture pond or fixed shoreline coordinates.
     local sea=surface.find_tiles_filtered{area={{-250,-250},{250,250}},name="quinityn-unicomp-sea"}
     for _, tile in ipairs(sea) do
