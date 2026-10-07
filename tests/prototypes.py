@@ -93,7 +93,7 @@ for name,planet in D['planet'].items():
   assert (ore in mg.get('autoplace_controls',{})) == (name=='quinityn'), (name,ore)
 mg=D['planet']['quinityn']['map_gen_settings']
 assert 'enemy-base' not in mg['autoplace_controls']
-for control,category in [('quinityn_water','terrain'),('quinityn_cliff','cliff'),('quinityn_enemy_base','enemy')]:
+for control,category in [('quinityn_water','terrain'),('quinityn_cliff','cliff'),('quinityn_enemy_base','enemy'),('quinityn_trees','terrain')]:
  assert control in mg['autoplace_controls'] and D['autoplace-control'][control]['category']==category
 sort=R['quinityn-hand-sort']
 assert sort['icons']==[{'icon':I['quinityn-salvage']['icon'],'icon_size':I['quinityn-salvage']['icon_size']}]
@@ -127,3 +127,13 @@ for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fue
  a,b=unlocks[first][0],unlocks[upgrade][0]
  assert a!=b and a in ancestry(b),(first,upgrade,a,b)
 print('PASS: discovery ancestry, mandatory post-Materials science, representative icons and ordered production tiers')
+
+assert mg['cliff_settings']['name']=='cliff-fulgora'
+assert D['autoplace-control']['quinityn_trees']['can_be_disabled']
+for name in ['quinityn-dry-tree','quinityn-dead-dry-hairy-tree']:
+ tree=D['tree'][name]
+ assert name in mg['autoplace_settings']['entity']['settings']
+ assert tree['minable']['result']=='wood'
+ for sprite in tree['pictures']:
+  assert sprite['tint'][0]>sprite['tint'][1] and sprite['tint'][2]>sprite['tint'][1]
+print('PASS: Fulgora cliffs and controllable purple dead-tree sprites')

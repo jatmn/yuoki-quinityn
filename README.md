@@ -6,7 +6,7 @@ Quinityn is the contract world named in YuokiTani's original stories. This adapt
 
 ## Development toward 0.1.0
 
-Development updates retain version **0.1.0** until `main` is stable for the initial release. This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
+Development updates retain version **0.1.0** until `main` is stable for the initial release. This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. A winding dry land connection prevents isolated landing islands. Fulgora-style cliffs concentrate around shorelines, and sparse purple dead-tree groves have their own generation sliders and disable checkbox. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
 
 These terrain changes apply to new chunks; use a fresh map to see the revised starting area. [Revision validation](docs/validation.md) includes biter pathfinding and actual factory operation checks.
 

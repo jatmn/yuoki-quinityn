@@ -12,6 +12,9 @@ Date: 2026-10-07
     - Added smog, slag districts, buried machinery and low pollution absorption.
     - Limited starting ore and made emergency resource conversions hand-crafting only.
   Changes:
+    - Joined landing terrain to a winding dry land connection, with clear passage for biter attacks.
+    - Replaced inland cliff bands with Fulgora-style coastal cliffs and occasional inland escarpments.
+    - Added sparse purple dead/decaying trees with independent frequency, coverage and disable controls.
     - Anchored the field survey and Yuoki tree beneath planet discovery; require Quinityn science after Materials.
     - Split bulk unlocks into production and machine upgrade tiers with representative research icons and guide entries.
     - Added independent unicomp coverage/scale, default-on cliffs and Quinityn enemy-base controls.
@@ -35,5 +38,6 @@ Date: 2026-10-07
     - Preserves upstream unlock prerequisites and the heavy-oil conversion opt-out.
     - Disables the optional starting suit to preserve the physical-visit gate.
   Testing:
+    - Added multi-seed native nest-to-landing paths across default and extreme liquid settings.
     - Added factory operation, F7 fuel, biter collision/pathfinding, localization and terrain-distribution checks.
     - Added official headless engine fixtures, local resource closure and finite bootstrap budget checks.

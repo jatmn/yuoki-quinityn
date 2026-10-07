@@ -16,6 +16,13 @@ script.on_init(function()
     surface.force_generate_chunk_requests()
     local sea=surface.count_tiles_filtered{area=area,name="quinityn-unicomp-sea"}
     local cliffs=surface.count_entities_filtered{area=area,type="cliff"}
+    local trees=surface.count_entities_filtered{area=area,type="tree"}
+    local coast=0
+    for _,cliff in pairs(surface.find_entities_filtered{area=area,type="cliff"}) do
+      assert(cliff.name=="cliff-fulgora")
+      local p=cliff.position
+      if surface.count_tiles_filtered{area={{p.x-10,p.y-10},{p.x+10,p.y+10}},name="quinityn-unicomp-sea"}>0 then coast=coast+1 end
+    end
     local bases=surface.count_entities_filtered{area=area,type="unit-spawner"}
     check(surface.count_entities_filtered{area={{-80,-80},{80,80}},type="cliff"}==0,name.." protects starter core from cliffs")
     local signature={}
@@ -23,11 +30,19 @@ script.on_init(function()
       signature[#signature+1]=e.name..":"..e.position.x..":"..e.position.y
     end
     table.sort(signature)
-    log("CONTROL SAMPLE "..name.." sea="..sea.." cliffs="..cliffs.." bases="..bases)
+    log("CONTROL SAMPLE "..name.." sea="..sea.." cliffs="..cliffs.." bases="..bases.." trees="..trees.." coastal-cliffs="..coast)
     game.delete_surface(surface)
-    return {sea=sea,cliffs=cliffs,bases=bases,signature=table.concat(signature,";")}
+    return {sea=sea,cliffs=cliffs,coast=coast,trees=trees,bases=bases,signature=table.concat(signature,";")}
   end
   local normal=sample("default",function(_) end)
+  check(normal.coast/normal.cliffs>0.65 and normal.coast<normal.cliffs,"cliffs are mostly coastal with some inland")
+  check(normal.trees>20 and normal.trees<1000,"dead trees are present but sparse by default")
+  local no_trees=sample("trees-off",function(s) s.autoplace_controls.quinityn_trees={frequency=0,size=0} end)
+  check(no_trees.trees==0,"tree checkbox suppresses all trees")
+  local more_trees=sample("more-trees",function(s) s.autoplace_controls.quinityn_trees.size=2 end)
+  check(more_trees.trees>normal.trees,"tree coverage slider increases groves")
+  local scaled_trees=sample("tree-frequency",function(s) s.autoplace_controls.quinityn_trees.frequency=4 end)
+  check(scaled_trees.trees>0 and scaled_trees.trees~=normal.trees,"tree frequency changes groves")
   local dry=sample("less-liquid",function(s) s.autoplace_controls.quinityn_water.size=0.5 end)
   local wet=sample("more-liquid",function(s) s.autoplace_controls.quinityn_water.size=2 end)
   check(dry.sea<normal.sea and normal.sea<wet.sea,"unicomp coverage changes land/liquid ratio monotonically")

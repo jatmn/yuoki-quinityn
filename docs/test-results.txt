@@ -27,12 +27,12 @@ y-res2 3371 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 206 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 211 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
-Seed 420151202: land 59.2%, connected 82.7%, starter wrecks 300, outer wrecks 356, occupied districts 10/100
-Seed 420151243: land 40.5%, connected 90.5%, starter wrecks 182, outer wrecks 771, occupied districts 13/100
-Seed 428826510: land 26.2%, connected 90.6%, starter wrecks 183, outer wrecks 127, occupied districts 7/100
+Seed 420151202: land 61.8%, connected 98.4%, starter wrecks 181, outer wrecks 352, occupied districts 10/100
+Seed 420151243: land 44.4%, connected 100.0%, starter wrecks 117, outer wrecks 797, occupied districts 12/100
+Seed 428826510: land 32.3%, connected 92.4%, starter wrecks 169, outer wrecks 119, occupied districts 8/100
 PASS: organic connected terrain, six surface types, sparse dense salvage clusters and seed-varied starter placements
 
 GENERATE-1
@@ -163,33 +163,36 @@ PASS: native rocket construction and launch
 PASS: Quinityn science grants native infinite plasma bonus
 
 MAP-CONTROLS
-PASS: default protects starter core from cliffs
-default sea=380279 cliffs=524 bases=8
-PASS: less-liquid protects starter core from cliffs
-less-liquid sea=220174 cliffs=1164 bases=20
-PASS: more-liquid protects starter core from cliffs
-more-liquid sea=474451 cliffs=235 bases=0
-PASS: unicomp coverage changes land/liquid ratio monotonically
-PASS: smaller-districts protects starter core from cliffs
-smaller-districts sea=399986 cliffs=732 bases=13
-PASS: unicomp scale changes generated terrain
-PASS: no-cliffs protects starter core from cliffs
-no-cliffs sea=380279 cliffs=0 bases=9
-PASS: cliffs generate by default and their slider disables them
-PASS: nauvis-enemies-off protects starter core from cliffs
-nauvis-enemies-off sea=380279 cliffs=524 bases=8
-PASS: Nauvis enemy settings do not change Quinityn nests
-PASS: more-enemies protects starter core from cliffs
-more-enemies sea=380279 cliffs=524 bases=171
-PASS: Quinityn enemy slider increases native nests
-PASS: no-enemies protects starter core from cliffs
-no-enemies sea=380279 cliffs=524 bases=0
-PASS: zero Quinityn enemy frequency suppresses nests
-PASS: nauvis has no Yuoki ores
-PASS: vulcanus has no Yuoki ores
-PASS: gleba has no Yuoki ores
-PASS: fulgora has no Yuoki ores
-PASS: aquilo has no Yuoki ores
+default sea=362408 cliffs=955 bases=5 trees=397 coastal-cliffs=806
+trees-off sea=362408 cliffs=955 bases=4 trees=0 coastal-cliffs=806
+more-trees sea=362408 cliffs=955 bases=5 trees=648 coastal-cliffs=806
+tree-frequency sea=362408 cliffs=955 bases=4 trees=304 coastal-cliffs=806
+less-liquid sea=214545 cliffs=792 bases=18 trees=760 coastal-cliffs=655
+more-liquid sea=446109 cliffs=801 bases=0 trees=208 coastal-cliffs=663
+smaller-districts sea=377817 cliffs=1238 bases=10 trees=369 coastal-cliffs=1078
+no-cliffs sea=362408 cliffs=0 bases=11 trees=409 coastal-cliffs=0
+nauvis-enemies-off sea=362408 cliffs=955 bases=5 trees=397 coastal-cliffs=806
+more-enemies sea=362408 cliffs=949 bases=157 trees=398 coastal-cliffs=802
+no-enemies sea=362408 cliffs=955 bases=0 trees=397 coastal-cliffs=806
+PASS: Quinityn ore control membership and no native Yuoki ore on other planets
+PASS: independent liquid coverage and terrain scale controls
+PASS: default Fulgora cliffs, mostly coastal with some inland
+PASS: cliffs can be disabled and leave the starter core clear
+PASS: sparse purple dead trees with frequency/coverage/disable controls
+PASS: Nauvis enemy controls leave Quinityn nests unchanged
+PASS: Quinityn enemy controls increase or disable nests
+
+LANDING ROUTES
+20 native generation cases: seeds 1, 42, 8675309, 4042551623, 17, 12345,
+314159 and 4294967295 at default liquid settings; the first four also at
+coverage 1/6, coverage 6, and coverage 2 with frequency 6.
+PASS: dry connections to both distant edges on every case
+PASS: native behemoth-biter paths from both exits to landing on every case
+PASS: native path from a naturally generated nest to landing on every case
+No terrain or obstacles are cleared. Search area extends to 1,536 tiles when
+extreme coverage leaves no nests within 1,024 tiles.
+Baseline 40c0570 fails this test on seed 1 at default coverage:
+LANDING ROUTE TEST FAILED: has dry connections to both distant edges
 
 UPSTREAM OPTION
 PASS: heavy-oil conversion opt-out
