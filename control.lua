@@ -8,3 +8,5 @@ script.on_event(defines.events.on_player_changed_force,function(e) progression.a
 script.on_event(defines.events.on_research_finished,progression.research)
 script.on_event(defines.events.on_forces_merged,progression.reconcile)
 script.on_event(defines.events.on_chunk_generated,progression.chunk)
+script.on_event(defines.events.on_player_joined_game,function(e) progression.arrive(game.get_player(e.player_index)) end)
+script.on_event(defines.events.on_player_controller_changed,function(e) progression.arrive(game.get_player(e.player_index)) end)

@@ -6,3 +6,14 @@ Date: 2026-10-06
     - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
     - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
     - Added local petrochemical research and Yuoki rocket component alternatives.
+    - Added 17 native Tips and Tricks progression chapters.
+    - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
+    - Added planet-exclusive science and infinite mining productivity / plasma damage research.
+    - Added smog, slag districts, buried machinery and low pollution absorption.
+    - Limited starting ore and made emergency resource conversions hand-crafting only.
+  Compatibility:
+    - Targets the pending Yuoki and Engines 1.3.0 Factorio 2.1 branches.
+    - Preserves upstream unlock prerequisites and the heavy-oil conversion opt-out.
+    - Disables the optional starting suit to preserve the physical-visit gate.
+  Testing:
+    - Added official headless engine fixtures, local resource closure and finite bootstrap budget checks.

@@ -24,15 +24,21 @@ for _, name in ipairs(names) do
   r.enabled=false
   local tech="quinityn-"..stages.stage(r)
   local old=existing[name]
-  if old and #old>0 then
+  if name=="y-heavyoil2uc" and not settings.startup["yuoki-uc-heavyoil"].value then
+    -- Respect the upstream opt-out even after researching Cimota.
+  elseif old and #old>0 then
     -- Preserve an OR between alternative old unlocks with one bridge per old technology.
     table.sort(old)
     for i, prerequisite in ipairs(old) do
-      data:extend({{type="technology",name="quinityn-bridge-"..name.."-"..i,
-        localised_name={"", {"technology-name."..tech}, ": ", r.localised_name or {"recipe-name."..name}},
-        icon="__Yuoki__/graphics/icons/sign_tech_icon.png",icon_size=64,
-        prerequisites={tech,prerequisite},research_trigger={type="scripted",trigger_description={"quinityn.bridge"}},
-        effects={{type="unlock-recipe",recipe=name}},hidden=true}})
+      local bridge="quinityn-bridge-"..stages.stage(r).."-"..prerequisite
+      if not data.raw.technology[bridge] then
+        data:extend({{type="technology",name=bridge,
+          localised_name={"technology-name."..tech},
+          icon="__Yuoki__/graphics/icons/sign_tech_icon.png",icon_size=64,
+          prerequisites={tech,prerequisite},research_trigger={type="scripted",trigger_description={"quinityn.bridge"}},
+          effects={},hidden=true}})
+      end
+      table.insert(data.raw.technology[bridge].effects,{type="unlock-recipe",recipe=name})
     end
   else
     table.insert(data.raw.technology[tech].effects,{type="unlock-recipe",recipe=name})
@@ -52,3 +58,8 @@ for name, planet in pairs(data.raw.planet) do
     end
   end
 end
+-- Match all normal foundation destinations, then add the unicomp sea exclusively.
+local foundation=data.raw.item["quinityn-foundation"]
+foundation.place_as_tile=table.deepcopy(data.raw.item.foundation.place_as_tile)
+foundation.place_as_tile.result="quinityn-foundation"
+table.insert(foundation.place_as_tile.tile_condition,"quinityn-unicomp-sea")

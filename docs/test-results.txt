@@ -1,0 +1,110 @@
+Factorio 2.1.21 / Space Age; Yuoki ce7918f; Engines dd13f42
+Validated 2026-10-06
+
+PROTOTYPES
+PASS: 867 named upstream recipe gates; technology DAG; 17 guide chapters; foundations; science sinks; pollution
+
+REACHABILITY
+Closure: 512 items; 181 technologies; 85 machines; 21 iterations
+low-density-structure : low-density-structure
+processing-unit : processing-unit
+quinityn-burner-separator : quinityn-burner-separator
+quinityn-foundation : quinityn-foundation
+quinityn-research-data : quinityn-research-data
+rocket-fuel : y_mixedfuel2rocketfuel
+rocket-silo : rocket-silo
+y-atomic-constructor : y-atomic-constructor
+PASS: local zero-inventory / zero-research rocket and infinite-research science dependency closure
+
+BOOTSTRAP_BUDGET
+y-res1 4784 / 9800 starting units
+y-res2 2627 / 9800 starting units
+PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
+
+GENERATE-1
+PASS: upstream starting suit cannot bypass visit gate
+PASS: arrival locked before landing
+PASS: Yuoki locked before landing
+PASS: Engines locked before landing
+PASS: discovery alone does not unlock Yuoki
+PASS: guaranteed unicomp inlet
+PASS: dry landing plateau
+PASS: starter N4 patch
+PASS: starter F7 patch
+PASS: salvage generates
+PASS: biter bases generate
+PASS: no imported vanilla deposits
+PASS: all natural liquid tiles are unicomp
+PASS: remote view does not count as physical landing
+PASS: small starter deposit: y-res1=9800
+PASS: small starter deposit: y-res2=9800
+
+GENERATE-42
+PASS: upstream starting suit cannot bypass visit gate
+PASS: arrival locked before landing
+PASS: Yuoki locked before landing
+PASS: Engines locked before landing
+PASS: discovery alone does not unlock Yuoki
+PASS: guaranteed unicomp inlet
+PASS: dry landing plateau
+PASS: starter N4 patch
+PASS: starter F7 patch
+PASS: salvage generates
+PASS: biter bases generate
+PASS: no imported vanilla deposits
+PASS: all natural liquid tiles are unicomp
+PASS: remote view does not count as physical landing
+PASS: small starter deposit: y-res1=9800
+PASS: small starter deposit: y-res2=9800
+
+GENERATE-8675309
+PASS: upstream starting suit cannot bypass visit gate
+PASS: arrival locked before landing
+PASS: Yuoki locked before landing
+PASS: Engines locked before landing
+PASS: discovery alone does not unlock Yuoki
+PASS: guaranteed unicomp inlet
+PASS: dry landing plateau
+PASS: starter N4 patch
+PASS: starter F7 patch
+PASS: salvage generates
+PASS: biter bases generate
+PASS: no imported vanilla deposits
+PASS: all natural liquid tiles are unicomp
+PASS: remote view does not count as physical landing
+PASS: small starter deposit: y-res1=9800
+PASS: small starter deposit: y-res2=9800
+
+RUNTIME
+PASS: physical landing opens survey
+PASS: landing unlocks water bootstrap
+PASS: landing does not grant advanced Yuoki recipes
+PASS: materials still need research
+PASS: burner separator placement
+PASS: separator selects water recipe
+PASS: offshore pump can be placed at unicomp inlet
+PASS: new force remains locked
+PASS: materials research unlocks crusher
+PASS: local crude-oil milestone grants oil processing
+PASS: rocket silo can be placed on Quinityn
+PASS: receiving platform created
+PASS: burner separator actually produces water without grid power
+PASS: offshore pump actually extracts Yuoki liquid unicomp
+PASS: inserter discards into unicomp
+PASS: quality items also dissolve
+PASS: discarded items are destroyed
+PASS: mining research is infinite
+PASS: plasma research is infinite
+PASS: configuration reconciliation preserves unrelated recipe state
+PASS: configuration reconciliation preserves researched Yuoki recipes
+PASS: infinite mining research can be selected
+PASS: Quinityn science grants native infinite mining bonus
+PASS: infinite plasma research can be selected
+PASS: real rocket launched from Quinityn
+PASS: native rocket construction and launch
+PASS: Quinityn science grants native infinite plasma bonus
+RUNTIME TESTS PASSED
+
+PASS: official engine prototype load with default settings.
+PASS: official engine load with heavy-oil conversion disabled; no unlock can reenable it.
+PASS: final installable zip packages load and create a fresh save without the test harness.

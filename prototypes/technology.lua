@@ -48,3 +48,21 @@ local orbital=data.raw.technology["quinityn-orbital"]
 table.insert(orbital.prerequisites,"rocket-silo")
 table.insert(orbital.effects,unlock("quinityn-low-density-structure"))
 table.insert(orbital.effects,unlock("quinityn-processing-unit"))
+for _, definition in ipairs({
+  {name="quinityn-mining-productivity",effect={type="mining-drill-productivity-bonus",modifier=0.1}},
+  {name="quinityn-plasma-damage",effect={type="ammo-damage",ammo_category="plasma",modifier=0.1}}
+}) do
+  data:extend({{type="technology",name=definition.name,icon=icon,icon_size=64,
+    max_level="infinite",upgrade=true,
+    prerequisites={"quinityn-mastery","quinityn-orbital","production-science-pack","utility-science-pack","space-science-pack"},
+    effects={definition.effect},
+    unit={count_formula="1000*1.5^(L-1)",time=60,ingredients={
+      {"automation-science-pack",1},{"logistic-science-pack",1},{"chemical-science-pack",1},
+      {"production-science-pack",1},{"utility-science-pack",1},{"space-science-pack",1},
+      {"quinityn-research-data",2}}},order="y-z-"..definition.name}})
+end
+data:extend({{type="technology",name="quinityn-foundation",
+  icon="__space-age__/graphics/technology/foundation.png",icon_size=256,
+  prerequisites={"quinityn-refining"},effects={unlock("quinityn-foundation")},
+  unit={count=200,time=30,ingredients={{"automation-science-pack",1},{"logistic-science-pack",1},{"quinityn-research-data",1}}},
+  order="y-06a"}})

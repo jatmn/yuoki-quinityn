@@ -62,11 +62,11 @@ recipe("quinityn-research-data",{item("y-unicomp-raw",1),item("y-refined-yres2",
 for _, lab in pairs(data.raw.lab) do
   if lab.name == "lab" or lab.name == "biolab" then table.insert(lab.inputs,"quinityn-research-data") end
 end
-local wreck = copy(data.raw["simple-entity"]["huge-rock"])
+local wreck = copy(data.raw["simple-entity"]["fulgoran-ruin-small"])
 wreck.name = "quinityn-wreck"
 wreck.localised_name = {"entity-name.quinityn-wreck"}
 wreck.minable = {mining_time=1,results={item("quinityn-salvage",20)}}
-wreck.autoplace = {probability_expression="0.025 * (quinityn_elevation > 0)"}
+wreck.autoplace = {probability_expression="0.001 * (quinityn_elevation > 0) * (distance > 100)"}
 wreck.map_color = {0.58,0.41,0.68}
 data:extend({wreck})
 data.raw.planet.quinityn.map_gen_settings.autoplace_settings.entity.settings[wreck.name] = {}
@@ -74,3 +74,29 @@ recipe("quinityn-low-density-structure",{item("y_structure_element",2),item("y-u
   {item("low-density-structure",1)},{"crafting"},15)
 recipe("quinityn-processing-unit",{item("y-chip-2",2),item("y-conductive-wire-1",4),fluid("sulfuric-acid",5)},
   {item("processing-unit",1)},{"crafting-with-fluid"},10)
+
+-- Emergency dressing cannot become a competing automated ore industry.
+for _, name in ipairs({"hand-sort","iron","copper","carbon","stone","timber"}) do
+  data.raw.recipe["quinityn-"..name].categories={"hand-crafting"}
+end
+
+local foundation_item = copy(data.raw.item.foundation)
+foundation_item.name = "quinityn-foundation"
+foundation_item.default_import_location = "quinityn"
+foundation_item.place_as_tile.result = "quinityn-foundation"
+foundation_item.order = "c[landfill]-h[quinityn]"
+foundation_item.icons = {{icon=foundation_item.icon,icon_size=64,tint={0.65,0.40,1}}}
+foundation_item.icon = nil
+local foundation_tile = copy(data.raw.tile.foundation)
+foundation_tile.name = "quinityn-foundation"
+foundation_tile.minable.result = "quinityn-foundation"
+foundation_tile.frozen_variant = "quinityn-frozen-foundation"
+foundation_tile.tint = {0.65,0.5,0.85}
+foundation_tile.map_color = {0.35,0.25,0.42}
+local frozen = copy(data.raw.tile["frozen-foundation"])
+frozen.name = "quinityn-frozen-foundation"
+frozen.thawed_variant = "quinityn-foundation"
+if frozen.minable then frozen.minable.result="quinityn-foundation" end
+data:extend({foundation_item,foundation_tile,frozen})
+recipe("quinityn-foundation",{item("y_structure_element",2),item("y_structure_vessel",1),
+  item("y-orange-stuff",5),item("stone-brick",10)}, {item("quinityn-foundation",4)},{"yuoki-formpress"},8)
