@@ -129,7 +129,11 @@ for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fue
  assert a!=b and a in ancestry(b),(first,upgrade,a,b)
 print('PASS: discovery ancestry, mandatory post-milestone science, representative icons and ordered production tiers')
 
-assert mg['cliff_settings']['name']=='cliff-fulgora'
+assert mg['cliff_settings']['name']=='quinityn-cliff'
+assert D['cliff']['quinityn-cliff']['orientations']==D['cliff']['cliff-fulgora']['orientations']
+assert 'quinityn-cliff-blocker' not in D['cliff']['cliff-fulgora']['collision_mask']['layers']
+for name in mg['autoplace_settings']['tile']['settings']:
+ assert bool(tiles[name]['collision_mask']['layers'].get('quinityn-cliff-blocker')) == (name!='quinityn-ruined-district')
 assert D['autoplace-control']['quinityn_trees']['can_be_disabled']
 for name in ['quinityn-dry-tree','quinityn-dead-dry-hairy-tree']:
  tree=D['tree'][name]
@@ -154,3 +158,15 @@ for name,t in T.items():
  if name.startswith('quinityn-') and t.get('unit'):
   assert 'quinityn-industrial-science' in ancestry(name),name
 print('PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research')
+
+# Habitat is a surface-local generation override, never an enemy collision rule.
+for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-turret','big-worm-turret','behemoth-worm-turret']:
+ key='entity:'+name+':probability'
+ assert key in mg['property_expression_names']
+ entity=D.get('unit-spawner',{}).get(name,D.get('turret',{}).get(name))
+ assert 'quinityn' not in str(entity.get('collision_mask'))
+ assert 'quinityn' not in str(entity['autoplace'])
+ for planet in D['planet'].values():
+  if planet['name']!='quinityn':
+   assert 'quinityn' not in str(planet.get('map_gen_settings',{}).get('property_expression_names',{}).get(key,''))
+print('PASS: machinery-only cliff masks and surface-local enemy generation habitat')

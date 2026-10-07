@@ -6,9 +6,11 @@ Quinityn is the contract world named in YuokiTani's original stories. This adapt
 
 ## Development toward 0.1.0
 
-Development updates retain version **0.1.0** until `main` is stable for the initial release. This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. A winding dry land connection prevents isolated landing islands. Fulgora-style cliffs concentrate around shorelines, and sparse purple dead-tree groves have their own generation sliders and disable checkbox. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
+Development updates retain version **0.1.0** until `main` is stable for the initial release. This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. A winding dry land connection prevents isolated landing islands. Fulgora-style cliffs generate only on machinery-covered ruined districts, primarily near shorelines, and sparse purple dead-tree groves have their own generation sliders and disable checkbox. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
 
-These terrain changes apply to new chunks; use a fresh map to see the revised starting area. [Revision validation](docs/validation.md) includes biter pathfinding and actual factory operation checks.
+Initial enemy nests and worms generate on brown slag; later colonies can expand onto other walkable terrain.
+
+Use a fresh Quinityn surface or map to see all generation changes; existing surfaces can retain their saved generation settings and existing terrain is not rewritten. [Revision validation](docs/validation.md) includes biter pathfinding and actual factory operation checks.
 
 ## Download
 

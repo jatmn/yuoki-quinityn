@@ -19,7 +19,8 @@ script.on_init(function()
     local trees=surface.count_entities_filtered{area=area,type="tree"}
     local coast=0
     for _,cliff in pairs(surface.find_entities_filtered{area=area,type="cliff"}) do
-      assert(cliff.name=="cliff-fulgora")
+      assert(cliff.name=="quinityn-cliff")
+      assert(surface.get_tile(cliff.position).name=="quinityn-ruined-district","Cliff origin outside machinery district: "..name)
       local p=cliff.position
       if surface.count_tiles_filtered{area={{p.x-10,p.y-10},{p.x+10,p.y+10}},name="quinityn-unicomp-sea"}>0 then coast=coast+1 end
     end
@@ -27,7 +28,25 @@ script.on_init(function()
     check(surface.count_entities_filtered{area={{-80,-80},{80,80}},type="cliff"}==0,name.." protects starter core from cliffs")
     local signature={}
     for _,e in pairs(surface.find_entities_filtered{area=area,type="unit-spawner"}) do
+      assert(surface.get_tile(e.position).name=="quinityn-slag","Natural nest outside brown slag")
       signature[#signature+1]=e.name..":"..e.position.x..":"..e.position.y
+    end
+    for _,worm in pairs(surface.find_entities_filtered{area=area,type="turret",force="enemy"}) do
+      assert(surface.get_tile(worm.position).name=="quinityn-slag","Natural worm outside brown slag")
+    end
+    if name=="default" then
+      for _,kind in ipairs({"quinityn-basalt","quinityn-ash","quinityn-slag","quinityn-rubble","quinityn-ruined-district"}) do
+        local placed=false
+        for _,tile in pairs(surface.find_tiles_filtered{area=area,name=kind}) do
+          local spec={name="biter-spawner",force="enemy",position={tile.position.x+0.5,tile.position.y+0.5}}
+          if surface.can_place_entity(spec) then
+            local nest=surface.create_entity(spec)
+            check(nest and nest.valid,"later colony placement remains allowed on "..kind)
+            nest.destroy();placed=true;break
+          end
+        end
+        check(placed,"walkable colony site exists on "..kind)
+      end
     end
     table.sort(signature)
     log("CONTROL SAMPLE "..name.." sea="..sea.." cliffs="..cliffs.." bases="..bases.." trees="..trees.." coastal-cliffs="..coast)
@@ -36,9 +55,9 @@ script.on_init(function()
   end
   local normal=sample("default",function(_) end)
   -- Same seed/area at f14a2ae had 806 coastal cliffs and 397 trees.
-  check(normal.coast>806*0.35 and normal.coast<806*0.65,"coastal cliffs reduced roughly half from previous default")
+  check(normal.coast>0 and normal.coast<806*0.65,"machinery-only cliffs retain reduced coastal coverage")
   check(normal.trees>397 and normal.trees<397*1.5,"default tree increase remains modest")
-  check(normal.coast/normal.cliffs>0.65 and normal.coast<normal.cliffs,"cliffs are mostly coastal with some inland")
+  check(normal.coast/normal.cliffs>0.5 and normal.coast<normal.cliffs,"cliffs are mostly coastal with some inland")
   check(normal.trees>20 and normal.trees<1000,"dead trees are present but sparse by default")
   local no_trees=sample("trees-off",function(s) s.autoplace_controls.quinityn_trees={frequency=0,size=0} end)
   check(no_trees.trees==0,"tree checkbox suppresses all trees")

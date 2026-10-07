@@ -42,6 +42,9 @@ local function next_case()
   storage.surface=surface.index
   surface.request_to_generate_chunks({0,0},32)
   surface.force_generate_chunk_requests()
+  for _,cliff in pairs(surface.find_entities_filtered{type="cliff"}) do
+    assert(surface.get_tile(cliff.position).name=="quinityn-ruined-district","Cliff origin outside machinery district on seed "..case.seed.." at "..helpers.table_to_json(cliff.position).." tile "..surface.get_tile(cliff.position).name)
+  end
   -- Sample tile connectivity independently, then ask the native pathfinder to
   -- validate the selected exits with full entity collision (including cliffs).
   local frontier={{x=0,y=0}}
@@ -76,6 +79,9 @@ local function next_case()
     surface.request_to_generate_chunks({0,0},48)
     surface.force_generate_chunk_requests()
     nests=surface.find_entities_filtered{type="unit-spawner"}
+  end
+  for _,nest in pairs(nests) do
+    assert(surface.get_tile(nest.position).name=="quinityn-slag","Natural nest outside slag on seed "..case.seed)
   end
   table.sort(nests,function(a,b) return a.position.x^2+a.position.y^2 < b.position.x^2+b.position.y^2 end)
   for j=1,math.min(#nests,24) do
