@@ -5,6 +5,7 @@ Validated 2026-10-07
 PROTOTYPES
 PASS: 867 named upstream recipe gates; technology DAG; 17 guide chapters; foundations; science sinks; pollution
 PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons
+PASS: planet-specific map control membership and visible salvage sorting identity/unlock
 
 REACHABILITY
 Closure: 512 items; 181 technologies; 85 machines; 22 iterations
@@ -24,11 +25,11 @@ y-res2 3227 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 99 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 106 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
-Seed 420151202: land 59.2%, connected 82.7%, starter wrecks 306, outer wrecks 379, occupied districts 10/100
-Seed 420151243: land 40.5%, connected 90.5%, starter wrecks 182, outer wrecks 811, occupied districts 13/100
+Seed 420151202: land 59.2%, connected 82.7%, starter wrecks 300, outer wrecks 356, occupied districts 10/100
+Seed 420151243: land 40.5%, connected 90.5%, starter wrecks 182, outer wrecks 771, occupied districts 13/100
 Seed 428826510: land 26.2%, connected 90.6%, starter wrecks 183, outer wrecks 127, occupied districts 7/100
 PASS: organic connected terrain, six surface types, sparse dense salvage clusters and seed-varied starter placements
 
@@ -46,6 +47,10 @@ PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
 PASS: remote view does not count as physical landing
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
 PASS: rich starter deposit: y-res1=148383
 PASS: larger organic starter patch: y-res1
 PASS: rich starter deposit: y-res2=135357
@@ -65,6 +70,10 @@ PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
 PASS: remote view does not count as physical landing
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
 PASS: rich starter deposit: y-res1=135059
 PASS: larger organic starter patch: y-res1
 PASS: rich starter deposit: y-res2=138691
@@ -84,6 +93,10 @@ PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
 PASS: remote view does not count as physical landing
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
 PASS: rich starter deposit: y-res1=135853
 PASS: larger organic starter patch: y-res1
 PASS: rich starter deposit: y-res2=147834
@@ -138,7 +151,38 @@ PASS: infinite plasma research can be selected
 PASS: real rocket launched from Quinityn
 PASS: native rocket construction and launch
 PASS: Quinityn science grants native infinite plasma bonus
-RUNTIME TESTS PASSED
 
-PASS: official engine load with heavy-oil conversion disabled; no unlock can reenable it.
-PASS: final packaged 0.1.0 zip creates a fresh save without the test harness.
+MAP-CONTROLS
+PASS: default protects starter core from cliffs
+default sea=380279 cliffs=524 bases=8
+PASS: less-liquid protects starter core from cliffs
+less-liquid sea=220174 cliffs=1164 bases=20
+PASS: more-liquid protects starter core from cliffs
+more-liquid sea=474451 cliffs=235 bases=0
+PASS: unicomp coverage changes land/liquid ratio monotonically
+PASS: smaller-districts protects starter core from cliffs
+smaller-districts sea=399986 cliffs=732 bases=13
+PASS: unicomp scale changes generated terrain
+PASS: no-cliffs protects starter core from cliffs
+no-cliffs sea=380279 cliffs=0 bases=9
+PASS: cliffs generate by default and their slider disables them
+PASS: nauvis-enemies-off protects starter core from cliffs
+nauvis-enemies-off sea=380279 cliffs=524 bases=8
+PASS: Nauvis enemy settings do not change Quinityn nests
+PASS: more-enemies protects starter core from cliffs
+more-enemies sea=380279 cliffs=524 bases=171
+PASS: Quinityn enemy slider increases native nests
+PASS: no-enemies protects starter core from cliffs
+no-enemies sea=380279 cliffs=524 bases=0
+PASS: zero Quinityn enemy frequency suppresses nests
+PASS: nauvis has no Yuoki ores
+PASS: vulcanus has no Yuoki ores
+PASS: gleba has no Yuoki ores
+PASS: fulgora has no Yuoki ores
+PASS: aquilo has no Yuoki ores
+
+UPSTREAM OPTION
+PASS: heavy-oil conversion opt-out
+
+PACKAGING
+Packaged addon save-creation smoke is recorded in docs/validation.md.

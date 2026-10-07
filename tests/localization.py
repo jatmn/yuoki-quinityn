@@ -23,7 +23,7 @@ def localized(value,owner):
    if key.endswith('_key') and isinstance(child,str):assert child in keys,(owner,child)
    if isinstance(child,(list,dict)):localized(child,owner)
 
-fallback={'item':'item-name','tool':'item-name','recipe':'recipe-name','tile':'tile-name',
+fallback={'autoplace-control':'autoplace-control-names','item':'item-name','tool':'item-name','recipe':'recipe-name','tile':'tile-name',
  'assembling-machine':'entity-name','simple-entity':'entity-name','planet':'space-location-name',
  'space-connection':'space-connection-name','technology':'technology-name',
  'surface-property':'surface-property-name','item-subgroup':'item-subgroup-name',

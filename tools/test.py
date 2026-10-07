@@ -39,6 +39,13 @@ for seed in [1,42,8675309]:
  run(f'generate-{seed}',base+['--create',str(save),'--map-gen-seed',str(seed)],'rich starter deposit: y-res2=')
 run('worldgen',[sys.executable,str(ROOT/'tests/worldgen.py'),str(a.output)],'PASS')
 run('runtime',base+['--benchmark',str(a.output/'seed-42.zip'),'--benchmark-ticks','15001','--benchmark-runs','1'],'QUINITYN RUNTIME TESTS PASSED')
+# Native paired surfaces verify the independent planet controls through map generation.
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/map_controls")\n')
+ run('map-controls',base+['--create',str(a.output/'map-controls.zip'),'--map-gen-seed','42'],
+     'QUINITYN MAP CONTROL TESTS PASSED')
+finally:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Preserve the upstream heavy-oil conversion opt-out through the new tree.
 setting_override=harness/'settings-updates.lua'
 try:

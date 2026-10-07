@@ -65,12 +65,20 @@ planet.asteroid_spawn_definitions = copy(data.raw.planet.vulcanus.asteroid_spawn
 planet.map_gen_settings = {
   water = 1,
   starting_area = 1.5,
-  property_expression_names = {elevation = "quinityn_elevation", moisture = "0", aux = "0"},
-  cliff_settings = {name = "cliff", cliff_elevation_interval = 0, cliff_elevation_0 = 1024},
+  property_expression_names = {
+    elevation = "quinityn_elevation", moisture = "0", aux = "0",
+    cliff_elevation = "quinityn_cliff_elevation", cliffiness = "quinityn_cliffiness",
+    enemy_base_radius = "quinityn_enemy_base_radius",
+    enemy_base_frequency = "quinityn_enemy_base_frequency"
+  },
+  cliff_settings = {name = "cliff", control = "quinityn_cliff",
+    cliff_elevation_interval = 24, cliff_elevation_0 = 12, richness = 0.7},
   autoplace_controls = {
     ["y-res1"] = {frequency = 0.5, size = 0.5, richness = 0.5},
     ["y-res2"] = {frequency = 0.5, size = 0.5, richness = 0.5},
-    ["enemy-base"] = {frequency = 1, size = 1, richness = 1}
+    ["quinityn_enemy_base"] = {frequency = 1, size = 1},
+    ["quinityn_water"] = {frequency = 1, size = 1},
+    ["quinityn_cliff"] = {}
   },
   autoplace_settings = {
     tile = {treat_missing_as_default = false, settings = {[sea.name] = {}, [land.name] = {}}},
@@ -90,6 +98,20 @@ connection.length = 15000
 connection.order = "d"
 data:extend({
   {type = "surface-property", name = "quinityn-industry", default_value = 0},
+  {type="autoplace-control",name="quinityn_water",category="terrain",order="c-z-e",can_be_disabled=false,
+    localised_description={"autoplace-control-descriptions.quinityn_water"}},
+  {type="autoplace-control",name="quinityn_cliff",category="cliff",order="c-z-e",
+    localised_description={"autoplace-control-descriptions.quinityn_cliff"}},
+  {type="autoplace-control",name="quinityn_enemy_base",category="enemy",order="z-q",
+    richness=false,can_be_disabled=false,related_to_fight_achievements=true,
+    localised_description={"autoplace-control-descriptions.quinityn_enemy_base"}},
+  {type="noise-expression",name="quinityn_enemy_base_radius",
+    expression="sqrt(control:quinityn_enemy_base:size) * (15 + 4 * enemy_base_intensity)"},
+  {type="noise-expression",name="quinityn_enemy_base_frequency",
+    expression="(0.00001 + 0.000003 * enemy_base_intensity) * control:quinityn_enemy_base:frequency"},
+  {type="noise-expression",name="quinityn_cliff_elevation",expression="4 * quinityn_elevation"},
+  {type="noise-expression",name="quinityn_cliffiness",
+    expression="cliffiness_basic * (distance > 125) * (quinityn_elevation > 2)"},
   -- Domain warping breaks up smooth coastlines; broad ridges keep districts joined.
   {type="noise-expression",name="quinityn_warp_x",expression=[[
     multioctave_noise{x=x,y=y,seed0=map_seed,seed1=811,octaves=3,
@@ -101,11 +123,11 @@ data:extend({
   ]]},
   {type="noise-expression",name="quinityn_continents",expression=[[
     multioctave_noise{x=x+quinityn_warp_x,y=y+quinityn_warp_y,
-      seed0=map_seed,seed1=912,octaves=4,persistence=0.55,input_scale=0.007,output_scale=1}
+      seed0=map_seed,seed1=912,octaves=4,persistence=0.55,input_scale=0.007 * sqrt(control:quinityn_water:frequency),output_scale=1}
   ]]},
   {type="noise-expression",name="quinityn_elevation",expression=[[
     max(110-sqrt((x+18*sin(quinityn_warp_x/20))^2+(y+18*sin(quinityn_warp_y/20))^2),
-      28*(0.33-abs(quinityn_continents)))
+      28*(0.33 / max(0.1,control:quinityn_water:size)-abs(quinityn_continents)))
   ]]},
   {type="noise-expression",name="quinityn_stockpile_noise",expression=[[
     multioctave_noise{x=x,y=y,seed0=map_seed,seed1=2171,octaves=3,

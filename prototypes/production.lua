@@ -55,6 +55,12 @@ data:extend({separator,separator_item,
 -- Emergency manual processes have poor yield; established Yuoki machinery is the scaling route.
 recipe("quinityn-hand-sort",{item("quinityn-salvage",1)},
   {item("y-res1",2),item("y-res2",2),item("stone",2),item("wood",1)},nil,3)
+-- Sorting represents the input salvage, not just the first of four outputs.
+local sort=data.raw.recipe["quinityn-hand-sort"]
+sort.icons={{icon=data.raw.item["quinityn-salvage"].icon,icon_size=256}}
+sort.main_product=""
+sort.localised_description={"recipe-description.quinityn-hand-sort"}
+data.raw.item["quinityn-salvage"].default_import_location="quinityn"
 recipe("quinityn-iron",{item("y-res1",3)},{item("iron-ore",2)},nil,3)
 recipe("quinityn-copper",{item("y-res2",3)},{item("copper-ore",2)},nil,3)
 recipe("quinityn-carbon",{item("y-res2",2)},{item("coal",1)},nil,2)

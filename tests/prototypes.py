@@ -85,3 +85,21 @@ for name,group in [('quinityn-salvage',I),('quinityn-research-data',D['tool'])]:
  width,height,depth,color=struct.unpack('>IIBB',image[16:26])
  assert width==height==p['icon_size']==256 and depth==8 and color==6
 print('PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons')
+
+# UI planet badges are derived from control membership, not nonzero settings.
+for name,planet in D['planet'].items():
+ mg=planet.get('map_gen_settings',{})
+ for ore in ['y-res1','y-res2']:
+  assert (ore in mg.get('autoplace_controls',{})) == (name=='quinityn'), (name,ore)
+mg=D['planet']['quinityn']['map_gen_settings']
+assert 'enemy-base' not in mg['autoplace_controls']
+for control,category in [('quinityn_water','terrain'),('quinityn_cliff','cliff'),('quinityn_enemy_base','enemy')]:
+ assert control in mg['autoplace_controls'] and D['autoplace-control'][control]['category']==category
+sort=R['quinityn-hand-sort']
+assert sort['icons']==[{'icon':I['quinityn-salvage']['icon'],'icon_size':I['quinityn-salvage']['icon_size']}]
+assert not sort.get('hidden',False) and not sort.get('hide_from_player_crafting',False)
+assert sort['ingredients']==[{'type':'item','name':'quinityn-salvage','amount':1}]
+assert {p['name']:p['amount'] for p in sort['results']}=={'y-res1':2,'y-res2':2,'stone':2,'wood':1}
+assert unlocks['quinityn-hand-sort']==['quinityn-arrival']
+assert 'hand-crafting' in D['character']['character']['crafting_categories']
+print('PASS: planet-specific map control membership and visible salvage sorting identity/unlock')

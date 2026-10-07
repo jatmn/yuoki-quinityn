@@ -42,6 +42,15 @@ script.on_init(function()
     physical_surface=game.surfaces.nauvis,surface=surface}
   check(not force.technologies["quinityn-arrival"].researched,"remote view does not count as physical landing")
   progression.arrive{valid=true,character=character,force=force,physical_surface=surface}
+  -- Mine a naturally generated stockpile into a real inventory, then verify its
+  -- consumer is available after the actual arrival handler (no fabricated unlock).
+  local wreck=surface.find_entities_filtered{name="quinityn-wreck",limit=1}[1]
+  local mined=game.create_inventory(1)
+  check(wreck.mine{inventory=mined},"natural stockpile can be mined")
+  check(mined.get_item_count("quinityn-salvage")==20,"stockpile yields the sorting ingredient")
+  check(force.recipes["quinityn-hand-sort"].enabled,"arrival unlocks salvage sorting")
+  check(not force.recipes["quinityn-hand-sort"].hidden,"salvage sorting is visible")
+  mined.destroy()
   storage.test_surface=surface.index
   for _, name in ipairs({"y-res1","y-res2"}) do
     local amount=0

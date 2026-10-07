@@ -6,9 +6,9 @@ The two icons were generated with the built-in imagegen tool on 2026-10-07, then
 
 ## Final generation prompts
 
-The science badge was subsequently enlarged at the user's request. Final edit prompt (built-in imagegen):
+The science badge was enlarged again after the user supplied its actual 32px inventory appearance. The final icon was inspected at 32px, not just 64px. Final edit prompt (built-in imagegen):
 
-Use case: precise-object-edit. Edit this exact transparent Factorio science bottle inventory icon. Change ONLY the Technic Sign badge on the front: enlarge the complete dark hexagonal backing and red cogwheel together by approximately 25 percent, keeping the badge centered in its existing location and attached naturally to the front glass. It should be easier to read at 64px inventory size. Preserve exactly the bottle silhouette, bottle scale and framing, glass, metallic stopper, violet unicomp liquid color and level, lighting and all other details. Do not enlarge or redesign the bottle. No lettering or new elements. Preserve genuine background alpha transparency. Single square icon.
+Use case: precise-object-edit. Asset type: transparent Factorio inventory science pack icon. Edit the supplied exact bottle. Change ONLY the front Technic Sign badge: enlarge its entire dark hexagonal plate and red cogwheel to approximately 80 percent of the round bottle bulb width (about 1.8 times the current badge width), centered on the lower front bulb. The red cog and central concentric circles must remain crisp, chunky and clearly readable when the entire image is only 32 by 32 pixels. Use strong red highlights and dark edging, no extra fine markings. Keep the identical bottle silhouette, scale, neck and metal stopper, glass reflections and violet unicomp liquid. Keep a visible purple glass/liquid rim around the badge. Keep the same tight square framing, transparent background, no lettering, no shadow outside the bottle, no other objects. Actual alpha transparency.
 
 ### Salvage
 
