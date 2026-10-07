@@ -170,3 +170,23 @@ for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-
   if planet['name']!='quinityn':
    assert 'quinityn' not in str(planet.get('map_gen_settings',{}).get('property_expression_names',{}).get(key,''))
 print('PASS: machinery-only cliff masks and surface-local enemy generation habitat')
+
+# The new natural remnants stay cosmetic and planet-local, with water shorelines
+# rather than lava/void edges. Native source prototypes remain available unchanged.
+for name,source in [('quinityn-weathered-soil','dirt-6'),('quinityn-dead-turf','grass-4')]:
+ tile=tiles[name]
+ assert tile['absorptions_per_second']['pollution']==.000001
+ assert tile['variants']==tiles[source]['variants']
+ assert tile['tint']!=tiles[source].get('tint')
+ shore=[t for t in tile['transitions'] if 'quinityn-unicomp-sea' in t.get('to_tiles',[])]
+ assert len(shore)==1 and 'water' in shore[0]['to_tiles']
+ assert all('quinityn-unicomp-sea' not in t.get('to_tiles',[]) for t in tiles[source]['transitions'])
+for name in ['quinityn-dead-shrub','quinityn-dry-tuft','quinityn-dead-grass','quinityn-dead-groundcover',
+             'quinityn-tiny-rock','quinityn-small-rock']:
+ assert name in D['optimized-decorative'] and name in mg['autoplace_settings']['decorative']['settings']
+ assert name not in mg['autoplace_settings']['entity']['settings']
+ assert 'minable' not in D['optimized-decorative'][name]
+for name,planet in D['planet'].items():
+ if name!='quinityn':
+  assert 'quinityn-weathered-soil' not in planet.get('map_gen_settings',{}).get('autoplace_settings',{}).get('tile',{}).get('settings',{})
+print('PASS: decayed soil/turf, native water transitions and non-mineable plant/stone decoratives')

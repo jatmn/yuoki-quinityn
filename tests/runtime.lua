@@ -17,9 +17,21 @@ script.on_init(function()
 
   check(surface.count_entities_filtered{name="quinityn-wreck",area={{-160,-160},{160,160}}}>=15,"abundant clustered starter salvage")
   check(#surface.find_decoratives_filtered{area={{-200,-200},{200,200}}}>100,"cosmetic decoratives generate")
+  local natural_decoratives={"quinityn-dead-shrub","quinityn-dry-tuft","quinityn-dead-grass",
+    "quinityn-dead-groundcover","quinityn-tiny-rock","quinityn-small-rock"}
+  for _,name in ipairs(natural_decoratives) do
+    local placed=surface.find_decoratives_filtered{area={{-360,-360},{360,360}},name=name}
+    check(#placed>10,"natural ground detail generates: "..name)
+    for _,d in pairs(placed) do
+      local tile=surface.get_tile(d.position).name
+      assert(tile=="quinityn-weathered-soil" or tile=="quinityn-dead-turf","Natural detail outside old soil: "..name)
+    end
+    log("NATURAL DETAIL "..name.." placements="..#placed)
+  end
   local rows={}
   local codes={["quinityn-unicomp-sea"]="~",["quinityn-basalt"]=".",["quinityn-slag"]="s",
-    ["quinityn-ruined-district"]="m",["quinityn-ash"]="a",["quinityn-rubble"]="r"}
+    ["quinityn-ruined-district"]="m",["quinityn-ash"]="a",["quinityn-rubble"]="r",
+    ["quinityn-weathered-soil"]="d",["quinityn-dead-turf"]="g"}
   for y=-360,358,2 do
     local row={}
     for x=-360,358,2 do row[#row+1]=codes[surface.get_tile(x,y).name] or "?" end

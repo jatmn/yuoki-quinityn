@@ -200,44 +200,88 @@ for _, name in ipairs({"biter-spawner","spitter-spawner","small-worm-turret",
   planet.map_gen_settings.property_expression_names["entity:"..name..":probability"]=expression
 end
 
--- Ruined industrial districts interrupt the basalt with slag and buried machinery.
-data:extend({{type="noise-expression",name="quinityn_industrial_noise",expression=[[
-  multioctave_noise{x=x,y=y,seed0=map_seed,seed1=1717,octaves=3,
-    persistence=0.5,input_scale=0.025,output_scale=1}
-]]}})
+-- Remnants of the old soil weave between the industrial districts. Keep their
+-- mask outside slag/machinery so native nest and cliff habitats remain intact.
+data:extend({
+  {type="noise-expression",name="quinityn_industrial_noise",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=1717,octaves=3,
+      persistence=0.5,input_scale=0.025,output_scale=1}
+  ]]},
+  {type="noise-expression",name="quinityn_soil_patches",expression=[[
+    multioctave_noise{x=x+quinityn_warp_x,y=y+quinityn_warp_y,
+      seed0=map_seed,seed1=2719,octaves=3,persistence=0.55,input_scale=0.012,output_scale=1}
+  ]]},
+  {type="noise-expression",name="quinityn_groundcover",expression=[[
+    clamp(multioctave_noise{x=x,y=y,seed0=map_seed,seed1=3121,octaves=2,
+      persistence=0.5,input_scale=0.045,output_scale=1} + 0.25,0,1)
+  ]]}
+})
 for i, spec in ipairs({
   {name="quinityn-slag",source="volcanic-ash-cracks",threshold="quinityn_industrial_noise > 0.15"},
   {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"},
   {name="quinityn-ash",source="volcanic-ash-light",threshold="quinityn_industrial_noise < -0.20"},
-  {name="quinityn-rubble",source="fulgoran-walls",threshold="quinityn_industrial_noise < -0.45"}
+  {name="quinityn-rubble",source="fulgoran-walls",threshold="quinityn_industrial_noise < -0.45"},
+  {name="quinityn-weathered-soil",source="dirt-6",layer=55,tint={0.88,0.78,0.85},map_color={0.29,0.23,0.22},
+    threshold="(quinityn_industrial_noise <= 0.15) * (quinityn_soil_patches > -0.65)"},
+  {name="quinityn-dead-turf",source="grass-4",layer=56,tint={0.82,0.68,0.78},map_color={0.25,0.21,0.23},
+    threshold="(quinityn_industrial_noise <= 0.15) * (quinityn_soil_patches > 0.4)"}
 }) do
   local tile=copy(data.raw.tile[spec.source])
   tile.name=spec.name
+  tile.factoriopedia_alternative=nil
   if spec.name~="quinityn-ruined-district" then tile.collision_mask.layers[cliff_blocker]=true end
   tile.allowed_neighbors=nil
   tile.transition_merges_with_tile=nil
   tile.autoplace={probability_expression=(2000+i).." * (quinityn_elevation >= 0) * (distance > 12) * ("..spec.threshold..")"}
   tile.absorptions_per_second={pollution=0.000001}
-  tile.tint={0.75,0.65,0.8}
+  tile.tint=spec.tint or {0.75,0.65,0.8}
+  -- Match the ash layer family above slag; lower Nauvis layers let native tile
+  -- correction replace narrow slag margins underneath map-generated nests.
+  if spec.layer then tile.layer=spec.layer end
+  if spec.map_color then tile.map_color=spec.map_color end
+  if spec.name=="quinityn-weathered-soil" or spec.name=="quinityn-dead-turf" then
+    tile.vehicle_friction_modifier=land.vehicle_friction_modifier
+  end
   for _, tr in pairs(tile.transitions or {}) do
-    if tr.to_tiles then table.insert(tr.to_tiles,"quinityn-unicomp-sea") end
+    for _, name in pairs(tr.to_tiles or {}) do
+      if name=="water" then
+        table.insert(tr.to_tiles,sea.name)
+        break
+      end
+    end
   end
   data:extend({tile})
   planet.map_gen_settings.autoplace_settings.tile.settings[spec.name]={}
 end
 
--- Surface-local decorative clones use this world's masks, not another planet's noise.
+-- Non-mineable ground detail follows the terrain: dry, poisoned plants and
+-- ordinary stones on old soil; volcanic fragments and wreckage in scarred areas.
+local soils={"quinityn-weathered-soil","quinityn-dead-turf"}
+local rocky_ground={"quinityn-basalt","quinityn-slag","quinityn-ash"}
 for _, spec in ipairs({
-  {"tiny-volcanic-rock",0.12}, {"small-volcanic-rock",0.025},
-  {"vulcanus-crack-decal",0.035}, {"pumice-relief-decal",0.018},
-  {"fulgoran-ruin-tiny",0.055}
+  {"tiny-volcanic-rock",0.12,tiles=rocky_ground}, {"small-volcanic-rock",0.025,tiles=rocky_ground},
+  {"vulcanus-crack-decal",0.035,tiles={"quinityn-basalt","quinityn-slag"}},
+  {"pumice-relief-decal",0.018,tiles={"quinityn-basalt","quinityn-ash"}},
+  {"fulgoran-ruin-tiny",0.055,tiles={"quinityn-ruined-district","quinityn-rubble"}},
+  {"tiny-rock",0.09,tiles=soils,tint={0.85,0.78,0.88}},
+  {"small-rock",0.018,tiles=soils,tint={0.85,0.78,0.88}},
+  {"brown-asterisk",0.035,name="quinityn-dead-shrub",tiles=soils,tint={0.84,0.64,0.9},plant=true},
+  {"brown-fluff-dry",0.06,name="quinityn-dry-tuft",tiles=soils,tint={0.86,0.72,0.9},plant=true},
+  {"brown-hairy-grass",0.045,name="quinityn-dead-grass",tiles=soils,tint={0.82,0.69,0.86},plant=true},
+  {"brown-carpet-grass",0.018,name="quinityn-dead-groundcover",tiles=soils,tint={0.82,0.69,0.86},plant=true}
 }) do
   local decorative=copy(data.raw["optimized-decorative"][spec[1]])
-  decorative.name="quinityn-"..spec[1]
+  decorative.name=spec.name or "quinityn-"..spec[1]
   decorative.localised_name={"decorative-name."..decorative.name}
   decorative.collision_mask={layers={water_tile=true},colliding_with_tiles_only=true}
-  decorative.autoplace={probability_expression=spec[2]..
-    " * (quinityn_elevation > 0) * clamp(0.5 + quinityn_industrial_noise,0.15,1)"}
+  if spec.tint then
+    for _, sprite in pairs(decorative.pictures) do sprite.tint=spec.tint end
+  end
+  -- Equal autoplace orders compete, suppressing every type except the most
+  -- probable one. Independent groups let stones, shrubs and grass coexist.
+  decorative.autoplace={order=decorative.name,tile_restriction=spec.tiles,probability_expression=spec[2]..
+    " * (quinityn_elevation > 0)"..(spec.plant and " * quinityn_groundcover" or
+      (spec.tiles==soils and "" or " * clamp(0.5 + quinityn_industrial_noise,0.15,1)"))}
   data:extend({decorative})
   planet.map_gen_settings.autoplace_settings.decorative.settings[decorative.name]={}
 end
@@ -258,7 +302,7 @@ for _, source in ipairs({"dry-tree", "dead-dry-hairy-tree"}) do
   tree.map_color={0.55,0.36,0.62}
   for _, sprite in pairs(tree.pictures) do sprite.tint={0.95,0.68,1} end
   tree.autoplace={control="quinityn_trees",order="a[tree]-z[quinityn]",probability_expression=[[
-    0.014 * (control:quinityn_trees:frequency > 0) * (control:quinityn_trees:size > 0)
+    0.0112 * (control:quinityn_trees:frequency > 0) * (control:quinityn_trees:size > 0)
       * (distance > 85) * (quinityn_elevation > 1) * (quinityn_passage_distance > 12)
       * clamp((quinityn_tree_patches + 0.35 * log2(max(0.01,control:quinityn_trees:size)) - 0.48)*3,0,1)
   ]]}

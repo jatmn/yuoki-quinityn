@@ -10,6 +10,7 @@ PASS: discovery ancestry, mandatory post-milestone science, representative icons
 PASS: Fulgora cliffs and controllable purple dead-tree sprites
 PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research
 PASS: machinery-only cliff masks and surface-local enemy generation habitat
+PASS: decayed soil/turf, native water transitions and non-mineable plant/stone decoratives
 
 REACHABILITY
 PASS: first Quinityn science producible after factory milestone, before Power
@@ -30,16 +31,21 @@ y-res2 3551 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 243 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 253 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
-Seed 420151202: land 61.8%, connected 98.4%, starter wrecks 187, outer wrecks 372, occupied districts 10/100
-Seed 420151243: land 44.4%, connected 100.0%, starter wrecks 117, outer wrecks 811, occupied districts 12/100
-Seed 428826510: land 32.3%, connected 92.4%, starter wrecks 169, outer wrecks 127, occupied districts 8/100
-PASS: organic connected terrain, six surface types, sparse dense salvage clusters and seed-varied starter placements
-
+Seed 420151202: land 61.8%, connected 98.4%, natural soil/turf 42.9% of land, starter wrecks 187, outer wrecks 372, occupied districts 10/100
+Seed 420151243: land 44.4%, connected 100.0%, natural soil/turf 52.7% of land, starter wrecks 117, outer wrecks 811, occupied districts 12/100
+Seed 428826510: land 32.3%, connected 92.4%, natural soil/turf 54.3% of land, starter wrecks 169, outer wrecks 127, occupied districts 8/100
+PASS: organic connected terrain, eight surface types with decayed natural patches, sparse dense salvage clusters and seed-varied starter placements
 
 GENERATE-1
+quinityn-dead-shrub placements=1754
+quinityn-dry-tuft placements=2986
+quinityn-dead-grass placements=2222
+quinityn-dead-groundcover placements=880
+quinityn-tiny-rock placements=12373
+quinityn-small-rock placements=2426
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
@@ -64,6 +70,12 @@ PASS: rich starter deposit: y-res2=135357
 PASS: larger organic starter patch: y-res2
 
 GENERATE-42
+quinityn-dead-shrub placements=1535
+quinityn-dry-tuft placements=2661
+quinityn-dead-grass placements=1982
+quinityn-dead-groundcover placements=796
+quinityn-tiny-rock placements=10836
+quinityn-small-rock placements=2068
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
@@ -88,6 +100,12 @@ PASS: rich starter deposit: y-res2=138691
 PASS: larger organic starter patch: y-res2
 
 GENERATE-8675309
+quinityn-dead-shrub placements=1307
+quinityn-dry-tuft placements=2226
+quinityn-dead-grass placements=1683
+quinityn-dead-groundcover placements=707
+quinityn-tiny-rock placements=8090
+quinityn-small-rock placements=1556
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
@@ -178,46 +196,49 @@ PASS: later colony placement remains allowed on quinityn-rubble
 PASS: walkable colony site exists on quinityn-rubble
 PASS: later colony placement remains allowed on quinityn-ruined-district
 PASS: walkable colony site exists on quinityn-ruined-district
-default sea=362408 cliffs=109 bases=4 trees=445 coastal-cliffs=63
+PASS: later colony placement remains allowed on quinityn-weathered-soil
+PASS: walkable colony site exists on quinityn-weathered-soil
+PASS: later colony placement remains allowed on quinityn-dead-turf
+PASS: walkable colony site exists on quinityn-dead-turf
+default sea=362408 cliffs=109 bases=4 trees=360 coastal-cliffs=63
 PASS: machinery-only cliffs retain reduced coastal coverage
-PASS: default tree increase remains modest
+PASS: default trees are modestly reduced from PR #1
 PASS: cliffs are mostly coastal with some inland
 PASS: dead trees are present but sparse by default
 PASS: trees-off protects starter core from cliffs
 trees-off sea=362408 cliffs=109 bases=4 trees=0 coastal-cliffs=63
 PASS: tree checkbox suppresses all trees
 PASS: more-trees protects starter core from cliffs
-more-trees sea=362408 cliffs=109 bases=4 trees=660 coastal-cliffs=63
+more-trees sea=362408 cliffs=109 bases=4 trees=554 coastal-cliffs=63
 PASS: tree coverage slider increases groves
 PASS: tree-frequency protects starter core from cliffs
-tree-frequency sea=362408 cliffs=109 bases=3 trees=392 coastal-cliffs=63
+tree-frequency sea=362408 cliffs=109 bases=3 trees=344 coastal-cliffs=63
 PASS: tree frequency changes groves
 PASS: less-liquid protects starter core from cliffs
-less-liquid sea=214545 cliffs=166 bases=5 trees=859 coastal-cliffs=23
+less-liquid sea=214545 cliffs=166 bases=5 trees=703 coastal-cliffs=23
 PASS: more-liquid protects starter core from cliffs
-more-liquid sea=446109 cliffs=82 bases=0 trees=247 coastal-cliffs=71
+more-liquid sea=446109 cliffs=82 bases=0 trees=207 coastal-cliffs=71
 PASS: unicomp coverage changes land/liquid ratio monotonically
 PASS: smaller-districts protects starter core from cliffs
-smaller-districts sea=377817 cliffs=225 bases=7 trees=521 coastal-cliffs=131
+smaller-districts sea=377817 cliffs=225 bases=5 trees=401 coastal-cliffs=131
 PASS: unicomp scale changes generated terrain
 PASS: no-cliffs protects starter core from cliffs
-no-cliffs sea=362408 cliffs=0 bases=4 trees=446 coastal-cliffs=0
+no-cliffs sea=362408 cliffs=0 bases=4 trees=362 coastal-cliffs=0
 PASS: cliffs generate by default and their slider disables them
 PASS: nauvis-enemies-off protects starter core from cliffs
-nauvis-enemies-off sea=362408 cliffs=109 bases=4 trees=445 coastal-cliffs=63
+nauvis-enemies-off sea=362408 cliffs=109 bases=4 trees=360 coastal-cliffs=63
 PASS: Nauvis enemy settings do not change Quinityn nests
 PASS: more-enemies protects starter core from cliffs
-more-enemies sea=362408 cliffs=109 bases=97 trees=445 coastal-cliffs=63
+more-enemies sea=362408 cliffs=109 bases=99 trees=360 coastal-cliffs=63
 PASS: Quinityn enemy slider increases native nests
 PASS: no-enemies protects starter core from cliffs
-no-enemies sea=362408 cliffs=109 bases=0 trees=445 coastal-cliffs=63
+no-enemies sea=362408 cliffs=109 bases=0 trees=360 coastal-cliffs=63
 PASS: zero Quinityn enemy frequency suppresses nests
 PASS: nauvis has no Yuoki ores
 PASS: vulcanus has no Yuoki ores
 PASS: gleba has no Yuoki ores
 PASS: fulgora has no Yuoki ores
 PASS: aquilo has no Yuoki ores
-
 
 PRODUCTION MILESTONES
 PASS: actual production completed materials
