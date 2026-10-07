@@ -14,8 +14,6 @@ local groups = {
 local mapping = {}
 for stage, list in pairs(groups) do for _, group in ipairs(list) do mapping[group]=stage end end
 local overrides = {
-  -- First factory must precede the planet science it is required to manufacture.
-  ["ye_fassembly1"]="materials",
   ["y-atomic-constructor"]="cimota", ["y-atomic-quantum-composer"]="quantum",
   ["y-alien-infuser"]="quantum", ["y_crystalizer"]="refining",
   ["y_moxmixer"]="refining", ["y_smelter"]="refining", ["y_charger"]="quantum",
@@ -30,6 +28,9 @@ local overrides = {
 for _, tier in ipairs(require("prototypes.research-tiers")) do
   for _, name in ipairs(tier.recipes) do overrides[name]=tier.name end
 end
+overrides["y-heat-pipe"]="power"
+overrides["yi_graphite"]="power"
+overrides["ye_canister2plates_smelt"]="fluid-handling"
 overrides["y_turret_gun1f12"]="defense"
 overrides["y-weapon-ztt"]="quantum-power"
 overrides["ye_center"]="quantum"

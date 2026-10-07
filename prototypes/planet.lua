@@ -79,7 +79,7 @@ planet.map_gen_settings = {
     ["quinityn_enemy_base"] = {frequency = 1, size = 1},
     ["quinityn_water"] = {frequency = 1, size = 1},
     ["quinityn_cliff"] = {},
-    ["quinityn_trees"] = {frequency = 1, size = 1}
+    ["quinityn_trees"] = {frequency = 1.25, size = 1}
   },
   autoplace_settings = {
     tile = {treat_missing_as_default = false, settings = {[sea.name] = {}, [land.name] = {}}},
@@ -118,7 +118,12 @@ data:extend({
   {type="noise-expression",name="quinityn_cliff_elevation",
     expression="40 + 50 * (quinityn_elevation > 1) + clamp(2 * (quinityn_elevation - 1),0,70)"},
   {type="noise-expression",name="quinityn_cliffiness",
-    expression="cliffiness_basic * (distance > 125) * (quinityn_passage_distance > 18) * (4 * (quinityn_elevation < 3) + (quinityn_elevation >= 3) * (quinityn_industrial_noise > 0.7))"},
+    expression="cliffiness_basic * (distance > 125) * (quinityn_passage_distance > 18) * (4 * (quinityn_elevation < 3) * (quinityn_coastal_breaks > 0.1) + (quinityn_elevation >= 3) * (quinityn_industrial_noise > 0.7))"},
+  -- Coherent breaks remove about half the coastal wall and open usable shore.
+  {type="noise-expression",name="quinityn_coastal_breaks",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=5321,octaves=2,
+      persistence=0.5,input_scale=0.035,output_scale=1}
+  ]]},
   -- Domain warping breaks up smooth coastlines; broad ridges keep districts joined.
   {type="noise-expression",name="quinityn_warp_x",expression=[[
     multioctave_noise{x=x,y=y,seed0=map_seed,seed1=811,octaves=3,
@@ -222,13 +227,13 @@ for _, source in ipairs({"dry-tree", "dead-dry-hairy-tree"}) do
   tree.localised_description={"entity-description.quinityn-dead-tree"}
   tree.factoriopedia_alternative=nil
   tree.deconstruction_alternative=nil
-  tree.icons={{icon=tree.icon,icon_size=tree.icon_size or 64,tint={0.72,0.38,0.85}}}
-  tree.map_color={0.32,0.18,0.35}
-  for _, sprite in pairs(tree.pictures) do sprite.tint={0.72,0.38,0.85} end
+  tree.icons={{icon=tree.icon,icon_size=tree.icon_size or 64,tint={0.95,0.68,1}}}
+  tree.map_color={0.55,0.36,0.62}
+  for _, sprite in pairs(tree.pictures) do sprite.tint={0.95,0.68,1} end
   tree.autoplace={control="quinityn_trees",order="a[tree]-z[quinityn]",probability_expression=[[
-    0.012 * (control:quinityn_trees:frequency > 0) * (control:quinityn_trees:size > 0)
+    0.014 * (control:quinityn_trees:frequency > 0) * (control:quinityn_trees:size > 0)
       * (distance > 85) * (quinityn_elevation > 1) * (quinityn_passage_distance > 12)
-      * clamp((quinityn_tree_patches + 0.35 * log2(max(0.01,control:quinityn_trees:size)) - 0.55)*3,0,1)
+      * clamp((quinityn_tree_patches + 0.35 * log2(max(0.01,control:quinityn_trees:size)) - 0.48)*3,0,1)
   ]]}
   data:extend({tree})
   planet.map_gen_settings.autoplace_settings.entity.settings[tree.name]={}

@@ -111,6 +111,8 @@ script.on_event(defines.events.on_tick,function(event)
     check(force.recipes["y-crush-unicomp-raw"].enabled and not force.recipes["y-crush-blue_whead"].enabled,
       "Materials enables plain crushing but not tool-assisted crushing")
     check(not force.recipes["y_crusher2"].enabled,"Materials does not unlock the second crusher")
+    check(not force.recipes["y-heat-form-press"].enabled and not force.recipes["quinityn-research-data"].enabled,
+      "Crushing does not unlock pressing or science")
     force.technologies["quinityn-excavation"].researched=true
     check(force.recipes["y-digfdirt"].enabled and not force.recipes["y-digfdirt2"].enabled,
       "Excavation enables plain digging but not drill-head digging")
@@ -149,6 +151,7 @@ script.on_event(defines.events.on_tick,function(event)
       collision_mask=prototypes.entity["small-biter"].collision_mask,start={300.5,300.5},goal={303.5,300.5},
       force=game.forces.enemy,radius=0.5,pathfind_flags={allow_destroy_friendly_entities=false}}
     -- All three real factories operate both requested recipes. Vanilla assembler cannot select them.
+    force.technologies["quinityn-industrial-science"].researched=true
     storage.factories={}
     for i,name in ipairs({"ye_fassembly1","ye_fassembly2","ye_fassembly_sp"}) do
       local machine=surface.create_entity{name=name,position={-25+i*8,60},force=force}

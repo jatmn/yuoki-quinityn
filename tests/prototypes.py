@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==51
+assert len(tips)==59
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 51 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 59 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -66,8 +66,9 @@ assert R['quinityn-research-data']['categories']==['quinityn-science']
 assert R['quinityn-technic-sign']['categories']==['quinityn-science']
 assert R['quinityn-technic-sign']['results']==[{'type':'item','name':'y_rwtechsign','amount':1}]
 assert R['quinityn-technic-sign']['energy_required']>=30
-assert unlocks['ye_fassembly1']==['quinityn-materials']
-assert 'quinityn-research-data' not in [i[0] for i in T['quinityn-materials']['unit']['ingredients']]
+assert unlocks['ye_fassembly1']==['quinityn-basic-factory']
+assert 'unit' not in T['quinityn-materials']
+assert unlocks['quinityn-research-data']==['quinityn-industrial-science']
 separator=D['assembling-machine']['quinityn-burner-separator']
 assert separator['graphics_set']==D['assembling-machine']['y-atomic-constructor']['graphics_set']
 assert separator['crafting_speed']==0.5 and separator['energy_usage']=='180kW'
@@ -104,13 +105,13 @@ assert unlocks['quinityn-hand-sort']==['quinityn-arrival']
 assert 'hand-crafting' in D['character']['character']['crafting_categories']
 print('PASS: planet-specific map control membership and visible salvage sorting identity/unlock')
 
-# Research is anchored beyond space travel, and only Materials bootstraps without local science.
+# Research is anchored beyond space travel; native milestones bootstrap local science.
 assert T['quinityn-arrival']['prerequisites']==['planet-discovery-quinityn']
 assert 'space-science-pack' in [i[0] for i in T['planet-discovery-quinityn']['unit']['ingredients']]
 for name,t in T.items():
  if not name.startswith('quinityn-'):continue
  assert 'planet-discovery-quinityn' in ancestry(name),name
- if t.get('unit') and name!='quinityn-materials':
+ if t.get('unit'):
   assert 'quinityn-research-data' in [i[0] for i in t['unit']['ingredients']],name
  assert 'sign_tech_icon' not in str(t.get('icons',t.get('icon',''))),name
 for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fuel-raw','y-crush-green_whead'),
@@ -126,7 +127,7 @@ for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fue
  ('yi_construction-robot','j_construction2-robot'),('yi_logistic-robot','j_logistic2-robot')]:
  a,b=unlocks[first][0],unlocks[upgrade][0]
  assert a!=b and a in ancestry(b),(first,upgrade,a,b)
-print('PASS: discovery ancestry, mandatory post-Materials science, representative icons and ordered production tiers')
+print('PASS: discovery ancestry, mandatory post-milestone science, representative icons and ordered production tiers')
 
 assert mg['cliff_settings']['name']=='cliff-fulgora'
 assert D['autoplace-control']['quinityn_trees']['can_be_disabled']
@@ -137,3 +138,19 @@ for name in ['quinityn-dry-tree','quinityn-dead-dry-hairy-tree']:
  for sprite in tree['pictures']:
   assert sprite['tint'][0]>sprite['tint'][1] and sprite['tint'][2]>sprite['tint'][1]
 print('PASS: Fulgora cliffs and controllable purple dead-tree sprites')
+
+# Each bootstrap stage is a native crafting milestone, with its trigger producible
+# from earlier unlocks. Cheap red-only research must not recreate the starter tier.
+for name in ['materials','pressing','compacting','alloying','structures','electronics','fuel-processing','basic-factory','industrial-science']:
+ t=T['quinityn-'+name]
+ assert 'unit' not in t and t['research_trigger']['type']=='craft-item'
+ assert len([e for e in t['effects'] if e['type']=='unlock-recipe'])<=4,(name,t['effects'])
+ assert 'quinityn-research-data' not in [e.get('recipe') for e in t['effects']] or name=='industrial-science'
+for early,later in [('y-crusher','y-heat-form-press'),('y-smelt-crush-res1','y-unicomp-raw'),
+ ('y-unicomp-raw','y_structure_element'),('y-orange-stuff','y-chip-1'),
+ ('y_structure_element','ye_fassembly1'),('y-chip-1','ye_fassembly1'),('ye_fassembly1','quinityn-research-data')]:
+ assert unlocks[early][0] in ancestry(unlocks[later][0]),(early,later)
+for name,t in T.items():
+ if name.startswith('quinityn-') and t.get('unit'):
+  assert 'quinityn-industrial-science' in ancestry(name),name
+print('PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research')

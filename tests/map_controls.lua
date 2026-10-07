@@ -35,6 +35,9 @@ script.on_init(function()
     return {sea=sea,cliffs=cliffs,coast=coast,trees=trees,bases=bases,signature=table.concat(signature,";")}
   end
   local normal=sample("default",function(_) end)
+  -- Same seed/area at f14a2ae had 806 coastal cliffs and 397 trees.
+  check(normal.coast>806*0.35 and normal.coast<806*0.65,"coastal cliffs reduced roughly half from previous default")
+  check(normal.trees>397 and normal.trees<397*1.5,"default tree increase remains modest")
   check(normal.coast/normal.cliffs>0.65 and normal.coast<normal.cliffs,"cliffs are mostly coastal with some inland")
   check(normal.trees>20 and normal.trees<1000,"dead trees are present but sparse by default")
   local no_trees=sample("trees-off",function(s) s.autoplace_controls.quinityn_trees={frequency=0,size=0} end)

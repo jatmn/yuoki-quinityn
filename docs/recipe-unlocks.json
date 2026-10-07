@@ -116,6 +116,10 @@
     "ye_synwood",
     "ye_trade_node"
   ],
+  "quinityn-alloying": [
+    "y-mixing-rich",
+    "y-orange-stuff"
+  ],
   "quinityn-armor-2": [
     "yi_armor_red",
     "yi_equip_shield_b"
@@ -132,6 +136,10 @@
     "quinityn-timber",
     "quinityn-burner-separator",
     "quinityn-water"
+  ],
+  "quinityn-basic-factory": [
+    "y-basic-t1-mf",
+    "ye_fassembly1"
   ],
   "quinityn-bridge-advanced-components-recycling": [
     "y-basic-t2-mf-recycling",
@@ -248,6 +256,9 @@
     "ye_zells-recycling",
     "yie_crystal_grey-recycling"
   ],
+  "quinityn-bridge-alloying-recycling": [
+    "y-orange-stuff-recycling"
+  ],
   "quinityn-bridge-armor-2-recycling": [
     "yi_armor_red-recycling",
     "yi_equip_shield_b-recycling"
@@ -255,9 +266,17 @@
   "quinityn-bridge-armor-3-recycling": [
     "yi_armor_gold-recycling"
   ],
+  "quinityn-bridge-basic-factory-recycling": [
+    "y-basic-t1-mf-recycling",
+    "ye_fassembly1-recycling"
+  ],
   "quinityn-bridge-cimota-recycling": [
     "y-atomic-constructor-recycling",
     "y-repair-krakon-recycling"
+  ],
+  "quinityn-bridge-compacting-recycling": [
+    "y-raw-fuelnium-recycling",
+    "y-unicomp-raw-recycling"
   ],
   "quinityn-bridge-crystal-processing-recycling": [
     "y_crystal_dust-recycling",
@@ -280,6 +299,11 @@
     "y_turret_gun1f12-recycling",
     "y_wood_wall-recycling",
     "yi_cannon_shell-recycling"
+  ],
+  "quinityn-bridge-electronics-recycling": [
+    "y-chip-1-recycling",
+    "y-conductive-wire-1-recycling",
+    "y_chip_plate-recycling"
   ],
   "quinityn-bridge-energy-storage-recycling": [
     "y-accumulator-b-recycling",
@@ -351,6 +375,9 @@
     "ye_sealing-recycling",
     "ye_sealing-recycling"
   ],
+  "quinityn-bridge-fuel-processing-recycling": [
+    "y-fuel-reactor-recycling"
+  ],
   "quinityn-bridge-husbandry-recycling": [
     "ye_dnasplicer-recycling",
     "ye_fish3-recycling",
@@ -396,23 +423,14 @@
     "ye_science_ultimate-recycling"
   ],
   "quinityn-bridge-materials-recycling": [
-    "y-basic-t1-mf-recycling",
-    "y-bluegear-recycling",
     "y-c_mud-recycling",
-    "y-chip-1-recycling",
-    "y-conductive-wire-1-recycling",
     "y-crush-yres1-recycling",
     "y-crush-yres2-recycling",
     "y-crusher-recycling",
     "y-crystal2-recycling",
     "y-dirt-recycling",
     "y-dry_mud-recycling",
-    "y-fuel-reactor-recycling",
-    "y-heat-form-press-recycling",
-    "y-heat-pipe-recycling",
     "y-mining-drill-recycling",
-    "y-orange-stuff-recycling",
-    "y-raw-fuelnium-recycling",
     "y-refined-yres1-recycling",
     "y-refined-yres2-recycling",
     "y-res1-recycling",
@@ -420,15 +438,9 @@
     "y-richdust-recycling",
     "y-slag-recycling",
     "y-toxic-dust-recycling",
-    "y-unicomp-raw-recycling",
-    "y_chip_plate-recycling",
     "y_drillhead_broken-recycling",
     "y_quantrinum_infused-recycling",
-    "y_structure_element-recycling",
-    "y_structure_vessel-recycling",
-    "y_toolhead_broken-recycling",
-    "ye_fassembly1-recycling",
-    "yi_graphite-recycling"
+    "y_toolhead_broken-recycling"
   ],
   "quinityn-bridge-modules-recycling": [
     "y-green-module-1-recycling",
@@ -483,6 +495,7 @@
     "y-coal-brikett-recycling",
     "y-coal-dust-recycling",
     "y-coal-stack-recycling",
+    "y-heat-pipe-recycling",
     "y-mixed-fuel-loaded-recycling",
     "y-mixed-fuel-recycling",
     "y-mixed-fuel-recycling",
@@ -495,7 +508,8 @@
     "y_alien_solar-recycling",
     "y_bg-1-recycling",
     "y_mftank-recycling",
-    "y_old_bodenlampe-recycling"
+    "y_old_bodenlampe-recycling",
+    "yi_graphite-recycling"
   ],
   "quinityn-bridge-powered-armor-recycling": [
     "yi_ammo_energie-recycling",
@@ -507,6 +521,9 @@
     "yi_lasergun-recycling",
     "yi_minigun-recycling",
     "yi_pld_equipment-recycling"
+  ],
+  "quinityn-bridge-pressing-recycling": [
+    "y-heat-form-press-recycling"
   ],
   "quinityn-bridge-quantum-modules-recycling": [
     "y-pink-module-3-recycling",
@@ -623,6 +640,11 @@
     "yi_logistic-robot-recycling",
     "yi_roboport-recycling"
   ],
+  "quinityn-bridge-structures-recycling": [
+    "y-bluegear-recycling",
+    "y_structure_element-recycling",
+    "y_structure_vessel-recycling"
+  ],
   "quinityn-bridge-tooling-recycling": [
     "y_drillhead-recycling",
     "y_toolhead-recycling"
@@ -697,6 +719,10 @@
     "y-uc2crudeoil",
     "y-uc2liquid"
   ],
+  "quinityn-compacting": [
+    "y-raw-fuelnium",
+    "y-unicomp-raw"
+  ],
   "quinityn-crystal-processing": [
     "y_chunks1",
     "y_chunks2",
@@ -722,6 +748,11 @@
     "y_turret_gun1f12",
     "y_wood_wall",
     "yi_cannon_shell"
+  ],
+  "quinityn-electronics": [
+    "y-chip-1",
+    "y-conductive-wire-1",
+    "y_chip_plate"
   ],
   "quinityn-energy-storage": [
     "y-accumulator-b",
@@ -783,6 +814,7 @@
     "ye_can_uc_empty",
     "ye_can_veg_empty",
     "ye_canister",
+    "ye_canister2plates_smelt",
     "ye_canmachine",
     "ye_ice_container_empty",
     "ye_ice_container_filled",
@@ -791,6 +823,9 @@
   ],
   "quinityn-foundation": [
     "quinityn-foundation"
+  ],
+  "quinityn-fuel-processing": [
+    "y-fuel-reactor"
   ],
   "quinityn-genetics": [
     "ye_dna_animal2",
@@ -823,6 +858,10 @@
     "ye_dna_animal4",
     "ye_grow_animal4",
     "yie_pureiron"
+  ],
+  "quinityn-industrial-science": [
+    "quinityn-research-data",
+    "quinityn-technic-sign"
   ],
   "quinityn-logistics": [
     "j-dl-buffer",
@@ -863,31 +902,10 @@
     "ye_science_ultimate"
   ],
   "quinityn-materials": [
-    "quinityn-research-data",
-    "quinityn-technic-sign",
-    "y-basic-t1-mf",
-    "y-bluegear",
-    "y-chip-1",
-    "y-conductive-wire-1",
     "y-crush-fuel-raw",
     "y-crush-unicomp-raw",
     "y-crusher",
-    "y-fuel-reactor",
-    "y-heat-form-press",
-    "y-heat-pipe",
-    "y-mining-drill",
-    "y-mixing-rich",
-    "y-orange-stuff",
-    "y-raw-fuelnium",
-    "y-smelt-crush-res1",
-    "y-smelt-crush-res2",
-    "y-unicomp-raw",
-    "y_chip_plate",
-    "y_structure_element",
-    "y_structure_vessel",
-    "ye_canister2plates_smelt",
-    "ye_fassembly1",
-    "yi_graphite"
+    "y-mining-drill"
   ],
   "quinityn-mining-productivity": [],
   "quinityn-modules": [
@@ -950,6 +968,7 @@
     "y-coal-dust",
     "y-coal-stack",
     "y-coaldust-mixing",
+    "y-heat-pipe",
     "y-mixfuel-load",
     "y-notfall-generator-s2",
     "y-repair-durotal",
@@ -959,7 +978,8 @@
     "y_alien_solar",
     "y_bg-1",
     "y_mixedfuel2rocketfuel",
-    "y_mud2solidfuel"
+    "y_mud2solidfuel",
+    "yi_graphite"
   ],
   "quinityn-powered-armor": [
     "yi_ammo_energie",
@@ -971,6 +991,11 @@
     "yi_lasergun",
     "yi_minigun",
     "yi_pld_equipment"
+  ],
+  "quinityn-pressing": [
+    "y-heat-form-press",
+    "y-smelt-crush-res1",
+    "y-smelt-crush-res2"
   ],
   "quinityn-quantum": [
     "y-alien-infuser",
@@ -1055,6 +1080,11 @@
     "yi_construction-robot",
     "yi_logistic-robot",
     "yi_roboport"
+  ],
+  "quinityn-structures": [
+    "y-bluegear",
+    "y_structure_element",
+    "y_structure_vessel"
   ],
   "quinityn-tooling": [
     "y-crush-blue_whead",

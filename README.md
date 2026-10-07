@@ -21,9 +21,9 @@ The published 2.0 dependency versions cannot substitute for these builds. This a
 
 ## Play
 
-Research Planet discovery Quinityn and travel from Nauvis. Yuoki and Engines recipes remain locked until a character physically lands. A force-wide technology tree then guides materials, power, Cimota reconstruction, Mechanical Force, refining, farming, defense, trade and advanced industry. **51 native Tips and Tricks chapters** explain the stages in game.
+Research Planet discovery Quinityn and travel from Nauvis. Yuoki and Engines recipes remain locked until a character physically lands. A force-wide technology tree then guides materials, power, Cimota reconstruction, Mechanical Force, refining, farming, defense, trade and advanced industry. **59 native Tips and Tricks chapters** explain the stages in game.
 
-Arriving with no items is supported after researching planet discovery. The field survey requires discovery and physical landing; every pack-based planet research after Materials consumes Quinityn science. Small N4/F7 starting patches support emergency hand processing; the existing Yuoki unicomp conversions supply ordinary resources for long-term production. Water, electricity, science and rocket materials all have local paths. Initial spawn and normal platform travel remain unchanged.
+Arriving with no items is supported after researching planet discovery. The field survey requires discovery and physical landing. Crafting milestones guide crushing through components and the first factory before science unlocks; every pack-based planet research consumes Quinityn science. Small N4/F7 starting patches support emergency hand processing; the existing Yuoki unicomp conversions supply ordinary resources for long-term production. Water, electricity, science and rocket materials all have local paths. Initial spawn and normal platform travel remain unchanged.
 
 **Durotal foundations**, unlocked and manufactured here, work wherever ordinary foundations work and are required to expand over unicomp. Planet-exclusive research data also feeds **infinite mining productivity and Yuoki plasma damage research**, giving the planet a continuing endgame role.
 

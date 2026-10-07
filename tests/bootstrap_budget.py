@@ -33,6 +33,12 @@ goals={'automation-science-pack':600,'logistic-science-pack':400,'quinityn-resea
  'stone-furnace':2,'boiler':1,'steam-engine':1,'offshore-pump':1,'small-electric-pole':10,
  'quinityn-burner-separator':1,'lab':2,'y-crusher':1,'y-heat-form-press':1,'y-atomic-constructor':1,
  'ye_fassembly1':1,'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}
+# Reserve each pre-science craft count again even when the same intermediates
+# also appear inside later goals. This intentionally overbudgets milestone work.
+for t in D['technology'].values():
+ tr=t.get('research_trigger',{})
+ if t['name'].startswith('quinityn-') and tr.get('type')=='craft-item':
+  supply(tr['item'],tr.get('count',1))
 for name,amount in goals.items():supply(name,amount)
 for ore in ['y-res1','y-res2']:
  print(ore,math.ceil(used[ore]),'/ 125000 starting units')

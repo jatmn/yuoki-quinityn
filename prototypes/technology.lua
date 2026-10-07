@@ -22,8 +22,8 @@ end
 data:extend({discovery,landing})
 -- A single shared foundation followed by focused industrial disciplines.
 local stages = {
-  {"materials", {"arrival"}, 30, "y-crusher"},
-  {"power", {"materials"}, 60, "y-steam-turbine"},
+  {"materials", {"arrival"}, nil, "y-crusher", {type="craft-item",item="quinityn-burner-separator",count=1}},
+  {"power", {"industrial-science"}, 60, "y-steam-turbine"},
   {"cimota", {"power"}, 100, "y-atomic-constructor"},
   {"engines", {"cimota"}, 120, "y-sfe"},
   {"refining", {"engines","advanced-components"}, 150, "y_smelter"},
@@ -36,22 +36,19 @@ local stages = {
   {"orbital", {"quantum"}, 200, "rocket-silo"}
 }
 for _, tier in ipairs(require("prototypes.research-tiers")) do
-  stages[#stages+1]={tier.name,tier.prerequisites,tier.count,tier.icon}
+  stages[#stages+1]={tier.name,tier.prerequisites,tier.count,tier.icon,tier.trigger}
 end
 for i, s in ipairs(stages) do
-  local science = {{"automation-science-pack",1}}
-  if s[1] ~= "materials" then table.insert(science,{"logistic-science-pack",1}) end
-  if s[1] ~= "materials" then
-    table.insert(science,{"quinityn-research-data",1})
-  end
+  local science = {{"automation-science-pack",1},{"logistic-science-pack",1},{"quinityn-research-data",1}}
   local prerequisites={}
   for _, parent in ipairs(s[2]) do prerequisites[#prerequisites+1]="quinityn-"..parent end
   data:extend({{type="technology",name="quinityn-"..s[1],icons=icons(s[4]),
     effects={},prerequisites=prerequisites,
-    unit={count=s[3],time=20,ingredients=science},order="y-"..string.format("%02d",i)}})
+    research_trigger=s[5],
+    unit=not s[5] and {count=s[3],time=20,ingredients=science} or nil,order="y-"..string.format("%02d",i)}})
 end
-table.insert(data.raw.technology["quinityn-materials"].effects,unlock("quinityn-research-data"))
-table.insert(data.raw.technology["quinityn-materials"].effects,unlock("quinityn-technic-sign"))
+table.insert(data.raw.technology["quinityn-industrial-science"].effects,unlock("quinityn-research-data"))
+table.insert(data.raw.technology["quinityn-industrial-science"].effects,unlock("quinityn-technic-sign"))
 data:extend({{type="technology",name="quinityn-oil-processing",
   icon="__base__/graphics/technology/oil-processing.png",icon_size=256,
   prerequisites={"quinityn-cimota","oil-gathering"},

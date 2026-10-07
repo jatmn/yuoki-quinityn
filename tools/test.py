@@ -44,6 +44,10 @@ try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/map_controls")\n')
  run('map-controls',base+['--create',str(a.output/'map-controls.zip'),'--map-gen-seed','42'],
      'QUINITYN MAP CONTROL TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/production_milestones")\n')
+ run('production-milestones-create',base+['--create',str(a.output/'production-milestones.zip')],'Factorio initialised')
+ run('production-milestones',base+['--benchmark',str(a.output/'production-milestones.zip'),
+     '--benchmark-ticks','30000','--benchmark-runs','1'],'QUINITYN PRODUCTION MILESTONE TESTS PASSED')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/landing_routes")\n')
  run('landing-routes-create',base+['--create',str(a.output/'landing-routes.zip')],'Factorio initialised')
  run('landing-routes',base+['--benchmark',str(a.output/'landing-routes.zip'),

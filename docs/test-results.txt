@@ -3,14 +3,16 @@ Yuoki ce7918f; Engines dd13f42
 Validated 2026-10-07
 
 PROTOTYPES
-PASS: 867 named upstream recipe gates; technology DAG; 51 guide chapters; foundations; science sinks; pollution
+PASS: 867 named upstream recipe gates; technology DAG; 59 guide chapters; foundations; science sinks; pollution
 PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons
 PASS: planet-specific map control membership and visible salvage sorting identity/unlock
-PASS: discovery ancestry, mandatory post-Materials science, representative icons and ordered production tiers
+PASS: discovery ancestry, mandatory post-milestone science, representative icons and ordered production tiers
+PASS: Fulgora cliffs and controllable purple dead-tree sprites
+PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research
 
 REACHABILITY
-PASS: first Quinityn science producible after Materials, before Power
-Closure: 512 items; 216 technologies; 85 machines; 22 iterations
+PASS: first Quinityn science producible after factory milestone, before Power
+Closure: 512 items; 224 technologies; 85 machines; 25 iterations
 low-density-structure : low-density-structure
 processing-unit : processing-unit
 quinityn-burner-separator : quinityn-burner-separator
@@ -22,18 +24,19 @@ y-atomic-constructor : y-atomic-constructor
 PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure
 
 BOOTSTRAP_BUDGET
-y-res1 6878 / 125000 starting units
-y-res2 3371 / 125000 starting units
+y-res1 7219 / 125000 starting units
+y-res2 3551 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 211 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 235 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
-Seed 420151202: land 61.8%, connected 98.4%, starter wrecks 181, outer wrecks 352, occupied districts 10/100
-Seed 420151243: land 44.4%, connected 100.0%, starter wrecks 117, outer wrecks 797, occupied districts 12/100
+Seed 420151202: land 61.8%, connected 98.4%, starter wrecks 181, outer wrecks 361, occupied districts 10/100
+Seed 420151243: land 44.4%, connected 100.0%, starter wrecks 117, outer wrecks 801, occupied districts 12/100
 Seed 428826510: land 32.3%, connected 92.4%, starter wrecks 169, outer wrecks 119, occupied districts 8/100
 PASS: organic connected terrain, six surface types, sparse dense salvage clusters and seed-varied starter placements
+
 
 GENERATE-1
 PASS: upstream starting suit cannot bypass visit gate
@@ -163,24 +166,58 @@ PASS: native rocket construction and launch
 PASS: Quinityn science grants native infinite plasma bonus
 
 MAP-CONTROLS
-default sea=362408 cliffs=955 bases=5 trees=397 coastal-cliffs=806
-trees-off sea=362408 cliffs=955 bases=4 trees=0 coastal-cliffs=806
-more-trees sea=362408 cliffs=955 bases=5 trees=648 coastal-cliffs=806
-tree-frequency sea=362408 cliffs=955 bases=4 trees=304 coastal-cliffs=806
-less-liquid sea=214545 cliffs=792 bases=18 trees=760 coastal-cliffs=655
-more-liquid sea=446109 cliffs=801 bases=0 trees=208 coastal-cliffs=663
-smaller-districts sea=377817 cliffs=1238 bases=10 trees=369 coastal-cliffs=1078
-no-cliffs sea=362408 cliffs=0 bases=11 trees=409 coastal-cliffs=0
-nauvis-enemies-off sea=362408 cliffs=955 bases=5 trees=397 coastal-cliffs=806
-more-enemies sea=362408 cliffs=949 bases=157 trees=398 coastal-cliffs=802
-no-enemies sea=362408 cliffs=955 bases=0 trees=397 coastal-cliffs=806
-PASS: Quinityn ore control membership and no native Yuoki ore on other planets
-PASS: independent liquid coverage and terrain scale controls
-PASS: default Fulgora cliffs, mostly coastal with some inland
-PASS: cliffs can be disabled and leave the starter core clear
-PASS: sparse purple dead trees with frequency/coverage/disable controls
-PASS: Nauvis enemy controls leave Quinityn nests unchanged
-PASS: Quinityn enemy controls increase or disable nests
+PASS: default protects starter core from cliffs
+default sea=362408 cliffs=507 bases=10 trees=442 coastal-cliffs=419
+PASS: coastal cliffs reduced roughly half from previous default
+PASS: default tree increase remains modest
+PASS: cliffs are mostly coastal with some inland
+PASS: dead trees are present but sparse by default
+PASS: trees-off protects starter core from cliffs
+trees-off sea=362408 cliffs=507 bases=10 trees=0 coastal-cliffs=419
+PASS: tree checkbox suppresses all trees
+PASS: more-trees protects starter core from cliffs
+more-trees sea=362408 cliffs=507 bases=11 trees=652 coastal-cliffs=419
+PASS: tree coverage slider increases groves
+PASS: tree-frequency protects starter core from cliffs
+tree-frequency sea=362408 cliffs=507 bases=11 trees=389 coastal-cliffs=419
+PASS: tree frequency changes groves
+PASS: less-liquid protects starter core from cliffs
+less-liquid sea=214545 cliffs=478 bases=16 trees=855 coastal-cliffs=371
+PASS: more-liquid protects starter core from cliffs
+more-liquid sea=446109 cliffs=493 bases=0 trees=239 coastal-cliffs=394
+PASS: unicomp coverage changes land/liquid ratio monotonically
+PASS: smaller-districts protects starter core from cliffs
+smaller-districts sea=377817 cliffs=763 bases=13 trees=511 coastal-cliffs=645
+PASS: unicomp scale changes generated terrain
+PASS: no-cliffs protects starter core from cliffs
+no-cliffs sea=362408 cliffs=0 bases=10 trees=446 coastal-cliffs=0
+PASS: cliffs generate by default and their slider disables them
+PASS: nauvis-enemies-off protects starter core from cliffs
+nauvis-enemies-off sea=362408 cliffs=507 bases=10 trees=442 coastal-cliffs=419
+PASS: Nauvis enemy settings do not change Quinityn nests
+PASS: more-enemies protects starter core from cliffs
+more-enemies sea=362408 cliffs=504 bases=176 trees=441 coastal-cliffs=418
+PASS: Quinityn enemy slider increases native nests
+PASS: no-enemies protects starter core from cliffs
+no-enemies sea=362408 cliffs=507 bases=0 trees=442 coastal-cliffs=419
+PASS: zero Quinityn enemy frequency suppresses nests
+PASS: nauvis has no Yuoki ores
+PASS: vulcanus has no Yuoki ores
+PASS: gleba has no Yuoki ores
+PASS: fulgora has no Yuoki ores
+PASS: aquilo has no Yuoki ores
+
+PRODUCTION MILESTONES
+PASS: actual production completed materials
+PASS: actual production completed pressing
+PASS: actual production completed compacting
+PASS: actual production completed alloying
+PASS: actual production completed structures
+PASS: actual production completed electronics
+PASS: actual production completed fuel-processing
+PASS: actual production completed basic-factory
+PASS: actual production completed industrial-science
+PASS: science stays locked until first factory manufacture; later lab research remains locked
 
 LANDING ROUTES
 20 native generation cases: seeds 1, 42, 8675309, 4042551623, 17, 12345,

@@ -68,9 +68,9 @@ for iteration in range(200):
     if p['name'] not in items:
      sources[p['name']]=n
      if p['name']=='quinityn-research-data':
-      assert 'quinityn-materials' in techs and 'quinityn-power' not in techs, 'First science depends on science-gated Power'
+      assert 'quinityn-industrial-science' in techs and 'quinityn-power' not in techs, 'First science depends on science-gated Power'
       assert 'ye_fassembly1' in machines, 'First science lacks its local factory'
-      print('PASS: first Quinityn science producible after Materials, before Power')
+      print('PASS: first Quinityn science producible after factory milestone, before Power')
     items.add(p['name']);crafted.add(p['name'])
  for n,t in T.items():
   if n not in techs and researchable(n,t):techs.add(n)
@@ -88,7 +88,7 @@ if missing:
   if n.startswith('quinityn') or any(p['name'] in missing for p in r.get('results',[])):
    print('BLOCKED?',n,'ingredients',[p['name'] for p in r.get('ingredients',[]) if not available(p)],'categories',r.get('categories',['crafting']))
  sys.exit(1)
-assert all(n in techs for n,t in T.items() if n.startswith('quinityn-') and t.get('unit') and t.get('max_level')!='infinite'), 'Finite planet research unreachable'
+assert all(n in techs for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-') and t.get('max_level')!='infinite'), 'Finite planet research unreachable'
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes

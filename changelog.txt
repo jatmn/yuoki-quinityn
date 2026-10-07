@@ -6,16 +6,18 @@ Date: 2026-10-07
     - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
     - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
     - Added local petrochemical research and Yuoki rocket component alternatives.
-    - Added 51 native Tips and Tricks progression chapters.
+    - Added 59 native Tips and Tricks progression chapters.
     - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
     - Added planet-exclusive science and infinite mining productivity / plasma damage research.
     - Added smog, slag districts, buried machinery and low pollution absorption.
     - Limited starting ore and made emergency resource conversions hand-crafting only.
   Changes:
+    - Opened gaps in roughly half the coastal cliffs; slightly increased and brightened purple dead-tree patches.
+    - Replaced red-only N4/F7 bulk research with nine crafting milestones; science unlocks after making the first factory.
     - Joined landing terrain to a winding dry land connection, with clear passage for biter attacks.
     - Replaced inland cliff bands with Fulgora-style coastal cliffs and occasional inland escarpments.
     - Added sparse purple dead/decaying trees with independent frequency, coverage and disable controls.
-    - Anchored the field survey and Yuoki tree beneath planet discovery; require Quinityn science after Materials.
+    - Anchored the field survey and Yuoki tree beneath planet discovery; require Quinityn science after crafting milestones.
     - Split bulk unlocks into production and machine upgrade tiers with representative research icons and guide entries.
     - Added independent unicomp coverage/scale, default-on cliffs and Quinityn enemy-base controls.
     - Enlarged the bottle badge for 32-pixel inventory readability.
@@ -24,7 +26,7 @@ Date: 2026-10-07
     - Clustered collapsed stockpiles into sparse districts with useful starter salvage and reduced overall placement density.
     - Added ash, rubble, rocks, cracks, pumice and machinery debris.
     - Added original salvage and purple science-bottle icons with a larger, readable Technic Sign badge.
-    - Restricted planet science to the three Yuoki factories; moved the first factory to Materials to avoid a research deadlock.
+    - Restricted planet science to the three Yuoki factories; placed the first factory before its separate science unlock.
     - Added expensive factory-only Technic Sign qualification without byproducts.
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:
