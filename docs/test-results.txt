@@ -1,4 +1,4 @@
-Quinityn 0.1.1; Factorio 2.1.21 / Space Age
+Quinityn 0.1.0 development; Factorio 2.1.21 / Space Age
 Yuoki ce7918f; Engines dd13f42
 Validated 2026-10-07
 
@@ -141,4 +141,4 @@ PASS: Quinityn science grants native infinite plasma bonus
 RUNTIME TESTS PASSED
 
 PASS: official engine load with heavy-oil conversion disabled; no unlock can reenable it.
-PASS: final packaged 0.1.1 zip creates a fresh save without the test harness.
+PASS: final packaged 0.1.0 zip creates a fresh save without the test harness.

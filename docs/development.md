@@ -50,7 +50,7 @@ For the addon alone:
 python3 tools/package.py
 ```
 
-The current branch is 0.1.1; the existing v0.1.0 release is the earlier preview. Build this branch with the commands above to test the world-generation revision.
+All development updates remain **0.1.0** until `main` is stable for the initial release. The existing `v0.1.0` prerelease is an earlier development snapshot. Build the desired branch with the commands above for current changes. Replace the previous `yuoki-quinityn_0.1.0.zip` when installing a new build; do not install multiple copies.
 
 ## Source layout
 

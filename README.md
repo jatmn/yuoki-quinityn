@@ -4,15 +4,15 @@ A Factorio **2.1 + Space Age** planet addon for **Yuoki Industries and Yuoki Ind
 
 Quinityn is the contract world named in YuokiTani's original stories. This adaptation turns it into a polluted industrial wasteland: volcanic ash, slag, buried machinery, salvage, native biters and purple seas of **Yuoki Liquid Unicomp A2**. Offshore pumps extract unicomp; shore inserters discard items into it using Factorio's native lava disposal mechanic.
 
-## World-generation revision (0.1.1)
+## Development toward 0.1.0
 
-This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
+Development updates retain version **0.1.0** until `main` is stable for the initial release. This branch revises the starting area to irregular, seed-varied 125k–150k ore deposits, removes the artificial pond, and adds organic connected terrain, clustered stockpiles and more ground detail. Original salvage and science-bottle icons are included. Science now runs only in the three Yuoki factories; a dedicated expensive recipe supplies Technic Signs. The bootstrap machine is a slower primitive Cimota that can burn raw F7 at 1 MJ.
 
 These terrain changes apply to new chunks; use a fresh map to see the revised starting area. [Revision validation](docs/validation.md) includes biter pathfinding and actual factory operation checks.
 
 ## Download
 
-**[Private playable preview v0.1.0](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0)** — install the three mod zips with Factorio **2.1.21** and Space Age. The release includes the unmodified pending 2.1 dependency builds and checksums.
+**[Earlier private development snapshot](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0)** — this snapshot predates the latest PR changes. For current development, build the desired branch using [the packaging instructions](docs/development.md). Install the three mod zips with Factorio **2.1.21** and Space Age. The release includes the unmodified pending 2.1 dependency builds and checksums.
 
 - [Yuoki 1.3.0 / 2.1 PR #11](https://github.com/jatmn/Yuoki-Factorio-2.0/pull/11), commit `ce7918f`.
 - [Engines 1.3.0 / 2.1 PR #3](https://github.com/jatmn/Yuoki-Engines-Factorio-2.0/pull/3), commit `dd13f42`.

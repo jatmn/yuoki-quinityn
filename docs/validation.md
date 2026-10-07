@@ -1,6 +1,6 @@
-# Validation record — 0.1.1
+# Validation record — 0.1.0 development
 
-Checked with official Factorio **2.1.21 + Space Age** and the pinned, unmodified Yuoki/Engines 1.3.0 branches. The [0.1.0 validation record](https://github.com/jatmn/yuoki-quinityn/blob/v0.1.0/docs/validation.md) remains available for the earlier preview.
+Checked with official Factorio **2.1.21 + Space Age** and the pinned, unmodified Yuoki/Engines 1.3.0 branches. The [earlier development snapshot validation record](https://github.com/jatmn/yuoki-quinityn/blob/v0.1.0/docs/validation.md) remains available for the earlier preview.
 
 ## Feedback checks
 
