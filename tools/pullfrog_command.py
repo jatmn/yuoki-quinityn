@@ -55,6 +55,8 @@ def main():
         ),
         'event': {
             'trigger': 'issue_comment_created',
+            # The identity checks above verify this personal repository's owner.
+            'authorPermission': 'admin',
             'comment_type': 'issue',
             'comment_id': comment_id,
             'issue_number': number,

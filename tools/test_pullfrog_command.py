@@ -53,6 +53,7 @@ class OwnerCommandTests(unittest.TestCase):
                 payload = json.loads(fields['payload'])
                 self.assertTrue(payload['~pullfrog'])
                 self.assertEqual(payload['triggerer'], 'jatmn')
+                self.assertEqual(payload['event'].get('authorPermission'), 'admin')
                 self.assertEqual(payload['event']['issue_number'], 7)
                 self.assertEqual(payload['event']['comment_id'], 123)
                 self.assertEqual(payload['event'].get('is_pr', False), is_pr)
