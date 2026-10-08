@@ -23,7 +23,7 @@ data:extend({discovery,landing})
 -- A single shared foundation followed by focused industrial disciplines.
 local stages = {
   {"materials", {"arrival"}, nil, "y-crusher", {type="craft-item",item="quinityn-burner-separator",count=1}},
-  {"power", {"industrial-science"}, 60, "y-steam-turbine"},
+  {"power", {"industrial-science","basic-factory","fuel-processing"}, 60, "y-steam-turbine"},
   {"cimota", {"power"}, 100, "y-atomic-constructor"},
   {"engines", {"cimota"}, 120, "y-sfe"},
   {"refining", {"engines","advanced-components"}, 150, "y_smelter"},

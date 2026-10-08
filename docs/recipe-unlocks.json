@@ -116,6 +116,20 @@
     "ye_synwood",
     "ye_trade_node"
   ],
+  "quinityn-air-filters": [
+    "j-airfilter",
+    "j-airfilter_cleaning",
+    "j-airfilter_dirty"
+  ],
+  "quinityn-air-scrubbing": [
+    "y-electric-air-heater",
+    "y-emotor-s",
+    "y-iron-case",
+    "y-mf1c",
+    "y-rmvpol",
+    "y-winding",
+    "yie_hard_metals"
+  ],
   "quinityn-alloying": [
     "y-mixing-rich",
     "y-orange-stuff"
@@ -256,6 +270,17 @@
     "ye_zells-recycling",
     "yie_crystal_grey-recycling"
   ],
+  "quinityn-bridge-air-filters-recycling": [
+    "j-airfilter-recycling",
+    "j-airfilter_dirty-recycling"
+  ],
+  "quinityn-bridge-air-scrubbing-recycling": [
+    "y-electric-air-heater-recycling",
+    "y-emotor-s-recycling",
+    "y-iron-case-recycling",
+    "y-winding-recycling",
+    "yie_hard_metals-recycling"
+  ],
   "quinityn-bridge-alloying-recycling": [
     "y-orange-stuff-recycling"
   ],
@@ -316,18 +341,12 @@
     "y_compensator_25-recycling"
   ],
   "quinityn-bridge-engines-recycling": [
-    "j-airfilter-recycling",
-    "j-airfilter_dirty-recycling",
     "y-1stirling-engine-recycling",
-    "y-electric-air-heater-recycling",
-    "y-emotor-s-recycling",
-    "y-iron-case-recycling",
     "y-mftrans-shaft-ground-recycling",
     "y-mftrans-shaft-recycling",
     "y-mwater-pump-recycling",
     "y-pol-waste-recycling",
     "y-sfe-recycling",
-    "y-winding-recycling",
     "y_flowcheck_10-recycling",
     "y_gauge-recycling",
     "ye_buechsenblech-recycling",
@@ -348,8 +367,7 @@
     "ye_tranport_tube_orange-recycling",
     "ye_tranport_tube_orange_splitter-recycling",
     "ye_tranport_tube_orange_underground-recycling",
-    "ye_wpump_m-recycling",
-    "yie_hard_metals-recycling"
+    "ye_wpump_m-recycling"
   ],
   "quinityn-bridge-excavation-recycling": [
     "y-mining-drill-e2-recycling",
@@ -767,23 +785,18 @@
   ],
   "quinityn-engines": [
     "y-1stirling-engine",
-    "y-electric-air-heater",
-    "y-emotor-s",
-    "y-iron-case",
     "y-mf1a",
     "y-mf1a1",
-    "y-mf1c",
     "y-mf1f",
     "y-mftrans-shaft",
     "y-mftrans-shaft-ground",
     "y-mfwater",
     "y-mwater-pump",
-    "y-rmvpol",
     "y-sfe",
     "y-waste-condense",
-    "y-winding",
     "y_flowcheck_10",
     "y_gauge_analog",
+    "y_mixedfuel2rocketfuel",
     "y_mpump_mf",
     "y_mpump_water",
     "ye_buechsenblech",
@@ -792,8 +805,7 @@
     "ye_tranport_tube_orange_splitter",
     "ye_tranport_tube_orange_underground",
     "ye_water2mf",
-    "ye_wpump_m",
-    "yie_hard_metals"
+    "ye_wpump_m"
   ],
   "quinityn-excavation": [
     "y-digfdirt",
@@ -977,7 +989,6 @@
     "y-wooden-brikett",
     "y_alien_solar",
     "y_bg-1",
-    "y_mixedfuel2rocketfuel",
     "y_mud2solidfuel",
     "yi_graphite"
   ],

@@ -30,6 +30,22 @@ script.on_init(function()
     end
     log("NATURAL DETAIL "..name.." placements="..#placed)
   end
+  check(surface.count_entities_filtered{name={"big-rock","huge-rock","big-sand-rock"}}==0,
+    "Quinityn generates only its ash-coated mineable rocks")
+  local rocks=surface.find_entities_filtered{name={"quinityn-big-rock","quinityn-huge-rock"},area={{-160,-160},{160,160}}}
+  local ash=0
+  for _,rock in pairs(rocks) do ash=ash+(rock.name=="quinityn-big-rock" and 2 or 4) end
+  check(ash>=60,"starter rocks supply at least 60 finite flyash for science and Fatmice research: "..ash)
+  for _,name in ipairs({"quinityn-big-rock","quinityn-huge-rock"}) do
+    local rock=surface.find_entities_filtered{name=name,limit=1}[1]
+    check(rock~=nil,"natural ash-coated rock generates: "..name)
+    local inventory=game.create_inventory(5)
+    check(rock.mine{inventory=inventory},"natural ash-coated rock can be mined")
+    check(inventory.get_item_count("stone")>=20,"native rock stone yield retained")
+    check(inventory.get_item_count("y-pol-waste")== (name=="quinityn-big-rock" and 2 or 4),"small flyash sample recovered")
+    if name=="quinityn-huge-rock" then check(inventory.get_item_count("coal")>=24,"huge rock coal retained") end
+    inventory.destroy()
+  end
   local rows={}
   local codes={["quinityn-unicomp-sea"]="~",["quinityn-basalt"]=".",["quinityn-slag"]="s",
     ["quinityn-ruined-district"]="m",["quinityn-ash"]="a",["quinityn-rubble"]="r",

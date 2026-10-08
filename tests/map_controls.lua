@@ -85,6 +85,8 @@ script.on_init(function()
       s.request_to_generate_chunks({0,0},4)
       s.force_generate_chunk_requests()
       check(s.count_entities_filtered{name={"y-res1","y-res2"}}==0,name.." has no Yuoki ores")
+      check(s.count_entities_filtered{name={"quinityn-big-rock","quinityn-huge-rock"}}==0,
+        name.." has no Quinityn flyash rocks")
     end
   end
   log("QUINITYN MAP CONTROL TESTS PASSED")

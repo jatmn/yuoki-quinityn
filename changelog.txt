@@ -6,19 +6,23 @@ Date: 2026-10-07
     - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
     - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
     - Added local petrochemical research and Yuoki rocket component alternatives.
-    - Added 59 native Tips and Tricks progression chapters.
+    - Added 61 native Tips and Tricks progression chapters.
     - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
     - Added planet-exclusive science and infinite mining productivity / plasma damage research.
     - Added smog, slag districts, buried machinery and low pollution absorption.
     - Limited starting ore and made emergency resource conversions hand-crafting only.
   Changes:
+    - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
+    - Reveal industrial science by mining a Quinityn rock and require one flyash per five science packs.
+    - Give Fatmice its own unlock, with unfiltered scrubbing first and reusable filters/cleaning as a later upgrade.
+    - Guide flyash collection, pollution control and the existing mixed-fuel-to-rocket-fuel path; preserve filter washing's six ash and zero wastewater.
     - Softened natural-ground boundaries with mixed ash/earth margins, cooler soil tones and irregular turf edges; retained ground decorations.
     - Added weathered soil, dead turf, decayed shrubs, dry grasses and non-mineable stone fragments between industrial scars.
     - Matched volcanic and machinery debris to their terrain; reduced dead-tree placement by 20% while retaining all controls.
     - Restricted new cliffs to machinery-covered ruined districts; standardized Quinityn generation-control names.
     - Restricted map-generated nests and worms to brown slag, preserving later expansion onto other walkable terrain.
     - Opened gaps in roughly half the coastal cliffs; brightened purple dead-tree patches.
-    - Replaced red-only N4/F7 bulk research with nine crafting milestones; science unlocks after making the first factory.
+    - Replaced red-only N4/F7 bulk research with eight crafting milestones; mining an ash-coated Quinityn rock reveals factory-only science.
     - Joined landing terrain to a winding dry land connection, with clear passage for biter attacks.
     - Replaced inland cliff bands with Fulgora-style coastal cliffs and occasional inland escarpments.
     - Added sparse purple dead/decaying trees with independent frequency, coverage and disable controls.
@@ -31,7 +35,7 @@ Date: 2026-10-07
     - Clustered collapsed stockpiles into sparse districts with useful starter salvage and reduced overall placement density.
     - Added ash, rubble, rocks, cracks, pumice and machinery debris.
     - Added original salvage and purple science-bottle icons with a larger, readable Technic Sign badge.
-    - Restricted planet science to the three Yuoki factories; placed the first factory before its separate science unlock.
+    - Restricted planet science production to the three Yuoki factories; rock discovery reveals its recipes.
     - Added expensive factory-only Technic Sign qualification without byproducts.
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:

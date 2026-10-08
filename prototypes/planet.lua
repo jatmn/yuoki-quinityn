@@ -297,6 +297,36 @@ for _, spec in ipairs({
   planet.map_gen_settings.autoplace_settings.decorative.settings[decorative.name]={}
 end
 
+-- Ordinary Nauvis boulders stained by unicomp and coated with settled flyash.
+-- Small finite samples introduce the item; Fatmice supplies sustained research.
+for _, name in ipairs({"big-rock","huge-rock","big-sand-rock"}) do
+  planet.map_gen_settings.property_expression_names["entity:"..name..":probability"]="0"
+end
+for _, spec in ipairs({{"big-rock",0.0015,2},{"huge-rock",0.0004,4}}) do
+  local rock=copy(data.raw["simple-entity"][spec[1]])
+  rock.name="quinityn-"..spec[1]
+  rock.localised_name={"entity-name."..rock.name}
+  rock.localised_description={"entity-description.quinityn-flyash-rock"}
+  rock.factoriopedia_alternative=nil
+  local tint={0.76,0.64,0.82}
+  rock.icons={{icon=rock.icon,icon_size=rock.icon_size or 64,tint=tint}}
+  for _, sprite in pairs(rock.pictures) do sprite.tint=tint end
+  rock.map_color={0.43,0.37,0.46}
+  if rock.minable.result then
+    rock.minable.results={{type="item",name=rock.minable.result,amount=rock.minable.count or 1}}
+    rock.minable.result=nil
+    rock.minable.count=nil
+  end
+  table.insert(rock.minable.results,{type="item",name="y-pol-waste",amount=spec[3]})
+  -- Place after existing habitats so rocks cannot displace native trees or nests.
+  rock.autoplace={order="z[quinityn-rock]-"..spec[1],probability_expression=spec[2]..[[
+    * (quinityn_elevation > 1) * (distance > 24) * (quinityn_passage_distance > 12)
+    * clamp(quinityn_soil_patches + 0.8,0.3,1)
+  ]]}
+  data:extend({rock})
+  planet.map_gen_settings.autoplace_settings.entity.settings[rock.name]={}
+end
+
 -- Poisoned, leafless native trees: sparse groves rather than a living forest.
 data:extend({{type="noise-expression",name="quinityn_tree_patches",expression=[[
   multioctave_noise{x=x,y=y,seed0=map_seed,seed1=3117,octaves=3,
