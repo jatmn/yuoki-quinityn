@@ -302,7 +302,7 @@ class ReleaseTests(unittest.TestCase):
         for head, succeeds in [(foreign_head, False), (trusted_head, True)]:
             result = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', script], cwd=self.root,
                                     env={**os.environ, 'PATH': str(fake_bin) + os.pathsep + os.environ['PATH'],
-                                         'TEST_PR_HEAD': head}, capture_output=True)
+                                         'GITHUB_SHA': foreign_head, 'TEST_PR_HEAD': head}, capture_output=True)
             self.assertEqual(result.returncode == 0, succeeds, result.stderr.decode())
             if not succeeds:
                 self.assertEqual(git('rev-parse', branch), trusted_head)
@@ -311,6 +311,42 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(published_head, git('rev-parse', 'HEAD'))
         self.assertNotEqual(published_head, trusted_head)
         validate_package.validate(self.out, tag='v' + version)
+        # Repository membership and matching SHA do not establish code trust.
+        # A writer can amend the canonical branch after the bot creates it.
+        marker = Path(self.temp.name) / 'credential-read'
+        tool = self.root / 'tools/release_notes.py'
+        tool.write_text('import os\nfrom pathlib import Path\n'
+                        'Path(os.environ["TEST_MARKER"]).write_text(os.environ["GH_TOKEN"])\n'
+                        'raise SystemExit(1)\n')
+        git('add', 'tools/release_notes.py')
+        git('commit', '-qm', 'chore: replace release tool')
+        git('push', '-q', 'origin', branch)
+        malicious_head = git('rev-parse', 'HEAD')
+        git('checkout', '--detach', foreign_head)
+        result = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', script], cwd=self.root,
+                                env={**os.environ, 'PATH': str(fake_bin) + os.pathsep + os.environ['PATH'],
+                                     'GITHUB_SHA': foreign_head, 'TEST_PR_HEAD': malicious_head,
+                                     'GH_TOKEN': 'test-canary-not-a-real-credential',
+                                     'TEST_MARKER': str(marker)}, capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertFalse(marker.exists(), 'Unreviewed branch code read the release credential')
+        self.assertEqual(git('rev-parse', 'HEAD'), foreign_head)
+        # Allowed metadata paths are data files, not links into credential or code paths.
+        git('checkout', '-B', branch, published_head)
+        info.unlink()
+        info.symlink_to('changelog.txt')
+        git('add', 'info.json')
+        git('commit', '-qm', 'chore: replace metadata with a symlink')
+        git('push', '-q', '--force', 'origin', branch)  # Test-owned local bare remote only.
+        symlink_head = git('rev-parse', 'HEAD')
+        git('checkout', '--detach', foreign_head)
+        result = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', script], cwd=self.root,
+                                env={**os.environ, 'PATH': str(fake_bin) + os.pathsep + os.environ['PATH'],
+                                     'GITHUB_SHA': foreign_head, 'TEST_PR_HEAD': symlink_head},
+                                capture_output=True)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn(b'Release data must be a regular file: info.json', result.stderr)
+        self.assertEqual(git('rev-parse', 'HEAD'), foreign_head)
 
 
 if __name__ == '__main__':

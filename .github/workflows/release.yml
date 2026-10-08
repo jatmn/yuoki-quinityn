@@ -53,6 +53,20 @@ jobs:
           if [ -z "$head" ]; then exit 0; fi
           git fetch origin "refs/heads/$branch"
           test "$(git rev-parse FETCH_HEAD)" = "$head"
+          # A same-repository branch can still contain unreviewed code. Only
+          # release data may differ from the trusted main workflow revision.
+          git diff --quiet "$GITHUB_SHA" "$head" -- . \
+            ':(exclude)info.json' ':(exclude)changelog.txt' \
+            ':(exclude).github/version.txt' \
+            ':(exclude).github/release-please-manifest.json' \
+            ':(exclude)docs/CHANGELOG.md'
+          for path in info.json changelog.txt .github/version.txt .github/release-please-manifest.json docs/CHANGELOG.md; do
+            entry="$(git ls-tree "$head" -- "$path")"
+            if [ -n "$entry" ] && [[ "$entry" != '100644 blob '* ]]; then
+              echo "Release data must be a regular file: $path" >&2
+              exit 1
+            fi
+          done
           git checkout -B "$branch" FETCH_HEAD
           python3 tools/release_notes.py --date "$(date -u +%F)"
           python3 tools/package.py
