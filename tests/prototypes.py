@@ -173,7 +173,8 @@ print('PASS: machinery-only cliff masks and surface-local enemy generation habit
 
 # The new natural remnants stay cosmetic and planet-local, with water shorelines
 # rather than lava/void edges. Native source prototypes remain available unchanged.
-for name,source in [('quinityn-weathered-soil','dirt-6'),('quinityn-dead-turf','grass-4')]:
+for name,source in [('quinityn-weathered-soil','dirt-6'),('quinityn-dead-turf','grass-4'),
+                    ('quinityn-ash-soil','volcanic-ash-soil')]:
  tile=tiles[name]
  assert tile['absorptions_per_second']['pollution']==.000001
  assert tile['variants']==tiles[source]['variants']

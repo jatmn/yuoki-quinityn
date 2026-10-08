@@ -31,13 +31,16 @@ y-res2 3551 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
 
 LOCALIZATION
-PASS: 253 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+PASS: 256 Quinityn prototypes have resolved explicit and visible fallback English locale keys
 
 WORLDGEN
+Seed 420151202: 100.0% of soil/turf boundaries meet the weathered fringe
 Seed 420151202: land 61.8%, connected 98.4%, natural soil/turf 42.9% of land, starter wrecks 187, outer wrecks 372, occupied districts 10/100
+Seed 420151243: 97.2% of soil/turf boundaries meet the weathered fringe
 Seed 420151243: land 44.4%, connected 100.0%, natural soil/turf 52.7% of land, starter wrecks 117, outer wrecks 811, occupied districts 12/100
+Seed 428826510: 95.7% of soil/turf boundaries meet the weathered fringe
 Seed 428826510: land 32.3%, connected 92.4%, natural soil/turf 54.3% of land, starter wrecks 169, outer wrecks 127, occupied districts 8/100
-PASS: organic connected terrain, eight surface types with decayed natural patches, sparse dense salvage clusters and seed-varied starter placements
+PASS: organic connected terrain, nine surface types with weathered transition zones, sparse dense salvage clusters and seed-varied starter placements
 
 GENERATE-1
 quinityn-dead-shrub placements=1754
@@ -200,6 +203,8 @@ PASS: later colony placement remains allowed on quinityn-weathered-soil
 PASS: walkable colony site exists on quinityn-weathered-soil
 PASS: later colony placement remains allowed on quinityn-dead-turf
 PASS: walkable colony site exists on quinityn-dead-turf
+PASS: later colony placement remains allowed on quinityn-ash-soil
+PASS: walkable colony site exists on quinityn-ash-soil
 default sea=362408 cliffs=109 bases=4 trees=360 coastal-cliffs=63
 PASS: machinery-only cliffs retain reduced coastal coverage
 PASS: default trees are modestly reduced from PR #1

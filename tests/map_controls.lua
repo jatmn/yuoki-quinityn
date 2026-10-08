@@ -36,7 +36,7 @@ script.on_init(function()
     end
     if name=="default" then
       for _,kind in ipairs({"quinityn-basalt","quinityn-ash","quinityn-slag","quinityn-rubble","quinityn-ruined-district",
-          "quinityn-weathered-soil","quinityn-dead-turf"}) do
+          "quinityn-weathered-soil","quinityn-dead-turf","quinityn-ash-soil"}) do
         local placed=false
         for _,tile in pairs(surface.find_tiles_filtered{area=area,name=kind}) do
           local spec={name="biter-spawner",force="enemy",position={tile.position.x+0.5,tile.position.y+0.5}}

@@ -211,6 +211,15 @@ data:extend({
     multioctave_noise{x=x+quinityn_warp_x,y=y+quinityn_warp_y,
       seed0=map_seed,seed1=2719,octaves=3,persistence=0.55,input_scale=0.012,output_scale=1}
   ]]},
+  -- Distance in noise space to either edge of the natural-ground mask. A mixed
+  -- ash/earth fringe grades into the old ground before reaching solid soil/turf.
+  {type="noise-expression",name="quinityn_soil_edge",expression=[[
+    min(0.15 - quinityn_industrial_noise, 0.5 * (quinityn_soil_patches + 0.65))
+  ]]},
+  {type="noise-expression",name="quinityn_turf_detail",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=2720,octaves=2,
+      persistence=0.5,input_scale=0.12,output_scale=0.12}
+  ]]},
   {type="noise-expression",name="quinityn_groundcover",expression=[[
     clamp(multioctave_noise{x=x,y=y,seed0=map_seed,seed1=3121,octaves=2,
       persistence=0.5,input_scale=0.045,output_scale=1} + 0.25,0,1)
@@ -221,10 +230,12 @@ for i, spec in ipairs({
   {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"},
   {name="quinityn-ash",source="volcanic-ash-light",threshold="quinityn_industrial_noise < -0.20"},
   {name="quinityn-rubble",source="fulgoran-walls",threshold="quinityn_industrial_noise < -0.45"},
-  {name="quinityn-weathered-soil",source="dirt-6",layer=55,tint={0.88,0.78,0.85},map_color={0.29,0.23,0.22},
+  {name="quinityn-weathered-soil",source="dirt-6",layer=55,tint={0.68,0.74,0.82},map_color={0.25,0.23,0.23},
     threshold="(quinityn_industrial_noise <= 0.15) * (quinityn_soil_patches > -0.65)"},
-  {name="quinityn-dead-turf",source="grass-4",layer=56,tint={0.82,0.68,0.78},map_color={0.25,0.21,0.23},
-    threshold="(quinityn_industrial_noise <= 0.15) * (quinityn_soil_patches > 0.4)"}
+  {name="quinityn-dead-turf",source="grass-4",layer=56,tint={0.76,0.74,0.82},map_color={0.24,0.22,0.24},
+    threshold="(quinityn_industrial_noise <= 0.15) * (quinityn_soil_patches > -0.65) * (quinityn_soil_patches + quinityn_turf_detail > 0.4)"},
+  {name="quinityn-ash-soil",source="volcanic-ash-soil",layer=57,tint={0.80,0.75,0.84},map_color={0.23,0.21,0.23},
+    threshold="(quinityn_soil_edge > 0) * (quinityn_soil_edge < 0.18)"}
 }) do
   local tile=copy(data.raw.tile[spec.source])
   tile.name=spec.name
@@ -239,7 +250,7 @@ for i, spec in ipairs({
   -- correction replace narrow slag margins underneath map-generated nests.
   if spec.layer then tile.layer=spec.layer end
   if spec.map_color then tile.map_color=spec.map_color end
-  if spec.name=="quinityn-weathered-soil" or spec.name=="quinityn-dead-turf" then
+  if spec.layer then
     tile.vehicle_friction_modifier=land.vehicle_friction_modifier
   end
   for _, tr in pairs(tile.transitions or {}) do
@@ -256,7 +267,7 @@ end
 
 -- Non-mineable ground detail follows the terrain: dry, poisoned plants and
 -- ordinary stones on old soil; volcanic fragments and wreckage in scarred areas.
-local soils={"quinityn-weathered-soil","quinityn-dead-turf"}
+local soils={"quinityn-weathered-soil","quinityn-dead-turf","quinityn-ash-soil"}
 local rocky_ground={"quinityn-basalt","quinityn-slag","quinityn-ash"}
 for _, spec in ipairs({
   {"tiny-volcanic-rock",0.12,tiles=rocky_ground}, {"small-volcanic-rock",0.025,tiles=rocky_ground},

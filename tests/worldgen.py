@@ -6,10 +6,22 @@ assert len(maps)>=3
 for p in maps:
  m=json.loads(p.read_text());rows=m['rows'];counts=collections.Counter(''.join(rows))
  assert '?' not in counts
- assert set(counts)==set('~.smardg'), 'Missing terrain variety, including old soil and dead turf'
+ assert set(counts)==set('~.smardge'), 'Missing terrain variety, including the ash/soil transition'
  land=sum(counts.values())-counts['~']
- natural=(counts['d']+counts['g'])/land
+ natural=(counts['d']+counts['g']+counts['e'])/land
  assert .2<natural<.7,'Old soil and dead turf should form substantial patches between industrial scars'
+ # Sample actual generated boundaries, not the noise formula: most edges of
+ # solid soil/turf should meet mixed ash/earth before reaching scarred ground.
+ edges=collections.Counter()
+ for y,row in enumerate(rows[:-1]):
+  for x,a in enumerate(row[:-1]):
+   for b in (row[x+1],rows[y+1][x]):
+    if (a in 'dg') != (b in 'dg'):
+     neighbor=b if a in 'dg' else a
+     if neighbor!='~':edges['fringe' if neighbor=='e' else 'abrupt']+=1
+ softened=edges['fringe']/sum(edges.values())
+ assert softened>.75,'Most soil/turf edges should grade through mixed ash/earth'
+ print(f"Seed {m['seed']}: {softened:.1%} of soil/turf boundaries meet the weathered fringe")
  assert .2<land/sum(counts.values())<.7,'Unexpected land/sea balance'
  frontier=collections.deque([(180,180)]);seen={(180,180)}
  while frontier:
@@ -31,4 +43,4 @@ for seed in [1,42,8675309]:
  assert len(match)==2
  centroids.append(tuple((n,round(float(x)),round(float(y))) for n,x,y in match))
 assert len(set(centroids))==3,'Seed must change patch placement'
-print('PASS: organic connected terrain, eight surface types with decayed natural patches, sparse dense salvage clusters and seed-varied starter placements')
+print('PASS: organic connected terrain, nine surface types with weathered transition zones, sparse dense salvage clusters and seed-varied starter placements')
