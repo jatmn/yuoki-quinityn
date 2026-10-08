@@ -1,3 +1,10 @@
+-- Engines' overhaul hides the basic recipe. Keep it as the first research tier.
+data.raw.recipe["y-rmvpol"].hidden=false
+data.raw.recipe["y-rmvpol"].disabled=nil
+-- Filters capture six ash per ten-second cycle after washing, versus one per
+-- two seconds unfiltered, and remove twice as much pollution while running.
+data.raw.recipe["j-airfilter_dirty"].energy_required=10
+data.raw.recipe["j-airfilter_dirty"].emissions_multiplier=2
 local stages = require("prototypes.recipe-stages")
 local owned = {}
 local names = {}
@@ -59,6 +66,11 @@ for name, planet in pairs(data.raw.planet) do
       -- including surfaces whose entity placement uses default settings.
       mg.property_expression_names=mg.property_expression_names or {}
       mg.property_expression_names["entity:"..ore..":probability"]="0"
+    end
+    for _, rock in ipairs({"quinityn-big-rock","quinityn-huge-rock"}) do
+      local entities=mg.autoplace_settings and mg.autoplace_settings.entity
+      if entities and entities.settings then entities.settings[rock]=nil end
+      mg.property_expression_names["entity:"..rock..":probability"]="0"
     end
   end
 end

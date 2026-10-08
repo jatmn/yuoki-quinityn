@@ -9,7 +9,7 @@ local steps={
   {"electronics","stone-furnace","y-orange-stuff"},
   {"fuel-processing","y-heat-form-press","y-raw-fuelnium"},
   {"basic-factory","assembling-machine-1","y-chip-1"},
-  {"industrial-science","assembling-machine-1","ye_fassembly1"}
+  {"factory","assembling-machine-1","ye_fassembly1"}
 }
 local function check(ok,message)
   assert(ok,"MILESTONE TEST FAILED: "..message)
@@ -29,10 +29,23 @@ end)
 script.on_event(defines.events.on_tick,function()
   if storage.finished then return end
   local force=game.forces.player
+  if storage.miner then
+    storage.miner.update_selected_entity(storage.rock_position)
+    storage.miner.mining_state={mining=true,position=storage.rock_position}
+    if force.technologies["quinityn-industrial-science"].researched then
+      check(force.recipes["quinityn-research-data"].enabled,"late rock discovery reveals science after factory construction")
+      check(not force.technologies["quinityn-power"].researched,"later research still requires science")
+      storage.miner.destroy();storage.finished=true
+      log("QUINITYN PRODUCTION MILESTONE TESTS PASSED")
+    else assert(game.tick-storage.started<1000,"Native rock discovery timed out: ash="..storage.miner.get_item_count("y-pol-waste").." mining="..tostring(storage.miner.mining_state.mining)) end
+    return
+  end
   local step=steps[storage.step]
   if not storage.machine then
     for i=storage.step,#steps do
-      check(not force.technologies["quinityn-"..steps[i][1]].researched,steps[i][1].." remains locked before its production milestone")
+      if steps[i][1]~="factory" then
+        check(not force.technologies["quinityn-"..steps[i][1]].researched,steps[i][1].." remains locked before its production milestone")
+      end
     end
     check(not force.recipes["quinityn-research-data"].enabled,"science recipe is still locked")
     check(force.recipes[step[3]].enabled,"milestone recipe is already available: "..step[3])
@@ -48,15 +61,21 @@ script.on_event(defines.events.on_tick,function()
     if p.type=="fluid" then machine.insert_fluid{name=p.name,amount=p.amount}
     else machine.insert{name=p.name,count=p.amount} end
   end
-  if force.technologies["quinityn-"..step[1]].researched then
+  if (step[1]=="factory" and machine.products_finished>0) or
+      (step[1]~="factory" and force.technologies["quinityn-"..step[1]].researched) then
     check(machine.products_finished>0,"actual production completed "..step[1])
     machine.destroy();storage.machine=nil
     storage.step=storage.step+1
     if storage.step>#steps then
-      check(force.recipes["quinityn-research-data"].enabled,"science unlocks after first factory manufacture")
-      check(not force.technologies["quinityn-power"].researched,"later research still requires science")
-      storage.finished=true
-      log("QUINITYN PRODUCTION MILESTONE TESTS PASSED")
+      check(not force.recipes["quinityn-research-data"].enabled,"factory manufacture alone cannot reveal science")
+      local surface=game.surfaces[storage.surface]
+      local rock=surface.find_entities_filtered{name="quinityn-big-rock",limit=1}[1]
+      assert(rock,"No native discovery rock")
+      storage.miner=surface.create_entity{name="character",position={rock.position.x+2,rock.position.y},force=force}
+      storage.rock_position=rock.position
+      storage.miner.update_selected_entity(rock.position)
+      storage.miner.mining_state={mining=true,position=rock.position}
+      storage.started=game.tick
     end
   else
     assert(game.tick-storage.started<10000,"Milestone timed out: "..step[1])

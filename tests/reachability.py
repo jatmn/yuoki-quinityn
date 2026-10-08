@@ -9,12 +9,15 @@ import json, sys
 from pathlib import Path
 D=json.loads(Path(sys.argv[1]).read_text())
 R=D['recipe']; T=D['technology']
-items={'y-res1','y-res2','quinityn-salvage'}
+items={'y-res1','y-res2','quinityn-salvage','y-pol-waste'}
+# Finite natural rock samples fund the first science; budget/runtime bound this stock.
+mined={'y-res1','y-res2','quinityn-wreck','quinityn-big-rock','quinityn-huge-rock'}
 fluids=set(); categories={'crafting','hand-crafting'}
 techs={'planet-discovery-quinityn','quinityn-arrival'}
 recipes={n for n,r in R.items() if r.get('enabled',True)}
 crafted=set(); machines=set(); power=False
 sources={n:'hand mining / salvage on Quinityn' for n in items}
+produced=set()
 entities={n:e for kind in ['assembling-machine','furnace','rocket-silo','offshore-pump','boiler','generator','solar-panel','lab'] for n,e in D.get(kind,{}).items()}
 allitems={n:v for kind in ['item','tool','item-with-entity-data','ammo','capsule','module','armor','gun'] for n,v in D.get(kind,{}).items()}
 
@@ -29,7 +32,7 @@ def researchable(n,t):
  if kind=='craft-item':
   item=tr['item'];return (item if isinstance(item,str) else item['name']) in crafted
  if kind=='craft-fluid':return tr['fluid'] in fluids
- if kind=='mine-entity':return bool(set(tr['entities'])&{'y-res1','y-res2','quinityn-wreck'})
+ if kind=='mine-entity':return bool(set(tr['entities'])&mined)
  if kind=='scripted':return n.startswith('quinityn-bridge-')
  return False
 
@@ -61,6 +64,7 @@ for iteration in range(200):
   conditions=r.get('surface_conditions',[])
   props={'pressure':1600,'gravity':10,'magnetic-field':60,'quinityn-industry':1}
   if any(not c.get('min',-float('inf'))<=props.get(c['property'],0)<=c.get('max',float('inf')) for c in conditions):continue
+  produced.add(n)
   for p in r.get('results',[]):
    if p.get('independent_probability',1)<=0:continue
    if p.get('type','item')=='fluid':fluids.add(p['name'])
@@ -70,7 +74,7 @@ for iteration in range(200):
      if p['name']=='quinityn-research-data':
       assert 'quinityn-industrial-science' in techs and 'quinityn-power' not in techs, 'First science depends on science-gated Power'
       assert 'ye_fassembly1' in machines, 'First science lacks its local factory'
-      print('PASS: first Quinityn science producible after factory milestone, before Power')
+      print('PASS: first Quinityn science producible after rock discovery and factory construction, before Power')
     items.add(p['name']);crafted.add(p['name'])
  for n,t in T.items():
   if n not in techs and researchable(n,t):techs.add(n)
@@ -98,3 +102,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert 'quinityn-research-data' in items, 'Local endgame science inaccessible: '+n
  assert ['quinityn-research-data',2] in t['unit']['ingredients']
 print('PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure')
+
+assert {'y-rmvpol','j-airfilter_dirty','j-airfilter_cleaning','y-waste-condense','y_mixedfuel2rocketfuel'}<=produced
+assert {'y-electric-air-heater','y-emotor-s','y-dirtwasher'}<=machines
+print('PASS: renewable unfiltered/filtered flyash and alternate rocket fuel are locally producible')

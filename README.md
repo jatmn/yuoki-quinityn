@@ -22,6 +22,16 @@ destination and a progression of their own. Their recipes stay locked until you
 physically land on Quinityn. Once you do, the climb from salvaged parts to advanced
 industry begins.
 
+Grey-purple rocks appear only on Quinityn, with 20 big and 16 huge sprite
+variants replacing ordinary mineable rocks. Mining keeps normal stone/coal
+drops and adds 2 or 4 flyash; the first rock reveals science. Each five-pack
+batch needs **five flyash**. Collect 100 ash to research Power and **Fatmice air
+scrubbing**, then automate collection. **Reusable air filters** improve capture
+later; surplus ash can become rocket fuel. Other planets' rocks remain unchanged.
+
+Initial enemy nests and worms generate on brown slag; later colonies can expand
+onto other walkable terrain.
+
 **[Get started](#get-started)** · **[Progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md)** ·
 **[Report a bug](https://github.com/jatmn/yuoki-quinityn/issues)** ·
 **[Contribute](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md)**
@@ -42,14 +52,15 @@ industry begins.
    its industry: a character must physically land to complete the field survey.
 2. **Make the first machines count.** Crush and press local resources, recover
    salvage, and build a primitive burner Cimota to begin processing.
-3. **Bring the factories online.** Crafting milestones lead through components
-   and your first factory before Quinityn science unlocks. All three Yuoki
-   factories can produce it; vanilla assemblers cannot.
+3. **Bring the factories online.** Mining a Quinityn rock reveals science;
+   crafting milestones lead through the components and first factory needed to
+   manufacture it. All three Yuoki factories can produce it; vanilla assemblers
+   cannot.
 4. **Turn an outpost into an industrial world.** Expand over unicomp with
    Durotal foundations, establish local rocket production, and export research
    data for continuing upgrades.
 
-**59 in-game Tips and Tricks chapters** walk you through the stages. Arriving
+**61 in-game Tips and Tricks chapters** walk you through the stages. Arriving
 with no items is supported after researching discovery; ordinary initial spawn
 and platform travel remain unchanged. For the production details, open the
 [local-resource and progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md).

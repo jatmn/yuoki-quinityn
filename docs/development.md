@@ -32,7 +32,7 @@ python3 tools/test.py \
   --dependencies build/dependencies
 ```
 
-The runner creates isolated mod links and an isolated game write directory inside `build/test`. Engine invocations are sequential. It checks actual loading, prototype contracts, zero-inventory resource/technology closure, finite starting-stock cost, terrain on three seeds, native walking routes across 20 seed/setting combinations, independent generation controls, native crafting milestones and runtime fixtures. It saves logs and temporary test maps under `build/test`.
+The runner creates isolated mod links and an isolated game write directory inside `build/test`. Engine invocations are sequential. It checks actual loading, prototype contracts, zero-inventory resource/technology closure, finite starting-stock cost, terrain on three seeds, native walking routes across 20 seed/setting combinations, independent generation controls, native crafting milestones, ordinary-rock isolation on all planets, Quinityn flyash discovery, unfiltered/filtered Fatmice operation, alternate rocket fuel and runtime fixtures. It saves logs and temporary test maps under `build/test`.
 
 The test harness is a separate test-only mod. It never ships in the playable zip. Native fixtures inject ingredients and power to isolate machinery, research and rocket behavior; the separate dependency and budget checks verify where the materials come from. Player landing uses a narrow facade because the headless API cannot create a LuaPlayer. These distinctions are recorded in [validation](validation.md).
 

@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==59
+assert len(tips)==61
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 59 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 61 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -145,19 +145,19 @@ print('PASS: Fulgora cliffs and controllable purple dead-tree sprites')
 
 # Each bootstrap stage is a native crafting milestone, with its trigger producible
 # from earlier unlocks. Cheap red-only research must not recreate the starter tier.
-for name in ['materials','pressing','compacting','alloying','structures','electronics','fuel-processing','basic-factory','industrial-science']:
+for name in ['materials','pressing','compacting','alloying','structures','electronics','fuel-processing','basic-factory']:
  t=T['quinityn-'+name]
  assert 'unit' not in t and t['research_trigger']['type']=='craft-item'
  assert len([e for e in t['effects'] if e['type']=='unlock-recipe'])<=4,(name,t['effects'])
  assert 'quinityn-research-data' not in [e.get('recipe') for e in t['effects']] or name=='industrial-science'
 for early,later in [('y-crusher','y-heat-form-press'),('y-smelt-crush-res1','y-unicomp-raw'),
  ('y-unicomp-raw','y_structure_element'),('y-orange-stuff','y-chip-1'),
- ('y_structure_element','ye_fassembly1'),('y-chip-1','ye_fassembly1'),('ye_fassembly1','quinityn-research-data')]:
+ ('y_structure_element','ye_fassembly1'),('y-chip-1','ye_fassembly1')]:
  assert unlocks[early][0] in ancestry(unlocks[later][0]),(early,later)
 for name,t in T.items():
  if name.startswith('quinityn-') and t.get('unit'):
   assert 'quinityn-industrial-science' in ancestry(name),name
-print('PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research')
+print('PASS: eight crafting milestones, separate rock discovery and factory unlocks and science-rooted lab research')
 
 # Habitat is a surface-local generation override, never an enemy collision rule.
 for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-turret','big-worm-turret','behemoth-worm-turret']:
@@ -191,3 +191,37 @@ for name,planet in D['planet'].items():
  if name!='quinityn':
   assert 'quinityn-weathered-soil' not in planet.get('map_gen_settings',{}).get('autoplace_settings',{}).get('tile',{}).get('settings',{})
 print('PASS: decayed soil/turf, native water transitions and non-mineable plant/stone decoratives')
+
+# Discovery and added loot belong exclusively to the Quinityn rock clones.
+rocks={'quinityn-big-rock','quinityn-huge-rock'}
+science=T['quinityn-industrial-science']
+assert science['research_trigger']=={'type':'mine-entity','entities':['quinityn-big-rock','quinityn-huge-rock']}
+assert science['prerequisites']==['quinityn-arrival']
+assert next(p['amount'] for p in R['quinityn-research-data']['ingredients'] if p['name']=='y-pol-waste')==5
+for source,ash in [('big-rock',2),('huge-rock',4)]:
+ native=D['simple-entity'][source];rock=D['simple-entity']['quinityn-'+source]
+ assert all(p['name']!='y-pol-waste' for p in native['minable'].get('results',[]))
+ expected=native['minable'].get('results',[{'type':'item','name':native['minable'].get('result'),'amount':native['minable'].get('count',1)}])
+ assert rock['minable']['results']==expected+[{'type':'item','name':'y-pol-waste','amount':ash}]
+ assert len(rock['pictures'])==len(native['pictures'])>=16
+ assert [p['filename'] for p in rock['pictures']]==[p['filename'] for p in native['pictures']]
+ for sprite in rock['pictures']:
+  assert sprite['tint'][0]>sprite['tint'][1] and sprite['tint'][2]>sprite['tint'][1]
+for name,planet in D['planet'].items():
+ mg=planet.get('map_gen_settings',{})
+ for rock in rocks:
+  assert (rock in mg.get('autoplace_settings',{}).get('entity',{}).get('settings',{})) == (name=='quinityn')
+  if name!='quinityn' and mg:assert mg['property_expression_names']['entity:'+rock+':probability']=='0'
+for name in ['big-rock','huge-rock','big-sand-rock']:
+ assert D['planet']['quinityn']['map_gen_settings']['property_expression_names']['entity:'+name+':probability']=='0'
+assert unlocks['y-electric-air-heater']==unlocks['y-rmvpol']==['quinityn-air-scrubbing']
+assert not R['y-rmvpol'].get('hidden',False)
+for name in ['j-airfilter','j-airfilter_dirty','j-airfilter_cleaning']:
+ assert unlocks[name]==['quinityn-air-filters'] and not R[name].get('enabled',True)
+assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines'}<=ancestry('quinityn-air-filters')
+assert next(p['amount'] for p in R['j-airfilter_dirty']['ingredients'] if p['name']=='j-airfilter')==1
+assert {p['name']:p['amount'] for p in R['j-airfilter_cleaning']['results']}=={'j-airfilter':1,'y-pol-waste':6}
+assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emissions_multiplier',1)
+assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
+assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
+print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')

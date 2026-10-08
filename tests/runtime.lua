@@ -30,6 +30,22 @@ script.on_init(function()
     end
     log("NATURAL DETAIL "..name.." placements="..#placed)
   end
+  check(surface.count_entities_filtered{name={"big-rock","huge-rock","big-sand-rock"}}==0,
+    "Quinityn generates only its ash-coated mineable rocks")
+  local rocks=surface.find_entities_filtered{name={"quinityn-big-rock","quinityn-huge-rock"},area={{-160,-160},{160,160}}}
+  local ash=0
+  for _,rock in pairs(rocks) do ash=ash+(rock.name=="quinityn-big-rock" and 2 or 4) end
+  check(ash>=100,"starter rocks supply at least 100 finite flyash for Power and Fatmice research: "..ash)
+  for _,name in ipairs({"quinityn-big-rock","quinityn-huge-rock"}) do
+    local rock=surface.find_entities_filtered{name=name,limit=1}[1]
+    check(rock~=nil,"natural ash-coated rock generates: "..name)
+    local inventory=game.create_inventory(5)
+    check(rock.mine{inventory=inventory},"natural ash-coated rock can be mined")
+    check(inventory.get_item_count("stone")>=20,"native rock stone yield retained")
+    check(inventory.get_item_count("y-pol-waste")== (name=="quinityn-big-rock" and 2 or 4),"small flyash sample recovered")
+    if name=="quinityn-huge-rock" then check(inventory.get_item_count("coal")>=24,"huge rock coal retained") end
+    inventory.destroy()
+  end
   local rows={}
   local codes={["quinityn-unicomp-sea"]="~",["quinityn-basalt"]=".",["quinityn-slag"]="s",
     ["quinityn-ruined-district"]="m",["quinityn-ash"]="a",["quinityn-rubble"]="r",
@@ -196,11 +212,19 @@ script.on_event(defines.events.on_tick,function(event)
       check(machine.get_output_inventory().get_item_count("y_rwtechsign")==1,machine.name.." produces exactly one sign")
       machine.get_output_inventory().clear()
       check(machine.set_recipe("quinityn-research-data"),machine.name.." selects planet science")
-      for _,ingredient in pairs(prototypes.recipe["quinityn-research-data"].ingredients) do machine.insert{name=ingredient.name,count=ingredient.amount} end
+      for _,ingredient in pairs(prototypes.recipe["quinityn-research-data"].ingredients) do
+        machine.insert{name=ingredient.name,count=ingredient.name=="y-pol-waste" and 4 or ingredient.amount}
+      end
+    end
+  elseif event.tick==1500 then
+    for _,machine in ipairs(storage.factories) do
+      check(machine.get_output_inventory().is_empty() and machine.crafting_progress==0,machine.name.." cannot make science with only four flyash")
+      check(machine.insert{name="y-pol-waste",count=1}==1,machine.name.." accepts the fifth flyash")
     end
   elseif event.tick==2400 then
     for _,machine in ipairs(storage.factories) do
       check(machine.get_output_inventory().get_item_count("quinityn-research-data")==5,machine.name.." produces science")
+      check(machine.get_item_count("y-pol-waste")==0,machine.name.." consumes five flyash for five science packs")
     end
     check(storage.biter_path_land_passed,"biter path succeeds on dry land control")
     check(storage.biter_path_blocked,"biter path cannot cross unicomp moat")
