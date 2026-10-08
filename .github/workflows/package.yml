@@ -1,45 +1,10 @@
 name: Package
 
 on:
-  pull_request:
-    paths:
-      # Match the playable ZIP's surface, including new runtime directories.
-      - '**'
-      - '!**/.*'
-      - '!**/.*/**'
-      - '!**/build/**'
-      - '!**/__pycache__/**'
-      - '!tests/**'
-      - '!tools/**'
-      - '!docs/**'
-      - '!AGENTS.md'
-      - '!CONTRIBUTING.md'
-      - 'tools/package.py'
-      - 'tools/validate_package.py'
-      - '.github/workflows/package.yml'
-  push:
-    branches: [main]
-    paths:
-      - '**'
-      - '!**/.*'
-      - '!**/.*/**'
-      - '!**/build/**'
-      - '!**/__pycache__/**'
-      - '!tests/**'
-      - '!tools/**'
-      - '!docs/**'
-      - '!AGENTS.md'
-      - '!CONTRIBUTING.md'
-      - 'tools/package.py'
-      - 'tools/validate_package.py'
-      - '.github/workflows/package.yml'
+  workflow_call:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   package:

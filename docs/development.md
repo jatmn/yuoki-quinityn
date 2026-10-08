@@ -54,11 +54,13 @@ All development updates remain **0.1.0** until `main` is stable for the initial 
 
 ## Lightweight CI
 
-Four independent workflows run on pull requests and pushes to `main`. Native
-GitHub path filters prevent unrelated workflows from starting runners. Topic
-branch pushes do not trigger duplicate runs, and a new update cancels the
-superseded run for the same workflow/PR. No CI job downloads or runs Factorio,
-Space Age, Yuoki or Engines; engine validation remains local.
+CI runs on pull requests and pushes to `main`. One small `changes` job reads the
+complete Git diff, then invokes only the affected reusable validation workflows.
+This avoids GitHub's capped file list for event-level path filters. Unrelated
+validation jobs do not start runners; docs-only PRs pay only for change detection.
+Topic branch pushes do not trigger duplicate runs, and a new update cancels the
+superseded CI run for that PR. No CI job downloads or runs Factorio, Space Age,
+Yuoki or Engines; engine validation remains local.
 
 | Changed surface | Checks that run |
 | --- | --- |
@@ -68,12 +70,15 @@ Space Age, Yuoki or Engines; engine validation remains local.
 | `tools/package.py` or `tools/validate_package.py` | Python syntax and packaging |
 | `info.json`, locale, graphics, other shipped files | Metadata and package validation |
 | `.luacheckrc` or `.stylua.toml` | Lua checks only |
-| One workflow file | actionlint plus the workflow being changed |
-| `docs/`, `AGENTS.md`, `CONTRIBUTING.md` | No workflows |
+| One validation workflow file | actionlint plus the workflow being changed |
+| Dispatcher (`ci.yml`) or `tools/ci_changes.py` | All four validation workflows |
+| `docs/`, `AGENTS.md`, `CONTRIBUTING.md` | Change detection only |
 
 The README, changelog, license files and `graphics/README.md` ship in the addon,
 so changes to them trigger packaging. A mixed change runs the union of its
-affected checks. Renames/deletions are included in GitHub's change filters.
+affected checks. The router disables rename detection so both the old and new
+paths are considered; deletions also select their affected checks. An unavailable
+comparison revision fails the routing job instead of silently skipping validation.
 Lua syntax/lint scan the remaining Lua source; formatting checks only added,
 modified or renamed Lua files, never deleted files. Changes to format config
 also validate the configuration without demanding a repository-wide reformat.
@@ -98,12 +103,17 @@ python3 tools/package.py
 python3 tools/validate_package.py
 ```
 
-Python CI parses tracked `.py` files without importing or running them. Package
+The Python syntax step parses tracked `.py` files without importing or running them. Package
 validation checks metadata, the versioned ZIP root, every tracked release file
 and its bytes, required entrypoints/notices, developer-file exclusions and the
 SHA256 checksum. The addon ZIP/checksum is attached to its workflow run for seven
 days; CI does not publish a release. These checks do not prove game API usage,
 recipe correctness, graphics rendering or gameplay.
+
+Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library routing
+regression suite. It checks surface isolation and the real Git-to-router path
+with 3,500 documentation files followed by a Lua change, plus cross-surface
+renames, deletions, unusual filenames and an invalid comparison revision.
 
 ## Source layout
 

@@ -1,22 +1,10 @@
 name: Python
 
 on:
-  pull_request:
-    paths:
-      - '**/*.py'
-      - '.github/workflows/python.yml'
-  push:
-    branches: [main]
-    paths:
-      - '**/*.py'
-      - '.github/workflows/python.yml'
+  workflow_call:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   python:
@@ -38,3 +26,5 @@ jobs:
               ast.parse(Path(name).read_bytes(), filename=name)
               print('PASS', name)
           PY
+      - name: Test CI change routing
+        run: python3 tools/test_ci_changes.py

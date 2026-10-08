@@ -1,20 +1,10 @@
 name: Workflows
 
 on:
-  pull_request:
-    paths:
-      - '.github/workflows/**'
-  push:
-    branches: [main]
-    paths:
-      - '.github/workflows/**'
+  workflow_call:
 
 permissions:
   contents: read
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
 
 jobs:
   actionlint:
