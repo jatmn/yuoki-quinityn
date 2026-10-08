@@ -69,6 +69,12 @@ function M.reconcile()
     if not settings.startup["yuoki-uc-heavyoil"].value then
       force.recipes["y-heavyoil2uc"].enabled = false
     end
+    -- Also clear stale unlocks when an existing save opts out of these inserters.
+    for name, recipe in pairs(force.recipes) do
+      if recipe.prototype.hidden and name:match("^y[-_]inserter") and prototypes.entity[name] then
+        recipe.enabled = false
+      end
+    end
     complete_bridges(force)
   end
   for _, player in pairs(game.players) do
