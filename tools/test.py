@@ -48,6 +48,10 @@ try:
  run('production-milestones-create',base+['--create',str(a.output/'production-milestones.zip')],'Factorio initialised')
  run('production-milestones',base+['--benchmark',str(a.output/'production-milestones.zip'),
      '--benchmark-ticks','30000','--benchmark-runs','1'],'QUINITYN PRODUCTION MILESTONE TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/research_progression")\n')
+ run('research-progression-create',base+['--create',str(a.output/'research-progression.zip')],'Factorio initialised')
+ run('research-progression',base+['--benchmark',str(a.output/'research-progression.zip'),
+     '--benchmark-ticks','130000','--benchmark-runs','1'],'QUINITYN RESEARCH PROGRESSION TESTS PASSED')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/flyash")\n')
  run('flyash-create',base+['--create',str(a.output/'flyash.zip')],'Factorio initialised')
  run('flyash',base+['--benchmark',str(a.output/'flyash.zip'),
@@ -69,32 +73,37 @@ try:
  print('PASS upstream heavy-oil opt-out')
 finally:
  setting_override.unlink(missing_ok=True)
-# Simulate a compatibility setting hiding both naming styles of Yuoki inserters.
-# The pinned dependencies have no such setting; production sources stay untouched.
+# Activate Yuoki's real cleanup setting with a detection-only Bob's mod stub.
+# This exercises upstream cleanup/load order, not Bob's adjustment implementation.
+adjustable=mods/'bobinserters';adjustable.mkdir(exist_ok=True)
+(adjustable/'info.json').write_text(json.dumps({'name':'bobinserters','version':'3.0.0','factorio_version':'2.1','title':'Detection fixture','author':'jatmn','dependencies':['base >= 2.1.0']}))
+mod_list=json.loads((mods/'mod-list.json').read_text())
+mod_list['mods'].append({'name':'bobinserters','enabled':True})
+(mods/'mod-list.json').write_text(json.dumps(mod_list))
 try:
- (harness/'settings.lua').write_text('data:extend({{type="bool-setting",name="quinityn-test-hide-inserters",setting_type="startup",default_value=false}})\n')
- (harness/'data-updates.lua').write_text('''if settings.startup["quinityn-test-hide-inserters"].value then
- for _,name in ipairs({"y-inserter-smart-long","y_inserter_diagonal"}) do
-  data.raw.recipe[name].hidden=true
-  data.raw.recipe[name].enabled=false
- end
-end
-''')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/inserter_opt_out")\n')
  (mods/'mod-settings.dat').unlink(missing_ok=True)
  run('inserters-visible',base+['--create',str(a.output/'inserters-visible.zip')],
      'QUINITYN INSERTER OPT-OUT TESTS PASSED')
- setting_override.write_text('local setting=data.raw["bool-setting"]["quinityn-test-hide-inserters"]; setting.forced_value=true; setting.hidden=true\n')
+ setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-inserter-cleanup"]); setting.forced_value=true; setting.hidden=true\n')
  run('inserters-hidden',base+['--create',str(a.output/'inserters-hidden.zip')],
      'QUINITYN INSERTER OPT-OUT TESTS PASSED')
  run('inserters-disable-reload',base+['--benchmark',str(a.output/'inserters-visible.zip'),
      '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
- setting_override.write_text('local setting=data.raw["bool-setting"]["quinityn-test-hide-inserters"]; setting.forced_value=false; setting.hidden=true\n')
+ setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-inserter-cleanup"]); setting.forced_value=false; setting.hidden=true\n')
  run('inserters-enable-reload',base+['--benchmark',str(a.output/'inserters-hidden.zip'),
      '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
+ setting_override.unlink()
+ mod_list['mods'][-1]['enabled']=False
+ (mods/'mod-list.json').write_text(json.dumps(mod_list))
+ run('inserters-remove-adjustable-reload',base+['--benchmark',str(a.output/'inserters-hidden.zip'),
+     '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
 finally:
- for filename in ['settings.lua','settings-updates.lua','data-updates.lua']:
-  (harness/filename).unlink(missing_ok=True)
+ setting_override.unlink(missing_ok=True)
+ mod_list['mods']=[m for m in mod_list['mods'] if m['name']!='bobinserters']
+ (mods/'mod-list.json').write_text(json.dumps(mod_list))
+ (adjustable/'info.json').unlink()
+ adjustable.rmdir()
  (mods/'mod-settings.dat').unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 print('All checks passed. Logs:',a.output)

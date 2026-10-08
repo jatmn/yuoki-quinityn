@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Fetch the exact pending 2.1 dependency sources; never modify upstream branches."""
+"""Fetch the exact 2.1 dependency sources; never modify upstream branches."""
 import argparse, json, subprocess
 from pathlib import Path
 LOCK={
- 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.0.git','commit':'ce7918f2b252f2d79ba86b9ae05d991e7af1f261'},
+ 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'c865cf05d5009d7f2224b32900272d4b1f012f21'},
  'yi_engines':{'url':'https://github.com/jatmn/Yuoki-Engines-Factorio-2.0.git','commit':'dd13f421f68010fd0180cda4fb9273f9b582198e'},
 }
 def main():

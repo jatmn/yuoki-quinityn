@@ -22,6 +22,9 @@
     "yi_mine_impact",
     "yi_mine_plasma"
   ],
+  "quinityn-advanced-efficiency-module": [
+    "y-green-module-2"
+  ],
   "quinityn-advanced-engines": [
     "y-ffe",
     "y-mf2a",
@@ -43,10 +46,7 @@
     "ye_tfmw_turbine-s"
   ],
   "quinityn-advanced-factories": [
-    "ye_fassembly2",
-    "ye_fassembly_sp",
-    "ye_science_blue",
-    "yie_science_blue_gen"
+    "ye_fassembly2"
   ],
   "quinityn-advanced-generation": [
     "y-beg",
@@ -80,9 +80,10 @@
     "y_formpress2"
   ],
   "quinityn-advanced-modules": [
-    "y-green-module-2",
-    "y-pink-module-2",
     "y-speed-module-2"
+  ],
+  "quinityn-advanced-productivity-module": [
+    "y-pink-module-2"
   ],
   "quinityn-advanced-robotics": [
     "j_construction2-robot",
@@ -176,6 +177,9 @@
     "yi_mine_impact-recycling",
     "yi_mine_plasma-recycling"
   ],
+  "quinityn-bridge-advanced-efficiency-module-recycling": [
+    "y-green-module-2-recycling"
+  ],
   "quinityn-bridge-advanced-engines-recycling": [
     "y-ffe-recycling",
     "ye_emotor_m-recycling",
@@ -187,9 +191,7 @@
     "ye_tfmw_turbine-s-recycling"
   ],
   "quinityn-bridge-advanced-factories-recycling": [
-    "ye_fassembly2-recycling",
-    "ye_fassembly_sp-recycling",
-    "yie_science_blue_gen-recycling"
+    "ye_fassembly2-recycling"
   ],
   "quinityn-bridge-advanced-generation-recycling": [
     "y-beg-recycling",
@@ -218,9 +220,10 @@
     "y_formpress2-recycling"
   ],
   "quinityn-bridge-advanced-modules-recycling": [
-    "y-green-module-2-recycling",
-    "y-pink-module-2-recycling",
     "y-speed-module-2-recycling"
+  ],
+  "quinityn-bridge-advanced-productivity-module-recycling": [
+    "y-pink-module-2-recycling"
   ],
   "quinityn-bridge-advanced-robotics-recycling": [
     "j_construction2-robot-recycling",
@@ -299,6 +302,9 @@
     "y-atomic-constructor-recycling",
     "y-repair-krakon-recycling"
   ],
+  "quinityn-bridge-combined-module-recycling": [
+    "y_modul_red2-recycling"
+  ],
   "quinityn-bridge-compacting-recycling": [
     "y-raw-fuelnium-recycling",
     "y-unicomp-raw-recycling"
@@ -324,6 +330,9 @@
     "y_turret_gun1f12-recycling",
     "y_wood_wall-recycling",
     "yi_cannon_shell-recycling"
+  ],
+  "quinityn-bridge-efficiency-module-recycling": [
+    "y-green-module-1-recycling"
   ],
   "quinityn-bridge-electronics-recycling": [
     "y-chip-1-recycling",
@@ -461,9 +470,10 @@
     "y_toolhead_broken-recycling"
   ],
   "quinityn-bridge-modules-recycling": [
-    "y-green-module-1-recycling",
-    "y-pink-module-1-recycling",
     "y-speed-module-1-recycling"
+  ],
+  "quinityn-bridge-p3-factory-recycling": [
+    "ye_fassembly_sp-recycling"
   ],
   "quinityn-bridge-packaging-recycling": [
     "ye_buechse_blau-recycling",
@@ -543,11 +553,14 @@
   "quinityn-bridge-pressing-recycling": [
     "y-heat-form-press-recycling"
   ],
+  "quinityn-bridge-productivity-module-recycling": [
+    "y-pink-module-1-recycling"
+  ],
+  "quinityn-bridge-quality-module-recycling": [
+    "y-quality-module-1-recycling"
+  ],
   "quinityn-bridge-quantum-modules-recycling": [
-    "y-pink-module-3-recycling",
-    "y-quality-module-1-recycling",
-    "y_modul_red2-recycling",
-    "y_modul_science-recycling"
+    "y-pink-module-3-recycling"
   ],
   "quinityn-bridge-quantum-power-recycling": [
     "y-accumulator-b-tx-recycling",
@@ -652,11 +665,19 @@
     "ye_steam-barrel-recycling",
     "yie_refrigerant-barrel-recycling"
   ],
+  "quinityn-bridge-research-center-recycling": [
+    "yie_science_blue_gen-recycling"
+  ],
+  "quinityn-bridge-robot-network-expansion-recycling": [
+    "j_yi_roboport1-recycling"
+  ],
   "quinityn-bridge-robotics-recycling": [
-    "j_yi_roboport1-recycling",
     "yi_construction-robot-recycling",
     "yi_logistic-robot-recycling",
     "yi_roboport-recycling"
+  ],
+  "quinityn-bridge-science-module-recycling": [
+    "y_modul_science-recycling"
   ],
   "quinityn-bridge-structures-recycling": [
     "y-bluegear-recycling",
@@ -737,6 +758,9 @@
     "y-uc2crudeoil",
     "y-uc2liquid"
   ],
+  "quinityn-combined-module": [
+    "y_modul_red2"
+  ],
   "quinityn-compacting": [
     "y-raw-fuelnium",
     "y-unicomp-raw"
@@ -766,6 +790,9 @@
     "y_turret_gun1f12",
     "y_wood_wall",
     "yi_cannon_shell"
+  ],
+  "quinityn-efficiency-module": [
+    "y-green-module-1"
   ],
   "quinityn-electronics": [
     "y-chip-1",
@@ -904,7 +931,6 @@
     "y_mc_dirtwasher",
     "y_mc_e2_mining_drill",
     "y_mc_underground_drill",
-    "y_modul_green_op",
     "y_obninsk_mc",
     "y_steam_turbine_gr",
     "y_steam_turbine_mc",
@@ -921,14 +947,15 @@
   ],
   "quinityn-mining-productivity": [],
   "quinityn-modules": [
-    "y-green-module-1",
-    "y-pink-module-1",
     "y-speed-module-1"
   ],
   "quinityn-oil-processing": [],
   "quinityn-orbital": [
     "quinityn-low-density-structure",
     "quinityn-processing-unit"
+  ],
+  "quinityn-p3-factory": [
+    "ye_fassembly_sp"
   ],
   "quinityn-packaging": [
     "ye_buechse_blau",
@@ -1008,6 +1035,12 @@
     "y-smelt-crush-res1",
     "y-smelt-crush-res2"
   ],
+  "quinityn-productivity-module": [
+    "y-pink-module-1"
+  ],
+  "quinityn-quality-module": [
+    "y-quality-module-1"
+  ],
   "quinityn-quantum": [
     "y-alien-infuser",
     "y-atomic-quantum-composer",
@@ -1024,10 +1057,7 @@
     "yi_beacon"
   ],
   "quinityn-quantum-modules": [
-    "y-pink-module-3",
-    "y-quality-module-1",
-    "y_modul_red2",
-    "y_modul_science"
+    "y-pink-module-3"
   ],
   "quinityn-quantum-power": [
     "y-accumulator-b-tx",
@@ -1086,11 +1116,21 @@
     "yi-molten-copper",
     "yi-molten-iron"
   ],
+  "quinityn-research-center": [
+    "ye_science_blue",
+    "yie_science_blue_gen"
+  ],
+  "quinityn-robot-network-expansion": [
+    "j_yi_roboport1"
+  ],
+  "quinityn-robot-production": [],
   "quinityn-robotics": [
-    "j_yi_roboport1",
     "yi_construction-robot",
     "yi_logistic-robot",
     "yi_roboport"
+  ],
+  "quinityn-science-module": [
+    "y_modul_science"
   ],
   "quinityn-structures": [
     "y-bluegear",
@@ -1144,6 +1184,9 @@
     "yie_import_blech_blau",
     "yie_import_sealing",
     "ypfw_trader_sign"
+  ],
+  "quinityn-ultimate-efficiency-module": [
+    "y_modul_green_op"
   ],
   "quinityn-walker-1": [
     "yi_equip_generator_a",

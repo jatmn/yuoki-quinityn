@@ -60,7 +60,7 @@ onto other walkable terrain.
    Durotal foundations, establish local rocket production, and export research
    data for continuing upgrades.
 
-**61 in-game Tips and Tricks chapters** walk you through the stages. Arriving
+**73 in-game Tips and Tricks chapters** walk you through the stages. Arriving
 with no items is supported after researching discovery; ordinary initial spawn
 and platform travel remain unchanged. For the production details, open the
 [local-resource and progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md).
@@ -85,6 +85,11 @@ This is a prerelease; the mod version remains 0.1.0. Its dependency builds are p
   commit `ce7918f`.
 - [Engines 1.3.0 / Factorio 2.1 PR #3](https://github.com/jatmn/Yuoki-Engines-Factorio-2.0/pull/3),
   commit `dd13f42`.
+
+Current source builds instead pin Yuoki's merged `release/1.3.0` commit
+`c865cf0`, including its optional adjustable-inserter cleanup. Quinityn respects
+that setting when assigning research and reconciling saves. Rebuild dependencies
+using the installation guide above; the published preview ZIPs are unchanged.
 
 Keep a backup of development saves. **Use a fresh Quinityn surface or map to see
 all terrain changes**: generated terrain is not rewritten, and existing
