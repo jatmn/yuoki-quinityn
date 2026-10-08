@@ -77,9 +77,9 @@ Build the current source using the [installation and packaging guide](https://gi
 Install the Quinityn, Yuoki and Engines zip files in your Factorio mods directory
 and enable them with Space Age.
 
-An [earlier v0.1.0 development snapshot](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0)
-is also available to users with repository access. It predates the current
-source and is not the initial public release. Its dependency builds are pinned to:
+Download the [public 0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
+for installable Quinityn, Yuoki and Engines ZIPs, license notices and checksums.
+This is a prerelease; the mod version remains 0.1.0. Its dependency builds are pinned to:
 
 - [Yuoki 1.3.0 / Factorio 2.1 PR #11](https://github.com/jatmn/Yuoki-Factorio-2.0/pull/11),
   commit `ce7918f`.
