@@ -30,8 +30,11 @@ including for administrators. Access permissions limit who can merge.
 The required approval count is zero so the sole maintainer can merge their own
 PRs. This matches the owner-driven review model in Codex Warp. It does not let
 outside contributors merge their PRs. Review and validation are still maintainer
-responsibilities. No required status-check names are configured because this
-repository has no PR CI workflow; inventing a check name would block all merges.
+responsibilities. No required status-check names are configured. The lightweight
+CI workflows use path filters and may not run for a given PR. Do not make these
+individual workflows required: GitHub can leave a path-skipped required check
+pending. Enforcing CI as a merge gate needs a separately designed always-reported
+status. Adding these workflows does not change live protections or the ruleset JSON.
 
 The JSON is the versioned policy; editing it does not change live settings.
 For an authorized policy update, inspect the current rule and apply the reviewed

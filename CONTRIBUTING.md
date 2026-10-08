@@ -70,7 +70,15 @@ must resolve the validation gap before merge.
 
 Re-run affected checks after each update, before requesting review. Include
 commands, versions and results in the PR; do not rely on CI as a substitute for
-local validation. This repository currently has no automated PR check suite.
+local validation. [Lightweight CI](docs/development.md#lightweight-ci) runs Lua,
+Python, workflow and package checks only for affected surfaces. It never runs
+Factorio or downloads the game/dependency mods. The local gameplay checks above
+remain required for their applicable changes.
+
+For added or modified Lua files, use StyLua 2.5.2 with the root `.stylua.toml`,
+then run `stylua --check` on those files. CI checks syntax and Luacheck across
+the Lua surface but enforces formatting only on files changed by the PR.
+Leave unrelated Lua files untouched; repository-wide formatting is separate work.
 
 ## Pull requests and follow-up
 

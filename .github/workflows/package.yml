@@ -1,0 +1,64 @@
+name: Package
+
+on:
+  pull_request:
+    paths:
+      # Match the playable ZIP's surface, including new runtime directories.
+      - '**'
+      - '!**/.*'
+      - '!**/.*/**'
+      - '!**/build/**'
+      - '!**/__pycache__/**'
+      - '!tests/**'
+      - '!tools/**'
+      - '!docs/**'
+      - '!AGENTS.md'
+      - '!CONTRIBUTING.md'
+      - 'tools/package.py'
+      - 'tools/validate_package.py'
+      - '.github/workflows/package.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**'
+      - '!**/.*'
+      - '!**/.*/**'
+      - '!**/build/**'
+      - '!**/__pycache__/**'
+      - '!tests/**'
+      - '!tools/**'
+      - '!docs/**'
+      - '!AGENTS.md'
+      - '!CONTRIBUTING.md'
+      - 'tools/package.py'
+      - 'tools/validate_package.py'
+      - '.github/workflows/package.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build and validate the addon ZIP
+        run: |
+          python3 tools/package.py
+          python3 tools/validate_package.py
+      - name: Attach addon and checksum
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: quinityn-${{ github.sha }}
+          path: |
+            build/dist/*.zip
+            build/dist/SHA256SUMS
+          if-no-files-found: error
+          retention-days: 7

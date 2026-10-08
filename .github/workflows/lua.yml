@@ -1,0 +1,58 @@
+name: Lua
+
+on:
+  pull_request:
+    paths:
+      - '**/*.lua'
+      - '.luacheckrc'
+      - '.stylua.toml'
+      - '.github/workflows/lua.yml'
+  push:
+    branches: [main]
+    paths:
+      - '**/*.lua'
+      - '.luacheckrc'
+      - '.stylua.toml'
+      - '.github/workflows/lua.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lua:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install Lua 5.2
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install --no-install-recommends -y lua5.2
+      - name: Check Lua syntax
+        run: |
+          luac5.2 -p .luacheckrc
+          git ls-files -z '*.lua' | xargs -0 -r -n1 luac5.2 -p
+      - name: Lint Lua
+        uses: lunarmodules/luacheck@cc089e3f65acdd1ef8716cc73a3eca24a6b845e4 # v1.2.0
+      - name: Install StyLua
+        uses: JohnnyMorganz/stylua-action@76fd70c03e6340ceaf673366712db9b20560b402 # v5
+        with:
+          token: ${{ github.token }}
+          version: v2.5.2
+          args: 'false'
+      - name: Check formatting of changed Lua files
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: |
+          git diff --check "$BASE" HEAD
+          # Parse the configuration even when only CI/configuration changed.
+          printf 'return true\n' | stylua --check --config-path .stylua.toml -
+          git diff --name-only --diff-filter=ACMR -z "$BASE" HEAD -- '*.lua' |
+            xargs -0 -r stylua --check --config-path .stylua.toml --
