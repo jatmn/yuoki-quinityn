@@ -49,8 +49,10 @@ remaining graphical-client validation.
 
 Format every added or modified Lua file with StyLua **2.5.2**, using the root
 `.stylua.toml`, before committing. Run `stylua --check` on those files afterward.
-CI enforces formatting on changed Lua files only; do not reformat untouched
-files as incidental cleanup. See [development](docs/development.md#lightweight-ci)
+The repository-wide formatting baseline is complete. PR CI checks only changed
+Lua files; pushes to `main` check all tracked Lua files when the Lua surface
+changes. Do not reformat untouched files as incidental cleanup.
+See [development](docs/development.md#lightweight-ci)
 for the lint commands and which changes trigger each workflow.
 
 Do not add new languages, dependency managers, CI frameworks or Dependabot as

@@ -11,9 +11,8 @@ exclude_files = {"build/**", ".cache/**"}
 
 -- Factorio's data and runtime environments expose different globals.
 files["data*.lua"].globals = {"data"}
--- Existing heavy-oil opt-out has an intentionally empty branch; the bridge loop
--- retains an unused index. Keep these two baseline warnings local to this file.
-files["data-final-fixes.lua"].ignore = {"542", "213/i"}
+-- The empty heavy-oil opt-out branch intentionally prevents any unlock.
+files["data-final-fixes.lua"].ignore = {"542"}
 files["settings*.lua"].globals = {"data"}
 files["prototypes/**"].globals = {"data"}
 files["control.lua"].globals = {"game", "storage"}

@@ -64,7 +64,7 @@ Yuoki or Engines; engine validation remains local.
 
 | Changed surface | Checks that run |
 | --- | --- |
-| Runtime Lua | Lua syntax, Luacheck, changed-file StyLua; addon packaging |
+| Runtime Lua | Lua syntax, Luacheck, StyLua; addon packaging |
 | Test-only Lua | Lua checks only |
 | Python outside packaging tools | Python syntax only; no game tests execute |
 | `tools/package.py` or `tools/validate_package.py` | Python syntax and packaging |
@@ -79,28 +79,40 @@ so changes to them trigger packaging. A mixed change runs the union of its
 affected checks. The router disables rename detection so both the old and new
 paths are considered; deletions also select their affected checks. An unavailable
 comparison revision fails the routing job instead of silently skipping validation.
-Lua syntax/lint scan the remaining Lua source; formatting checks only added,
-modified or renamed Lua files, never deleted files. Changes to format config
-also validate the configuration without demanding a repository-wide reformat.
-The repository-wide formatting baseline is tracked in
-[issue #9](https://github.com/jatmn/yuoki-quinityn/issues/9).
+On pull requests, Lua syntax, lint and formatting check only added, modified or
+renamed Lua files, never deleted files. After merge, a push to `main` checks all
+tracked Lua files when the Lua surface changes, including lint or formatter
+configuration changes. Configuration is parsed even when a PR changes no Lua
+files. The one-time repository-wide formatting baseline from
+[issue #9](https://github.com/jatmn/yuoki-quinityn/issues/9) is complete; ordinary
+PRs should leave unrelated Lua files untouched.
 
 The Lua workflow uses Lua 5.2 syntax, Luacheck 1.2.0 and StyLua 2.5.2. Factorio
 data/runtime globals are declared separately in `.luacheckrc`; line length is
-left to StyLua. Two existing warnings in `data-final-fixes.lua` (the intentional
-empty heavy-oil opt-out and unused loop index) have file-local exemptions.
+left to StyLua. The intentional empty heavy-oil opt-out in `data-final-fixes.lua`
+retains a file-local exemption; its unused bridge-loop index now uses `_` and
+needs no exemption.
 
 Run the same checks locally from the repository root:
 
 ```sh
-git ls-files -z '*.lua' | xargs -0 -r -n1 luac5.2 -p
-luacheck .
 # Replace these paths with the Lua files you changed. Format before checking.
+luac5.2 -p .luacheckrc
+luac5.2 -p control.lua
+luacheck control.lua
 stylua --config-path .stylua.toml control.lua
 stylua --check --config-path .stylua.toml control.lua
 actionlint
 python3 tools/package.py
 python3 tools/validate_package.py
+```
+
+For the full Lua baseline check used after merge:
+
+```sh
+git ls-files -z '*.lua' | xargs -0 -r -n1 luac5.2 -p
+git ls-files -z '*.lua' | xargs -0 -r luacheck --
+git ls-files -z '*.lua' | xargs -0 -r stylua --check --config-path .stylua.toml --
 ```
 
 The Python syntax step parses tracked `.py` files without importing or running them. Package

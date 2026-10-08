@@ -76,9 +76,11 @@ Factorio or downloads the game/dependency mods. The local gameplay checks above
 remain required for their applicable changes.
 
 For added or modified Lua files, use StyLua 2.5.2 with the root `.stylua.toml`,
-then run `stylua --check` on those files. CI checks syntax and Luacheck across
-the Lua surface but enforces formatting only on files changed by the PR.
-Leave unrelated Lua files untouched; repository-wide formatting is separate work.
+then run `stylua --check` on those files. The repository-wide formatting baseline
+is complete. PR CI checks syntax, Luacheck and formatting only on changed Lua
+files. After merge, pushes to `main` check all tracked Lua files when the Lua
+surface changes, including lint or formatter configuration changes.
+Leave unrelated Lua files untouched during ordinary work.
 
 ## Pull requests and follow-up
 
