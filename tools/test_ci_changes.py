@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""Regressions for CI routing only; no game or dependency mods are loaded."""
+"""Regressions for CI routing and Lua selection; no game or dependency mods are loaded."""
 from pathlib import Path
+import os
 import subprocess
 import sys
 import tempfile
+import textwrap
 import unittest
 
 from ci_changes import classify
@@ -12,6 +14,47 @@ ROUTER = Path(__file__).with_name('ci_changes.py').resolve()
 
 
 class RoutingTests(unittest.TestCase):
+    def test_lua_workflow_selects_type_changes(self):
+        workflow = ROUTER.parents[1] / '.github/workflows/lua.yml'
+        step = workflow.read_text().split('      - name: Select Lua files for this event\n', 1)[1]
+        selection = textwrap.dedent(step.split('        run: |\n', 1)[1].split('      - name:', 1)[0])
+        for starts_as_symlink in (False, True):
+            with self.subTest(starts_as_symlink=starts_as_symlink), \
+                    tempfile.TemporaryDirectory(prefix='quinityn-ci-type-') as directory:
+                root = Path(directory)
+
+                def git(*args):
+                    return subprocess.check_output([
+                        'git', '-c', 'user.name=CI test', '-c', 'user.email=ci@example.invalid', *args
+                    ], cwd=root, text=True).strip()
+
+                git('init', '-q')
+                (root / 'docs').mkdir()
+                (root / 'docs/source').write_text('return true\n')
+                (root / 'untouched.lua').write_text('return true\n')
+                lua = root / 'control.lua'
+                if starts_as_symlink:
+                    lua.symlink_to('docs/source')
+                else:
+                    lua.write_text('return true\n')
+                git('add', '.'); git('commit', '-qm', 'base')
+                base = git('rev-parse', 'HEAD')
+                lua.unlink()
+                if starts_as_symlink:
+                    lua.write_text('invalid Lua source\n')
+                else:
+                    lua.symlink_to('docs/source')
+                    (root / 'docs/source').write_text('invalid Lua source\n')
+                git('add', '.'); git('commit', '-qm', 'change Lua file type')
+                self.assertIn('T\tcontrol.lua', git('diff', '--name-status', base, 'HEAD').splitlines())
+                routed = subprocess.check_output(
+                    [sys.executable, str(ROUTER), '--base', base], cwd=root, text=True
+                ).splitlines()
+                self.assertIn('lua=true', routed)
+                subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', selection], cwd=root,
+                               env={**os.environ, 'BASE': base, 'EVENT_NAME': 'pull_request'}, check=True)
+                self.assertEqual((root / '.cache/ci-lua-files').read_bytes(), b'control.lua\0')
+
     def test_surface_selection(self):
         cases = [
             (['control.lua'], {'lua', 'package'}),
