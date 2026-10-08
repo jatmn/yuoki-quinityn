@@ -43,10 +43,7 @@
     "ye_tfmw_turbine-s"
   ],
   "quinityn-advanced-factories": [
-    "ye_fassembly2",
-    "ye_fassembly_sp",
-    "ye_science_blue",
-    "yie_science_blue_gen"
+    "ye_fassembly2"
   ],
   "quinityn-advanced-generation": [
     "y-beg",
@@ -187,9 +184,7 @@
     "ye_tfmw_turbine-s-recycling"
   ],
   "quinityn-bridge-advanced-factories-recycling": [
-    "ye_fassembly2-recycling",
-    "ye_fassembly_sp-recycling",
-    "yie_science_blue_gen-recycling"
+    "ye_fassembly2-recycling"
   ],
   "quinityn-bridge-advanced-generation-recycling": [
     "y-beg-recycling",
@@ -465,6 +460,9 @@
     "y-pink-module-1-recycling",
     "y-speed-module-1-recycling"
   ],
+  "quinityn-bridge-p3-factory-recycling": [
+    "ye_fassembly_sp-recycling"
+  ],
   "quinityn-bridge-packaging-recycling": [
     "ye_buechse_blau-recycling",
     "ye_buechse_braun-recycling",
@@ -652,8 +650,13 @@
     "ye_steam-barrel-recycling",
     "yie_refrigerant-barrel-recycling"
   ],
+  "quinityn-bridge-research-center-recycling": [
+    "yie_science_blue_gen-recycling"
+  ],
+  "quinityn-bridge-robot-network-expansion-recycling": [
+    "j_yi_roboport1-recycling"
+  ],
   "quinityn-bridge-robotics-recycling": [
-    "j_yi_roboport1-recycling",
     "yi_construction-robot-recycling",
     "yi_logistic-robot-recycling",
     "yi_roboport-recycling"
@@ -930,6 +933,9 @@
     "quinityn-low-density-structure",
     "quinityn-processing-unit"
   ],
+  "quinityn-p3-factory": [
+    "ye_fassembly_sp"
+  ],
   "quinityn-packaging": [
     "ye_buechse_blau",
     "ye_buechse_braun",
@@ -1086,8 +1092,15 @@
     "yi-molten-copper",
     "yi-molten-iron"
   ],
+  "quinityn-research-center": [
+    "ye_science_blue",
+    "yie_science_blue_gen"
+  ],
+  "quinityn-robot-network-expansion": [
+    "j_yi_roboport1"
+  ],
+  "quinityn-robot-production": [],
   "quinityn-robotics": [
-    "j_yi_roboport1",
     "yi_construction-robot",
     "yi_logistic-robot",
     "yi_roboport"

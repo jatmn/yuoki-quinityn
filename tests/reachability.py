@@ -92,7 +92,18 @@ if missing:
   if n.startswith('quinityn') or any(p['name'] in missing for p in r.get('results',[])):
    print('BLOCKED?',n,'ingredients',[p['name'] for p in r.get('ingredients',[]) if not available(p)],'categories',r.get('categories',['crafting']))
  sys.exit(1)
-assert all(n in techs for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-') and t.get('max_level')!='infinite'), 'Finite planet research unreachable'
+local_finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-')
+              and t.get('max_level')!='infinite'}-{'quinityn-research-center'}
+assert local_finite<=techs, 'Finite local research unreachable: '+str(sorted(local_finite-techs))
+# The endgame center now explicitly requires space science. Preserve the strict
+# local rocket proof above; only this new unlock may wait for an orbital supply.
+center=T['quinityn-research-center']
+assert 'quinityn-research-center' not in techs
+assert all(n in techs for n in center['prerequisites'])
+assert {i[0] for i in center['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'}
+assert {'ye_fassembly2','ye_fassembly_sp'}<=machines
+assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
+print('PASS: Y2/P3 use existing reputation byproducts; only endgame research center awaits space science')
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes

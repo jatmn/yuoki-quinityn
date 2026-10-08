@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==61
+assert len(tips)==65
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 61 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 65 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -128,6 +128,39 @@ for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fue
  a,b=unlocks[first][0],unlocks[upgrade][0]
  assert a!=b and a in ancestry(b),(first,upgrade,a,b)
 print('PASS: discovery ancestry, mandatory post-milestone science, representative icons and ordered production tiers')
+
+# Factory upgrades and free reputation generation must be distinct research steps.
+y2,p3,center=(unlocks[n][0] for n in ['ye_fassembly2','ye_fassembly_sp','yie_science_blue_gen'])
+assert len({y2,p3,center})==3
+assert {e['recipe'] for e in T[y2]['effects'] if e['type']=='unlock-recipe'}=={'ye_fassembly2'}
+assert y2 in ancestry(p3) and p3 in ancestry(center)
+assert 'quinityn-advanced-modules' in ancestry(p3) and 'quinityn-mastery' in ancestry(center)
+assert T[p3]['unit']['count']>=1000 and T[center]['unit']['count']>=5000
+assert T[center]['unit']['time']==40
+assert {i[0] for i in T[center]['unit']['ingredients']}=={
+ 'automation-science-pack','logistic-science-pack','military-science-pack','chemical-science-pack',
+ 'production-science-pack','utility-science-pack','space-science-pack','quinityn-research-data'}
+assert unlocks['ye_science_blue']==[center]
+# Existing reputation byproducts remain available before the free generator.
+for name in ['yi_radar','y-quantrinum']:
+ assert all(center not in ancestry(t) for t in unlocks[name])
+ assert any(p['name']=='ye_science_blue' for p in R[name]['results'])
+
+robotics=unlocks['yi_logistic-robot'][0]
+assert {e['recipe'] for e in T[robotics]['effects'] if e['type']=='unlock-recipe'}=={
+ 'yi_roboport','yi_logistic-robot','yi_construction-robot'}
+network=unlocks['j_yi_roboport1'][0]
+assert network!=robotics and robotics in ancestry(network)
+advanced=unlocks['j_logistic2-robot'][0]
+milestones=[n for n in ancestry(advanced) if T[n].get('research_trigger')==
+ {'type':'craft-item','item':'yi_logistic-robot','count':500}]
+assert len(milestones)==1 and robotics in ancestry(milestones[0])
+assert not T[milestones[0]].get('unit') and not T[milestones[0]].get('effects')
+assert T[advanced]['unit']['count']>240 and 'research_trigger' not in T[advanced]
+for n in [robotics,network,advanced]:
+ assert {'logistic-science-pack','chemical-science-pack'}<={i[0] for i in T[n]['unit']['ingredients']}
+ assert 'chemical-science-pack' in ancestry(n)
+print('PASS: separate Y2/P3/research center, endgame science/costs and robot manufacturing plus lab gates')
 
 assert mg['cliff_settings']['name']=='quinityn-cliff'
 assert D['cliff']['quinityn-cliff']['orientations']==D['cliff']['cliff-fulgora']['orientations']

@@ -1,6 +1,6 @@
 # Quinityn progression
 
-The same progression is available inside Factorio through **61 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **65 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -77,8 +77,16 @@ flowchart TD
   Components --> Storage[First energy storage]
   Crystals --> Quantum[Quantum materials]
   Storage --> Quantum
-  Engines --> Factories[Advanced factories]
+  Engines --> Factories[Y2-Factory]
   Machining --> Factories
+  Factories --> P3[P3-Factory - 1000 units]
+  AdvancedEngines[Advanced engines] --> P3
+  AdvancedModules[Advanced modules] --> P3
+  P3 --> Center[Research center - 5000 units / 40 seconds]
+  Mastery[Mastercrafted industry] --> Center
+  Robotics[Yuoki robotics - includes chemical science] --> Network[8080 network expansion]
+  Robotics --> RobotProduction[Craft 500 YI Logistikers]
+  RobotProduction --> AdvancedRobots[Advanced robots - 1000 science units]
   Refining --> Crops[Crop production]
   Crops --> Animals[Husbandry and later genetics]
   Factories --> Animals
@@ -86,7 +94,7 @@ flowchart TD
   Quantum --> Orbital[Orbital manufacturing]
 ```
 
-The survey is a descendant of **Planet discovery Quinityn**, not an available starter technology. Discovery costs the normal space-age sciences and unlocks travel; only physical landing completes the survey. The eight crafting milestones and rock discovery consume no research packs. Materials is the first crushing milestone; factory manufacture still needs its production chain even if science has already been revealed. **Every pack-based Quinityn technology uses red, green and Quinityn packs** (infinite research also uses the standard advanced packs). Prerequisite bridges and the local crude-oil milestone retain their specific technology requirements.
+The survey is a descendant of **Planet discovery Quinityn**, not an available starter technology. Discovery costs the normal space-age sciences and unlocks travel; only physical landing completes the survey. The eight crafting milestones and rock discovery consume no research packs. Materials is the first crushing milestone; factory manufacture still needs its production chain even if science has already been revealed. **Every pack-based Quinityn technology uses red, green and Quinityn packs** (later factories, robots, the research center and infinite research also use advanced packs). Prerequisite bridges and the local crude-oil milestone retain their specific technology requirements.
 
 The broad base disciplines now cover their first usable production stage. Upgrades have separate research:
 
@@ -105,17 +113,21 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Mixed-oxide reactor engineering | Yuoki industrial refining, Advanced industrial components, Contract world defense, Advanced electric generation | 160 |
 | Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering | 250 |
 | Industrial fluid handling | Mechanical force engineering | 80 |
-| Advanced Yuoki factories | Mechanical force engineering, Advanced crushing and forming | 140 |
-| Advanced Mechanical Force engines | Advanced Yuoki factories, Advanced industrial components | 180 |
+| Y2-Factory | Mechanical force engineering, Advanced crushing and forming | 140 |
+| P3-Factory | Y2-Factory, Advanced Mechanical Force engines, Advanced industrial modules | 1,000 |
+| Yuoki research center | P3-Factory, Mastercrafted industry | 5,000 |
+| Advanced Mechanical Force engines | Y2-Factory, Advanced industrial components | 180 |
 | Advanced transport tubes | Mechanical force engineering, Advanced industrial components | 120 |
 | Crystal and emulsion processing | Yuoki industrial refining, Ore washing and residue recovery | 150 |
-| Animal husbandry and aquaculture | Yuoki agronomy and biology, Advanced Yuoki factories, Industrial fluid handling | 160 |
+| Animal husbandry and aquaculture | Yuoki agronomy and biology, Y2-Factory, Industrial fluid handling | 160 |
 | First-generation industrial biology | Animal husbandry and aquaculture | 200 |
 | Second-generation industrial biology | First-generation industrial biology, Quantrinum and advanced electronics | 250 |
 | Third-generation industrial biology | Second-generation industrial biology | 300 |
 | Advanced industrial inserters | Yuoki logistics, Quantrinum and advanced electronics | 160 |
-| Yuoki robot networks | Yuoki logistics, Quantrinum and advanced electronics, Industrial energy storage | 180 |
-| Advanced Yuoki robots | Yuoki robot networks | 240 |
+| Yuoki robotics | Yuoki logistics, Quantrinum and advanced electronics, Industrial energy storage | 180 |
+| 8080 network expansion | Yuoki robotics | 300 |
+| YI Logistiker production | Yuoki robotics | Craft 500 YI Logistikers; no packs |
+| Advanced Yuoki robots | YI Logistiker production | 1,000 |
 | Advanced industrial defenses | Contract world defense, Advanced industrial components, Industrial energy storage | 160 |
 | Yuoki powered armor | Laika trade network, Advanced industrial defenses, Industrial energy storage | 200 |
 | Yuoki powered armor II | Yuoki powered armor, Crystal accumulator upgrades | 240 |
@@ -128,6 +140,10 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Industrial packaging | Yuoki agronomy and biology, Industrial fluid handling | 120 |
 | Advanced electric generation | Yuoki power and infrastructure, Advanced industrial components, Mechanical force engineering, Yuoki industrial refining | 140 |
 | Industrial fluid and electric infrastructure | Yuoki power and infrastructure, Advanced industrial components | 80 |
+
+Y2 research unlocks only the Y2-Factory at the existing point in the tree. P3 follows advanced engines and modules, costing 1,000 each of red, green, blue, purple, yellow and Quinityn science at 30 seconds per unit. The research center follows P3 and Mastercrafted industry: **5,000 each of automation, logistic, military, chemical, production, utility, space and Quinityn science, at 40 seconds per unit**. Its free Scientific Reputation recipe moves with it. Existing factory ingredients stay unchanged: Scientific Reputation is available earlier as a byproduct of radar construction, Quantrinum production and other recipes. The local dependency check reaches both factories without the research center; the center alone waits for space science from an orbital supply in the no-import/no-trade scenario.
+
+Yuoki robotics unlocks only the basic roboport and two robots; The 8080 has its own 300-unit research. All three robot lab technologies require **chemical science as well as logistic science**, retaining red and Quinityn science. After Yuoki robotics, craft **500 YI Logistikers** to complete the force-wide production milestone. Existing stock does not count, and other forces do not share the progress. The milestone grants no robot recipes: advanced robots then cost **1,000 each of red, green, blue, purple, yellow and Quinityn science**. Robot lab research retains 20-second units.
 
 The tree separates **upgrades** while keeping related processing steps and same-tier variants together. For example, empty/charged battery cells are steps of one battery process; long, directional and underground transport variants are not successive machine tiers. Some optional products still need inputs from other industrial branches. Existing non-Yuoki research requirements on upstream unlocks are retained through automatic prerequisite bridges. The engine-generated [recipe manifest](recipe-unlocks.json) records every assigned unlock for review.
 
@@ -153,7 +169,7 @@ Start with one scrubber and let the first factory work intermittently. An unfilt
 
 A primitive burner Cimota provides only 25 water/s, so even one unfiltered Fatmice needs more than one separator at full speed. Boilers need water too. A single 900 kW steam engine cannot run the Fatmice at full speed: expand the power plant and water supply before scaling. The bootstrap budget proves finite materials, not full-speed simultaneous operation of every machine.
 
-Power plus Fatmice needs **100 rock ash**. Reaching filters costs **460 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing and Filters: the additional 360 ash takes 12 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 8,350 packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; research costs and the capture/cleaning recipes remain unchanged.
+Power plus Fatmice needs **100 rock ash**. Reaching filters costs **460 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing and Filters: the additional 360 ash takes 12 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 15,410 Quinityn packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; the capture and cleaning recipes remain unchanged.
 
 Quinityn replaces Engines' Fatmice startup toggle with these research tiers; both modes use the overhaul's 1x crafting speed and base -250 pollution/minute while active. Filter capture uses a 2x recipe emission multiplier. It does not require actual pollution as a consumed recipe input: it produces ash while running and removes pollution where present, following the upstream mechanic.
 
