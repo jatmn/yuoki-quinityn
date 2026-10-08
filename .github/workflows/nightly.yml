@@ -1,0 +1,58 @@
+name: Nightly
+
+on:
+  schedule:
+    - cron: '23 8 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: nightly-release
+  cancel-in-progress: false
+
+jobs:
+  nightly:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Build a loadable upcoming-patch snapshot
+        run: |
+          python3 tools/package.py --nightly
+          python3 tools/validate_package.py --nightly
+      - name: Publish only to GitHub
+        run: |
+          tag="nightly-$(date -u +%Y%m%d)-${GITHUB_SHA:0:12}-$GITHUB_RUN_ID"
+          {
+            echo "Development snapshot of $GITHUB_SHA."
+            echo
+            echo 'Install only this addon ZIP; obtain the pinned dependencies separately.'
+            echo 'The mod uses the upcoming patch version. Replace older snapshots of that version.'
+            echo 'A stable release with the same version is not an in-game upgrade; replace the ZIP manually.'
+            echo 'Player-facing history is in changelog.txt; development history is linked below.'
+            echo
+            echo "https://github.com/$GITHUB_REPOSITORY/commits/$GITHUB_SHA"
+          } > build/nightly-notes.md
+          if gh release view "$tag" >/dev/null 2>&1; then
+            echo "Nightly already exists: $tag"
+          else
+            gh release create "$tag" --target "$GITHUB_SHA" --title "$tag" --prerelease --latest=false --notes-file build/nightly-notes.md
+          fi
+          mkdir -p build/published
+          gh release view "$tag" --json assets --jq '.assets[].name' > build/assets.txt
+          for file in build/dist/*.zip build/dist/SHA256SUMS; do
+            name="${file##*/}"
+            if grep -Fxq "$name" build/assets.txt; then
+              gh release download "$tag" --pattern "$name" --dir build/published
+              cmp "$file" "build/published/$name"
+            else
+              gh release upload "$tag" "$file"
+            fi
+          done

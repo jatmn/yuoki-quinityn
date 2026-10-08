@@ -63,7 +63,15 @@ For the addon alone:
 python3 tools/package.py
 ```
 
-All development updates remain **0.1.0** until `main` is stable for the initial release. The Git tag `v0.1.0-preview.2` identifies the public preview without changing the mod version. Build the desired branch with the commands above for current changes. Replace the previous `yuoki-quinityn_0.1.0.zip` when installing a new build; do not install multiple copies.
+Ordinary development keeps the last stable mod version. Release Please starts
+with **0.1.1**. Write player-facing notes in `changelog.txt`'s `Unreleased`
+section in each contribution PR; the release workflow assigns version/date
+headers automatically. Development packages turn pending notes into a numeric
+upcoming-patch section without changing tracked source files.
+GitHub-only nightlies use the upcoming patch version and require replacing
+earlier snapshots of the same version. See [releases and nightlies](releases.md)
+for the version policy, credentials, publication and retries. The historical
+`v0.1.0-preview.2` tag and its 0.1.0 mod ZIP remain unchanged.
 
 ## Lightweight CI
 
@@ -85,6 +93,7 @@ Yuoki or Engines; engine validation remains local.
 | `.luacheckrc` or `.stylua.toml` | Lua checks only |
 | One validation workflow file | actionlint plus the workflow being changed |
 | Dispatcher (`ci.yml`) or `tools/ci_changes.py` | All four validation workflows |
+| Release configuration/version records or release workflows | Python release tests and package validation; actionlint for workflows |
 | `docs/`, `AGENTS.md`, `CONTRIBUTING.md` | Change detection only |
 
 The README, changelog, license files and `graphics/README.md` ship in the addon,
@@ -132,8 +141,11 @@ git ls-files -z '*.lua' | xargs -0 -r stylua --check --config-path .stylua.toml 
 The Python syntax step parses tracked `.py` files without importing or running them. Package
 validation checks metadata, the versioned ZIP root, every tracked release file
 and its bytes, required entrypoints/notices, developer-file exclusions and the
-SHA256 checksum. The addon ZIP/checksum is attached to its workflow run for seven
-days; CI does not publish a release. These checks do not prove game API usage,
+SHA256 checksum. It also validates Factorio changelog formatting and matching
+version records. Python CI runs `python3 tools/test_releases.py` for release
+packages and simulated portal upload responses. The addon ZIP/checksum is
+attached to its validation workflow run for seven days; publishing is handled
+by the separate release/nightly workflows. These checks do not prove game API usage,
 recipe correctness, graphics rendering or gameplay.
 
 Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library CI

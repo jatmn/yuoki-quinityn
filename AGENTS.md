@@ -65,7 +65,13 @@ and generated build output out of Git.
 Use a Conventional Commit subject (`feat`, `fix`, `perf`, `refactor`, `docs`,
 `test`, `build`, `ci`, `chore`, or `revert`, with an optional scope) and a body
 describing the behavior and validation. Use the same format for PR titles.
-Do not automatically increment `info.json` or publish/tag a release.
+Do not increment `info.json` or publish/tag a release in ordinary contribution
+work. Maintainer release PRs use [the release workflow](docs/releases.md);
+Release Please updates versions and GitHub notes. Add player-facing notes to
+the top `Version: Unreleased` section of `changelog.txt` in each normal PR;
+create that section when absent, without editing numbered history or adding a
+date. The release workflow assigns version/date headers automatically. Omit
+CI-only details from the player changelog.
 
 Work on a topic branch and submit reviewable PRs. Only jatmn and designated
 maintainers merge to `main`. Do not merge, change visibility, alter live branch

@@ -1,0 +1,93 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing stable tag to retry publishing (blank: run release-please)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stable-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main' && inputs.tag == ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      created: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+      - name: Check release metadata before creating tags
+        run: |
+          python3 tools/package.py
+          python3 tools/validate_package.py
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          target-branch: main
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+      - name: Finalize the release PR's accumulated game notes
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+        run: |
+          branch=release-please--branches--main
+          head="$(gh pr list --base main --head "$branch" --state open --json headRefOid,isCrossRepository --jq '[.[] | select(.isCrossRepository == false)] | .[0].headRefOid // empty')"
+          if [ -z "$head" ]; then exit 0; fi
+          git fetch origin "refs/heads/$branch"
+          test "$(git rev-parse FETCH_HEAD)" = "$head"
+          # A same-repository branch can still contain unreviewed code. Only
+          # release data may differ from the trusted main workflow revision.
+          git diff --quiet "$GITHUB_SHA" "$head" -- . \
+            ':(exclude)info.json' ':(exclude)changelog.txt' \
+            ':(exclude).github/version.txt' \
+            ':(exclude).github/release-please-manifest.json' \
+            ':(exclude)docs/CHANGELOG.md'
+          for path in info.json changelog.txt .github/version.txt .github/release-please-manifest.json docs/CHANGELOG.md; do
+            entry="$(git ls-tree "$head" -- "$path")"
+            if [ -n "$entry" ] && [[ "$entry" != '100644 blob '* ]]; then
+              echo "Release data must be a regular file: $path" >&2
+              exit 1
+            fi
+          done
+          git checkout -B "$branch" FETCH_HEAD
+          python3 tools/release_notes.py --date "$(date -u +%F)"
+          python3 tools/package.py
+          python3 tools/validate_package.py
+          if git diff --quiet -- changelog.txt; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add changelog.txt
+          git commit -m 'chore: finalize player changelog metadata'
+          git push origin "HEAD:refs/heads/$branch"
+
+  publish:
+    needs: release
+    if: >-
+      always() && github.ref == 'refs/heads/main' &&
+      (needs.release.outputs.created == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.tag != ''))
+    permissions:
+      contents: write
+    uses: ./.github/workflows/publish.yml
+    with:
+      tag: ${{ inputs.tag || needs.release.outputs.tag }}
+    secrets:
+      FACTORIO_API_KEY: ${{ secrets.FACTORIO_API_KEY }}
