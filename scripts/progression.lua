@@ -26,7 +26,10 @@ function M.arrive(player)
   complete_bridges(force)
 end
 function M.research(event)
-  if event.research.name == "quinityn-oil-processing" then
+  if event.research.name == "planet-discovery-quinityn" then
+    -- Discovery can finish after a character changes force while on Quinityn.
+    for _, player in pairs(event.research.force.players) do M.arrive(player) end
+  elseif event.research.name == "quinityn-oil-processing" then
     event.research.force.technologies["oil-processing"].researched=true
   end
   complete_bridges(event.research.force)

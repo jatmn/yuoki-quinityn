@@ -132,6 +132,25 @@ PASS: larger organic starter patch: y-res1
 PASS: rich starter deposit: y-res2=147834
 PASS: larger organic starter patch: y-res2
 
+DISCOVERY EVENT ORDER
+PASS: force transfer before discovery stays gated
+PASS: discovery with remote view or characterless presence does not unlock survey
+PASS: another force's discovery does not unlock an otherwise eligible waiting force
+PASS: discovery completion unlocks a character already physically present
+PASS: discovery retry does not bypass later crafting milestones
+PASS: completed survey is not replayed by duplicate discovery events
+PASS: discovery before physical arrival remains supported
+Force/character/research/recipe state is native. LuaPlayer membership and fields
+use the documented headless facade. The survey-completion assertion fails at
+the starting head without the research-finished retry.
+
+SAME-VERSION UPDATE
+PASS: base-to-head load at unchanged 0.1.0 emits on_configuration_changed
+PASS: completed Materials and Power research, separator recipe and both circuit
+colors/control settings survive; new factory/science owners remain required
+PASS: separator disconnect/reconnect and production through its changed input
+Native event mod_changes={} does not prevent configuration reconciliation.
+
 RUNTIME
 PASS: physical landing opens survey
 PASS: landing unlocks water bootstrap
