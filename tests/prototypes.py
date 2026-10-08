@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==65
+assert len(tips)==73
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 65 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 73 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -161,6 +161,51 @@ for n in [robotics,network,advanced]:
  assert {'logistic-science-pack','chemical-science-pack'}<={i[0] for i in T[n]['unit']['ingredients']}
  assert 'chemical-science-pack' in ancestry(n)
 print('PASS: separate Y2/P3/research center, endgame science/costs and robot manufacturing plus lab gates')
+
+# Every active Yuoki module has its own research, including ultimate products
+# outside the ordinary module crafting subgroup. Recipe inputs establish lineage.
+modules={n for n in D['module'] if n.startswith('y')}
+assert len(modules)==11
+module_owners={}
+for name in modules:
+ owners=unlocks[name]
+ assert len(owners)==1,(name,owners)
+ owner=owners[0];module_owners[name]=owner
+ assert [e['recipe'] for e in T[owner]['effects'] if e['type']=='unlock-recipe']==[name], \
+  'Module still shares a research unlock: '+name
+for name,owner in module_owners.items():
+ for ingredient in R[name]['ingredients']:
+  if ingredient['name'] in modules:
+   assert module_owners[ingredient['name']] in ancestry(owner),(name,ingredient['name'])
+assert module_owners['y-green-module-2'] in ancestry(module_owners['y_modul_green_op'])
+assert module_owners['y-pink-module-3'] in ancestry(module_owners['y_modul_science'])
+assert 'quinityn-mastery' in ancestry(module_owners['y_modul_green_op'])
+assert 'quinityn-mastery' in ancestry(module_owners['y_modul_science'])
+assert 'quality-module-2' in ancestry(module_owners['y-quality-module-1'])
+allowed_packs={'automation-science-pack','logistic-science-pack','military-science-pack',
+ 'chemical-science-pack','production-science-pack','utility-science-pack','space-science-pack','quinityn-research-data'}
+for owner in module_owners.values():
+ for parent in ancestry(owner)|{owner}:
+  assert {i[0] for i in T[parent].get('unit',{}).get('ingredients',[])}<=allowed_packs,(owner,parent)
+# Compare ordinary tiers to the installed vanilla units, with local science added.
+for family,vanilla in [('speed','speed'),('green','efficiency'),('pink','productivity')]:
+ for tier in [1,2]:
+  name=f'y-{family}-module-{tier}'
+  unit=T[module_owners[name]]['unit']
+  base=T[f'{vanilla}-module'+('' if tier==1 else '-2')]['unit']
+  assert unit['count']==base['count'] and unit['time']==base['time']
+  assert dict(unit['ingredients'])==dict(base['ingredients'])|{'quinityn-research-data':1}
+ first=module_owners[f'y-{family}-module-1']
+ assert not (set(module_owners.values())-{first})&ancestry(first),family
+late_packs={'automation-science-pack','logistic-science-pack','chemical-science-pack',
+ 'production-science-pack','space-science-pack','quinityn-research-data'}
+for name,count in [('y-pink-module-3',300),('y_modul_red2',1000),('y_modul_green_op',5000),
+ ('y_modul_science',5000),('y-quality-module-1',5000)]:
+ unit=T[module_owners[name]]['unit']
+ expected=late_packs if name=='y-pink-module-3' else late_packs|{'utility-science-pack'}
+ assert dict(unit['ingredients'])==dict.fromkeys(expected,1),name
+ assert unit['count']==count and unit['time']==60,name
+print('PASS: eleven individual modules, ingredient ancestry, vanilla tier 1/2 costs and Nauvis/space-only advanced science')
 
 assert mg['cliff_settings']['name']=='quinityn-cliff'
 assert D['cliff']['quinityn-cliff']['orientations']==D['cliff']['cliff-fulgora']['orientations']

@@ -5,23 +5,26 @@ Validated 2026-10-07; research progression based on main 1f78ba4d19456ce4c36a0ab
 
 FULL RUNNER: tools/test.py
 PASS load; pinned unmodified dependencies, native prototype dump.
-PASS prototypes; visit gates, technology DAG, 65 guide chapters, all linked prototypes,
+PASS prototypes; visit gates, technology DAG, 73 guide chapters, all linked prototypes,
   factory-only science/signs, eight manufacturing milestones and rock discovery,
   Quinityn-only rock placement, unchanged normal rock loot, all 36 rock sprite variants,
   dedicated Fatmice and later filters, existing rocket-fuel chain, foundations/science sinks.
   Separate Y2/P3/research-center and 8080 unlocks; endgame eight-pack/40-second cost;
   advanced robots require a 500-craft milestone followed by science-funded research.
-PASS reachability; 513 items, 229 technologies, 84 machines, 26 closure iterations.
+  All 11 modules have individual research; component and ultimate-module ancestry,
+  vanilla first/second-tier costs and packs, and Nauvis/space-only ancestor science.
+PASS reachability; 504 items, 228 technologies, 83 machines, 25 closure iterations.
   First science follows rock discovery and factory construction, before Power.
   Unfiltered/filtered flyash, filter materials, alternate fuel, rockets and infinite science reachable.
-  Y2/P3 use existing Scientific Reputation byproducts before the research center.
-  All other finite research remains local; only the center waits for space science.
+  Y2 and existing Scientific Reputation byproducts remain local.
+  Eight advanced module researches, P3 and the center await orbital science;
+  every other finite Quinityn technology remains locally reachable.
 PASS bootstrap_budget; 7,744 N4 and 3,811 F7 of 125,000 minimum per starting deposit.
   Reserve 600 red, 400 green, 260 Quinityn packs, first factory, Cimota, Fatmice,
   small electric motor and early equipment, milestone margin and 500 coal.
   Requires 100 rock flyash for Power + Fatmice; the remaining 160 science packs
   use unfiltered scrubbing, including water and MF inputs. Starter samples require at least 100.
-PASS localization; 275 Quinityn prototypes, explicit keys and visible fallback names.
+PASS localization; 298 Quinityn prototypes, explicit keys and visible fallback names.
 PASS generate-1, generate-42, generate-8675309; organic ore patches, rock samples,
   normal stone/coal plus flyash mining yields; no ordinary mineable rocks on Quinityn.
 PASS worldgen; nine terrain types, ash/soil transitions, connected land, sparse stockpiles,
@@ -34,7 +37,10 @@ PASS map-controls; independent liquid, cliff, enemy and tree controls; native ha
   all five other planets generate no Quinityn rocks or Yuoki ores.
 PASS production-milestones; real production reaches each of eight crafting milestones,
   manufactures a factory, then native rock mining reveals science. Factory alone is insufficient.
-PASS research-progression; native radar crafting supplies four Scientific Reputation signs,
+PASS research-progression; all 11 native module researches unlock only their own module.
+  Reconciliation preserves completed legacy module and Mastery research flags;
+  moved recipes remain locked until their new researches complete.
+  Native radar crafting supplies four Scientific Reputation signs,
   then actual Y2/P3 manufacture succeeds while the research center remains locked.
   Robotics unlocks only basic bots/roboport; a separate research unlocks The 8080.
   With 500 robots in storage, 499 native crafts still leave advanced research unavailable.

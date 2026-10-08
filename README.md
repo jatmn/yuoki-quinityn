@@ -60,7 +60,7 @@ onto other walkable terrain.
    Durotal foundations, establish local rocket production, and export research
    data for continuing upgrades.
 
-**65 in-game Tips and Tricks chapters** walk you through the stages. Arriving
+**73 in-game Tips and Tricks chapters** walk you through the stages. Arriving
 with no items is supported after researching discovery; ordinary initial spawn
 and platform travel remain unchanged. For the production details, open the
 [local-resource and progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md).

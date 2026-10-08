@@ -17,7 +17,47 @@ local function supply(machine,recipe)
   end
   return true
 end
+local function module_unlocks()
+  local modules={}
+  for name,item in pairs(prototypes.item) do
+    if item.type=="module" and name:sub(1,1)=="y" then modules[name]=true end
+  end
+  local force=game.create_force("module-unlocks")
+  local owners={}
+  for name in pairs(force.technologies) do
+    for _,effect in pairs(prototypes.technology[name].effects) do
+      if effect.type=="unlock-recipe" and modules[effect.recipe] then owners[name]=effect.recipe end
+    end
+  end
+  for name,t in pairs(force.technologies) do
+    if not owners[name] and not name:match("^quinityn%-bridge%-") then t.researched=true end
+  end
+  progression.reconcile()
+  for name in pairs(modules) do check(not force.recipes[name].enabled,"module initially locked: "..name) end
+  -- Each native research unlocks just its module, independently of the others.
+  for technology,recipe in pairs(owners) do
+    force.technologies[technology].researched=true
+    progression.reconcile()
+    for name in pairs(modules) do
+      check(force.recipes[name].enabled==(name==recipe),"individual "..recipe.." unlock: "..name)
+    end
+    force.technologies[technology].researched=false
+  end
+  -- Simulate completed legacy bundles; moved recipes need their new researches.
+  for _,name in ipairs({"modules","advanced-modules","quantum-modules"}) do
+    force.technologies["quinityn-"..name].researched=true
+  end
+  progression.reconcile()
+  local retained={["y-speed-module-1"]=true,["y-speed-module-2"]=true,["y-pink-module-3"]=true}
+  for name in pairs(modules) do
+    check(force.recipes[name].enabled==(retained[name] or false),"legacy module reconciliation: "..name)
+  end
+  for _,name in ipairs({"modules","advanced-modules","quantum-modules","mastery"}) do
+    check(force.technologies["quinityn-"..name].researched,"completed research preserved: "..name)
+  end
+end
 script.on_init(function()
+  module_unlocks()
   local force=game.forces.player
   for name,t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then t.researched=true end
