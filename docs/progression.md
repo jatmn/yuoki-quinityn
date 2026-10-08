@@ -6,6 +6,8 @@ The same progression is available inside Factorio through **59 Tips and Tricks c
 
 Discovery is researched through the normal Space Age route. The connection runs from Nauvis to Quinityn. Discovery or remote viewing alone does not unlock Yuoki; a character must physically arrive. The unlock belongs to the force, so teammates share it. The initial spawn remains unchanged.
 
+If a character changes to an undiscovered force while already on Quinityn, finishing discovery completes that force's survey without another landing. The same physical-character checks apply; remote viewing and characterless controllers do not count.
+
 The world is an industrial wasteland: dark ash, cracked slag, buried machinery, scattered industrial salvage, purple unicomp seas and smog. New-map terrain settings include **Unicomp liquid** (coverage and scale), **Quinityn cliffs** (enabled by default), independent **Quinityn enemy bases** and **Quinityn dead trees** (frequency, coverage and disable). The dry landing core remains protected from liquid and cliffs. Sparse purple dead and decaying trees provide wood outside the landing core. Surface pollution absorption is extremely low. Your machines' existing pollution emissions therefore matter to the biter population. Pollution is not artificially multiplied on other worlds.
 
 The starting plateau provides **125,000–150,000 N4 and 125,000–150,000 F7**, in larger irregular patches whose positions, outline and richness vary by map seed. There are no natural iron, copper, coal, stone or crude-oil deposits. Large native starting ore patches are suppressed inside a 200-tile radius; modest distant N4/F7 deposits remain. The intended long-term resource source is unicomp conversion, not mining larger starter fields.

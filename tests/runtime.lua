@@ -1,4 +1,5 @@
 local progression=require("__yuoki-quinityn__/scripts/progression")
+local discovery_tests=require("__yuoki-quinityn__/tests/discovery")
 local function check(condition,message)
   if not condition then error("QUINITYN TEST FAILED: "..message) end
   log("QUINITYN PASS: "..message)
@@ -44,6 +45,7 @@ script.on_init(function()
     physical_surface=game.surfaces.nauvis,surface=surface}
   check(not force.technologies["quinityn-arrival"].researched,"remote view does not count as physical landing")
   progression.arrive{valid=true,character=character,force=force,physical_surface=surface}
+  discovery_tests(surface)
   -- Mine a naturally generated stockpile into a real inventory, then verify its
   -- consumer is available after the actual arrival handler (no fabricated unlock).
   local wreck=surface.find_entities_filtered{name="quinityn-wreck",limit=1}[1]
