@@ -16,6 +16,8 @@ end
 function M.arrive(player)
   if not player or not player.valid or (not player.character and not player.cutscene_character and player.physical_controller_type ~= defines.controllers.character) or not is_quinityn(player.physical_surface) then return end
   local force=player.force
+  -- Discovery anchors this whole branch and must precede the scripted survey.
+  if not force.technologies["planet-discovery-quinityn"].researched then return end
   local tech=force.technologies["quinityn-arrival"]
   if tech and not tech.researched then
     force.script_trigger_research("quinityn-arrival")
@@ -24,7 +26,10 @@ function M.arrive(player)
   complete_bridges(force)
 end
 function M.research(event)
-  if event.research.name == "quinityn-oil-processing" then
+  if event.research.name == "planet-discovery-quinityn" then
+    -- Discovery can finish after a character changes force while on Quinityn.
+    for _, player in pairs(event.research.force.players) do M.arrive(player) end
+  elseif event.research.name == "quinityn-oil-processing" then
     event.research.force.technologies["oil-processing"].researched=true
   end
   complete_bridges(event.research.force)
@@ -52,17 +57,41 @@ function M.chunk(event)
   local surface=event.surface
   if not is_quinityn(surface) then return end
   local area=event.area
-  -- Guaranteed hand-mineable stocks on the starting plateau, independent of seed.
-  -- These supplement normal infinite-map ore placement and never award free items.
-  for _, patch in ipairs({{name="y-res1",x=-28,y=-18},{name="y-res2",x=28,y=-18}}) do
-    for x=patch.x-4,patch.x+4 do
-      for y=patch.y-4,patch.y+4 do
-        if x>=area.left_top.x and x<area.right_bottom.x and y>=area.left_top.y and y<area.right_bottom.y
-          and (x-patch.x)^2+(y-patch.y)^2<=16 then
-          local p={x=x+0.5,y=y+0.5}
-          if surface.can_place_entity{name=patch.name,position=p,amount=200} then
-            surface.create_entity{name=patch.name,position=p,amount=200}
-          end
+  if area.right_bottom.x < -90 or area.left_top.x > 90
+    or area.right_bottom.y < -90 or area.left_top.y > 90 then return end
+  -- Recreate the same small plan per nearby chunk: no shared RNG state, exploration
+  -- order dependence, or migration state. The 80-tile dry core contains both patches.
+  local rng=game.create_random_generator(surface.map_gen_settings.seed)
+  -- Warm up the generator so neighboring map seeds do not share a first bearing.
+  for _=1,8 do rng() end
+  local first_angle=rng()*2*math.pi
+  for i, name in ipairs({"y-res1","y-res2"}) do
+    local angle=first_angle+(i==1 and 0 or 1.9+rng()*1.8)
+    local radius=36+rng()*23
+    local cx,cy=math.floor(math.cos(angle)*radius),math.floor(math.sin(angle)*radius)
+    local rx,ry=10+rng()*3,8+rng()*3
+    local phase=rng()*2*math.pi
+    local target=125000+rng(0,25000)
+    local points,total={},0
+    for x=-16,16 do for y=-16,16 do
+      local theta=math.atan2(y/ry,x/rx)
+      local edge=1+0.13*math.sin(3*theta+phase)+0.08*math.cos(5*theta-phase)
+      local d=(x/rx)^2+(y/ry)^2
+      if d<edge^2 then
+        local weight=1.6-math.min(d,1)
+        points[#points+1]={x=x+cx,y=y+cy,weight=weight}
+        total=total+weight
+      end
+    end end
+    local allocated=0
+    for j,p in ipairs(points) do
+      local amount=j==#points and target-allocated or math.floor(target*p.weight/total)
+      allocated=allocated+amount
+      if p.x>=area.left_top.x and p.x<area.right_bottom.x
+        and p.y>=area.left_top.y and p.y<area.right_bottom.y then
+        local position={p.x+0.5,p.y+0.5}
+        if surface.can_place_entity{name=name,position=position,amount=amount} then
+          surface.create_entity{name=name,position=position,amount=amount}
         end
       end
     end

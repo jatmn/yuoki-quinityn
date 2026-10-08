@@ -1,11 +1,19 @@
-Factorio 2.1.21 / Space Age; Yuoki ce7918f; Engines dd13f42
-Validated 2026-10-06
+Quinityn 0.1.0 development; Factorio 2.1.21 / Space Age
+Yuoki ce7918f; Engines dd13f42
+Validated 2026-10-07
 
 PROTOTYPES
-PASS: 867 named upstream recipe gates; technology DAG; 17 guide chapters; foundations; science sinks; pollution
+PASS: 867 named upstream recipe gates; technology DAG; 59 guide chapters; foundations; science sinks; pollution
+PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons
+PASS: planet-specific map control membership and visible salvage sorting identity/unlock
+PASS: discovery ancestry, mandatory post-milestone science, representative icons and ordered production tiers
+PASS: Fulgora cliffs and controllable purple dead-tree sprites
+PASS: nine focused pre-science milestones, distinct factory/science unlocks and science-rooted lab research
+PASS: machinery-only cliff masks and surface-local enemy generation habitat
 
 REACHABILITY
-Closure: 512 items; 181 technologies; 85 machines; 21 iterations
+PASS: first Quinityn science producible after factory milestone, before Power
+Closure: 512 items; 224 technologies; 85 machines; 25 iterations
 low-density-structure : low-density-structure
 processing-unit : processing-unit
 quinityn-burner-separator : quinityn-burner-separator
@@ -14,66 +22,113 @@ quinityn-research-data : quinityn-research-data
 rocket-fuel : y_mixedfuel2rocketfuel
 rocket-silo : rocket-silo
 y-atomic-constructor : y-atomic-constructor
-PASS: local zero-inventory / zero-research rocket and infinite-research science dependency closure
+PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure
 
 BOOTSTRAP_BUDGET
-y-res1 4784 / 9800 starting units
-y-res2 2627 / 9800 starting units
+y-res1 7219 / 125000 starting units
+y-res2 3551 / 125000 starting units
 PASS: finite starting-stock budget reaches a powered Cimota without salvage, imported items or remote deposits
+
+LOCALIZATION
+PASS: 243 Quinityn prototypes have resolved explicit and visible fallback English locale keys
+
+WORLDGEN
+Seed 420151202: land 61.8%, connected 98.4%, starter wrecks 187, outer wrecks 372, occupied districts 10/100
+Seed 420151243: land 44.4%, connected 100.0%, starter wrecks 117, outer wrecks 811, occupied districts 12/100
+Seed 428826510: land 32.3%, connected 92.4%, starter wrecks 169, outer wrecks 127, occupied districts 8/100
+PASS: organic connected terrain, six surface types, sparse dense salvage clusters and seed-varied starter placements
+
 
 GENERATE-1
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
-PASS: guaranteed unicomp inlet
+PASS: artificial starter pond removed
 PASS: dry landing plateau
-PASS: starter N4 patch
-PASS: starter F7 patch
-PASS: salvage generates
+PASS: abundant clustered starter salvage
+PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
-PASS: small starter deposit: y-res1=9800
-PASS: small starter deposit: y-res2=9800
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
+PASS: rich starter deposit: y-res1=148383
+PASS: larger organic starter patch: y-res1
+PASS: rich starter deposit: y-res2=135357
+PASS: larger organic starter patch: y-res2
 
 GENERATE-42
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
-PASS: guaranteed unicomp inlet
+PASS: artificial starter pond removed
 PASS: dry landing plateau
-PASS: starter N4 patch
-PASS: starter F7 patch
-PASS: salvage generates
+PASS: abundant clustered starter salvage
+PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
-PASS: small starter deposit: y-res1=9800
-PASS: small starter deposit: y-res2=9800
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
+PASS: rich starter deposit: y-res1=135059
+PASS: larger organic starter patch: y-res1
+PASS: rich starter deposit: y-res2=138691
+PASS: larger organic starter patch: y-res2
 
 GENERATE-8675309
 PASS: upstream starting suit cannot bypass visit gate
 PASS: arrival locked before landing
 PASS: Yuoki locked before landing
 PASS: Engines locked before landing
-PASS: discovery alone does not unlock Yuoki
-PASS: guaranteed unicomp inlet
+PASS: artificial starter pond removed
 PASS: dry landing plateau
-PASS: starter N4 patch
-PASS: starter F7 patch
-PASS: salvage generates
+PASS: abundant clustered starter salvage
+PASS: cosmetic decoratives generate
 PASS: biter bases generate
 PASS: no imported vanilla deposits
 PASS: all natural liquid tiles are unicomp
+PASS: physical presence without discovery cannot unlock survey
+PASS: discovery alone does not unlock Yuoki
 PASS: remote view does not count as physical landing
-PASS: small starter deposit: y-res1=9800
-PASS: small starter deposit: y-res2=9800
+PASS: natural stockpile can be mined
+PASS: stockpile yields the sorting ingredient
+PASS: arrival unlocks salvage sorting
+PASS: salvage sorting is visible
+PASS: rich starter deposit: y-res1=135853
+PASS: larger organic starter patch: y-res1
+PASS: rich starter deposit: y-res2=147834
+PASS: larger organic starter patch: y-res2
+
+DISCOVERY EVENT ORDER
+PASS: force transfer before discovery stays gated
+PASS: discovery with remote view or characterless presence does not unlock survey
+PASS: another force's discovery does not unlock an otherwise eligible waiting force
+PASS: discovery completion unlocks a character already physically present
+PASS: discovery retry does not bypass later crafting milestones
+PASS: completed survey is not replayed by duplicate discovery events
+PASS: discovery before physical arrival remains supported
+Force/character/research/recipe state is native. LuaPlayer membership and fields
+use the documented headless facade. The survey-completion assertion fails at
+the starting head without the research-finished retry.
+
+SAME-VERSION UPDATE
+PASS: base-to-head load at unchanged 0.1.0 emits on_configuration_changed
+PASS: completed Materials and Power research, separator recipe and both circuit
+colors/control settings survive; new factory/science owners remain required
+PASS: separator disconnect/reconnect and production through its changed input
+Native event mod_changes={} does not prevent configuration reconciliation.
 
 RUNTIME
 PASS: physical landing opens survey
@@ -85,11 +140,37 @@ PASS: separator selects water recipe
 PASS: offshore pump can be placed at unicomp inlet
 PASS: new force remains locked
 PASS: materials research unlocks crusher
+PASS: Materials enables plain crushing but not tool-assisted crushing
+PASS: Materials does not unlock the second crusher
+PASS: Excavation enables plain digging but not drill-head digging
+PASS: Tooling unlocks head-assisted production only at its separate tier
+PASS: Advanced machining unlocks the second crusher
 PASS: local crude-oil milestone grants oil processing
 PASS: rocket silo can be placed on Quinityn
 PASS: receiving platform created
-PASS: burner separator actually produces water without grid power
+PASS: small-biter cannot occupy unicomp
+PASS: medium-biter cannot occupy unicomp
+PASS: big-biter cannot occupy unicomp
+PASS: behemoth-biter cannot occupy unicomp
+PASS: small-spitter cannot occupy unicomp
+PASS: ye_fassembly1 selects dedicated signs recipe
+PASS: ye_fassembly2 selects dedicated signs recipe
+PASS: ye_fassembly_sp selects dedicated signs recipe
+PASS: vanilla assembler rejects planet science
+PASS: biter path request completed
+PASS: primitive Cimota produces water burning raw F7 without grid power
 PASS: offshore pump actually extracts Yuoki liquid unicomp
+PASS: ye_fassembly1 produces exactly one sign
+PASS: ye_fassembly1 selects planet science
+PASS: ye_fassembly2 produces exactly one sign
+PASS: ye_fassembly2 selects planet science
+PASS: ye_fassembly_sp produces exactly one sign
+PASS: ye_fassembly_sp selects planet science
+PASS: ye_fassembly1 produces science
+PASS: ye_fassembly2 produces science
+PASS: ye_fassembly_sp produces science
+PASS: biter path succeeds on dry land control
+PASS: biter path cannot cross unicomp moat
 PASS: inserter discards into unicomp
 PASS: quality items also dissolve
 PASS: discarded items are destroyed
@@ -103,8 +184,88 @@ PASS: infinite plasma research can be selected
 PASS: real rocket launched from Quinityn
 PASS: native rocket construction and launch
 PASS: Quinityn science grants native infinite plasma bonus
-RUNTIME TESTS PASSED
 
-PASS: official engine prototype load with default settings.
-PASS: official engine load with heavy-oil conversion disabled; no unlock can reenable it.
-PASS: final installable zip packages load and create a fresh save without the test harness.
+MAP-CONTROLS
+PASS: default protects starter core from cliffs
+PASS: later colony placement remains allowed on quinityn-basalt
+PASS: walkable colony site exists on quinityn-basalt
+PASS: later colony placement remains allowed on quinityn-ash
+PASS: walkable colony site exists on quinityn-ash
+PASS: later colony placement remains allowed on quinityn-slag
+PASS: walkable colony site exists on quinityn-slag
+PASS: later colony placement remains allowed on quinityn-rubble
+PASS: walkable colony site exists on quinityn-rubble
+PASS: later colony placement remains allowed on quinityn-ruined-district
+PASS: walkable colony site exists on quinityn-ruined-district
+default sea=362408 cliffs=109 bases=4 trees=445 coastal-cliffs=63
+PASS: machinery-only cliffs retain reduced coastal coverage
+PASS: default tree increase remains modest
+PASS: cliffs are mostly coastal with some inland
+PASS: dead trees are present but sparse by default
+PASS: trees-off protects starter core from cliffs
+trees-off sea=362408 cliffs=109 bases=4 trees=0 coastal-cliffs=63
+PASS: tree checkbox suppresses all trees
+PASS: more-trees protects starter core from cliffs
+more-trees sea=362408 cliffs=109 bases=4 trees=660 coastal-cliffs=63
+PASS: tree coverage slider increases groves
+PASS: tree-frequency protects starter core from cliffs
+tree-frequency sea=362408 cliffs=109 bases=3 trees=392 coastal-cliffs=63
+PASS: tree frequency changes groves
+PASS: less-liquid protects starter core from cliffs
+less-liquid sea=214545 cliffs=166 bases=5 trees=859 coastal-cliffs=23
+PASS: more-liquid protects starter core from cliffs
+more-liquid sea=446109 cliffs=82 bases=0 trees=247 coastal-cliffs=71
+PASS: unicomp coverage changes land/liquid ratio monotonically
+PASS: smaller-districts protects starter core from cliffs
+smaller-districts sea=377817 cliffs=225 bases=7 trees=521 coastal-cliffs=131
+PASS: unicomp scale changes generated terrain
+PASS: no-cliffs protects starter core from cliffs
+no-cliffs sea=362408 cliffs=0 bases=4 trees=446 coastal-cliffs=0
+PASS: cliffs generate by default and their slider disables them
+PASS: nauvis-enemies-off protects starter core from cliffs
+nauvis-enemies-off sea=362408 cliffs=109 bases=4 trees=445 coastal-cliffs=63
+PASS: Nauvis enemy settings do not change Quinityn nests
+PASS: more-enemies protects starter core from cliffs
+more-enemies sea=362408 cliffs=109 bases=97 trees=445 coastal-cliffs=63
+PASS: Quinityn enemy slider increases native nests
+PASS: no-enemies protects starter core from cliffs
+no-enemies sea=362408 cliffs=109 bases=0 trees=445 coastal-cliffs=63
+PASS: zero Quinityn enemy frequency suppresses nests
+PASS: nauvis has no Yuoki ores
+PASS: vulcanus has no Yuoki ores
+PASS: gleba has no Yuoki ores
+PASS: fulgora has no Yuoki ores
+PASS: aquilo has no Yuoki ores
+
+
+PRODUCTION MILESTONES
+PASS: actual production completed materials
+PASS: actual production completed pressing
+PASS: actual production completed compacting
+PASS: actual production completed alloying
+PASS: actual production completed structures
+PASS: actual production completed electronics
+PASS: actual production completed fuel-processing
+PASS: actual production completed basic-factory
+PASS: actual production completed industrial-science
+PASS: science stays locked until first factory manufacture; later lab research remains locked
+
+LANDING ROUTES
+20 native generation cases: seeds 1, 42, 8675309, 4042551623, 17, 12345,
+314159 and 4294967295 at default liquid settings; the first four also at
+coverage 1/6, coverage 6, and coverage 2 with frequency 6.
+PASS: all generated cliff origins on machinery-covered districts
+PASS: all generated nest origins on brown slag
+PASS: dry connections to both distant edges on every case
+PASS: native behemoth-biter paths from both exits to landing on every case
+PASS: native path from a naturally generated nest to landing on every case
+No terrain or obstacles are cleared. Search area extends to 1,536 tiles when
+extreme coverage leaves no nests within 1,024 tiles.
+Baseline 40c0570 fails this test on seed 1 at default coverage:
+LANDING ROUTE TEST FAILED: has dry connections to both distant edges
+
+UPSTREAM OPTION
+PASS: heavy-oil conversion opt-out
+
+PACKAGING
+Packaged addon save-creation smoke is recorded in docs/validation.md.

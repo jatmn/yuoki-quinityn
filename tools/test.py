@@ -25,14 +25,35 @@ def run(name,args,marker=None):
  if result.returncode or 'Error Util.cpp' in text or (marker and marker not in text):
   print(text[-6000:]);raise SystemExit(name+' failed; see '+str(a.output/(name+'.log')))
  print('PASS',name)
+# Each run starts from defaults; the option-off fixture persists mod-settings.dat.
+(mods/'mod-settings.dat').unlink(missing_ok=True)
 run('load',base+['--dump-data'],'Factorio initialised')
 dump=a.output/'runtime/script-output/data-raw-dump.json'
 for name in ['prototypes','reachability','bootstrap_budget']:
  run(name,[sys.executable,str(ROOT/'tests'/f'{name}.py'),str(dump)],'PASS')
+run('localization',[sys.executable,str(ROOT/'tests/localization.py'),str(dump),
+  str(a.dependencies/'Yuoki'),str(a.dependencies/'yi_engines'),
+  *[str(p) for p in engine_data.iterdir() if p.is_dir()]],'PASS')
 for seed in [1,42,8675309]:
  save=a.output/f'seed-{seed}.zip'
- run(f'generate-{seed}',base+['--create',str(save),'--map-gen-seed',str(seed)],'small starter deposit: y-res2=9800')
+ run(f'generate-{seed}',base+['--create',str(save),'--map-gen-seed',str(seed)],'rich starter deposit: y-res2=')
+run('worldgen',[sys.executable,str(ROOT/'tests/worldgen.py'),str(a.output)],'PASS')
 run('runtime',base+['--benchmark',str(a.output/'seed-42.zip'),'--benchmark-ticks','15001','--benchmark-runs','1'],'QUINITYN RUNTIME TESTS PASSED')
+# Native paired surfaces verify the independent planet controls through map generation.
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/map_controls")\n')
+ run('map-controls',base+['--create',str(a.output/'map-controls.zip'),'--map-gen-seed','42'],
+     'QUINITYN MAP CONTROL TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/production_milestones")\n')
+ run('production-milestones-create',base+['--create',str(a.output/'production-milestones.zip')],'Factorio initialised')
+ run('production-milestones',base+['--benchmark',str(a.output/'production-milestones.zip'),
+     '--benchmark-ticks','30000','--benchmark-runs','1'],'QUINITYN PRODUCTION MILESTONE TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/landing_routes")\n')
+ run('landing-routes-create',base+['--create',str(a.output/'landing-routes.zip')],'Factorio initialised')
+ run('landing-routes',base+['--benchmark',str(a.output/'landing-routes.zip'),
+     '--benchmark-ticks','22000','--benchmark-runs','1'],'QUINITYN LANDING ROUTE TESTS PASSED')
+finally:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Preserve the upstream heavy-oil conversion opt-out through the new tree.
 setting_override=harness/'settings-updates.lua'
 try:

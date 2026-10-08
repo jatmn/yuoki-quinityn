@@ -1,6 +1,7 @@
 """Conservative item/category/technology closure over Factorio's real prototype dump.
 
-Models zero inventory and zero research after a physical landing; no trade imports,
+Models zero inventory after researched discovery and physical landing;
+conservatively withholds all other pre-existing vanilla research; no trade imports,
 recycling, other planets, or free electricity. This is a dependency proof, not a
 throughput simulation. Runtime tests separately check operating machines and terrain.
 """
@@ -10,7 +11,7 @@ D=json.loads(Path(sys.argv[1]).read_text())
 R=D['recipe']; T=D['technology']
 items={'y-res1','y-res2','quinityn-salvage'}
 fluids=set(); categories={'crafting','hand-crafting'}
-techs={'quinityn-arrival'}
+techs={'planet-discovery-quinityn','quinityn-arrival'}
 recipes={n for n,r in R.items() if r.get('enabled',True)}
 crafted=set(); machines=set(); power=False
 sources={n:'hand mining / salvage on Quinityn' for n in items}
@@ -64,7 +65,12 @@ for iteration in range(200):
    if p.get('independent_probability',1)<=0:continue
    if p.get('type','item')=='fluid':fluids.add(p['name'])
    else:
-    if p['name'] not in items:sources[p['name']]=n
+    if p['name'] not in items:
+     sources[p['name']]=n
+     if p['name']=='quinityn-research-data':
+      assert 'quinityn-industrial-science' in techs and 'quinityn-power' not in techs, 'First science depends on science-gated Power'
+      assert 'ye_fassembly1' in machines, 'First science lacks its local factory'
+      print('PASS: first Quinityn science producible after factory milestone, before Power')
     items.add(p['name']);crafted.add(p['name'])
  for n,t in T.items():
   if n not in techs and researchable(n,t):techs.add(n)
@@ -82,6 +88,7 @@ if missing:
   if n.startswith('quinityn') or any(p['name'] in missing for p in r.get('results',[])):
    print('BLOCKED?',n,'ingredients',[p['name'] for p in r.get('ingredients',[]) if not available(p)],'categories',r.get('categories',['crafting']))
  sys.exit(1)
+assert all(n in techs for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-') and t.get('max_level')!='infinite'), 'Finite planet research unreachable'
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes
@@ -90,4 +97,4 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert t['max_level']=='infinite'
  assert 'quinityn-research-data' in items, 'Local endgame science inaccessible: '+n
  assert ['quinityn-research-data',2] in t['unit']['ingredients']
-print('PASS: local zero-inventory / zero-research rocket and infinite-research science dependency closure')
+print('PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure')

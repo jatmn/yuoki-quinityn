@@ -1,6 +1,15 @@
 local copy = table.deepcopy
+-- Restrict this planet's cliff placement with native tile collision, including
+-- map previews. Other cliffs and the source planet's tiles remain untouched.
+local cliff_blocker = "quinityn-cliff-blocker"
+local cliff = copy(data.raw.cliff["cliff-fulgora"])
+cliff.name = "quinityn-cliff"
+cliff.localised_name = {"entity-name.quinityn-cliff"}
+cliff.collision_mask.layers[cliff_blocker] = true
+data:extend({{type="collision-layer",name=cliff_blocker},cliff})
 local sea = copy(data.raw.tile["water"])
 sea.name = "quinityn-unicomp-sea"
+sea.collision_mask.layers[cliff_blocker] = true
 sea.localised_name = {"tile-name.quinityn-unicomp-sea"}
 sea.fluid = "y-liquid-uc2"
 sea.destroys_dropped_items = true
@@ -19,6 +28,7 @@ sea.default_cover_tile = "quinityn-foundation"
 sea.localised_description = {"tile-description.quinityn-unicomp-sea"}
 local land = copy(data.raw.tile["volcanic-ash-dark"])
 land.name = "quinityn-basalt"
+land.collision_mask.layers[cliff_blocker] = true
 land.autoplace = {probability_expression = "1000 * (quinityn_elevation >= 0)"}
 land.absorptions_per_second = {pollution=0.000001}
 land.map_color = {0.22, 0.19, 0.24}
@@ -65,12 +75,21 @@ planet.asteroid_spawn_definitions = copy(data.raw.planet.vulcanus.asteroid_spawn
 planet.map_gen_settings = {
   water = 1,
   starting_area = 1.5,
-  property_expression_names = {elevation = "quinityn_elevation", moisture = "0", aux = "0"},
-  cliff_settings = {name = "cliff", cliff_elevation_interval = 0, cliff_elevation_0 = 1024},
+  property_expression_names = {
+    elevation = "quinityn_elevation", moisture = "0", aux = "0",
+    cliff_elevation = "quinityn_cliff_elevation", cliffiness = "quinityn_cliffiness",
+    enemy_base_radius = "quinityn_enemy_base_radius",
+    enemy_base_frequency = "quinityn_enemy_base_frequency"
+  },
+  cliff_settings = {name = cliff.name, control = "quinityn_cliff",
+    cliff_elevation_interval = 40, cliff_elevation_0 = 80, cliff_smoothing = 0, richness = 0.85},
   autoplace_controls = {
     ["y-res1"] = {frequency = 0.5, size = 0.5, richness = 0.5},
     ["y-res2"] = {frequency = 0.5, size = 0.5, richness = 0.5},
-    ["enemy-base"] = {frequency = 1, size = 1, richness = 1}
+    ["quinityn_enemy_base"] = {frequency = 1, size = 1},
+    ["quinityn_water"] = {frequency = 1, size = 1},
+    ["quinityn_cliff"] = {},
+    ["quinityn_trees"] = {frequency = 1.25, size = 1}
   },
   autoplace_settings = {
     tile = {treat_missing_as_default = false, settings = {[sea.name] = {}, [land.name] = {}}},
@@ -90,15 +109,77 @@ connection.length = 15000
 connection.order = "d"
 data:extend({
   {type = "surface-property", name = "quinityn-industry", default_value = 0},
-  {type = "noise-expression", name = "quinityn_elevation", expression = [[
-    min(sqrt((x-64)^2 + y^2) - 12, max(18 - distance / 6,
-      multioctave_noise{x=x, y=y, seed0=map_seed, seed1=912,
-        octaves=4, persistence=0.55, input_scale=0.003, output_scale=35} + 4))
+  {type="autoplace-control",name="quinityn_water",category="terrain",order="c-z-e",can_be_disabled=false,
+    localised_description={"autoplace-control-descriptions.quinityn_water"}},
+  {type="autoplace-control",name="quinityn_cliff",category="cliff",order="c-z-e",
+    localised_description={"autoplace-control-descriptions.quinityn_cliff"}},
+  {type="autoplace-control",name="quinityn_trees",category="terrain",order="c-z-f",
+    can_be_disabled=true,richness=false,
+    localised_description={"autoplace-control-descriptions.quinityn_trees"}},
+  {type="autoplace-control",name="quinityn_enemy_base",category="enemy",order="z-q",
+    richness=false,can_be_disabled=false,related_to_fight_achievements=true,
+    localised_description={"autoplace-control-descriptions.quinityn_enemy_base"}},
+  {type="noise-expression",name="quinityn_enemy_base_radius",
+    expression="sqrt(control:quinityn_enemy_base:size) * (15 + 4 * enemy_base_intensity)"},
+  {type="noise-expression",name="quinityn_enemy_base_frequency",
+    -- Slag occupies only part of the dry land; retain opportunities for nearby bases.
+    expression="4 * (0.00001 + 0.000003 * enemy_base_intensity) * control:quinityn_enemy_base:frequency"},
+  -- Like Fulgora, step across the first cliff level at the coast and disable
+  -- smoothing. Higher contours leave a few inland escarpments.
+  {type="noise-expression",name="quinityn_cliff_elevation",
+    expression="40 + 50 * (quinityn_elevation > 4) + clamp(2 * (quinityn_elevation - 4),0,70)"},
+  {type="noise-expression",name="quinityn_cliffiness",
+    -- Keep the generation grid inside district interiors; native end caps are
+    -- offset from the grid points where cliffiness is sampled.
+    expression="cliffiness_basic * (quinityn_industrial_noise > 0.7) * (distance > 125) * (quinityn_passage_distance > 18) * (4 * (quinityn_elevation < 6) * (quinityn_coastal_breaks > 0.1) + 0.25 * (quinityn_elevation >= 6) * (quinityn_industrial_noise > 0.7))"},
+  -- Coherent breaks remove about half the coastal wall and open usable shore.
+  {type="noise-expression",name="quinityn_coastal_breaks",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=5321,octaves=2,
+      persistence=0.5,input_scale=0.035,output_scale=1}
+  ]]},
+  -- Domain warping breaks up smooth coastlines; broad ridges keep districts joined.
+  {type="noise-expression",name="quinityn_warp_x",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=811,octaves=3,
+      persistence=0.55,input_scale=0.009,output_scale=38}
+  ]]},
+  {type="noise-expression",name="quinityn_warp_y",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=812,octaves=3,
+      persistence=0.55,input_scale=0.009,output_scale=38}
+  ]]},
+  {type="noise-expression",name="quinityn_continents",expression=[[
+    multioctave_noise{x=x+quinityn_warp_x,y=y+quinityn_warp_y,
+      seed0=map_seed,seed1=912,octaves=4,persistence=0.55,input_scale=0.007 * sqrt(control:quinityn_water:frequency),output_scale=1}
+  ]]},
+  -- A continuous meandering spine joins the landing district to the wider
+  -- world for every seed and liquid setting. Sampling one-dimensional noise
+  -- (and subtracting its origin) anchors it at landing without a circular island.
+  -- Keep its inner strip clear of cliffs/trees so connected land is walkable.
+  {type="noise-expression",name="quinityn_passage_distance",expression=[[
+    abs(y - multioctave_noise{x=x,y=0,seed0=map_seed,seed1=915,octaves=3,
+      persistence=0.5,input_scale=0.004,output_scale=100}
+      + multioctave_noise{x=0,y=0,seed0=map_seed,seed1=915,octaves=3,
+      persistence=0.5,input_scale=0.004,output_scale=100})
+  ]]},
+  {type="noise-expression",name="quinityn_elevation",expression=[[
+    max(36 + 10*sin(quinityn_warp_x/20) - quinityn_passage_distance,
+      110-sqrt((x+18*sin(quinityn_warp_x/20))^2+(y+18*sin(quinityn_warp_y/20))^2),
+      28*(0.33 / max(0.1,control:quinityn_water:size)-abs(quinityn_continents)))
+  ]]},
+  {type="noise-expression",name="quinityn_stockpile_noise",expression=[[
+    multioctave_noise{x=x,y=y,seed0=map_seed,seed1=2171,octaves=3,
+      persistence=0.6,input_scale=0.009,output_scale=1}
+  ]]},
+  -- Fulgora-style layered density: sparse districts containing dense wreck clusters.
+  {type="noise-expression",name="quinityn_stockpile_probability",expression=[[
+    (quinityn_elevation > 0) * (distance > 80) * (quinityn_passage_distance > 12) * 0.06 * clamp(
+      max(quinityn_stockpile_noise-1.1,
+        1-((x+18*sin(quinityn_warp_x/20)-88)^2+(y+18*sin(quinityn_warp_y/20)-20)^2)/900,
+        1-((x+18*sin(quinityn_warp_x/20)+82)^2+(y+18*sin(quinityn_warp_y/20)+30)^2)/900) * 5,0,1)
   ]]},
   sea, land, planet, connection
 })
 -- Suppress native large starter patches on this surface only; finite hand-placed
--- deposits total at most 9,800 units per ore. Distant deposits remain configurable.
+-- deposits contain 125k–150k units per ore. Distant deposits remain configurable.
 for _, ore in ipairs({"y-res1", "y-res2"}) do
   local expression="quinityn_"..ore:gsub("-","_").."_probability"
   data:extend({{type="noise-expression",name=expression,
@@ -106,20 +187,36 @@ for _, ore in ipairs({"y-res1", "y-res2"}) do
   planet.map_gen_settings.property_expression_names["entity:"..ore..":probability"]=expression
 end
 
+-- Native generation only: colonies originate on brown slag. Leave the enemy
+-- prototypes' collision and expansion behavior untouched, including on Nauvis.
+for _, name in ipairs({"biter-spawner","spitter-spawner","small-worm-turret",
+    "medium-worm-turret","big-worm-turret","behemoth-worm-turret"}) do
+  local entity=data.raw["unit-spawner"][name] or data.raw.turret[name]
+  local expression="quinityn_"..name:gsub("-","_").."_probability"
+  data:extend({{type="noise-expression",name=expression,
+    localised_name={"entity-name."..name},
+    expression="("..entity.autoplace.probability_expression..") * (quinityn_elevation >= 0)"..
+      " * (quinityn_industrial_noise > 0.15) * (quinityn_industrial_noise <= 0.45)"}})
+  planet.map_gen_settings.property_expression_names["entity:"..name..":probability"]=expression
+end
+
 -- Ruined industrial districts interrupt the basalt with slag and buried machinery.
 data:extend({{type="noise-expression",name="quinityn_industrial_noise",expression=[[
   multioctave_noise{x=x,y=y,seed0=map_seed,seed1=1717,octaves=3,
-    persistence=0.5,input_scale=0.015,output_scale=1}
+    persistence=0.5,input_scale=0.025,output_scale=1}
 ]]}})
-for _, spec in ipairs({
+for i, spec in ipairs({
   {name="quinityn-slag",source="volcanic-ash-cracks",threshold="quinityn_industrial_noise > 0.15"},
-  {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"}
+  {name="quinityn-ruined-district",source="fulgoran-machinery",threshold="quinityn_industrial_noise > 0.45"},
+  {name="quinityn-ash",source="volcanic-ash-light",threshold="quinityn_industrial_noise < -0.20"},
+  {name="quinityn-rubble",source="fulgoran-walls",threshold="quinityn_industrial_noise < -0.45"}
 }) do
   local tile=copy(data.raw.tile[spec.source])
   tile.name=spec.name
+  if spec.name~="quinityn-ruined-district" then tile.collision_mask.layers[cliff_blocker]=true end
   tile.allowed_neighbors=nil
   tile.transition_merges_with_tile=nil
-  tile.autoplace={probability_expression="2000 * (quinityn_elevation >= 0) * (distance > 80) * ("..spec.threshold..")"}
+  tile.autoplace={probability_expression=(2000+i).." * (quinityn_elevation >= 0) * (distance > 12) * ("..spec.threshold..")"}
   tile.absorptions_per_second={pollution=0.000001}
   tile.tint={0.75,0.65,0.8}
   for _, tr in pairs(tile.transitions or {}) do
@@ -127,4 +224,44 @@ for _, spec in ipairs({
   end
   data:extend({tile})
   planet.map_gen_settings.autoplace_settings.tile.settings[spec.name]={}
+end
+
+-- Surface-local decorative clones use this world's masks, not another planet's noise.
+for _, spec in ipairs({
+  {"tiny-volcanic-rock",0.12}, {"small-volcanic-rock",0.025},
+  {"vulcanus-crack-decal",0.035}, {"pumice-relief-decal",0.018},
+  {"fulgoran-ruin-tiny",0.055}
+}) do
+  local decorative=copy(data.raw["optimized-decorative"][spec[1]])
+  decorative.name="quinityn-"..spec[1]
+  decorative.localised_name={"decorative-name."..decorative.name}
+  decorative.collision_mask={layers={water_tile=true},colliding_with_tiles_only=true}
+  decorative.autoplace={probability_expression=spec[2]..
+    " * (quinityn_elevation > 0) * clamp(0.5 + quinityn_industrial_noise,0.15,1)"}
+  data:extend({decorative})
+  planet.map_gen_settings.autoplace_settings.decorative.settings[decorative.name]={}
+end
+
+-- Poisoned, leafless native trees: sparse groves rather than a living forest.
+data:extend({{type="noise-expression",name="quinityn_tree_patches",expression=[[
+  multioctave_noise{x=x,y=y,seed0=map_seed,seed1=3117,octaves=3,
+    persistence=0.6,input_scale=0.012 * sqrt(control:quinityn_trees:frequency),output_scale=1}
+]]}})
+for _, source in ipairs({"dry-tree", "dead-dry-hairy-tree"}) do
+  local tree=copy(data.raw.tree[source])
+  tree.name="quinityn-"..source
+  tree.localised_name={"entity-name."..tree.name}
+  tree.localised_description={"entity-description.quinityn-dead-tree"}
+  tree.factoriopedia_alternative=nil
+  tree.deconstruction_alternative=nil
+  tree.icons={{icon=tree.icon,icon_size=tree.icon_size or 64,tint={0.95,0.68,1}}}
+  tree.map_color={0.55,0.36,0.62}
+  for _, sprite in pairs(tree.pictures) do sprite.tint={0.95,0.68,1} end
+  tree.autoplace={control="quinityn_trees",order="a[tree]-z[quinityn]",probability_expression=[[
+    0.014 * (control:quinityn_trees:frequency > 0) * (control:quinityn_trees:size > 0)
+      * (distance > 85) * (quinityn_elevation > 1) * (quinityn_passage_distance > 12)
+      * clamp((quinityn_tree_patches + 0.35 * log2(max(0.01,control:quinityn_trees:size)) - 0.48)*3,0,1)
+  ]]}
+  data:extend({tree})
+  planet.map_gen_settings.autoplace_settings.entity.settings[tree.name]={}
 end

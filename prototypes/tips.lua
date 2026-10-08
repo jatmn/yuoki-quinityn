@@ -25,3 +25,11 @@ for i, chapter in ipairs(chapters) do
     localised_name={"tips-and-tricks-item-name.quinityn-"..chapter[1]},
     localised_description={"tips-and-tricks-item-description.quinityn-"..chapter[1]}}})
 end
+
+for i, tier in ipairs(require("prototypes.research-tiers")) do
+  data:extend({{type="tips-and-tricks-item",name="quinityn-"..tier.name,category="quinityn",
+    tag="[item="..tier.icon.."]",order="20-"..string.format("%02d",i),indent=1,
+    trigger={type="research",technology="quinityn-"..tier.name},
+    localised_name={"technology-name.quinityn-"..tier.name},
+    localised_description={"technology-description.quinityn-"..tier.name}}})
+end

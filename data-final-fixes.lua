@@ -34,7 +34,7 @@ for _, name in ipairs(names) do
       if not data.raw.technology[bridge] then
         data:extend({{type="technology",name=bridge,
           localised_name={"technology-name."..tech},
-          icon="__Yuoki__/graphics/icons/sign_tech_icon.png",icon_size=64,
+          icons=table.deepcopy(data.raw.technology[tech].icons),
           prerequisites={tech,prerequisite},research_trigger={type="scripted",trigger_description={"quinityn.bridge"}},
           effects={},hidden=true}})
       end
@@ -52,9 +52,13 @@ for name, planet in pairs(data.raw.planet) do
   if name ~= "quinityn" and planet.map_gen_settings then
     local mg=planet.map_gen_settings
     for _, ore in ipairs({"y-res1","y-res2"}) do
-      if mg.autoplace_controls then mg.autoplace_controls[ore]={frequency=0,size=0,richness=0} end
+      if mg.autoplace_controls then mg.autoplace_controls[ore]=nil end
       local entities=mg.autoplace_settings and mg.autoplace_settings.entity
       if entities and entities.settings then entities.settings[ore]=nil end
+      -- Do not advertise a disabled slider. Explicitly suppress probability too,
+      -- including surfaces whose entity placement uses default settings.
+      mg.property_expression_names=mg.property_expression_names or {}
+      mg.property_expression_names["entity:"..ore..":probability"]="0"
     end
   end
 end
