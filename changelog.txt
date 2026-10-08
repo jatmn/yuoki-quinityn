@@ -1,16 +1,7 @@
 ---------------------------------------------------------------------------------------------------
-Version: 0.1.0
-Date: 2026-10-07
+Version: Unreleased
   Features:
-    - Added Quinityn, a Yuoki contract world inspired by the original stories.
-    - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
-    - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
-    - Added local petrochemical research and Yuoki rocket component alternatives.
     - Added 61 native Tips and Tricks progression chapters.
-    - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
-    - Added planet-exclusive science and infinite mining productivity / plasma damage research.
-    - Added smog, slag districts, buried machinery and low pollution absorption.
-    - Limited starting ore and made emergency resource conversions hand-crafting only.
   Changes:
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
     - Reveal industrial science by mining a Quinityn rock and require five flyash per five science packs.
@@ -46,10 +37,25 @@ Date: 2026-10-07
   Compatibility:
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.
+  Testing:
+    - Added multi-seed native nest-to-landing paths across default and extreme liquid settings.
+    - Added factory operation, F7 fuel, biter collision/pathfinding, localization and terrain-distribution checks.
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-10-06
+  Features:
+    - Added Quinityn, a Yuoki contract world inspired by the original stories.
+    - Added liquid unicomp seas with native item disposal, N4/F7 resources, salvage and biters.
+    - Added landing-gated Yuoki and Engines technology progression and local bootstrap recipes.
+    - Added local petrochemical research and Yuoki rocket component alternatives.
+    - Added 17 native Tips and Tricks progression chapters.
+    - Added Durotal foundations for exclusive unicomp expansion and normal foundation destinations.
+    - Added planet-exclusive science and infinite mining productivity / plasma damage research.
+    - Added smog, slag districts, buried machinery and low pollution absorption.
+    - Limited starting ore and made emergency resource conversions hand-crafting only.
+  Compatibility:
     - Targets the pending Yuoki and Engines 1.3.0 Factorio 2.1 branches.
     - Preserves upstream unlock prerequisites and the heavy-oil conversion opt-out.
     - Disables the optional starting suit to preserve the physical-visit gate.
   Testing:
-    - Added multi-seed native nest-to-landing paths across default and extreme liquid settings.
-    - Added factory operation, F7 fuel, biter collision/pathfinding, localization and terrain-distribution checks.
     - Added official headless engine fixtures, local resource closure and finite bootstrap budget checks.
