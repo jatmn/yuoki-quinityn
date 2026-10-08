@@ -11,8 +11,8 @@
   <strong>Factorio 2.1 + Space Age · Yuoki Industries + Engines · Playable preview</strong>
 </p>
 
-Quinityn takes a world from YuokiTani's original stories and turns it into a
-hostile industrial frontier. Pick through buried machinery, pump purple seas of
+Quinityn takes a world from [YuokiTani's original stories](https://forums.factorio.com/viewtopic.php?t=18145)
+and turns it into a hostile industrial frontier. Pick through buried machinery, pump purple seas of
 **Liquid Unicomp A2**, and rebuild a factory among weathered soil, dead turf,
 ash, slag and poisoned trees. The native biters have already made themselves
 at home.
@@ -95,8 +95,12 @@ need playtesting. See [validation and limitations](https://github.com/jatmn/yuok
 
 ## Built on Yuoki's world
 
-Quinityn's name and contract-world inspiration come from **YuokiTani**. The
-unicomp oceans and this particular industrial landscape are this add-on's
+Quinityn's name and contract-world inspiration come from **YuokiTani**. Read the
+[original lore introduction on the Factorio forums](https://forums.factorio.com/viewtopic.php?t=18145),
+posted on December 1, 2015. It links the two original **German-language stories
+(PDFs)** that inspired this planet.
+
+The unicomp oceans and this particular industrial landscape are this add-on's
 adaptation, not claims about the original stories. Maintained by **jatmn**.
 
 - [Historical research, lore and primary sources](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/research.md)
