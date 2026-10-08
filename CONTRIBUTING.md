@@ -91,8 +91,11 @@ confirm that you checked for duplicate PRs. Use a Conventional Commit title:
 
 Keep changes focused. Do not bump `info.json` or publish a release as part of
 ordinary contribution work. Release Please proposes maintainer release PRs,
-starting at 0.1.1; maintain their player-facing changelog manually as described
-in [the release guide](docs/releases.md). Never include credentials, private logs, player
+starting at 0.1.1. In each normal PR, update the top `Version: Unreleased`
+section in `changelog.txt` with player-facing notes, creating it if absent and
+preserving numbered history. Automation assigns its version and date; do not
+add CI-only details. See [the release guide](docs/releases.md).
+Never include credentials, private logs, player
 data, game binaries or local machine paths in commits.
 
 Stay available for follow-up. PRs without a response for one week after review

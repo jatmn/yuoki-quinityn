@@ -23,7 +23,7 @@
         {"type": "chore", "section": "Maintenance", "hidden": false},
         {"type": "revert", "section": "Reverts", "hidden": false}
       ],
-      "pull-request-footer": "Before merging, manually add player-facing notes to changelog.txt for this version and run package validation. GitHub notes include development changes; changelog.txt must not be generated from these notes. See docs/releases.md."
+      "pull-request-footer": "Player-facing notes come from the Unreleased section maintained in normal PRs. The Release workflow finalizes their version and preparation date; wait for it and package checks before merging. Make note corrections in normal PRs, not on this generated branch. See docs/releases.md."
     }
   }
 }

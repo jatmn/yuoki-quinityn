@@ -64,7 +64,10 @@ python3 tools/package.py
 ```
 
 Ordinary development keeps the last stable mod version. Release Please starts
-with **0.1.1**; its release PR requires manually written player-facing notes.
+with **0.1.1**. Write player-facing notes in `changelog.txt`'s `Unreleased`
+section in each contribution PR; the release workflow assigns version/date
+headers automatically. Development packages turn pending notes into a numeric
+upcoming-patch section without changing tracked source files.
 GitHub-only nightlies use the upcoming patch version and require replacing
 earlier snapshots of the same version. See [releases and nightlies](releases.md)
 for the version policy, credentials, publication and retries. The historical

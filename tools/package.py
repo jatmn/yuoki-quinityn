@@ -2,21 +2,19 @@
 """Produce deterministic installable zips; source and dependency assets stay separate."""
 import argparse, hashlib, json, zipfile
 from pathlib import Path
+from release_notes import next_patch, render, split_pending
 ROOT=Path(__file__).resolve().parents[1]
-def nightly_files(info, changelog):
- """Stamp an upcoming-patch snapshot without editing source or gameplay notes."""
- major,minor,patch=map(int,info['version'].split('.'))
- if patch>=65535:raise ValueError('Nightly patch would exceed Factorio version limits')
- info={**info,'version':f'{major}.{minor}.{patch+1}'}
- heading='-'*99+'\nVersion: '+info['version']+'\n  Info:\n'
- heading+='    - Development snapshot; see its GitHub release for build details.\n'
+def development_files(info, changelog, nightly=False):
+ """Package pending notes as a numeric upcoming-patch snapshot; leave source alone."""
+ if not nightly and split_pending(changelog)[0] is None:return {}
+ info={**info,'version':next_patch(info['version'])}
  return {'info.json':(json.dumps(info,indent=2)+'\n').encode(),
-         'changelog.txt':(heading+changelog).encode()}
+         'changelog.txt':render(changelog,info['version'],nightly=True).encode()}
 
 def pack(root,out,addon=False,nightly=False):
  info=json.loads((root/'info.json').read_text())
- overrides=nightly_files(info,(root/'changelog.txt').read_text()) if nightly else {}
- if nightly:info=json.loads(overrides['info.json'])
+ overrides=development_files(info,(root/'changelog.txt').read_text(),nightly) if addon else {}
+ if overrides:info=json.loads(overrides['info.json'])
  name=f'{info["name"]}_{info["version"]}';target=out/(name+'.zip')
  with zipfile.ZipFile(target,'w',compression=zipfile.ZIP_DEFLATED,compresslevel=9) as z:
   for p in sorted(root.rglob('*')):

@@ -32,24 +32,11 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          persist-credentials: false
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
       - name: Check release metadata before creating tags
         run: |
           python3 tools/package.py
           python3 tools/validate_package.py
-      - name: Preserve a release PR with manually prepared game notes
-        id: notes
-        env:
-          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
-        run: |
-          pr="$(gh pr list --base main --head release-please--branches--main --state open --json number --jq '.[0].number // empty')"
-          if [ -n "$pr" ]; then
-            gh pr diff "$pr" --name-only > "$RUNNER_TEMP/release-files.txt"
-            if grep -Fxq changelog.txt "$RUNNER_TEMP/release-files.txt"; then
-              echo 'prepared=true' >> "$GITHUB_OUTPUT"
-              echo 'Game notes are prepared; release PR refresh is paused until merge. See docs/releases.md.' >> "$GITHUB_STEP_SUMMARY"
-            fi
-          fi
       - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
         id: release
         with:
@@ -57,7 +44,25 @@ jobs:
           target-branch: main
           config-file: .github/release-please-config.json
           manifest-file: .github/release-please-manifest.json
-          skip-github-pull-request: ${{ steps.notes.outputs.prepared == 'true' }}
+      - name: Finalize the release PR's accumulated game notes
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+        run: |
+          branch=release-please--branches--main
+          head="$(gh pr list --base main --head "$branch" --state open --json headRefOid,isCrossRepository --jq '[.[] | select(.isCrossRepository == false)] | .[0].headRefOid // empty')"
+          if [ -z "$head" ]; then exit 0; fi
+          git fetch origin "refs/heads/$branch"
+          test "$(git rev-parse FETCH_HEAD)" = "$head"
+          git checkout -B "$branch" FETCH_HEAD
+          python3 tools/release_notes.py --date "$(date -u +%F)"
+          python3 tools/package.py
+          python3 tools/validate_package.py
+          if git diff --quiet -- changelog.txt; then exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add changelog.txt
+          git commit -m 'chore: finalize player changelog metadata'
+          git push origin "HEAD:refs/heads/$branch"
 
   publish:
     needs: release

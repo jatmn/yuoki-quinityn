@@ -7,7 +7,8 @@ from pathlib import Path
 import re
 import subprocess
 import zipfile
-from package import nightly_files
+from package import development_files
+from release_notes import split_pending
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -68,7 +69,7 @@ def validate_changelog(text, version):
         else:
             raise ValueError(f'changelog.txt:{index + 1}: unrecognized line')
     if not versions or versions[0] != version_tuple(version):
-        raise ValueError(f'changelog.txt needs a manually written top section for {version}')
+        raise ValueError(f'changelog.txt needs a top section for {version}')
 
 
 def validate(output, nightly=False, tag=None):
@@ -78,9 +79,12 @@ def validate(output, nightly=False, tag=None):
     if manifest['.'] != info['version'] or (ROOT / '.github/version.txt').read_text().strip() != info['version']:
         raise ValueError('Release manifest, version.txt and info.json versions must match')
     changelog = (ROOT / 'changelog.txt').read_text()
-    validate_changelog(changelog, info['version'])
-    overrides = nightly_files(info, changelog) if nightly else {}
-    if nightly:
+    pending, history = split_pending(changelog)
+    validate_changelog(history, info['version'])
+    if tag is not None and pending is not None:
+        raise ValueError('Stable releases must finalize Unreleased notes before tagging')
+    overrides = development_files(info, changelog, nightly)
+    if overrides:
         info = json.loads(overrides['info.json'])
     if tag is not None and (nightly or tag != 'v' + info['version']):
         raise ValueError('Stable tag must match info.json exactly')
