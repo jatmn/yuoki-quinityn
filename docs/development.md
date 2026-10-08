@@ -2,9 +2,9 @@
 
 ## Install a development preview
 
-Build the current source using the commands below, or download the three mod zip files from the earlier `v0.1.0` prerelease if you have repository access. Put them in your Factorio mods directory. Use Factorio **2.1.21** with Space Age enabled. Enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
+Build the current source using the commands below, or download the three mod ZIPs from the [public preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2). Put them in your Factorio mods directory. Use Factorio **2.1.21** with Space Age enabled. Enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
 
-The dependency zips are unmodified builds of jatmn's pinned 1.3.0 development branches. Packaging does not publish, merge or change either upstream branch. Original license files remain in their packages. The old prerelease predates the repository's public-release preparation; use a new build to include Quinityn's current license and notices.
+The dependency zips are unmodified builds of jatmn's pinned 1.3.0 development branches. Packaging does not publish, merge or change either upstream branch. Original license files remain in their packages. The public preview includes Quinityn's license and attribution notices; the earlier private snapshot has been withdrawn from the release listing.
 
 ## Exact dependency revisions
 
@@ -50,7 +50,7 @@ For the addon alone:
 python3 tools/package.py
 ```
 
-All development updates remain **0.1.0** until `main` is stable for the initial release. The existing `v0.1.0` prerelease is an earlier development snapshot. Build the desired branch with the commands above for current changes. Replace the previous `yuoki-quinityn_0.1.0.zip` when installing a new build; do not install multiple copies.
+All development updates remain **0.1.0** until `main` is stable for the initial release. The Git tag `v0.1.0-preview.2` identifies the public preview without changing the mod version. Build the desired branch with the commands above for current changes. Replace the previous `yuoki-quinityn_0.1.0.zip` when installing a new build; do not install multiple copies.
 
 ## Source layout
 

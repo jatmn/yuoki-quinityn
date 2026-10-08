@@ -14,13 +14,13 @@ additional collaborator is designated by this change; jatmn is the current
 owner and sole maintainer. Add approved maintainers to CODEOWNERS as appropriate.
 CODEOWNERS requests review and does not grant or restrict merge permission.
 
-## Main protection: prepared, not yet active
+## Main protection: active
 
-During public-release preparation, GitHub returned HTTP 403 for both rulesets
-and branch protection: this private repository needs GitHub Pro or public
-visibility to use the feature. Committing the JSON below **does not activate
-protection**. Do not describe `main` as protected until live API readback confirms
-it. The visibility change is a separate owner decision.
+The repository became public on October 7, 2026. The
+[Main branch protection ruleset](https://github.com/jatmn/yuoki-quinityn/rules/24691504)
+is active, and the effective rules for `main` were verified through GitHub's API.
+Its ID is `24691504`. Private-repository plan restrictions had previously blocked
+activation; public visibility removed that limitation.
 
 [`.github/main-ruleset.json`](../.github/main-ruleset.json) is an importable
 repository ruleset targeting only `refs/heads/main`. It requires PRs and resolved
@@ -33,25 +33,24 @@ outside contributors merge their PRs. Review and validation are still maintainer
 responsibilities. No required status-check names are configured because this
 repository has no PR CI workflow; inventing a check name would block all merges.
 
-Once the account plan supports private rulesets, or immediately after an
-explicitly authorized visibility change, apply the reviewed policy from the
-repository root using an authenticated owner session:
+The JSON is the versioned policy; editing it does not change live settings.
+For an authorized policy update, inspect the current rule and apply the reviewed
+JSON from the repository root using an authenticated owner session:
 
 ```sh
-gh api repos/jatmn/yuoki-quinityn/rulesets
-gh api --method POST repos/jatmn/yuoki-quinityn/rulesets \
+gh api repos/jatmn/yuoki-quinityn/rulesets/24691504
+gh api --method PUT repos/jatmn/yuoki-quinityn/rulesets/24691504 \
   --input .github/main-ruleset.json
 ```
 
-First inspect the list. If `Main branch protection` already exists, inspect it
-and use `PUT /repos/jatmn/yuoki-quinityn/rulesets/RULESET_ID` with the same input
-to update that rule, rather than creating duplicates. Preserve other rulesets.
-Alternatively import the JSON in Settings → Rules → Rulesets.
+Preserve other rulesets and avoid duplicate policies. If the rule has been
+recreated, obtain its current ID from `gh api repos/jatmn/yuoki-quinityn/rulesets`
+before updating it.
 
 Verify the returned ID and effective rules, then audit access:
 
 ```sh
-gh api repos/jatmn/yuoki-quinityn/rulesets/RULESET_ID
+gh api repos/jatmn/yuoki-quinityn/rulesets/24691504
 gh api repos/jatmn/yuoki-quinityn/rules/branches/main
 gh api repos/jatmn/yuoki-quinityn/collaborators \
   --jq '.[] | {login, role_name, permissions}'
@@ -63,21 +62,27 @@ opened and that only the owner/maintainers have merge access. Do not test by
 force-pushing or deleting `main`. Public visibility and rule activation are
 separate operations, so avoid merging or pushing during that transition.
 
-## Before the public release
+## Public preview and future releases
 
-1. Merge the reviewed preparation PR through the owner/maintainer workflow.
+PR #3 merged the licensing and contributor preparation. The old `v0.1.0`
+release listing is now a draft, with its original tag and assets retained for
+maintainers. The replacement [public preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
+includes current Quinityn license notices and the unchanged pinned dependency
+packages with their own licenses. No Factorio game files are distributed.
+
+For future releases:
+
+1. Merge reviewed changes through the owner/maintainer workflow.
 2. Review the Git history, tracked files, releases and attachments for material
-   that should not become public. The existing `v0.1.0` prerelease contains
-   older add-on and dependency zips: they do not gain the new Quinityn license
-   files just because this PR is merged. Decide whether to replace or withdraw
-   that snapshot before changing visibility.
+   that should not become public. Existing ZIPs do not gain new license notices
+   just because source changes are merged; rebuild release artifacts as needed.
 3. Build from the intended release commit. Confirm `LICENSE`, `NOTICE` and
    `graphics/README.md` are present in the add-on zip and preserve each dependency's
    own license. Keep the Factorio engine and Space Age data outside releases.
 4. Confirm public users can obtain the documented pinned dependencies. The
    README must continue to distinguish pending 2.1 builds from published 2.0 mods.
-5. Change visibility only when authorized, then activate and verify protection
-   as above. Keep collaborator access limited to designated maintainers.
+5. Verify branch protection as above and keep collaborator access limited to
+   designated maintainers.
 6. For a separately approved Mod Portal release, select CC BY-NC-SA 4.0 and link
    NOTICE for the third-party exceptions. Add genuine in-game screenshots after
    graphical playtesting; do not present concept art as gameplay.
