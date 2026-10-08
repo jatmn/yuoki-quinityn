@@ -52,6 +52,69 @@ python3 tools/package.py
 
 All development updates remain **0.1.0** until `main` is stable for the initial release. The Git tag `v0.1.0-preview.2` identifies the public preview without changing the mod version. Build the desired branch with the commands above for current changes. Replace the previous `yuoki-quinityn_0.1.0.zip` when installing a new build; do not install multiple copies.
 
+## Lightweight CI
+
+CI runs on pull requests and pushes to `main`. One small `changes` job reads the
+complete Git diff, then invokes only the affected reusable validation workflows.
+This avoids GitHub's capped file list for event-level path filters. Unrelated
+validation jobs do not start runners; docs-only PRs pay only for change detection.
+Topic branch pushes do not trigger duplicate runs, and a new update cancels the
+superseded CI run for that PR. No CI job downloads or runs Factorio, Space Age,
+Yuoki or Engines; engine validation remains local.
+
+| Changed surface | Checks that run |
+| --- | --- |
+| Runtime Lua | Lua syntax, Luacheck, changed-file StyLua; addon packaging |
+| Test-only Lua | Lua checks only |
+| Python outside packaging tools | Python syntax only; no game tests execute |
+| `tools/package.py` or `tools/validate_package.py` | Python syntax and packaging |
+| `info.json`, locale, graphics, other shipped files | Metadata and package validation |
+| `.luacheckrc` or `.stylua.toml` | Lua checks only |
+| One validation workflow file | actionlint plus the workflow being changed |
+| Dispatcher (`ci.yml`) or `tools/ci_changes.py` | All four validation workflows |
+| `docs/`, `AGENTS.md`, `CONTRIBUTING.md` | Change detection only |
+
+The README, changelog, license files and `graphics/README.md` ship in the addon,
+so changes to them trigger packaging. A mixed change runs the union of its
+affected checks. The router disables rename detection so both the old and new
+paths are considered; deletions also select their affected checks. An unavailable
+comparison revision fails the routing job instead of silently skipping validation.
+Lua syntax/lint scan the remaining Lua source; formatting checks only added,
+modified or renamed Lua files, never deleted files. Changes to format config
+also validate the configuration without demanding a repository-wide reformat.
+The repository-wide formatting baseline is tracked in
+[issue #9](https://github.com/jatmn/yuoki-quinityn/issues/9).
+
+The Lua workflow uses Lua 5.2 syntax, Luacheck 1.2.0 and StyLua 2.5.2. Factorio
+data/runtime globals are declared separately in `.luacheckrc`; line length is
+left to StyLua. Two existing warnings in `data-final-fixes.lua` (the intentional
+empty heavy-oil opt-out and unused loop index) have file-local exemptions.
+
+Run the same checks locally from the repository root:
+
+```sh
+git ls-files -z '*.lua' | xargs -0 -r -n1 luac5.2 -p
+luacheck .
+# Replace these paths with the Lua files you changed. Format before checking.
+stylua --config-path .stylua.toml control.lua
+stylua --check --config-path .stylua.toml control.lua
+actionlint
+python3 tools/package.py
+python3 tools/validate_package.py
+```
+
+The Python syntax step parses tracked `.py` files without importing or running them. Package
+validation checks metadata, the versioned ZIP root, every tracked release file
+and its bytes, required entrypoints/notices, developer-file exclusions and the
+SHA256 checksum. The addon ZIP/checksum is attached to its workflow run for seven
+days; CI does not publish a release. These checks do not prove game API usage,
+recipe correctness, graphics rendering or gameplay.
+
+Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library routing
+regression suite. It checks surface isolation and the real Git-to-router path
+with 3,500 documentation files followed by a Lua change, plus cross-surface
+renames, deletions, unusual filenames and an invalid comparison revision.
+
 ## Source layout
 
 - `prototypes/planet.lua`: planet, navigation route, wasteland terrain, unicomp sea and generation controls.
