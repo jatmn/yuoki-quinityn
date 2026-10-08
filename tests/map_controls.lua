@@ -35,7 +35,8 @@ script.on_init(function()
       assert(surface.get_tile(worm.position).name=="quinityn-slag","Natural worm outside brown slag")
     end
     if name=="default" then
-      for _,kind in ipairs({"quinityn-basalt","quinityn-ash","quinityn-slag","quinityn-rubble","quinityn-ruined-district"}) do
+      for _,kind in ipairs({"quinityn-basalt","quinityn-ash","quinityn-slag","quinityn-rubble","quinityn-ruined-district",
+          "quinityn-weathered-soil","quinityn-dead-turf","quinityn-ash-soil"}) do
         local placed=false
         for _,tile in pairs(surface.find_tiles_filtered{area=area,name=kind}) do
           local spec={name="biter-spawner",force="enemy",position={tile.position.x+0.5,tile.position.y+0.5}}
@@ -54,9 +55,9 @@ script.on_init(function()
     return {sea=sea,cliffs=cliffs,coast=coast,trees=trees,bases=bases,signature=table.concat(signature,";")}
   end
   local normal=sample("default",function(_) end)
-  -- Same seed/area at f14a2ae had 806 coastal cliffs and 397 trees.
+  -- Same seed/area at f14a2ae had 806 coastal cliffs; PR #1 (2c7d5d3) had 445 trees.
   check(normal.coast>0 and normal.coast<806*0.65,"machinery-only cliffs retain reduced coastal coverage")
-  check(normal.trees>397 and normal.trees<397*1.5,"default tree increase remains modest")
+  check(normal.trees>445*0.7 and normal.trees<445*0.9,"default trees are modestly reduced from PR #1")
   check(normal.coast/normal.cliffs>0.5 and normal.coast<normal.cliffs,"cliffs are mostly coastal with some inland")
   check(normal.trees>20 and normal.trees<1000,"dead trees are present but sparse by default")
   local no_trees=sample("trees-off",function(s) s.autoplace_controls.quinityn_trees={frequency=0,size=0} end)
