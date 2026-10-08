@@ -9,7 +9,7 @@ def pack(root,out,addon=False):
   for p in sorted(root.rglob('*')):
    rel=p.relative_to(root)
    if not p.is_file() or any(x.startswith('.') or x in {'build','__pycache__'} for x in rel.parts):continue
-   if addon and rel.parts[0] in {'tests','tools','docs'}:continue
+   if addon and rel.parts[0] in {'tests','tools','docs','AGENTS.md','CONTRIBUTING.md'}:continue
    zi=zipfile.ZipInfo(name+'/'+rel.as_posix(),date_time=(2026,10,6,0,0,0));zi.compress_type=zipfile.ZIP_DEFLATED
    zi.external_attr=0o644<<16;z.writestr(zi,p.read_bytes())
  print(target)
