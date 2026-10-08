@@ -219,8 +219,9 @@ assert not R['y-rmvpol'].get('hidden',False)
 for name in ['j-airfilter','j-airfilter_dirty','j-airfilter_cleaning']:
  assert unlocks[name]==['quinityn-air-filters'] and not R[name].get('enabled',True)
 assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines'}<=ancestry('quinityn-air-filters')
+assert next(p['amount'] for p in R['j-airfilter_dirty']['ingredients'] if p['name']=='j-airfilter')==1
 assert {p['name']:p['amount'] for p in R['j-airfilter_cleaning']['results']}=={'j-airfilter':1,'y-pol-waste':6}
-assert R['j-airfilter_dirty']['emissions_multiplier']>R['y-rmvpol'].get('emissions_multiplier',1)
+assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emissions_multiplier',1)
 assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
 assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')

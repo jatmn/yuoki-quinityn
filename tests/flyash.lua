@@ -79,6 +79,33 @@ script.on_event(defines.events.on_tick,function()
   end
   local machine=storage.machine
   machine.energy=100000000
+  if storage.waiting_filter then
+    -- Run longer than a complete capture cycle with power and both fluids.
+    if game.tick-storage.started<660 then return end
+    check(machine.products_finished==0 and machine.crafting_progress==0,"capture cannot run without a clean filter")
+    check(machine.insert{name="j-airfilter",count=1}==1,"capture accepts exactly one clean filter")
+    check(machine.get_item_count("j-airfilter")==1,"clean filter is present before capture")
+    storage.waiting_filter=nil;storage.started=game.tick
+    return
+  end
+  if not storage.washing then
+    -- Compare the same 60 working ticks, after startup, in each mode. Read
+    -- machine-attributed removal so terrain/trees cannot satisfy the assertion.
+    local elapsed=game.tick-storage.started
+    if elapsed>=30 and elapsed<=90 then
+      assert(machine.is_crafting(),"Fatmice must work throughout the pollution sample")
+      local removed=game.get_pollution_statistics(surface).get_output_count(machine.name)
+      if elapsed==30 then storage.removal_start=removed end
+      if elapsed==90 then
+        removed=removed-storage.removal_start
+        check(removed>0,"working Fatmice removes pollution itself")
+        if storage.filtered then
+          check(math.abs(removed/storage.unfiltered_removed-2)<0.000001,"filtered capture removes twice the pollution over equal working time")
+          log("QUINITYN FLYASH REMOVAL: unfiltered="..storage.unfiltered_removed.." filtered="..removed.." over 60 ticks each")
+        else storage.unfiltered_removed=removed end
+      end
+    end
+  end
   if storage.ash_remaining and storage.ash_remaining>0 then
     storage.ash_remaining=storage.ash_remaining-machine.insert{name="y-pol-waste",count=storage.ash_remaining}
   end
@@ -93,12 +120,13 @@ script.on_event(defines.events.on_tick,function()
     storage.machine=surface.create_entity{name="y-electric-air-heater",position={0,0},force=force}
     machine=storage.machine
     check(machine.set_recipe("j-airfilter_dirty"),"Fatmice accepts upgraded filtration")
-    machine.insert{name="j-airfilter",count=1}
     machine.insert_fluid{name="water",amount=60}
     machine.insert_fluid{name="y-mechanical-force",amount=0.2}
-    storage.filtered=true;storage.started=game.tick
+    surface.pollute({0,0},10000)
+    storage.filtered=true;storage.waiting_filter=true;storage.started=game.tick
   elseif storage.filtered and not storage.washing and machine.products_finished>0 then
     check(machine.get_output_inventory().get_item_count("j-airfilter_dirty")==1,"filtered capture yields a dirty filter")
+    check(machine.get_item_count("j-airfilter")==0,"capture consumes the clean filter")
     machine.get_output_inventory().remove{name="j-airfilter_dirty",count=1};machine.destroy()
     storage.machine=surface.create_entity{name="y-dirtwasher",position={0,0},force=force}
     machine=storage.machine

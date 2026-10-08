@@ -33,7 +33,12 @@ PASS flyash; native character mines big, huge and sand rocks on all six planets:
   Native Quinityn rock mining gives two flyash and reveals science before factory research.
   Separate Fatmice research enables unfiltered production while filters remain locked.
   Running Fatmice produces flyash and reduces pollution.
-  Later filters yield a dirty filter; washing returns a clean filter plus six ash, no wastewater.
+  Powered capture cannot run without a clean filter, then consumes one and yields a dirty filter.
+  Equal 60-tick working samples measure 4.166667 unfiltered versus 8.333334 filtered
+  pollution removal attributed to the machine; natural absorption cannot satisfy the check.
+  Washing returns a clean filter plus six ash, no wastewater.
+  Mutation probes: removing the required filter or reducing its multiplier to 1.01
+  passes the previous native fixture and fails the revised fixture at the intended assertion.
   Actual machines turn 750 ash into ten mixed fuel, then one rocket fuel.
 PASS landing-routes; all 20 seed/liquid-setting cases retain native behemoth-biter paths
   from both distant exits and a naturally generated nest to landing. Nests stay on slag;
