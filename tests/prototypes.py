@@ -197,7 +197,7 @@ rocks={'quinityn-big-rock','quinityn-huge-rock'}
 science=T['quinityn-industrial-science']
 assert science['research_trigger']=={'type':'mine-entity','entities':['quinityn-big-rock','quinityn-huge-rock']}
 assert science['prerequisites']==['quinityn-arrival']
-assert next(p['amount'] for p in R['quinityn-research-data']['ingredients'] if p['name']=='y-pol-waste')==1
+assert next(p['amount'] for p in R['quinityn-research-data']['ingredients'] if p['name']=='y-pol-waste')==5
 for source,ash in [('big-rock',2),('huge-rock',4)]:
  native=D['simple-entity'][source];rock=D['simple-entity']['quinityn-'+source]
  assert all(p['name']!='y-pol-waste' for p in native['minable'].get('results',[]))

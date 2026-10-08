@@ -15,14 +15,16 @@ PASS reachability; 514 items, 226 technologies, 85 machines, 25 closure iteratio
 PASS bootstrap_budget; 7,744 N4 and 3,811 F7 of 125,000 minimum per starting deposit.
   Reserve 600 red, 400 green, 260 Quinityn packs, first factory, Cimota, Fatmice,
   small electric motor and early equipment, milestone margin and 500 coal.
-  Requires 52 rock flyash; native starter samples require at least 60.
+  Requires 100 rock flyash for Power + Fatmice; the remaining 160 science packs
+  use unfiltered scrubbing, including water and MF inputs. Starter samples require at least 100.
 PASS localization; 264 Quinityn prototypes, explicit keys and visible fallback names.
 PASS generate-1, generate-42, generate-8675309; organic ore patches, rock samples,
   normal stone/coal plus flyash mining yields; no ordinary mineable rocks on Quinityn.
 PASS worldgen; nine terrain types, ash/soil transitions, connected land, sparse stockpiles,
   seed-varied starter ore and natural groundcover.
 PASS runtime; discovery/physical arrival and force isolation, delayed discovery,
-  factory science/sign production, separator fuel and circuit connections, natural pumping,
+  all three factories reject four ash and consume five ash for five packs; sign production,
+  separator fuel and circuit connections, natural pumping,
   native item disposal, biter collision/pathfinding, research and actual rocket launch.
 PASS map-controls; independent liquid, cliff, enemy and tree controls; native habitats;
   all five other planets generate no Quinityn rocks or Yuoki ores.

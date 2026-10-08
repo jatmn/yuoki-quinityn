@@ -1,10 +1,10 @@
 # Development and installation
 
-## Install the private preview
+## Install a development preview
 
-Download the three mod zip files from this repository's private `v0.1.0` prerelease and put them in your Factorio mods directory. Use Factorio **2.1.21** with Space Age enabled. Enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
+Build the current source using the commands below, or download the three mod zip files from the earlier `v0.1.0` prerelease if you have repository access. Put them in your Factorio mods directory. Use Factorio **2.1.21** with Space Age enabled. Enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
 
-The dependency zips are unmodified builds of the user's pending 1.3.0 branches. They are provided privately for reproducibility; this does not publish, merge or change either upstream branch. Any original license files remain in their packages.
+The dependency zips are unmodified builds of jatmn's pinned 1.3.0 development branches. Packaging does not publish, merge or change either upstream branch. Original license files remain in their packages. The old prerelease predates the repository's public-release preparation; use a new build to include Quinityn's current license and notices.
 
 ## Exact dependency revisions
 
@@ -42,7 +42,7 @@ The test harness is a separate test-only mod. It never ships in the playable zip
 python3 tools/package.py --dependencies build/dependencies
 ```
 
-This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package excludes tests, tooling, research docs and build output; those remain available in the repository. Both dependency packages retain their source, graphics and any upstream license files.
+This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package includes `LICENSE`, `NOTICE` and artwork provenance, and excludes tests, tooling, research docs, contributor/agent instructions, GitHub configuration and build output; those remain available in the repository. Both dependency packages retain their source, graphics and upstream license files. See [CONTRIBUTING.md](../CONTRIBUTING.md) for change-specific validation and [repository administration](repository-administration.md) for public-release preparation.
 
 For the addon alone:
 

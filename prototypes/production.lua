@@ -72,7 +72,7 @@ recipe("quinityn-timber",{item("y-res1",2),item("y-res2",2)},{item("wood",1)},ni
 recipe(separator.name,{item("iron-plate",10),item("copper-plate",5),item("stone",10)},
   {item(separator.name,1)},nil,5)
 recipe("quinityn-water",{fluid("y-liquid-uc2",1)},{fluid("water",100)}, {"quinityn-separation"},2)
-recipe("quinityn-research-data",{item("y-unicomp-raw",1),item("y-refined-yres2",1),item("y_rwtechsign",1),item("y-pol-waste",1)},
+recipe("quinityn-research-data",{item("y-unicomp-raw",1),item("y-refined-yres2",1),item("y_rwtechsign",1),item("y-pol-waste",5)},
   {item("quinityn-research-data",5)},{"quinityn-science"},5)
 data.raw.item["y-pol-waste"].localised_description={"item-description.quinityn-flyash"}
 for _, name in ipairs({"y-waste-condense","y_mixedfuel2rocketfuel"}) do

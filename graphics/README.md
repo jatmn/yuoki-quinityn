@@ -1,5 +1,9 @@
 # Quinityn inventory icons
 
+See [NOTICE](../NOTICE) for credits, licenses and the mixed-reference science
+icon's Wube artwork exception. Generated output does not erase rights in its
+references; the repository does not offer Wube-derived artwork under CC terms.
+
 The two icons were generated with the built-in imagegen tool on 2026-10-07, then downscaled with ImageMagick to 256×256 RGBA PNGs. They retain transparent alpha. Prototype `icon_size` is 256; Factorio displays them at the appropriate UI size.
 
 `icons/quinityn-salvage.png` references Yuoki's reinforced gear, Durotal structure element and conductive wire. `icons/quinityn-science.png` uses the [Fulgora science bottle](https://wiki.factorio.com/Electromagnetic_science_pack) as a shape reference and Yuoki's Technic Sign as the badge reference. Original reference files remain outside the mod package.

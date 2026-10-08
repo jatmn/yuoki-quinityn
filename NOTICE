@@ -1,0 +1,75 @@
+Yuoki Industries: Quinityn
+Copyright (c) 2026 jatmn and contributors, for copyrightable contributions.
+
+Except for third-party material identified below, this project's code,
+documentation and copyrightable artwork contributions are licensed under
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+(CC BY-NC-SA 4.0). See LICENSE for the full text:
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+Yuoki Industries
+----------------
+Created by YuokiTani; currently maintained by jatmn.
+Upstream notice: Yuoki Industries 1.0.x is Copyright (c) YuokiTani & others
+2016-20. Acknowledgements: Michael Cowgill (ChurchOrganist), Josh Ricker
+(Codec), and Glendening for their code contributions.
+License: CC BY-NC-SA 4.0.
+Bundled upstream notice: LICENSES/Yuoki.txt.
+Source: https://github.com/Yuoki-Industries/yuoki
+Verified dependency notice:
+https://github.com/jatmn/Yuoki-Factorio-2.0/blob/ce7918f2b252f2d79ba86b9ae05d991e7af1f261/Licence.txt
+
+Quinityn adapts YuokiTani's contract-world lore into a playable planet and
+adds a landscape, visit-gated research, salvage, science, local production
+and foundations. Unicomp oceans and this landscape are new interpretations.
+The add-on references installed Yuoki assets and prototypes; it does not
+replace the parent mod or claim authorship of its art, lore or machines.
+Historical sources and adaptation boundaries are in the source repository:
+https://github.com/jatmn/yuoki-quinityn/blob/main/docs/research.md
+
+Yuoki Industries - Engines
+-------------------------
+Created by YuokiTani; currently maintained by jatmn.
+Upstream notice: Yuoki Industries - Engines (Addon) 0.8.43 is Copyright
+(c) 2016-2020 YuokiTani and others. Acknowledgements: Michael Cowgill
+(ChurchOrganist) for providing the fixes for pollution.
+License: MIT. This separate dependency keeps its own license.
+Bundled upstream notice and full MIT terms: LICENSES/yi_engines.txt.
+Verified dependency notice:
+https://github.com/jatmn/Yuoki-Engines-Factorio-2.0/blob/dd13f421f68010fd0180cda4fb9273f9b582198e/LICENSE.md
+
+Factorio and Space Age
+---------------------
+Copyright Wube Software Ltd. All rights reserved.
+https://factorio.com/terms-of-service
+
+The add-on clones, references and tints installed Factorio/Space Age
+prototypes and assets. Those underlying materials are not relicensed by
+this repository. Wube's terms permit adaptations of game assets as part
+of mods while retaining Wube's rights to those assets and derived work.
+The game and DLC are separate requirements and are not included here.
+
+Bundled graphics
+----------------
+graphics/icons/quinityn-salvage.png was AI-generated using Yuoki's reinforced
+gear, Durotal structure element and conductive wire as references.
+Copyrightable Quinityn contributions are offered under CC BY-NC-SA 4.0;
+the Yuoki references retain their attribution and license above.
+
+graphics/icons/quinityn-science.png was AI-generated using the Factorio
+electromagnetic science bottle as a shape reference and Yuoki's Technic
+Sign as a badge reference. Its purple contents and enlarged badge were
+adapted for Quinityn. This mixed-reference asset is excluded from a blanket
+CC license grant: any Wube-derived material remains under Wube's terms,
+and Yuoki-derived material remains under CC BY-NC-SA 4.0. No permission to
+reuse Wube-derived artwork outside those terms is granted here.
+
+Generation provenance and prompts are recorded in graphics/README.md.
+No exclusive copyright is asserted over purely AI-generated elements.
+No endorsement by YuokiTani, other upstream contributors or Wube is implied.
+
+Redistribution
+--------------
+Keep LICENSE and NOTICE with Quinityn. Preserve upstream notices and
+license files when separately distributing dependency builds. The package
+tool includes these files and leaves dependency license files intact.
