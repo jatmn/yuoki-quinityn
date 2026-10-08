@@ -80,7 +80,8 @@ affected checks. The router disables rename detection so both the old and new
 paths are considered; deletions also select their affected checks. An unavailable
 comparison revision fails the routing job instead of silently skipping validation.
 On pull requests, Lua syntax, lint and formatting check only added, modified or
-renamed Lua files, never deleted files. After merge, a push to `main` checks all
+renamed Lua files, including changes between regular files and symlinks; deleted
+files are excluded. After merge, a push to `main` checks all
 tracked Lua files when the Lua surface changes, including lint or formatter
 configuration changes. Configuration is parsed even when a PR changes no Lua
 files. The one-time repository-wide formatting baseline from
@@ -122,10 +123,12 @@ SHA256 checksum. The addon ZIP/checksum is attached to its workflow run for seve
 days; CI does not publish a release. These checks do not prove game API usage,
 recipe correctness, graphics rendering or gameplay.
 
-Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library routing
+Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library CI
 regression suite. It checks surface isolation and the real Git-to-router path
 with 3,500 documentation files followed by a Lua change, plus cross-surface
 renames, deletions, unusual filenames and an invalid comparison revision.
+Lua CI runs its focused file-selection case so workflow-only changes also check
+both directions of regular-file/symlink changes without scanning untouched Lua.
 
 ## Source layout
 
