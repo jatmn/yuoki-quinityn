@@ -28,3 +28,5 @@ jobs:
           PY
       - name: Test CI change routing
         run: python3 tools/test_ci_changes.py
+      - name: Test Pullfrog owner authorization
+        run: python3 tools/test_pullfrog_command.py
