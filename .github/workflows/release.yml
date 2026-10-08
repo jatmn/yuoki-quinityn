@@ -1,0 +1,74 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing stable tag to retry publishing (blank: run release-please)'
+        type: string
+        default: ''
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stable-release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main' && inputs.tag == ''
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    outputs:
+      created: ${{ steps.release.outputs.release_created }}
+      tag: ${{ steps.release.outputs.tag_name }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Check release metadata before creating tags
+        run: |
+          python3 tools/package.py
+          python3 tools/validate_package.py
+      - name: Preserve a release PR with manually prepared game notes
+        id: notes
+        env:
+          GH_TOKEN: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+        run: |
+          pr="$(gh pr list --base main --head release-please--branches--main --state open --json number --jq '.[0].number // empty')"
+          if [ -n "$pr" ]; then
+            gh pr diff "$pr" --name-only > "$RUNNER_TEMP/release-files.txt"
+            if grep -Fxq changelog.txt "$RUNNER_TEMP/release-files.txt"; then
+              echo 'prepared=true' >> "$GITHUB_OUTPUT"
+              echo 'Game notes are prepared; release PR refresh is paused until merge. See docs/releases.md.' >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+      - uses: googleapis/release-please-action@5c625bfb5d1ff62eadeeb3772007f7f66fdcf071 # v4.4.1
+        id: release
+        with:
+          token: ${{ secrets.RELEASE_PLEASE_TOKEN || github.token }}
+          target-branch: main
+          config-file: .github/release-please-config.json
+          manifest-file: .github/release-please-manifest.json
+          skip-github-pull-request: ${{ steps.notes.outputs.prepared == 'true' }}
+
+  publish:
+    needs: release
+    if: >-
+      always() && github.ref == 'refs/heads/main' &&
+      (needs.release.outputs.created == 'true' ||
+       (github.event_name == 'workflow_dispatch' && inputs.tag != ''))
+    permissions:
+      contents: write
+    uses: ./.github/workflows/publish.yml
+    with:
+      tag: ${{ inputs.tag || needs.release.outputs.tag }}
+    secrets:
+      FACTORIO_API_KEY: ${{ secrets.FACTORIO_API_KEY }}

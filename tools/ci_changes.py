@@ -17,6 +17,12 @@ def classify(paths):
             checks['lua'] = True
         if path.endswith('.py') or path == '.github/workflows/python.yml':
             checks['python'] = True
+        if path in {
+            '.github/release-please-config.json', '.github/release-please-manifest.json',
+            '.github/version.txt', '.github/workflows/release.yml',
+            '.github/workflows/publish.yml', '.github/workflows/nightly.yml',
+        }:
+            checks['python'] = checks['package'] = True
         if path.startswith('.github/workflows/'):
             checks['workflows'] = True
         parts = PurePosixPath(path).parts

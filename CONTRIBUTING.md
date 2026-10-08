@@ -90,8 +90,9 @@ confirm that you checked for duplicate PRs. Use a Conventional Commit title:
 `feat(locale): add a translation`. See [AGENTS.md](AGENTS.md) for agent rules.
 
 Keep changes focused. Do not bump `info.json` or publish a release as part of
-ordinary contribution work; development remains at 0.1.0 until the maintainer
-prepares the initial release. Never include credentials, private logs, player
+ordinary contribution work. Release Please proposes maintainer release PRs,
+starting at 0.1.1; maintain their player-facing changelog manually as described
+in [the release guide](docs/releases.md). Never include credentials, private logs, player
 data, game binaries or local machine paths in commits.
 
 Stay available for follow-up. PRs without a response for one week after review
