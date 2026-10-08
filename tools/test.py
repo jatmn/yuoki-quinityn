@@ -48,6 +48,10 @@ try:
  run('production-milestones-create',base+['--create',str(a.output/'production-milestones.zip')],'Factorio initialised')
  run('production-milestones',base+['--benchmark',str(a.output/'production-milestones.zip'),
      '--benchmark-ticks','30000','--benchmark-runs','1'],'QUINITYN PRODUCTION MILESTONE TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/research_progression")\n')
+ run('research-progression-create',base+['--create',str(a.output/'research-progression.zip')],'Factorio initialised')
+ run('research-progression',base+['--benchmark',str(a.output/'research-progression.zip'),
+     '--benchmark-ticks','130000','--benchmark-runs','1'],'QUINITYN RESEARCH PROGRESSION TESTS PASSED')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/flyash")\n')
  run('flyash-create',base+['--create',str(a.output/'flyash.zip')],'Factorio initialised')
  run('flyash',base+['--benchmark',str(a.output/'flyash.zip'),

@@ -36,9 +36,12 @@ goals={'automation-science-pack':600,'logistic-science-pack':400,
  'ye_fassembly1':1,'y-electric-air-heater':1,'y-emotor-s':1,'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}
 # Reserve each pre-science craft count again even when the same intermediates
 # also appear inside later goals. This intentionally overbudgets milestone work.
+def pre_science(t):
+ return not t.get('unit') and all(pre_science(D['technology'][p])
+  for p in t.get('prerequisites',[]) if p.startswith('quinityn-'))
 for t in D['technology'].values():
  tr=t.get('research_trigger',{})
- if t['name'].startswith('quinityn-') and tr.get('type')=='craft-item':
+ if t['name'].startswith('quinityn-') and tr.get('type')=='craft-item' and pre_science(t):
   supply(tr['item'],tr.get('count',1))
 for name,amount in goals.items():supply(name,amount)
 # Rock ash funds only the research needed to start renewable collection.

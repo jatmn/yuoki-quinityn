@@ -36,16 +36,19 @@ local stages = {
   {"orbital", {"quantum"}, 200, "rocket-silo"}
 }
 for _, tier in ipairs(require("prototypes.research-tiers")) do
-  stages[#stages+1]={tier.name,tier.prerequisites,tier.count,tier.icon,tier.trigger}
+  stages[#stages+1]={tier.name,tier.prerequisites,tier.count,tier.icon,tier.trigger,
+    science=tier.science,time=tier.time,science_prerequisites=tier.science_prerequisites}
 end
 for i, s in ipairs(stages) do
   local science = {{"automation-science-pack",1},{"logistic-science-pack",1},{"quinityn-research-data",1}}
+  for _, pack in ipairs(s.science or {}) do science[#science+1]={pack,1} end
   local prerequisites={}
   for _, parent in ipairs(s[2]) do prerequisites[#prerequisites+1]="quinityn-"..parent end
+  for _, parent in ipairs(s.science_prerequisites or {}) do prerequisites[#prerequisites+1]=parent end
   data:extend({{type="technology",name="quinityn-"..s[1],icons=icons(s[4]),
     effects={},prerequisites=prerequisites,
     research_trigger=s[5],
-    unit=not s[5] and {count=s[3],time=20,ingredients=science} or nil,order="y-"..string.format("%02d",i)}})
+    unit=not s[5] and {count=s[3],time=s.time or 20,ingredients=science} or nil,order="y-"..string.format("%02d",i)}})
 end
 table.insert(data.raw.technology["quinityn-industrial-science"].effects,unlock("quinityn-research-data"))
 table.insert(data.raw.technology["quinityn-industrial-science"].effects,unlock("quinityn-technic-sign"))
