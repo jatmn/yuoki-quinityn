@@ -22,9 +22,9 @@ destination and a progression of their own. Their recipes stay locked until you
 physically land on Quinityn. Once you do, the climb from salvaged parts to advanced
 industry begins.
 
-**[Get started](#get-started)** · **[Progression guide](docs/progression.md)** ·
+**[Get started](#get-started)** · **[Progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md)** ·
 **[Report a bug](https://github.com/jatmn/yuoki-quinityn/issues)** ·
-**[Contribute](CONTRIBUTING.md)**
+**[Contribute](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md)**
 
 ## Your next industrial outpost
 
@@ -52,7 +52,7 @@ industry begins.
 **59 in-game Tips and Tricks chapters** walk you through the stages. Arriving
 with no items is supported after researching discovery; ordinary initial spawn
 and platform travel remain unchanged. For the production details, open the
-[local-resource and progression guide](docs/progression.md).
+[local-resource and progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md).
 
 ## Get started
 
@@ -62,7 +62,7 @@ and platform travel remain unchanged. For the production details, open the
 > substitute for them. A full graphical playthrough and balance review remain
 > outstanding.
 
-Build the current source using the [installation and packaging guide](docs/development.md).
+Build the current source using the [installation and packaging guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/development.md).
 Install the Quinityn, Yuoki and Engines zip files in your Factorio mods directory
 and enable them with Space Age.
 
@@ -78,7 +78,7 @@ source and is not the initial public release. Its dependency builds are pinned t
 Keep a backup of development saves. **Use a fresh Quinityn surface or map to see
 all terrain changes**: generated terrain is not rewritten, and existing
 surfaces can retain saved generation settings. Read the
-[save compatibility notes](docs/validation.md#limits-and-save-compatibility)
+[save compatibility notes](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/validation.md#limits-and-save-compatibility)
 before updating an existing factory.
 
 ## Tested in the engine, still being shaped by play
@@ -90,8 +90,8 @@ resource and finite-stock analyses check the empty-inventory bootstrap.
 
 These checks do not replace a full graphical playthrough. Visual polish, tutorial
 presentation, overall balance and compatibility with other overhaul mods still
-need playtesting. See [validation and limitations](docs/validation.md) and the
-[recorded results](docs/test-results.txt).
+need playtesting. See [validation and limitations](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/validation.md) and the
+[recorded results](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/test-results.txt).
 
 ## Built on Yuoki's world
 
@@ -99,9 +99,9 @@ Quinityn's name and contract-world inspiration come from **YuokiTani**. The
 unicomp oceans and this particular industrial landscape are this add-on's
 adaptation, not claims about the original stories. Maintained by **jatmn**.
 
-- [Historical research, lore and primary sources](docs/research.md)
-- [Forum coverage index](docs/forum-index.json)
-- [Engine-generated recipe unlock manifest](docs/recipe-unlocks.json)
+- [Historical research, lore and primary sources](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/research.md)
+- [Forum coverage index](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/forum-index.json)
+- [Engine-generated recipe unlock manifest](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/recipe-unlocks.json)
 - [Artwork origins and generation prompts](graphics/README.md)
 
 Quinityn is licensed under **[CC BY-NC-SA 4.0](LICENSE)**, matching Yuoki
@@ -111,5 +111,5 @@ Space Age material remains subject to Wube's terms. See [NOTICE](NOTICE) for
 attribution and the science icon's third-party artwork exception.
 
 Bug reports, translations, playtest feedback and focused pull requests are
-welcome. Read [CONTRIBUTING.md](CONTRIBUTING.md); coding agents should also read
-[AGENTS.md](AGENTS.md). Only jatmn and designated maintainers merge into `main`.
+welcome. Read [CONTRIBUTING.md](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md); coding agents should also read
+[AGENTS.md](https://github.com/jatmn/yuoki-quinityn/blob/main/AGENTS.md). Only jatmn and designated maintainers merge into `main`.
