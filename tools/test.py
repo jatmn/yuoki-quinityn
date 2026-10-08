@@ -69,4 +69,32 @@ try:
  print('PASS upstream heavy-oil opt-out')
 finally:
  setting_override.unlink(missing_ok=True)
+# Simulate a compatibility setting hiding both naming styles of Yuoki inserters.
+# The pinned dependencies have no such setting; production sources stay untouched.
+try:
+ (harness/'settings.lua').write_text('data:extend({{type="bool-setting",name="quinityn-test-hide-inserters",setting_type="startup",default_value=false}})\n')
+ (harness/'data-updates.lua').write_text('''if settings.startup["quinityn-test-hide-inserters"].value then
+ for _,name in ipairs({"y-inserter-smart-long","y_inserter_diagonal"}) do
+  data.raw.recipe[name].hidden=true
+  data.raw.recipe[name].enabled=false
+ end
+end
+''')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/inserter_opt_out")\n')
+ (mods/'mod-settings.dat').unlink(missing_ok=True)
+ run('inserters-visible',base+['--create',str(a.output/'inserters-visible.zip')],
+     'QUINITYN INSERTER OPT-OUT TESTS PASSED')
+ setting_override.write_text('local setting=data.raw["bool-setting"]["quinityn-test-hide-inserters"]; setting.forced_value=true; setting.hidden=true\n')
+ run('inserters-hidden',base+['--create',str(a.output/'inserters-hidden.zip')],
+     'QUINITYN INSERTER OPT-OUT TESTS PASSED')
+ run('inserters-disable-reload',base+['--benchmark',str(a.output/'inserters-visible.zip'),
+     '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
+ setting_override.write_text('local setting=data.raw["bool-setting"]["quinityn-test-hide-inserters"]; setting.forced_value=false; setting.hidden=true\n')
+ run('inserters-enable-reload',base+['--benchmark',str(a.output/'inserters-hidden.zip'),
+     '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
+finally:
+ for filename in ['settings.lua','settings-updates.lua','data-updates.lua']:
+  (harness/filename).unlink(missing_ok=True)
+ (mods/'mod-settings.dat').unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 print('All checks passed. Logs:',a.output)

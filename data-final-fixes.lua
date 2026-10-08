@@ -33,6 +33,9 @@ for _, name in ipairs(names) do
   local old=existing[name]
   if name=="y-heavyoil2uc" and not settings.startup["yuoki-uc-heavyoil"].value then
     -- Respect the upstream opt-out even after researching Cimota.
+  elseif r.hidden and name:match("^y[-_]inserter") and data.raw.inserter[name] then
+    -- Compatibility settings may hide redundant variants. Do not unlock them.
+    -- Matching the entity excludes generated, hidden recycling recipes.
   elseif old and #old>0 then
     -- Preserve an OR between alternative old unlocks with one bridge per old technology.
     table.sort(old)
