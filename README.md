@@ -1,6 +1,14 @@
 # Yuoki Industries: Quinityn
 
 <p align="center">
+  <a href="graphics/quinityn-landscape.png">
+    <img src="graphics/quinityn-landscape.png" width="640" alt="Quinityn concept artwork: ruined industrial towers and machinery beside purple unicomp seas">
+  </a>
+</p>
+
+<p align="center"><em>Quinityn concept artwork · Click to view the full-resolution image.</em></p>
+
+<p align="center">
   <img src="graphics/icons/quinityn-salvage.png" width="112" alt="Quinityn industrial salvage">
   <img src="graphics/icons/quinityn-science.png" width="112" alt="Quinityn research data: a bottle of purple unicomp">
 </p>
