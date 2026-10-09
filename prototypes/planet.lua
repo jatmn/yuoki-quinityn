@@ -109,12 +109,12 @@ planet.map_gen_settings = {
       settings = {
         ["y-res1"] = {},
         ["y-res2"] = {},
-        ["biter-spawner"] = {},
-        ["spitter-spawner"] = {},
-        ["small-worm-turret"] = {},
-        ["medium-worm-turret"] = {},
-        ["big-worm-turret"] = {},
-        ["behemoth-worm-turret"] = {},
+        ["quinityn-biter-spawner"] = {},
+        ["quinityn-spitter-spawner"] = {},
+        ["quinityn-small-worm-turret"] = {},
+        ["quinityn-medium-worm-turret"] = {},
+        ["quinityn-big-worm-turret"] = {},
+        ["quinityn-behemoth-worm-turret"] = {},
       },
     },
   },
@@ -280,8 +280,8 @@ for _, ore in ipairs({ "y-res1", "y-res2" }) do
   planet.map_gen_settings.property_expression_names["entity:" .. ore .. ":probability"] = expression
 end
 
--- Native generation only: colonies originate on brown slag. Leave the enemy
--- prototypes' collision and expansion behavior untouched, including on Nauvis.
+-- Native generation only: contaminated colonies originate on brown slag.
+-- Their unit build lists retain expansion onto other walkable terrain.
 for _, name in ipairs({
   "biter-spawner",
   "spitter-spawner",
@@ -303,7 +303,7 @@ for _, name in ipairs({
         .. " * (quinityn_industrial_noise > 0.15) * (quinityn_industrial_noise <= 0.45)",
     },
   })
-  planet.map_gen_settings.property_expression_names["entity:" .. name .. ":probability"] = expression
+  planet.map_gen_settings.property_expression_names["entity:quinityn-" .. name .. ":probability"] = expression
 end
 
 -- Remnants of the old soil weave between the industrial districts. Keep their

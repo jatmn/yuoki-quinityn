@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Added Quinityn-only contaminated biters, spitters, worms and nests with a subtle purple tint that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.

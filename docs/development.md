@@ -42,6 +42,11 @@ The runner creates isolated mod links and an isolated game write directory insid
 
 The test harness is a separate test-only mod. It never ships in the playable zip. Native fixtures inject ingredients and power to isolate machinery, research and rocket behavior; the separate dependency and budget checks verify where the materials come from. Player landing uses a narrow facade because the headless API cannot create a LuaPlayer. These distinctions are recorded in [validation](validation.md).
 
+The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
+offspring, the engine's colony-building command and laser damage for all enemy
+sizes. Natural generation and planet isolation remain covered by map-control
+samples. This does not simulate the autonomous expansion timer or render sprites.
+
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
 eight affected recipes. A detection-only `bobinserters` stub activates the
 setting; it does not simulate recipe visibility or prove Bob's adjustment UI.
