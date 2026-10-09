@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Added Quinityn-only contaminated biters, spitters, worms and nests with a subtle purple tint that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
@@ -31,6 +32,8 @@ Version: Unreleased
     - Added expensive factory-only Technic Sign qualification without byproducts.
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:
+    - Carried the contaminated purple tint into Quinityn enemy death bursts without changing ordinary enemy particles.
+    - Preserved normal capture-rocket targeting for contaminated Quinityn nests.
     - Retry the physical field survey when discovery completes for characters already on Quinityn.
     - Limited N4/F7 map-generator planet badges to Quinityn without restoring ore generation elsewhere.
     - Matched the hand-sorting recipe icon to its salvage input and added direct guide/tooltip links.

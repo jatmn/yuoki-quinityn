@@ -239,7 +239,7 @@ print('PASS: eight crafting milestones, separate rock discovery and factory unlo
 
 # Habitat is a surface-local generation override, never an enemy collision rule.
 for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-turret','big-worm-turret','behemoth-worm-turret']:
- key='entity:'+name+':probability'
+ key='entity:quinityn-'+name+':probability'
  assert key in mg['property_expression_names']
  entity=D.get('unit-spawner',{}).get(name,D.get('turret',{}).get(name))
  assert 'quinityn' not in str(entity.get('collision_mask'))
@@ -248,6 +248,59 @@ for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-
   if planet['name']!='quinityn':
    assert 'quinityn' not in str(planet.get('map_gen_settings',{}).get('property_expression_names',{}).get(key,''))
 print('PASS: machinery-only cliff masks and surface-local enemy generation habitat')
+
+# Every size retains its combat/collision identity and stays in a closed colony
+# graph. No vanilla unit or nest can introduce a contaminated enemy elsewhere.
+def particle_effects(value):
+ if isinstance(value,dict):
+  if value.get('type')=='create-particle':yield value
+  for child in value.values():yield from particle_effects(child)
+ elif isinstance(value,list):
+  for child in value:yield from particle_effects(child)
+
+for kind,names in [('unit',[s+'-'+k for s in ['small','medium','big','behemoth'] for k in ['biter','spitter']]),
+                   ('turret',[s+'-worm-turret' for s in ['small','medium','big','behemoth']]),
+                   ('unit-spawner',['biter-spawner','spitter-spawner'])]:
+ for name in names:
+  source=D[kind][name];enemy=D[kind]['quinityn-'+name]
+  for key in ['max_health','collision_box','movement_speed','spawning_cooldown']:
+   assert enemy.get(key)==source.get(key),(name,key)
+  original={r['type']:r for r in source.get('resistances',[])}
+  modified={r['type']:r for r in enemy['resistances']}
+  laser=modified.pop('laser');native=original.pop('laser',{})
+  assert modified==original,name
+  assert abs((100-laser['percent'])-(100-native.get('percent',0))*.95)<1e-8,name
+  assert laser.get('decrease',0)==native.get('decrease',0),name
+  if kind=='unit':
+   assert enemy['buildable_entities']==['quinityn-'+n for n in source['buildable_entities']]
+   assert enemy['run_animation']!=source['run_animation']
+  if kind=='unit-spawner':
+   assert enemy['result_units']==[['quinityn-'+n,points] for n,points in source['result_units']]
+   assert enemy['graphics_set']!=source['graphics_set']
+  if kind=='turret':assert enemy['prepared_animation']!=source['prepared_animation']
+  if 'autoplace' in enemy:
+   assert enemy['autoplace']['probability_expression']==0
+   assert enemy['autoplace']['default_enabled'] is False
+   assert 'quinityn-'+name in mg['autoplace_settings']['entity']['settings']
+   assert name not in mg['autoplace_settings']['entity']['settings']
+  for field in ['corpse','folded_state_corpse','dying_explosion']:
+   if field in source:assert enemy[field]=='quinityn-'+source[field]
+  native_particles=list(particle_effects(D['explosion'][source['dying_explosion']]['created_effect']))
+  tinted_particles=list(particle_effects(D['explosion'][enemy['dying_explosion']]['created_effect']))
+  assert native_particles and len(tinted_particles)==len(native_particles),name
+  for native,tinted in zip(native_particles,tinted_particles):
+   assert {k:v for k,v in tinted.items() if k!='tint'}==native,(name,'death effect changed beyond tint')
+   tint=tinted.get('tint')
+   assert tint is not None,(name,'death particle lacks contamination tint')
+   # The loaded effect must carry a subtle purple wash without changing opacity.
+   assert 0.8<tint[1]<tint[0]<=tint[2]<=1 and tint[3]==1,(name,tint)
+for kind in ['unit','unit-spawner']:
+ for name,entity in D[kind].items():
+  if not name.startswith('quinityn-'):
+   assert 'quinityn-' not in str(entity.get('buildable_entities',[])),name
+   assert 'quinityn-' not in str(entity.get('result_units',[])),name
+print('PASS: contaminated enemy identity, minor laser resistance, and isolated spawn/expansion graph')
+print('PASS: all 14 contaminated death bursts have local particle tints and unchanged effect mechanics')
 
 # The new natural remnants stay cosmetic and planet-local, with water shorelines
 # rather than lava/void edges. Native source prototypes remain available unchanged.

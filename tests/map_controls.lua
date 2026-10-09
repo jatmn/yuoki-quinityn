@@ -41,10 +41,12 @@ script.on_init(function()
     )
     local signature = {}
     for _, e in pairs(surface.find_entities_filtered({ area = area, type = "unit-spawner" })) do
+      assert(e.name:find("^quinityn%-"), "Natural nest is not contaminated")
       assert(surface.get_tile(e.position).name == "quinityn-slag", "Natural nest outside brown slag")
       signature[#signature + 1] = e.name .. ":" .. e.position.x .. ":" .. e.position.y
     end
     for _, worm in pairs(surface.find_entities_filtered({ area = area, type = "turret", force = "enemy" })) do
+      assert(worm.name:find("^quinityn%-"), "Natural worm is not contaminated")
       assert(surface.get_tile(worm.position).name == "quinityn-slag", "Natural worm outside brown slag")
     end
     if name == "default" then
@@ -60,8 +62,11 @@ script.on_init(function()
       }) do
         local placed = false
         for _, tile in pairs(surface.find_tiles_filtered({ area = area, name = kind })) do
-          local spec =
-            { name = "biter-spawner", force = "enemy", position = { tile.position.x + 0.5, tile.position.y + 0.5 } }
+          local spec = {
+            name = "quinityn-biter-spawner",
+            force = "enemy",
+            position = { tile.position.x + 0.5, tile.position.y + 0.5 },
+          }
           if surface.can_place_entity(spec) then
             local nest = surface.create_entity(spec)
             check(nest and nest.valid, "later colony placement remains allowed on " .. kind)
@@ -159,6 +164,9 @@ script.on_init(function()
         s.count_entities_filtered({ name = { "quinityn-big-rock", "quinityn-huge-rock" } }) == 0,
         name .. " has no Quinityn flyash rocks"
       )
+      for _, entity in pairs(s.find_entities_filtered({ type = { "unit", "unit-spawner", "turret" } })) do
+        assert(not entity.name:find("^quinityn%-"), name .. " generated a contaminated enemy")
+      end
     end
   end
   log("QUINITYN MAP CONTROL TESTS PASSED")
