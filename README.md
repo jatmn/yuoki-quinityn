@@ -45,6 +45,29 @@ laser damage than their ordinary counterparts. These variants spawn only on
 Quinityn and retain their identity as colonies expand. Use a fresh
 Quinityn surface for this population; existing enemies are preserved.
 
+**Uni-touched Stomp-a-trons** sometimes emerge from Quinityn's biter and spitter
+nests. These five-legged hybrids stand at half the size of their Gleba relatives,
+with Spidertron bodies, yellow sensors and a pale-blue-to-royal-purple progression.
+Each size has one tenth the spawn weight of the corresponding biter or spitter,
+using that nest's same evolution curve. Medium variants begin above 20% evolution
+in biter nests and 40% in spitter nests; big variants begin above 50%.
+They respond to industrial pollution and cannot establish Gleba nests or release
+wrigglers or pentapod eggs.
+
+| Size | Laser resistance | Yuoki industrial salvage | Additional loot |
+| --- | --- | --- | --- |
+| Small | 3% | 1–2 | 1–5 Ancient Data Fragments |
+| Medium | 7% | 3–4 | 4–7 Ancient Data Fragments |
+| Big | 11% | 6–9 | 1 Data Crystal |
+
+Long after Quinityn's foundries fell silent, life continued feeding on their
+waste. Unicomp waters and generations of N4 and F7 consumption transformed
+these creatures, but their mechanical hearts tell an older story. In the
+planet's industrial past, a forgotten experiment grafted a living stomper to a
+Spidertron chassis. The works are dust; the experiment's descendants endure,
+carrying mineral armor, scavenged machinery and fragments of ancient memory.
+This origin is Quinityn add-on lore, not part of YuokiTani's original stories.
+
 **[Get started](#get-started)** · **[Progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md)** ·
 **[Report a bug](https://github.com/jatmn/yuoki-quinityn/issues)** ·
 **[Contribute](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md)**

@@ -1,4 +1,5 @@
 local progression = require("scripts.progression")
+script.on_event(defines.events.on_entity_spawned, require("scripts.stomp-a-trons"))
 script.on_init(progression.reconcile)
 script.on_configuration_changed(progression.reconcile)
 script.on_event(defines.events.on_player_changed_surface, function(e)

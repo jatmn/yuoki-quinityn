@@ -75,6 +75,11 @@ Generation provenance and prompts are recorded in graphics/README.md.
 No exclusive copyright is asserted over purely AI-generated elements.
 No endorsement by YuokiTani, other upstream contributors or Wube is implied.
 
+graphics/stomp-a-tron-sensors.png contains procedurally drawn yellow dots,
+positioned using Wube's installed Spidertron eye-coordinate layout. No game
+image pixels are copied. The layout remains Wube-derived material under
+Wube's terms above, excluded from the blanket CC license grant.
+
 Redistribution
 --------------
 Keep LICENSE and NOTICE with Quinityn. Preserve upstream notices and

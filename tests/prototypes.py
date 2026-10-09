@@ -310,7 +310,8 @@ for kind,names in [('unit',[s+'-'+k for s in ['small','medium','big','behemoth']
    assert enemy['buildable_entities']==['quinityn-'+n for n in source['buildable_entities']]
    assert enemy['run_animation']!=source['run_animation']
   if kind=='unit-spawner':
-   assert enemy['result_units']==[['quinityn-'+n,points] for n,points in source['result_units']]
+   ordinary=[result for result in enemy['result_units'] if not result[0].endswith('-stomp-a-tron')]
+   assert ordinary==[['quinityn-'+n,points] for n,points in source['result_units']]
    assert enemy['graphics_set']!=source['graphics_set']
   if kind=='turret':assert enemy['prepared_animation']!=source['prepared_animation']
   if 'autoplace' in enemy:

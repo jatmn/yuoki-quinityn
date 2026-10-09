@@ -37,6 +37,22 @@ Existing foundation contracts, visit gates, native disposal (including rare item
 
 ## Limits and save compatibility
 
+Uni-touched Stomp-a-trons use installed Spidertron torso layers and cloned
+stomper legs at half the original dimensions. The three color palettes follow
+the approved concept, from pale N4 blue through lavender to royal violet, with
+an original yellow sensor overlay. The headless engine can validate the assembly and behavior
+but cannot render it: stock mask boundaries, sensor appearance, body-to-leg
+alignment and movement still need graphical-client inspection. The concept
+board is an artistic reference, not an in-game screenshot. Original stomper
+health and damage remain; 3%, 7% and 11% replace the original 80% laser resistance.
+Combat pacing and the one-tenth relative spawn weights still need playtesting.
+
+Existing Quinityn variant nests gain the new offspring without replacing
+existing entities. Old ordinary nests preserved on an older Quinityn save
+retain their ordinary offspring. Other planets' native nests are unchanged.
+The spawn guard also removes these hybrids from Quinityn nests transplanted
+outside the planet, without triggering death effects or loot.
+
 The research progression fixture verifies Y2 research leaves P3 and the research center locked, produces four Scientific Reputation signs through real radar crafting, and uses that supply to manufacture Y2 and P3 before unlocking the center. The 8080 remains locked until its own research. With 500 robots already stored, 499 native YI Logistiker crafts still cannot open advanced robot research; the 500th craft completes only the production milestone, for that force. Labs remain idle without chemical science and then complete the separate research with all required packs. Prototype checks verify the center's eight science packs, 5,000-unit cost and 40-second units. The fixture injects ingredients, energy and earlier completed technologies; it does not measure progression pacing or replace graphical balance testing.
 
 The terrain images reviewed during development are sampled map schematics, not graphical-client screenshots. Research follows the native Fulgora crafting-trigger pattern rather than cheap red-only technologies; actual rendered list placement still requires client confirmation. Grey-purple rock tints, ash/soil transition artwork, revised soil/turf and dry-plant tints, native terrain seams, the map-generator UI itself, full visual clutter and tutorial layout still need graphical playtesting. Control membership and behavior are tested through the engine; hand-crafting menu clicks require a graphical player. The winding connection is built into the terrain expression for all seeds; native paths are tested on the listed cases. Overall balance across arbitrary seeds still needs playtesting.
