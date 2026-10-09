@@ -280,7 +280,7 @@ for _, ore in ipairs({ "y-res1", "y-res2" }) do
   planet.map_gen_settings.property_expression_names["entity:" .. ore .. ":probability"] = expression
 end
 
--- Native generation only: contaminated colonies originate on brown slag.
+-- Native generation only: Uni-touched colonies originate on brown slag.
 -- Their unit build lists retain expansion onto other walkable terrain.
 for _, name in ipairs({
   "biter-spawner",
