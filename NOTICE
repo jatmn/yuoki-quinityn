@@ -51,8 +51,9 @@ The game and DLC are separate requirements and are not included here.
 
 Bundled graphics
 ----------------
-graphics/quinityn-landscape.png and its downscaled thumbnail.png were
-AI-generated from a text description of this add-on's industrial landscape
+thumbnail.png is downscaled from the repository's graphics/quinityn-landscape.png.
+The full-resolution landscape is excluded from release and nightly ZIPs.
+Both were AI-generated from a text description of this add-on's industrial landscape
 and purple unicomp seas, without reference images or copied game assets.
 They are concept artwork, not in-game screenshots.
 Copyrightable Quinityn contributions are offered under CC BY-NC-SA 4.0.

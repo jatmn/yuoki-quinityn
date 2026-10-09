@@ -1,8 +1,8 @@
 # Yuoki Industries: Quinityn
 
 <p align="center">
-  <a href="graphics/quinityn-landscape.png">
-    <img src="graphics/quinityn-landscape.png" width="640" alt="Quinityn concept artwork: ruined industrial towers beside purple unicomp seas">
+  <a href="https://github.com/jatmn/yuoki-quinityn/blob/main/graphics/quinityn-landscape.png">
+    <img src="https://raw.githubusercontent.com/jatmn/yuoki-quinityn/main/graphics/quinityn-landscape.png" width="640" alt="Quinityn concept artwork: ruined industrial towers beside purple unicomp seas">
   </a>
 </p>
 

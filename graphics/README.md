@@ -2,9 +2,11 @@
 
 ## Landscape artwork and mod thumbnail
 
-[`quinityn-landscape.png`](quinityn-landscape.png) preserves the original
-full-resolution generated image, unchanged, for the main README. It shares
-the provenance and generation prompt below with the thumbnail.
+[`quinityn-landscape.png`](https://github.com/jatmn/yuoki-quinityn/blob/main/graphics/quinityn-landscape.png)
+preserves the original full-resolution generated image, unchanged, for the
+main README. It stays in the repository and is excluded from release and
+nightly ZIPs. It shares the provenance and generation prompt below with the
+thumbnail.
 
 [`../thumbnail.png`](../thumbnail.png) is the mod portal and in-game mod-browser
 thumbnail. [Factorio's mod structure documentation](https://lua-api.factorio.com/latest/auxiliary/mod-structure.html)
