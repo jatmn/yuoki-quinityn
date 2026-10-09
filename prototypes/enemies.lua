@@ -1,15 +1,14 @@
 local copy = table.deepcopy
 
--- Retain size markings under a light lavender wash. Tint sprite layers, never
--- shadows or sounds; the installed game still owns all underlying artwork.
-local function tint_sprites(value)
+-- Retain size markings under a light lavender wash. Tint sprite layers and local
+-- particle effects, never shared particle prototypes, shadows or sounds.
+local function tint_visuals(value)
   if type(value) ~= "table" then
     return
   end
   if
-    (value.filename or value.filenames or value.stripes)
-    and (value.width or value.size)
-    and not value.draw_as_shadow
+    ((value.filename or value.filenames or value.stripes) and (value.width or value.size) and not value.draw_as_shadow)
+    or value.type == "create-particle"
   then
     local tint = value.tint or { 1, 1, 1, 1 }
     value.tint = {
@@ -21,7 +20,7 @@ local function tint_sprites(value)
   end
   for key, child in pairs(value) do
     if key ~= "tint" then
-      tint_sprites(child)
+      tint_visuals(child)
     end
   end
 end
@@ -32,7 +31,7 @@ local function clone(kind, name)
   entity.localised_name = { "entity-name.quinityn-enemy", { "entity-name." .. name } }
   entity.factoriopedia_simulation = nil
   entity.icons = { { icon = entity.icon, icon_size = entity.icon_size or 64, tint = { 0.95, 0.8, 1 } } }
-  tint_sprites(entity)
+  tint_visuals(entity)
   data:extend({ entity })
   return entity
 end
