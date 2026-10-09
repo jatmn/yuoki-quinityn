@@ -2,16 +2,23 @@
 
 ## Install a development preview
 
-Build the current source using the commands below, or download the three mod ZIPs from the [public preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2). Put them in your Factorio mods directory. Use Factorio **2.1.21** with Space Age enabled. Enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
+Use Factorio **2.1.21** with Space Age enabled. Install **Yuoki 1.3.0** and **yi_engines 1.3.0** through the in-game mod manager or their released Mod Portal downloads: [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) and [Engines](https://mods.factorio.com/mod/yi_engines). Both releases target Factorio 2.1; the older 2.0 releases are not substitutes.
 
-The dependency zips are unmodified builds of jatmn's pinned 1.3.0 development branches. Packaging does not publish, merge or change either upstream branch. Original license files remain in their packages. The public preview includes Quinityn's license and attribution notices; the earlier private snapshot has been withdrawn from the release listing.
+Build the current Quinityn source with `python3 tools/package.py`, or download its ZIP from the [public preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2). Put the Quinityn ZIP in your Factorio mods directory and enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
+
+The public preview also retains its original dependency ZIPs, built from the historical source revisions recorded in the [README](../README.md#get-started). Use the released dependencies above for installation. Rebuilding dependencies is only needed to reproduce the pinned source baseline below. Original license files remain in source-built packages; Quinityn's preview includes its license and attribution notices.
 
 ## Exact dependency revisions
 
-| Dependency | Commit | Branch |
+These immutable source revisions remain the recorded engine-test baseline.
+They are not a claim that the published Mod Portal ZIPs were tested byte for
+byte. Both dependencies are released; their former development branches are
+not installation prerequisites.
+
+| Dependency | Commit | Purpose |
 | --- | --- | --- |
-| Yuoki 1.3.0 | `c865cf05d5009d7f2224b32900272d4b1f012f21` | `release/1.3.0` |
-| yi_engines 1.3.0 | `dd13f421f68010fd0180cda4fb9273f9b582198e` | `codex/engines-1.3.0-factorio-2.1` |
+| Yuoki 1.3.0 | `c865cf05d5009d7f2224b32900272d4b1f012f21` | Reproducible source tests/builds |
+| yi_engines 1.3.0 | `dd13f421f68010fd0180cda4fb9273f9b582198e` | Reproducible source tests/builds |
 | Factorio + Space Age | 2.1.21, build 87673 | Official headless Linux archive |
 
 Prepare dependency source checkouts using Python 3 and Git:
@@ -25,8 +32,8 @@ The script creates isolated checkouts under `build/dependencies`, verifies their
 The Yuoki pin includes the merged Factorio 2.1 port and adjustable-inserter
 cleanup setting. If an older pin is already prepared, pass `--directory` with
 a new empty directory and use it for the test/package `--dependencies` argument.
-The published preview still contains the older Yuoki build; build from source
-to include the cleanup integration.
+The published preview still bundles the older Yuoki source build; it does not
+track later source or Mod Portal releases.
 
 Get the official test engine from [Factorio's 2.1.21 headless download](https://factorio.com/get-download/2.1.21/headless/linux64). Extract it to a development directory. This repository does not redistribute the game.
 

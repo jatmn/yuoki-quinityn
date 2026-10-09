@@ -83,8 +83,12 @@ For future releases:
 3. Build from the intended release commit. Confirm `LICENSE`, `NOTICE` and
    `graphics/README.md` are present in the add-on zip and preserve each dependency's
    own license. Keep the Factorio engine and Space Age data outside releases.
-4. Confirm public users can obtain the documented pinned dependencies. The
-   README must continue to distinguish pending 2.1 builds from published 2.0 mods.
+4. Confirm public users can obtain the documented dependencies. Yuoki 1.3.0 and
+   Engines 1.3.0 are released for Factorio 2.1 on the
+   [Yuoki](https://mods.factorio.com/mod/Yuoki) and
+   [Engines](https://mods.factorio.com/mod/yi_engines) Mod Portal listings. Keep
+   current installation guidance distinct from pinned test revisions and
+   historical preview bundles.
 5. Verify branch protection as above and keep collaborator access limited to
    designated maintainers.
 6. For a separately approved Mod Portal release, select CC BY-NC-SA 4.0 and link
