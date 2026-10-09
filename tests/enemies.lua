@@ -66,6 +66,10 @@ script.on_init(function()
 end)
 
 script.on_event(defines.events.on_entity_spawned, function(event)
+  -- The capture phase deliberately introduces ordinary nests on Quinityn.
+  if storage.captures then
+    return
+  end
   for _, arena in ipairs(storage.arenas) do
     if event.entity.surface.index == arena.surface then
       check(
@@ -78,6 +82,24 @@ script.on_event(defines.events.on_entity_spawned, function(event)
 end)
 
 script.on_event(defines.events.on_tick, function()
+  if storage.captures then
+    for _, case in ipairs(storage.captures) do
+      if case.nest.valid then
+        case.character.update_selected_entity(case.position)
+        case.character.shooting_state = { state = defines.shooting.shooting_enemies, position = case.position }
+      end
+      if game.tick == 4800 then
+        check(not case.nest.valid, "capture rocket converted " .. case.name)
+        local captive = game.planets.quinityn.surface.find_entity("captive-biter-spawner", case.position)
+        check(captive and captive.force == game.forces.player, "native captive destination for " .. case.name)
+        check(case.character.get_item_count("capture-robot-rocket") == 0, "capture rocket consumed for " .. case.name)
+      end
+    end
+    if game.tick == 4800 then
+      log("QUINITYN ENEMY TESTS PASSED")
+    end
+    return
+  end
   if game.tick ~= 2400 then
     return
   end
@@ -96,5 +118,18 @@ script.on_event(defines.events.on_tick, function()
       )
     end
   end
-  log("QUINITYN ENEMY TESTS PASSED")
+  -- Normal enemy targeting must accept both vanilla and new nests on Quinityn.
+  -- Forced firing or directly creating capture robots bypasses the target filter.
+  local surface = game.planets.quinityn.surface
+  surface.peaceful_mode = true
+  storage.captures = {}
+  for i, name in ipairs({ "biter-spawner", "spitter-spawner", "quinityn-biter-spawner", "quinityn-spitter-spawner" }) do
+    local position = { x = -100 + i * 40, y = -60 }
+    local nest = surface.create_entity({ name = name, position = position, force = "enemy" })
+    local character = surface.create_entity({ name = "character", position = { position.x, -48 }, force = "player" })
+    character.destructible = false
+    character.get_inventory(defines.inventory.character_guns).insert({ name = "rocket-launcher", count = 1 })
+    character.get_inventory(defines.inventory.character_ammo).insert({ name = "capture-robot-rocket", count = 1 })
+    storage.captures[#storage.captures + 1] = { name = name, position = position, nest = nest, character = character }
+  end
 end)

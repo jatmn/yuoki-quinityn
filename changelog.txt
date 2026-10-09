@@ -32,6 +32,7 @@ Version: Unreleased
     - Added expensive factory-only Technic Sign qualification without byproducts.
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:
+    - Preserved normal capture-rocket targeting for contaminated Quinityn nests.
     - Retry the physical field survey when discovery completes for characters already on Quinityn.
     - Limited N4/F7 map-generator planet badges to Quinityn without restoring ore generation elsewhere.
     - Matched the hand-sorting recipe icon to its salvage input and added direct guide/tooltip links.

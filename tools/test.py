@@ -44,7 +44,7 @@ try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/enemies")\n')
  run('enemies-create',base+['--create',str(a.output/'enemies.zip')],'Factorio initialised')
  run('enemies',base+['--benchmark',str(a.output/'enemies.zip'),
-     '--benchmark-ticks','2401','--benchmark-runs','1'],'QUINITYN ENEMY TESTS PASSED')
+     '--benchmark-ticks','4801','--benchmark-runs','1'],'QUINITYN ENEMY TESTS PASSED')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/map_controls")\n')
  run('map-controls',base+['--create',str(a.output/'map-controls.zip'),'--map-gen-seed','42'],
      'QUINITYN MAP CONTROL TESTS PASSED')

@@ -82,6 +82,8 @@ for _, size in ipairs({ "small", "medium", "big", "behemoth" }) do
 end
 for _, kind in ipairs({ "biter", "spitter" }) do
   local spawner = enemy("unit-spawner", kind .. "-spawner")
+  -- Capture rockets filter by prototype ID before firing at enemy nests.
+  table.insert(data.raw.ammo["capture-robot-rocket"].ammo_type.target_filter, spawner.name)
   for _, result in ipairs(spawner.result_units) do
     result[1] = "quinityn-" .. result[1]
   end

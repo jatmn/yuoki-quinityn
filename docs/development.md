@@ -44,7 +44,9 @@ The test harness is a separate test-only mod. It never ships in the playable zip
 
 The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
 offspring, the engine's colony-building command and laser damage for all enemy
-sizes. Natural generation and planet isolation remain covered by map-control
+sizes. It also fires capture rockets using normal enemy targeting at both native
+and contaminated nests on Quinityn, checking ammunition use and captive ownership.
+Natural generation and planet isolation remain covered by map-control
 samples. This does not simulate the autonomous expansion timer or render sprites.
 
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
