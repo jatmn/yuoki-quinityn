@@ -95,10 +95,10 @@ remains available with installable ZIPs, license notices and checksums.
 This is a Quinityn prerelease; its mod version remains 0.1.0. The bundled
 dependency ZIPs are historical source builds, pinned to:
 
-- [Yuoki 1.3.0 / Factorio 2.1 PR #11](https://github.com/jatmn/Yuoki-Factorio-2.0/pull/11),
-  commit `ce7918f`.
-- [Engines 1.3.0 / Factorio 2.1 PR #3](https://github.com/jatmn/Yuoki-Engines-Factorio-2.0/pull/3),
-  commit `dd13f42`.
+- Yuoki 1.3.0, commit
+  [`ce7918f`](https://github.com/jatmn/Yuoki-Factorio-2.x/commit/ce7918f2b252f2d79ba86b9ae05d991e7af1f261).
+- Engines 1.3.0, commit
+  [`dd13f42`](https://github.com/jatmn/Yuoki-Engines-Factorio-2.x/commit/dd13f421f68010fd0180cda4fb9273f9b582198e).
 
 Current source builds instead pin Yuoki commit
 `c865cf0`, including its optional adjustable-inserter cleanup. Quinityn respects
