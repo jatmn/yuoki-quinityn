@@ -3,7 +3,6 @@ Version: Unreleased
   Features:
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
-    - Updated installation guidance for the released Yuoki and Engines 1.3.0 Factorio 2.1 mods on the Mod Portal.
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
     - Reveal industrial science by mining a Quinityn rock and require five flyash per five science packs.
