@@ -77,27 +77,35 @@ and platform travel remain unchanged. For the production details, open the
 
 > **Development preview — version 0.1.0.** The validated baseline is Factorio
 > **2.1.21 with Space Age**, plus the pinned **Yuoki 1.3.0** and
-> **Engines 1.3.0** development builds. Published 2.0 dependency versions cannot
-> substitute for them. A full graphical playthrough and balance review remain
+> **Engines 1.3.0** source revisions. Both dependencies now have released
+> **Factorio 2.1** versions on the Mod Portal. A full graphical playthrough and balance review remain
 > outstanding.
 
-Build the current source using the [installation and packaging guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/development.md).
-Install the Quinityn, Yuoki and Engines zip files in your Factorio mods directory
-and enable them with Space Age.
+Install **Yuoki 1.3.0** and **Engines 1.3.0** through Factorio's mod manager or
+download them from the [Yuoki Industries](https://mods.factorio.com/mod/Yuoki)
+and [Engines](https://mods.factorio.com/mod/yi_engines) Mod Portal listings.
+Their older Factorio 2.0 releases do not satisfy Quinityn's requirements.
+Build Quinityn from the current source using the
+[installation and packaging guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/development.md),
+or use the preview below. Install its ZIP in your Factorio mods directory
+and enable all three mods with Space Age.
 
-Download the [public 0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
-for installable Quinityn, Yuoki and Engines ZIPs, license notices and checksums.
-This is a prerelease; the mod version remains 0.1.0. Its dependency builds are pinned to:
+The [public 0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
+remains available with installable ZIPs, license notices and checksums.
+This is a Quinityn prerelease; its mod version remains 0.1.0. The bundled
+dependency ZIPs are historical source builds, pinned to:
 
-- [Yuoki 1.3.0 / Factorio 2.1 PR #11](https://github.com/jatmn/Yuoki-Factorio-2.0/pull/11),
-  commit `ce7918f`.
-- [Engines 1.3.0 / Factorio 2.1 PR #3](https://github.com/jatmn/Yuoki-Engines-Factorio-2.0/pull/3),
-  commit `dd13f42`.
+- Yuoki 1.3.0, commit
+  [`ce7918f`](https://github.com/jatmn/Yuoki-Factorio-2.x/commit/ce7918f2b252f2d79ba86b9ae05d991e7af1f261).
+- Engines 1.3.0, commit
+  [`dd13f42`](https://github.com/jatmn/Yuoki-Engines-Factorio-2.x/commit/dd13f421f68010fd0180cda4fb9273f9b582198e).
 
-Current source builds instead pin Yuoki's merged `release/1.3.0` commit
+Current source builds instead pin Yuoki commit
 `c865cf0`, including its optional adjustable-inserter cleanup. Quinityn respects
-that setting when assigning research and reconciling saves. Rebuild dependencies
-using the installation guide above; the published preview ZIPs are unchanged.
+that setting when assigning research and reconciling saves. These source pins
+remain the reproducible test baseline; the published preview ZIPs are unchanged.
+Use the released dependencies for installation, or the installation guide above
+to reproduce the pinned source builds.
 
 Keep a backup of development saves. **Use a fresh Quinityn surface or map to see
 all terrain changes**: generated terrain is not rewritten, and existing
