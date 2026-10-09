@@ -1,4 +1,29 @@
-# Quinityn inventory icons
+# Quinityn artwork
+
+## Mod thumbnail
+
+[`../thumbnail.png`](../thumbnail.png) is the mod portal and in-game mod-browser
+thumbnail. [Factorio's mod structure documentation](https://lua-api.factorio.com/latest/auxiliary/mod-structure.html)
+specifies `thumbnail.png` beside `info.json` and recommends 144×144 pixels.
+The existing package tool includes it at that location inside the mod ZIP.
+
+Generated with the built-in imagegen tool on 2026-10-08 from the landscape
+description in this repository's README: ruined industry, ash and slag,
+purple unicomp seas and dead trees. No reference images or copied game assets
+were supplied. This is concept artwork, not a screenshot or a claim about
+the original Yuoki stories. YuokiTani's world/lore credit remains in
+[NOTICE](../NOTICE). Copyrightable contributions follow the project's
+CC BY-NC-SA 4.0 license; no exclusive copyright is asserted over purely
+AI-generated elements.
+
+The square output was downscaled with ImageMagick's Lanczos filter to a
+144×144 RGB PNG, stripped of metadata and visually inspected at that size.
+
+Final generation prompt:
+
+> Use case: stylized-concept. Asset type: square mod-browser thumbnail for Yuoki Industries: Quinityn, designed to read clearly when reduced to 144x144 pixels. Create original painterly science-fiction industrial concept artwork: a ruined heavy industrial outpost on a rocky ash-grey and brown slag peninsula surrounded by vivid violet liquid unicomp seas. One large weathered steel processing tower and a few chunky pipes dominate the silhouette, collapsed machinery near the shore, sparse dead trees, hazy polluted lavender sky. Three-quarter elevated landscape view, strong simple shapes, bright violet sea provides clean separation from warm rusty metal and charcoal rock, restrained pale amber machinery highlights. Gritty painted game-art materials, bold readable composition, not a screenshot. Full-bleed opaque square image, no lettering, no words, no logo, no badge, no border, no watermark. No reference images or copied game assets.
+
+## Inventory icons
 
 See [NOTICE](../NOTICE) for credits, licenses and the mixed-reference science
 icon's Wube artwork exception. Generated output does not erase rights in its
