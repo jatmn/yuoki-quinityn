@@ -34,9 +34,8 @@ link directly to Factorio's recipe and item information.
 - [Validation record](contributing/validation.md): recorded evidence and its limits.
 - [Creature screenshot capture](contributing/screenshots.md): graphical-client
   setup, capture checklist and the pending enemy gallery.
-- [Releases and nightlies](maintainers/releases.md),
-  [repository administration](maintainers/repository-administration.md) and
-  [Pullfrog owner commands](maintainers/pullfrog.md).
+- [Releases and nightlies](maintainers/releases.md) and
+  [repository administration](maintainers/repository-administration.md).
 
 ## Records and release history
 
@@ -47,7 +46,7 @@ link directly to Factorio's recipe and item information.
 - [Historical forum index](forum-index.json).
 
 Generated records keep their existing paths for tooling and external references.
-The former top-level guide URLs remain as navigation pages; add new material to
+Retained guides' former top-level URLs remain as navigation pages; add new material to
 `guides/`, `lore/`, `contributing/` or `maintainers/` according to its audience.
 Keep detailed change history in the changelog and technical validation in the
 contributor guides so the root README can remain a showcase.
