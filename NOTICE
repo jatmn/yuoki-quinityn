@@ -81,6 +81,15 @@ positioned using Wube's installed Spidertron eye-coordinate layout. No game
 image pixels are copied. The layout remains Wube-derived material under
 Wube's terms above, excluded from the blanket CC license grant.
 
+docs/images/enemies/*.png are editor-staged in-game screenshots and their
+thumbnails, captured with Factorio 2.1.21 and Space Age on 2026-10-09. They
+show installed Wube artwork rendered with Quinityn's prototype tints and
+assembly, including the sensor overlay. Wube-derived content retains Wube's
+rights and terms above and is excluded from the blanket CC license grant.
+These documentation images are excluded from release and nightly ZIPs;
+no raw game sprite sheets are redistributed. Capture settings and inspection
+results are recorded in docs/contributing/screenshots.md.
+
 Redistribution
 --------------
 Keep LICENSE and NOTICE with Quinityn. Preserve upstream notices and
