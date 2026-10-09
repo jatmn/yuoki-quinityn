@@ -1,6 +1,28 @@
 local copy = table.deepcopy
 
--- Retain size markings under a light lavender wash. Tint sprite layers and local
+-- Royal violet (#7040B8) anchors the palette; native mask colors retain distinct
+-- shades for each variant. Keep each layer's original brightness and opacity.
+local royal_violet = { 112 / 255, 64 / 255, 184 / 255 }
+local function violet_tint(tint)
+  local strength = tint and 0.75 or 1
+  tint = tint or { 1, 1, 1, 1 }
+  local r, g, b = tint.r or tint[1], tint.g or tint[2], tint.b or tint[3]
+  local brightness = math.max(r, g, b)
+  local violet = brightness / royal_violet[3] * strength
+  r = r * (1 - strength) + royal_violet[1] * violet
+  g = g * (1 - strength) + royal_violet[2] * violet
+  b = b * (1 - strength) + royal_violet[3] * violet
+  local mixed_brightness = math.max(r, g, b)
+  local scale = mixed_brightness > 0 and brightness / mixed_brightness or 1
+  return {
+    r * scale,
+    g * scale,
+    b * scale,
+    tint.a or tint[4] or 1,
+  }
+end
+
+-- Retain size shading and markings. Tint sprite layers and local
 -- particle effects, never shared particle prototypes, shadows or sounds.
 local function tint_visuals(value)
   if type(value) ~= "table" then
@@ -10,13 +32,7 @@ local function tint_visuals(value)
     ((value.filename or value.filenames or value.stripes) and (value.width or value.size) and not value.draw_as_shadow)
     or value.type == "create-particle"
   then
-    local tint = value.tint or { 1, 1, 1, 1 }
-    value.tint = {
-      (tint.r or tint[1]) * 0.75 + 0.95 * 0.25,
-      (tint.g or tint[2]) * 0.75 + 0.55 * 0.25,
-      (tint.b or tint[3]) * 0.75 + 1 * 0.25,
-      tint.a or tint[4] or 1,
-    }
+    value.tint = violet_tint(value.tint)
   end
   for key, child in pairs(value) do
     if key ~= "tint" then
@@ -30,7 +46,7 @@ local function clone(kind, name)
   entity.name = "quinityn-" .. name
   entity.localised_name = { "entity-name.quinityn-enemy", { "entity-name." .. name } }
   entity.factoriopedia_simulation = nil
-  entity.icons = { { icon = entity.icon, icon_size = entity.icon_size or 64, tint = { 0.95, 0.8, 1 } } }
+  entity.icons = { { icon = entity.icon, icon_size = entity.icon_size or 64, tint = violet_tint() } }
   tint_visuals(entity)
   data:extend({ entity })
   return entity

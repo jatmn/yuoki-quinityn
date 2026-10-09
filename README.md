@@ -38,9 +38,11 @@ scrubbing**, then automate collection. **Reusable air filters** improve capture
 later; surplus ash can become rocket fuel. Other planets' rocks remain unchanged.
 
 Initial enemy nests and worms generate on brown slag; later colonies can expand
-onto other walkable terrain. Quinityn's biters, spitters, worms and nests have a
-subtle contaminated purple tint and take 5% less laser damage than their ordinary
-counterparts. These variants spawn only on Quinityn and retain their identity as colonies expand. Use a fresh
+onto other walkable terrain. In this add-on, Quinityn's **Uni-touched** biters,
+spitters, worms and nests have been altered by living off the surrounding unicomp
+waters. They have distinct shades within a royal-violet palette and take 5% less
+laser damage than their ordinary counterparts. These variants spawn only on
+Quinityn and retain their identity as colonies expand. Use a fresh
 Quinityn surface for this population; existing enemies are preserved.
 
 **[Get started](#get-started)** · **[Progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md)** ·

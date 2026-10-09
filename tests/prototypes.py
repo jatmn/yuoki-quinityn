@@ -1,5 +1,5 @@
 """Validate gameplay contracts against the actual engine prototype dump."""
-import json,re,sys
+import colorsys,json,re,sys
 from pathlib import Path
 D=json.loads(Path(sys.argv[1]).read_text());root=Path(__file__).resolve().parents[1]
 R=D['recipe'];T=D['technology'];I=D['item'];tiles=D['tile']
@@ -250,7 +250,7 @@ for name in ['biter-spawner','spitter-spawner','small-worm-turret','medium-worm-
 print('PASS: machinery-only cliff masks and surface-local enemy generation habitat')
 
 # Every size retains its combat/collision identity and stays in a closed colony
-# graph. No vanilla unit or nest can introduce a contaminated enemy elsewhere.
+# graph. No vanilla unit or nest can introduce a Uni-touched enemy elsewhere.
 def particle_effects(value):
  if isinstance(value,dict):
   if value.get('type')=='create-particle':yield value
@@ -258,11 +258,46 @@ def particle_effects(value):
  elif isinstance(value,list):
   for child in value:yield from particle_effects(child)
 
+def royal_violet(tint):
+ # The royal-violet base permits distinct blue-violet through grape variants.
+ hue,saturation,brightness=colorsys.rgb_to_hsv(*tint[:3])
+ assert 240<=hue*360<=295 and .3<=saturation<=.75 and brightness>0,tint
+
+def sprite_layers(value):
+ if isinstance(value,dict):
+  if any(k in value for k in ['filename','filenames','stripes']) and ('width' in value or 'size' in value):yield value
+  for child in value.values():yield from sprite_layers(child)
+ elif isinstance(value,list):
+  for child in value:yield from sprite_layers(child)
+
+def check_enemy_visuals(native,variant):
+ original=list(sprite_layers(native));modified=list(sprite_layers(variant))
+ assert original and len(original)==len(modified)
+ shade=None
+ for before,after in zip(original,modified):
+  if before.get('draw_as_shadow'):
+   assert after==before
+  else:
+   assert {k:v for k,v in after.items() if k!='tint'}=={k:v for k,v in before.items() if k!='tint'}
+   royal_violet(after['tint'])
+   tint=before.get('tint',[1,1,1,1])
+   if isinstance(tint,dict):tint=[tint.get(k,1 if k=='a' else 0) for k in ['r','g','b','a']]
+   assert abs(max(after['tint'][:3])-max(tint[:3]))<1e-6
+   assert after['tint'][3]==tint[3]
+   if shade is None and 'tint' in before:
+    shade=tuple(round(c,6) for c in colorsys.rgb_to_hsv(*after['tint'][:3])[:2])
+ royal_violet(variant['icons'][0]['tint'])
+ return shade
+
 for kind,names in [('unit',[s+'-'+k for s in ['small','medium','big','behemoth'] for k in ['biter','spitter']]),
                    ('turret',[s+'-worm-turret' for s in ['small','medium','big','behemoth']]),
                    ('unit-spawner',['biter-spawner','spitter-spawner'])]:
+ shades=set()
  for name in names:
   source=D[kind][name];enemy=D[kind]['quinityn-'+name]
+  shade=check_enemy_visuals(source,enemy)
+  assert shade is not None and shade not in shades,(name,'variant colors collapsed',shade)
+  shades.add(shade)
   for key in ['max_health','collision_box','movement_speed','spawning_cooldown']:
    assert enemy.get(key)==source.get(key),(name,key)
   original={r['type']:r for r in source.get('resistances',[])}
@@ -285,22 +320,25 @@ for kind,names in [('unit',[s+'-'+k for s in ['small','medium','big','behemoth']
    assert name not in mg['autoplace_settings']['entity']['settings']
   for field in ['corpse','folded_state_corpse','dying_explosion']:
    if field in source:assert enemy[field]=='quinityn-'+source[field]
+  for field in ['corpse','folded_state_corpse']:
+   if field in source:check_enemy_visuals(D['corpse'][source[field]],D['corpse'][enemy[field]])
   native_particles=list(particle_effects(D['explosion'][source['dying_explosion']]['created_effect']))
   tinted_particles=list(particle_effects(D['explosion'][enemy['dying_explosion']]['created_effect']))
   assert native_particles and len(tinted_particles)==len(native_particles),name
   for native,tinted in zip(native_particles,tinted_particles):
    assert {k:v for k,v in tinted.items() if k!='tint'}==native,(name,'death effect changed beyond tint')
    tint=tinted.get('tint')
-   assert tint is not None,(name,'death particle lacks contamination tint')
-   # The loaded effect must carry a subtle purple wash without changing opacity.
-   assert 0.8<tint[1]<tint[0]<=tint[2]<=1 and tint[3]==1,(name,tint)
+   assert tint is not None,(name,'death particle lacks Uni-touched tint')
+   royal_violet(tint)
+   assert tint[3]==1,(name,tint)
 for kind in ['unit','unit-spawner']:
  for name,entity in D[kind].items():
   if not name.startswith('quinityn-'):
    assert 'quinityn-' not in str(entity.get('buildable_entities',[])),name
    assert 'quinityn-' not in str(entity.get('result_units',[])),name
-print('PASS: contaminated enemy identity, minor laser resistance, and isolated spawn/expansion graph')
-print('PASS: all 14 contaminated death bursts have local particle tints and unchanged effect mechanics')
+print('PASS: Uni-touched enemy identity, minor laser resistance, and isolated spawn/expansion graph')
+print('PASS: all 14 Uni-touched death bursts have local particle tints and unchanged effect mechanics')
+print('PASS: distinct violet variants preserve sprite geometry, shadows, brightness and opacity through live/remains/icon/particle visuals')
 
 # The new natural remnants stay cosmetic and planet-local, with water shorelines
 # rather than lava/void edges. Native source prototypes remain available unchanged.

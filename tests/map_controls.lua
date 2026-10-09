@@ -41,12 +41,12 @@ script.on_init(function()
     )
     local signature = {}
     for _, e in pairs(surface.find_entities_filtered({ area = area, type = "unit-spawner" })) do
-      assert(e.name:find("^quinityn%-"), "Natural nest is not contaminated")
+      assert(e.name:find("^quinityn%-"), "Natural nest is not Uni-touched")
       assert(surface.get_tile(e.position).name == "quinityn-slag", "Natural nest outside brown slag")
       signature[#signature + 1] = e.name .. ":" .. e.position.x .. ":" .. e.position.y
     end
     for _, worm in pairs(surface.find_entities_filtered({ area = area, type = "turret", force = "enemy" })) do
-      assert(worm.name:find("^quinityn%-"), "Natural worm is not contaminated")
+      assert(worm.name:find("^quinityn%-"), "Natural worm is not Uni-touched")
       assert(surface.get_tile(worm.position).name == "quinityn-slag", "Natural worm outside brown slag")
     end
     if name == "default" then
@@ -165,7 +165,7 @@ script.on_init(function()
         name .. " has no Quinityn flyash rocks"
       )
       for _, entity in pairs(s.find_entities_filtered({ type = { "unit", "unit-spawner", "turret" } })) do
-        assert(not entity.name:find("^quinityn%-"), name .. " generated a contaminated enemy")
+        assert(not entity.name:find("^quinityn%-"), name .. " generated a Uni-touched enemy")
       end
     end
   end
