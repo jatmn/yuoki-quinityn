@@ -1,5 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: Unreleased
+Version: 0.1.1
+Date: 2026-10-09
   Features:
     - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
     - Local biter and spitter nests rarely produce Stomp-a-trons along their existing size evolution curves. They drop industrial salvage and ancient data, never wrigglers or pentapod eggs, and have 3%, 7% and 11% laser resistance.
