@@ -46,7 +46,7 @@ link directly to Factorio's recipe and item information.
 - [Historical forum index](forum-index.json).
 
 Generated records keep their existing paths for tooling and external references.
-Retained guides' former top-level URLs remain as navigation pages; add new material to
+This index links directly to each guide. Add new material to
 `guides/`, `lore/`, `contributing/` or `maintainers/` according to its audience.
 Keep detailed change history in the changelog and technical validation in the
 contributor guides so the root README can remain a showcase.
