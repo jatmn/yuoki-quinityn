@@ -29,7 +29,7 @@ def run(name,args,marker=None):
 (mods/'mod-settings.dat').unlink(missing_ok=True)
 run('load',base+['--dump-data'],'Factorio initialised')
 dump=a.output/'runtime/script-output/data-raw-dump.json'
-for name in ['prototypes','reachability','bootstrap_budget']:
+for name in ['prototypes','stomp_a_trons','reachability','bootstrap_budget']:
  run(name,[sys.executable,str(ROOT/'tests'/f'{name}.py'),str(dump)],'PASS')
 run('localization',[sys.executable,str(ROOT/'tests/localization.py'),str(dump),
   str(a.dependencies/'Yuoki'),str(a.dependencies/'yi_engines'),
@@ -45,6 +45,10 @@ try:
  run('enemies-create',base+['--create',str(a.output/'enemies.zip')],'Factorio initialised')
  run('enemies',base+['--benchmark',str(a.output/'enemies.zip'),
      '--benchmark-ticks','4801','--benchmark-runs','1'],'QUINITYN ENEMY TESTS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/stomp_a_trons")\n')
+ run('stomp-a-trons-create',base+['--create',str(a.output/'stomp-a-trons.zip')],'Factorio initialised')
+ run('stomp-a-trons',base+['--benchmark',str(a.output/'stomp-a-trons.zip'),
+     '--benchmark-ticks','14401','--benchmark-runs','1'],'QUINITYN STOMP-A-TRON TESTS PASSED')
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/map_controls")\n')
  run('map-controls',base+['--create',str(a.output/'map-controls.zip'),'--map-gen-seed','42'],
      'QUINITYN MAP CONTROL TESTS PASSED')

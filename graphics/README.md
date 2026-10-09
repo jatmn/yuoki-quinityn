@@ -50,3 +50,31 @@ Use case: stylized-concept. Asset type: transparent Factorio inventory item icon
 ### Science
 
 Use case: stylized-concept. Asset type: single transparent square Factorio science-pack inventory icon. Image 1 is the Fulgora electromagnetic science bottle style/shape reference. Image 2 is the Yuoki Technic Sign badge reference. Make an original small round-bottom glass science bottle following image 1 silhouette: round bulb, short narrow neck, metallic silver stopper, three-quarter isometric painted 3D game icon, upper-left highlights. Replace pink contents with dark violet and luminous purple liquid unicomp, approximately #8726b2 with lavender highlights, liquid visibly held inside translucent glass. On the front of the bulb attach a SMALL label/badge depicting image 2's red cogwheel with concentric central rings on a dark hexagonal backing; badge occupies about one quarter of bulb width so the purple liquid stays dominant. No lettering. Strong readable silhouette suitable for a 64px inventory icon, realistic worn Factorio materials without excessive microdetail. Entire bottle centered, modest transparent padding, no background, no floor, no border, no additional objects. Genuine alpha transparency.
+
+## Uni-touched Stomp-a-tron references
+
+The Stomp-a-tron palette and body/leg combination were developed through
+AI-generated concept previews using official Factorio wiki Stomper and
+Spidertron images and installed Yuoki item icons as references. The selected
+family progresses from pale N4 Durotal blue-gray and blue-violet to lavender
+and deeper royal purple; Charged F-C supplied the yellow sensor reference.
+The previews are not shipped as sprites or represented as engine screenshots.
+
+The implementation references installed Wube Spidertron torso and Space Age
+stomper leg/remains assets, combining and tinting their prototype layers and
+halving the stomper dimensions. No Wube image files are copied into this mod.
+The original artwork remains Wube Software's under the terms recorded in
+NOTICE. Palette choices, assembly code and Stomp-a-tron lore are this add-on's
+contributions. Actual stock-layer appearance requires graphical playtesting.
+
+`stomp-a-tron-sensors.png` is a procedural transparent overlay containing only
+yellow sensor disks; it copies no game image pixels. Its 64-direction layout
+comes from Wube's installed Spidertron eye coordinates, so the layout remains
+under Wube's terms (see NOTICE). The overlay uses the stock 132×138 frame size
+and matching offsets/scales, with 11 antialiased disks per direction in
+Charged F-C-inspired yellow (#FFF626). Spider-units cannot use Spidertron's
+vehicle-only eye-light fields, so this supported glow animation supplies the
+visible sensors. The body and legs still reference installed game sprites.
+
+Regenerate deterministically from the pinned engine's data dump:
+`python3 tools/generate_stomp_sensors.py build/test/runtime/script-output/data-raw-dump.json`.

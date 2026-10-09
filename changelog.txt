@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
+    - Local biter and spitter nests rarely produce Stomp-a-trons along their existing size evolution curves. They drop industrial salvage and ancient data, never wrigglers or pentapod eggs, and have 3%, 7% and 11% laser resistance.
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:

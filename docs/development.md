@@ -56,6 +56,14 @@ and Uni-touched nests on Quinityn, checking ammunition use and captive ownership
 Natural generation and planet isolation remain covered by map-control
 samples. This does not simulate the autonomous expansion timer or render sprites.
 
+The Stomp-a-tron fixture checks native nest spawning at 0%, 45%, 80% and 100%
+evolution, both nest types, actual death loot and laser damage. Quinityn nests
+are also deliberately placed on all five other built-in planets to exercise
+the off-planet spawn guard. Prototype checks cover the full evolution curves,
+half-size body/leg geometry and referenced attack/death effects, including the
+absence of wrigglers, mineable egg shells and Gleba nest construction. These
+flat-arena fixtures do not establish graphical fidelity or combat balance.
+
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
 eight affected recipes. A detection-only `bobinserters` stub activates the
 setting; it does not simulate recipe visibility or prove Bob's adjustment UI.
