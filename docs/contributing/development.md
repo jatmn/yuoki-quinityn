@@ -78,7 +78,7 @@ recycling unlocks, completed research and unrelated recipe state are preserved.
 python3 tools/package.py --dependencies build/dependencies
 ```
 
-This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package includes `LICENSE`, `NOTICE` and artwork provenance, and excludes tests, tooling, research docs, contributor/agent instructions, GitHub configuration and build output; those remain available in the repository. Both dependency packages retain their source, graphics and upstream license files. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for change-specific validation and [repository administration](../maintainers/repository-administration.md) for public-release preparation.
+This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package includes `LICENSE`, `NOTICE` and artwork provenance, and excludes tests, tooling, research docs, contributor/agent instructions, GitHub configuration and build output; those remain available in the repository. Both dependency packages retain their source, graphics and upstream license files. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for change-specific validation and the [release guide](../maintainers/releases.md#publication-checks) for publication checks.
 
 For the addon alone:
 

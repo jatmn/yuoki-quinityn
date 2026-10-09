@@ -13,13 +13,11 @@ project can support.
 3. Discuss major progression, balance, compatibility or tooling changes in an
    issue before implementing them. Keep ordinary fixes small and reviewable.
 4. Fork the repository, create a topic branch and open a PR against `main`.
-   Public contributors do not need collaborator access to submit a PR once
-   the repository is public.
+   Public contributors use forks and do not need collaborator access.
 
 Only **jatmn and explicitly designated maintainers** may merge into `main`.
 Contributor credit or a CODEOWNERS entry alone does not grant merge access.
-The owner grants collaborator access only to designated maintainers; see
-[repository administration](docs/maintainers/repository-administration.md).
+The owner grants collaborator access only to designated maintainers.
 
 ## What belongs here
 

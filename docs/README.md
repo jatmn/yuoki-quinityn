@@ -34,8 +34,8 @@ link directly to Factorio's recipe and item information.
 - [Validation record](contributing/validation.md): recorded evidence and its limits.
 - [Creature screenshot capture](contributing/screenshots.md): graphical-client
   setup, capture checklist and the pending enemy gallery.
-- [Releases and nightlies](maintainers/releases.md) and
-  [repository administration](maintainers/repository-administration.md).
+- [Releases and nightlies](maintainers/releases.md): release review, publication
+  checks, credentials and retries, including [Mod Portal integration](maintainers/releases.md#mod-portal-integration).
 
 ## Records and release history
 
