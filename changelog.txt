@@ -6,8 +6,6 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
-    - Reduced release and nightly download sizes by keeping the full-resolution showcase landscape in the repository only.
-    - Refreshed the mod showcase and organized installation, progression, flyash, enemies and lore into linked guides.
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
     - Reveal industrial science by mining a Quinityn rock and require five flyash per five science packs.
