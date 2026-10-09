@@ -95,8 +95,10 @@ GITHUB_TOKEN does not trigger a separate release-event workflow. See
 No Factorio credentials are needed to merge this automation or use GitHub
 releases/nightlies. When ready:
 
-1. Make the required Factorio 2.1 Yuoki/Engines builds available to users. Their
-   publication is managed separately; this repository uploads only Quinityn.
+1. The required Factorio 2.1 dependencies are already available on the Mod Portal:
+   [Yuoki 1.3.0](https://mods.factorio.com/mod/Yuoki) and
+   [Engines 1.3.0](https://mods.factorio.com/mod/yi_engines). Their publication is
+   managed separately; this repository uploads only Quinityn.
 2. On the [Factorio profile](https://factorio.com/profile), create an API key for
    the account allowed to manage Quinityn. Add it as the repository Actions
    secret `FACTORIO_API_KEY`. It needs **ModPortal: Upload Mods**; if this will
