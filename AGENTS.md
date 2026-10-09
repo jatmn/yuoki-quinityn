@@ -7,7 +7,7 @@ scope, licensing and review rules also apply to coding agents.
 
 Quinityn is a Factorio 2.1 + Space Age planet add-on for Yuoki Industries and
 Engines. Keep changes in the existing Lua prototypes/runtime and Python
-standard-library tooling. Use [docs/development.md](docs/development.md) for
+standard-library tooling. Use [docs/contributing/development.md](docs/contributing/development.md) for
 the source map, pinned dependencies, engine tests and packaging commands.
 
 - `prototypes/planet.lua`: terrain, resources, route and generation controls.
@@ -52,7 +52,7 @@ Format every added or modified Lua file with StyLua **2.5.2**, using the root
 The repository-wide formatting baseline is complete. PR CI checks only changed
 Lua files; pushes to `main` check all tracked Lua files when the Lua surface
 changes. Do not reformat untouched files as incidental cleanup.
-See [development](docs/development.md#lightweight-ci)
+See [development](docs/contributing/development.md#lightweight-ci)
 for the lint commands and which changes trigger each workflow.
 
 Do not add new languages, dependency managers, CI frameworks or Dependabot as
@@ -66,7 +66,7 @@ Use a Conventional Commit subject (`feat`, `fix`, `perf`, `refactor`, `docs`,
 `test`, `build`, `ci`, `chore`, or `revert`, with an optional scope) and a body
 describing the behavior and validation. Use the same format for PR titles.
 Do not increment `info.json` or publish/tag a release in ordinary contribution
-work. Maintainer release PRs use [the release workflow](docs/releases.md);
+work. Maintainer release PRs use [the release workflow](docs/maintainers/releases.md);
 Release Please updates versions and GitHub notes. Add player-facing notes to
 the top `Version: Unreleased` section of `changelog.txt` in each normal PR;
 create that section when absent, without editing numbered history or adding a

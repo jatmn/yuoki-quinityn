@@ -48,7 +48,8 @@ class ReleaseTests(unittest.TestCase):
 
     def test_stable_and_nightly_are_installable_and_leave_sources_unchanged(self):
         originals = {name: (self.root / name).read_bytes()
-                     for name in ['info.json', 'changelog.txt', '.github/release-please-manifest.json']}
+                     for name in ['info.json', 'changelog.txt', '.github/release-please-manifest.json',
+                                  'graphics/quinityn-landscape.png']}
         self.build()
         validate_package.validate(self.out, tag=self.tag)
         stable_hash = hashlib.sha256(self.archive.read_bytes()).hexdigest()
@@ -67,6 +68,13 @@ class ReleaseTests(unittest.TestCase):
             self.assertNotIn(b'updated ci', notes.lower())
             self.assertTrue(all(name.startswith(root) for name in archive.namelist()))
             self.assertFalse(any('/.github/' in name or '/tools/' in name for name in archive.namelist()))
+        for path in [self.archive, self.out / (root[:-1] + '.zip')]:
+            with self.subTest(archive=path.name), zipfile.ZipFile(path) as archive:
+                prefix = path.stem + '/'
+                self.assertNotIn(prefix + 'graphics/quinityn-landscape.png', archive.namelist())
+                for asset in ['thumbnail.png', 'graphics/icons/quinityn-salvage.png',
+                              'graphics/icons/quinityn-science.png', 'graphics/stomp-a-tron-sensors.png']:
+                    self.assertEqual(archive.read(prefix + asset), (self.root / asset).read_bytes())
         for name, content in originals.items():
             self.assertEqual((self.root / name).read_bytes(), content)
 

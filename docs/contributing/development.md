@@ -1,12 +1,13 @@
 # Development and installation
 
+[Documentation index](../README.md)
+
 ## Install a development preview
 
-Use Factorio **2.1.21** with Space Age enabled. Install **Yuoki 1.3.0** and **yi_engines 1.3.0** through the in-game mod manager or their released Mod Portal downloads: [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) and [Engines](https://mods.factorio.com/mod/yi_engines). Both releases target Factorio 2.1; the older 2.0 releases are not substitutes.
-
-Build the current Quinityn source with `python3 tools/package.py`, or download its ZIP from the [public preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2). Put the Quinityn ZIP in your Factorio mods directory and enable Yuoki, Engines and Yuoki Industries: Quinityn. Remove older simultaneous copies of the same mod/version if needed through the normal mod manager.
-
-The public preview also retains its original dependency ZIPs, built from the historical source revisions recorded in the [README](../README.md#get-started). Use the released dependencies above for installation. Rebuilding dependencies is only needed to reproduce the pinned source baseline below. Original license files remain in source-built packages; Quinityn's preview includes its license and attribution notices.
+For player installation, required versions and existing saves, start with
+[Getting started](../guides/getting-started.md). The steps below reproduce the
+source baseline and build the mod from this repository. Run commands from the
+repository root.
 
 ## Exact dependency revisions
 
@@ -77,7 +78,7 @@ recycling unlocks, completed research and unrelated recipe state are preserved.
 python3 tools/package.py --dependencies build/dependencies
 ```
 
-This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package includes `LICENSE`, `NOTICE` and artwork provenance, and excludes tests, tooling, research docs, contributor/agent instructions, GitHub configuration and build output; those remain available in the repository. Both dependency packages retain their source, graphics and upstream license files. See [CONTRIBUTING.md](../CONTRIBUTING.md) for change-specific validation and [repository administration](repository-administration.md) for public-release preparation.
+This produces the addon, Yuoki and Engines zip files plus `SHA256SUMS` under `build/dist`. Zip timestamps and ordering are deterministic. The addon package includes `LICENSE`, `NOTICE` and artwork provenance, and excludes tests, tooling, research docs, contributor/agent instructions, GitHub configuration and build output; those remain available in the repository. Release and nightly ZIPs also exclude the full-resolution README landscape (`graphics/quinityn-landscape.png`); the mod thumbnail and in-game graphics are included. Both dependency packages retain their source, graphics and upstream license files. See [CONTRIBUTING.md](../../CONTRIBUTING.md) for change-specific validation and the [release guide](../maintainers/releases.md#publication-checks) for publication checks.
 
 For the addon alone:
 
@@ -91,7 +92,7 @@ section in each contribution PR; the release workflow assigns version/date
 headers automatically. Development packages turn pending notes into a numeric
 upcoming-patch section without changing tracked source files.
 GitHub-only nightlies use the upcoming patch version and require replacing
-earlier snapshots of the same version. See [releases and nightlies](releases.md)
+earlier snapshots of the same version. See [releases and nightlies](../maintainers/releases.md)
 for the version policy, credentials, publication and retries. The historical
 `v0.1.0-preview.2` tag and its 0.1.0 mod ZIP remain unchanged.
 
@@ -188,6 +189,6 @@ both directions of regular-file/symlink changes without scanning untouched Lua.
 - `scripts/progression.lua`: physical arrival, research bridges, configuration reconciliation and limited starter patches.
 - `prototypes/tips.lua` and `locale/en/quinityn.cfg`: native in-game progression guide.
 - `tests/`: engine-backed contract tests and bootstrap analysis.
-- `docs/research.md`: historical sources, lore and adaptation boundaries.
+- `docs/lore/research.md`: historical sources, lore and adaptation boundaries.
 
-The addon references installed dependency/Space Age art rather than copying it. Planet/world graphics reuse and tint existing assets. Original salvage and science icons are included under `graphics/icons`; their prompts and references are recorded in `graphics/README.md`. The mod has English localization; other languages can add the same localization keys.
+The addon references installed dependency/Space Age art rather than copying it. Planet/world graphics reuse and tint existing assets. Original salvage and science icons are included under `graphics/icons`; their prompts and references are recorded in [graphics/README.md](../../graphics/README.md). The mod has English localization; other languages can add the same localization keys.

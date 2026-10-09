@@ -1,12 +1,14 @@
 # Yuoki Industries: historical and design research
 
+[Documentation index](../README.md)
+
 Research date: 6 October 2026. This document distinguishes original fiction, historical implementation, community proposals and this addon's inventions. Links are primary sources unless explicitly identified as a community contribution.
 
 ## Coverage and limits
 
-Both pages of the dedicated forum were indexed, yielding 62 distinct topic links and 157 topic pages, including the 60-page main discussion, the nine-page Engines thread, player builds, graphics, bugs, release announcements, PFW and railways. The local extraction contained 2,254 post records. [The index](forum-index.json) preserves titles, URLs and page counts; the counts include linked/sticky topics and are not a claim of 62 newly listed topics. Relevant author posts, the two original German stories, current English localization, recipes, machines, settings and Space Age integrations were examined in depth.
+Both pages of the dedicated forum were indexed, yielding 62 distinct topic links and 157 topic pages, including the 60-page main discussion, the nine-page Engines thread, player builds, graphics, bugs, release announcements, PFW and railways. The local extraction contained 2,254 post records. [The index](../forum-index.json) preserves titles, URLs and page counts; the counts include linked/sticky topics and are not a claim of 62 newly listed topics. Relevant author posts, the two original German stories, current English localization, recipes, machines, settings and Space Age integrations were examined in depth.
 
-This is a comprehensive design-oriented survey, not a claim that every historical screenshot, video, external download or forum reply was independently verified. Raw forum pages and full story PDFs are not republished here. Historical recipes describe their version, not necessarily today's balance. The source snapshots for implementation are the pinned Factorio 2.1 revisions in [development](development.md#exact-dependency-revisions), not a 2015 recipe guide. Yuoki and Engines 1.3.0 are now released on the Mod Portal.
+This is a comprehensive design-oriented survey, not a claim that every historical screenshot, video, external download or forum reply was independently verified. Raw forum pages and full story PDFs are not republished here. Historical recipes describe their version, not necessarily today's balance. The source snapshots for implementation are the pinned Factorio 2.1 revisions in [development](../contributing/development.md#exact-dependency-revisions), not a 2015 recipe guide. Yuoki and Engines 1.3.0 are now released on the Mod Portal.
 
 ## How the mod developed
 
@@ -85,4 +87,4 @@ Implementation follows the actual 2.1 prototype and runtime contracts, including
 - [Factorio 2.1.21 scripted technology trigger](https://lua-api.factorio.com/2.1.21/types/ScriptedTechnologyTrigger.html)
 - [Factorio 2.1.21 Tips and Tricks entries](https://lua-api.factorio.com/2.1.21/prototypes/TipsAndTricksItem.html)
 
-The dependency commits and verification commands are recorded in [development](development.md) and [validation](validation.md). The old published 2.0 branches were initially inspected, but are not used in the delivered implementation.
+The dependency commits and verification commands are recorded in [development](../contributing/development.md) and [validation](../contributing/validation.md). The old published 2.0 branches were initially inspected, but are not used in the delivered implementation.

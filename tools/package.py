@@ -21,6 +21,7 @@ def pack(root,out,addon=False,nightly=False):
    rel=p.relative_to(root)
    if not p.is_file() or any(x.startswith('.') or x in {'build','__pycache__'} for x in rel.parts):continue
    if addon and rel.parts[0] in {'tests','tools','docs','AGENTS.md','CONTRIBUTING.md'}:continue
+   if addon and rel.as_posix()=='graphics/quinityn-landscape.png':continue
    zi=zipfile.ZipInfo(name+'/'+rel.as_posix(),date_time=(2026,10,6,0,0,0));zi.compress_type=zipfile.ZIP_DEFLATED
    zi.external_attr=0o644<<16;z.writestr(zi,overrides.get(rel.as_posix(),p.read_bytes()))
  print(target)

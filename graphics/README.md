@@ -2,9 +2,11 @@
 
 ## Landscape artwork and mod thumbnail
 
-[`quinityn-landscape.png`](quinityn-landscape.png) preserves the original
-full-resolution generated image, unchanged, for the main README. It shares
-the provenance and generation prompt below with the thumbnail.
+[`quinityn-landscape.png`](https://github.com/jatmn/yuoki-quinityn/blob/main/graphics/quinityn-landscape.png)
+preserves the original full-resolution generated image, unchanged, for the
+main README. It stays in the repository and is excluded from release and
+nightly ZIPs. It shares the provenance and generation prompt below with the
+thumbnail.
 
 [`../thumbnail.png`](../thumbnail.png) is the mod portal and in-game mod-browser
 thumbnail. [Factorio's mod structure documentation](https://lua-api.factorio.com/latest/auxiliary/mod-structure.html)
@@ -65,7 +67,8 @@ stomper leg/remains assets, combining and tinting their prototype layers and
 halving the stomper dimensions. No Wube image files are copied into this mod.
 The original artwork remains Wube Software's under the terms recorded in
 NOTICE. Palette choices, assembly code and Stomp-a-tron lore are this add-on's
-contributions. Actual stock-layer appearance requires graphical playtesting.
+contributions. The screenshot pass below records a limited graphical
+inspection of the stock layers and native movement.
 
 `stomp-a-tron-sensors.png` is a procedural transparent overlay containing only
 yellow sensor disks; it copies no game image pixels. Its 64-direction layout
@@ -78,3 +81,27 @@ visible sensors. The body and legs still reference installed game sprites.
 
 Regenerate deterministically from the pinned engine's data dump:
 `python3 tools/generate_stomp_sensors.py build/test/runtime/script-output/data-raw-dump.json`.
+
+## In-game enemy screenshots
+
+The eight PNGs under `docs/images/enemies/` are four graphical-client captures
+and their 320-pixel-wide thumbnails, made on 2026-10-09. They show actual
+Quinityn biters, spitters, nests, worms and Stomp-a-trons, staged in the map
+editor on brown slag. They contain Wube's installed Factorio/Space Age artwork
+as rendered with the add-on's tints and assembly, including the sensor overlay.
+They retain the Wube-derived exception in [NOTICE](../NOTICE); the repository's
+blanket CC license does not relicense that material. Raw game sprite sheets
+are not included. The captures are excluded from release and nightly ZIPs.
+
+Captured source: `cf0684d7fbc817e3bab355ff1b1cbb218954a49a`; graphical Factorio
+and Space Age 2.1.21, Yuoki/Engines 1.3.0 at the pinned commits, and the
+packager's 0.1.1 Quinityn development artifact. Map seed 424242 generated
+Quinityn seed 420575443. Full images are unmodified 1920×1080 client PNGs;
+Pillow 12.2.0 produced whole-frame 320×180 Lanczos thumbnails with PNG
+optimization. No color edits, synthesis or subject rescaling were used.
+
+The [capture record](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/contributing/screenshots.md#capture-record)
+contains exact dependency revisions, daylight, scene coordinates, zooms and
+inspection limits. The pass checked all stills and thumbnails and observed
+a short native walking interval for the three Stomp-a-trons. It does not
+establish natural spawn rates, combat balance or a full playthrough.

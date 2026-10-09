@@ -1,7 +1,7 @@
 """Draw only sensor dots, using stock Spidertron eye coordinates (no game pixels).
 
 Usage: python3 tools/generate_stomp_sensors.py path/to/data-raw-dump.json
-The dump must come from the pinned Factorio engine; see docs/development.md.
+The dump must come from the pinned Factorio engine; see docs/contributing/development.md.
 """
 import json
 import math

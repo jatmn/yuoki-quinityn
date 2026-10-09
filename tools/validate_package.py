@@ -107,9 +107,10 @@ def validate(output, nightly=False, tag=None):
     name = f'{info["name"]}_{info["version"]}'
     archive = output / f'{name}.zip'
     tracked = subprocess.check_output(['git', 'ls-files', '-z'], cwd=ROOT).decode().split('\0')
-    # The release contract excludes developer files and hidden/generated content.
+    # The release contract excludes developer files, showcase art and hidden/generated content.
     expected = {
         file for file in tracked if file
+        and file != 'graphics/quinityn-landscape.png'
         and Path(file).parts[0] not in {'tests', 'tools', 'docs', 'AGENTS.md', 'CONTRIBUTING.md'}
         and not any(part.startswith('.') or part in {'build', '__pycache__'} for part in Path(file).parts)
     }

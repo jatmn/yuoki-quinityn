@@ -1,5 +1,7 @@
 # Validation record — 0.1.0 development
 
+[Documentation index](../README.md)
+
 Checked with official Factorio **2.1.21 + Space Age** and the pinned, unmodified Yuoki/Engines 1.3.0 source revisions listed in [development](development.md#exact-dependency-revisions). Both dependencies now have released Mod Portal versions; this record describes the pinned source tests, not a new validation run against the published ZIPs. The [earlier development snapshot validation record](https://github.com/jatmn/yuoki-quinityn/blob/v0.1.0/docs/validation.md) remains available for the earlier preview.
 
 ## Feedback checks
@@ -12,7 +14,7 @@ Checked with official Factorio **2.1.21 + Space Age** and the pinned, unmodified
 | Dense, sparse stockpile districts and starter salvage | Three samples verify dense clusters in fewer than half of the sampled 64-tile districts, with at least 15 stockpiles within 160 tiles of the start and at least 30 beyond it. Starter clusters replace the previous uniformly rare placement. The shared placement probability is 0.06, tuned down to keep the landscape from filling with wrecks. |
 | More cosmetic terrain | Nine generated tile types include weathered soil, dead turf and ash-covered earth. Three native samples contain 42.9%, 52.7% and 54.3% natural ground (including ashy margins) among their land tiles, retaining the original scarred terrain. In these samples, 100.0%, 97.2% and 95.7% of solid soil/turf land boundaries meet mixed ash/earth before reaching scarred ground. The regression requires at least 75%. Each of six new plant/stone decorative types must generate more than ten placements, all on old soil/turf or its ashy margin. The eleven decorative types include four decayed plants, two ordinary stone sizes, volcanic fragments, cracks, pumice and machinery debris. |
 | Impassable unicomp | The engine rejects placement of small/medium/big/behemoth biters and a spitter on unicomp. Native pathfinding cannot leave an island through a unicomp moat. |
-| Icons | Original RGBA salvage and bottle icons are packaged at 256×256. The updated bottle is inspected at 32px inventory size; the salvage was inspected at 64px. The bottle contains purple unicomp and a Technic Sign badge. [References and final prompts](../graphics/README.md). |
+| Icons | Original RGBA salvage and bottle icons are packaged at 256×256. The updated bottle is inspected at 32px inventory size; the salvage was inspected at 64px. The bottle contains purple unicomp and a Technic Sign badge. [References and final prompts](../../graphics/README.md). |
 | Planet-local rock discovery | Native character mining of big, huge and sand rocks on Nauvis, Vulcanus, Gleba, Fulgora, Aquilo and Quinityn returns ordinary drops, no ash and no science unlock. Native mining of a naturally generated Quinityn rock returns flyash and reveals science before factory research; the production-milestone fixture independently verifies discovery after factory manufacture. Actual map generation on every other built-in planet contains no Quinityn rock clones. Quinityn samples contain no ordinary mineable rocks; prototype checks retain all 36 native sprite variations on the tinted clones. |
 | Fatmice and later filters | A real Fatmice produces ash unfiltered while the filter recipes remain locked. After the later research, a powered and fluid-fed machine stays idle without a clean filter, then consumes exactly one to capture a dirty filter; a real dirt washer returns one clean filter and six ash with no wastewater. Equal 60-tick working samples use machine-attributed native pollution statistics to verify twice the filtered removal, excluding natural absorption. Prototype checks verify the required filter, exact 2x emissions multiplier and higher filtered capture throughput. The startup option is replaced by research tiers. |
 | Flyash rocket fuel | Real assemblers consume 750 ash to produce ten mixed fuel, then a chemical plant consumes those ten to produce one rocket fuel. Closure verifies both this route and the filter ingredients are locally available. These fixtures inject inputs and power; they are not a continuous factory playthrough. |
@@ -33,7 +35,7 @@ Checked with official Factorio **2.1.21 + Space Age** and the pinned, unmodified
 
 The constructive budget reserves **600 red, 400 green and 260 Quinityn packs**, the first factory, Fatmice, small electric motor and early machines, every milestone quantity again as extra margin, and 500 coal. It consumes **7,744 N4 and 3,811 F7**, below even the minimum starter target, without salvage or distant ore. The budget uses **100 finite rock flyash** for Power and Fatmice, then produces ash for the remaining 160 packs through unfiltered scrubbing with its real water/MF inputs. Three native starter samples contain 126, 242 and 200 ash and enforce a 100-unit minimum. This is a material budget; full-speed scrubbing needs additional water/power capacity as described in the progression guide. Reactor-fuel byproduct signs remain the economical early route; dedicated qualification is optional.
 
-Existing foundation contracts, visit gates, native disposal (including rare items), infinite research, actual rocket construction/launch, upstream settings and loaded technology/recipe dependencies remain covered. [Compact test results](test-results.txt) record the current run. The packaged `yuoki-quinityn_0.1.0.zip` also passes native save creation without the test harness. Reproduce the complete suite with `tools/test.py` as described in [development](development.md).
+Existing foundation contracts, visit gates, native disposal (including rare items), infinite research, actual rocket construction/launch, upstream settings and loaded technology/recipe dependencies remain covered. [Compact test results](../test-results.txt) record the current run. The packaged `yuoki-quinityn_0.1.0.zip` also passes native save creation without the test harness. Reproduce the complete suite with `tools/test.py` as described in [development](development.md).
 
 ## Limits and save compatibility
 
@@ -41,9 +43,13 @@ Uni-touched Stomp-a-trons use installed Spidertron torso layers and cloned
 stomper legs at half the original dimensions. The three color palettes follow
 the approved concept, from pale N4 blue through lavender to royal violet, with
 an original yellow sensor overlay. The headless engine can validate the assembly and behavior
-but cannot render it: stock mask boundaries, sensor appearance, body-to-leg
-alignment and movement still need graphical-client inspection. The concept
-board is an artistic reference, not an in-game screenshot. Original stomper
+but cannot render it. A [graphical capture pass on 2026-10-09](screenshots.md#capture-record)
+inspected all three rendered sizes, stock layers, yellow sensors, body-to-leg
+alignment and a short native walking interval with Factorio/Space Age 2.1.21
+and the same pinned dependencies. No obvious separation or sensor placement
+defect was observed in that interval; other orientations, animation states
+and terrain traversal still need playtesting. The gallery contains actual
+editor-staged screenshots; earlier concepts remain artistic references. Original stomper
 health and damage remain; 3%, 7% and 11% replace the original 80% laser resistance.
 Combat pacing and the one-tenth relative spawn weights still need playtesting.
 

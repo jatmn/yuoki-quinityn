@@ -25,7 +25,7 @@ and foundations. Unicomp oceans and this landscape are new interpretations.
 The add-on references installed Yuoki assets and prototypes; it does not
 replace the parent mod or claim authorship of its art, lore or machines.
 Historical sources and adaptation boundaries are in the source repository:
-https://github.com/jatmn/yuoki-quinityn/blob/main/docs/research.md
+https://github.com/jatmn/yuoki-quinityn/blob/main/docs/lore/research.md
 
 Yuoki Industries - Engines
 -------------------------
@@ -51,8 +51,9 @@ The game and DLC are separate requirements and are not included here.
 
 Bundled graphics
 ----------------
-graphics/quinityn-landscape.png and its downscaled thumbnail.png were
-AI-generated from a text description of this add-on's industrial landscape
+thumbnail.png is downscaled from the repository's graphics/quinityn-landscape.png.
+The full-resolution landscape is excluded from release and nightly ZIPs.
+Both were AI-generated from a text description of this add-on's industrial landscape
 and purple unicomp seas, without reference images or copied game assets.
 They are concept artwork, not in-game screenshots.
 Copyrightable Quinityn contributions are offered under CC BY-NC-SA 4.0.
@@ -79,6 +80,15 @@ graphics/stomp-a-tron-sensors.png contains procedurally drawn yellow dots,
 positioned using Wube's installed Spidertron eye-coordinate layout. No game
 image pixels are copied. The layout remains Wube-derived material under
 Wube's terms above, excluded from the blanket CC license grant.
+
+docs/images/enemies/*.png are editor-staged in-game screenshots and their
+thumbnails, captured with Factorio 2.1.21 and Space Age on 2026-10-09. They
+show installed Wube artwork rendered with Quinityn's prototype tints and
+assembly, including the sensor overlay. Wube-derived content retains Wube's
+rights and terms above and is excluded from the blanket CC license grant.
+These documentation images are excluded from release and nightly ZIPs;
+no raw game sprite sheets are redistributed. Capture settings and inspection
+results are recorded in docs/contributing/screenshots.md.
 
 Redistribution
 --------------

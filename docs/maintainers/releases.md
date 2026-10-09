@@ -1,9 +1,10 @@
 # Releases and nightlies
 
-Release Please starts from **0.1.0** and proposes **0.1.1** first. The configured
-policy increments the patch for each release, including feature changes. A future
-minor/major release needs an intentional policy change. Existing preview tags
-and their assets are preserved.
+[Documentation index](../README.md)
+
+The release policy increments the patch for each release, including feature
+changes. A future minor/major release needs an intentional policy change.
+Existing preview tags and their assets are preserved.
 
 ## Two changelogs
 
@@ -57,15 +58,14 @@ Release Please can discard manual edits to its generated branch. Wait for the
 Release workflow to finish finalizing metadata and for checks on the final head
 to pass before merging; an intermediate bot revision may fail package checks.
 
-## GitHub setup and stable releases
+## Stable releases
 
-The Release workflow runs on main pushes and can be run manually. Configure a
-repository-scoped `RELEASE_PLEASE_TOKEN` secret with contents, pull-request and
-issues write access to let bot PR checks run automatically. Enable **Allow
-GitHub Actions to create and approve pull requests** if repository policy
-requires it. The built-in GITHUB_TOKEN fallback can prepare PRs but does not
-trigger their CI runs; use RELEASE_PLEASE_TOKEN for the documented review-and-
-merge workflow. No token is committed; the workflow declares its own permissions.
+The Release workflow runs on main pushes and can be run manually. Keep the
+repository-scoped `RELEASE_PLEASE_TOKEN` secret valid, with contents, pull-request
+and issues write access, so bot PR checks run automatically. When rotating it,
+retain those permissions. The built-in GITHUB_TOKEN fallback can prepare PRs
+but does not trigger their CI runs. No token is committed; the workflow declares
+its own permissions.
 
 Merge normal work into main with Conventional Commit subjects. Release Please
 maintains a release PR updating the manifest, `.github/version.txt`, `info.json`
@@ -90,10 +90,28 @@ The release workflow calls publishing directly: a release created using
 GITHUB_TOKEN does not trigger a separate release-event workflow. See
 [GitHub's current triggering rules](https://docs.github.com/en/actions/how-tos/write-workflows/choose-when-workflows-run/trigger-a-workflow).
 
-## Connect Factorio later
+## Publication checks
 
-No Factorio credentials are needed to merge this automation or use GitHub
-releases/nightlies. When ready:
+Before publishing a release:
+
+- Validate the intended release revision using the commands above and the
+  [contribution checks](../../CONTRIBUTING.md#validation-before-commits-and-pr-updates).
+- Inspect the built ZIP for `LICENSE`, `NOTICE` and `graphics/README.md`.
+  Preserve upstream licenses when distributing dependency builds separately;
+  exclude game binaries and raw Space Age data. Rebuild archives when notices
+  change; editing source does not update an already published ZIP.
+- Check that players can obtain the documented dependency versions and that
+  the [installation guide](../guides/getting-started.md) describes the shipped
+  release rather than a newer source revision or historical preview.
+- Keep the Mod Portal description, dependency links and images aligned with
+  the release. Label concept artwork and use genuine game captures for the
+  screenshot gallery; the [capture guide](../contributing/screenshots.md)
+  records the required shots and provenance.
+
+## Mod Portal integration
+
+GitHub releases and nightlies work without Factorio credentials. To connect
+stable releases to the Mod Portal:
 
 1. The required Factorio 2.1 dependencies are already available on the Mod Portal:
    [Yuoki 1.3.0](https://mods.factorio.com/mod/Yuoki) and
@@ -140,7 +158,7 @@ Successive nightlies before a stable release share an in-game version. Replace
 the previous ZIP; do not keep competing copies. Returning to stable at the same
 version also needs manual replacement, and version-based migrations will not run
 again for that same version. Use development saves/backups. Dependencies are
-obtained separately using the [development guide](development.md).
+obtained separately using the [development guide](../contributing/development.md).
 
 Local equivalent:
 
