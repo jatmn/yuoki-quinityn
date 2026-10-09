@@ -59,6 +59,13 @@ with Spidertron bodies, yellow sensors and colors that deepen from pale blue to
 royal purple as they grow. Their smaller stature hides the strength of their
 Gleba relatives. Bring defenses; their remains hold salvage and ancient data.
 
+| Uni-touched biters | Stomp-a-trons |
+| :---: | :---: |
+| [<img src="https://raw.githubusercontent.com/jatmn/yuoki-quinityn/602a009906eb943b2ab51e11257e7b074cc46067/docs/images/enemies/biters-thumb.png" width="320" alt="Four violet biters on Quinityn slag, from small to behemoth">](https://raw.githubusercontent.com/jatmn/yuoki-quinityn/602a009906eb943b2ab51e11257e7b074cc46067/docs/images/enemies/biters.png) | [<img src="https://raw.githubusercontent.com/jatmn/yuoki-quinityn/602a009906eb943b2ab51e11257e7b074cc46067/docs/images/enemies/stomp-a-trons-thumb.png" width="320" alt="Small, medium and big Stomp-a-trons with five organic legs and Spidertron bodies">](https://raw.githubusercontent.com/jatmn/yuoki-quinityn/602a009906eb943b2ab51e11257e7b074cc46067/docs/images/enemies/stomp-a-trons.png) |
+| **Four biter tiers**, small through behemoth, left to right. | **Three Stomp-a-tron sizes**, small through big, left to right. Open the original for the yellow sensors. |
+
+*Editor-staged in-game captures · Factorio 2.1.21 + Space Age · Click for full size.*
+
 Meet the inhabitants in the **[enemy field guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides/enemies.md)**,
 with size variants, combat traits and loot. Their
 [industrial origins](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/lore/quinityn.md)

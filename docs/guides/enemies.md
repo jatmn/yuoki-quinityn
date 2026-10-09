@@ -65,15 +65,30 @@ ordinary offspring. Changing the mod does not replace an established colony.
 
 ## Visuals and validation
 
-Actual creature screenshots are still pending a graphical-client capture.
-The repository's landscape image is concept art, and the earlier Stomp-a-tron
-concepts are design references. Neither establishes the rendered appearance
-of these enemies. The [capture guide](../contributing/screenshots.md) lists
-the shots needed for a thumbnail gallery.
+These are **editor-staged in-game captures** on Quinityn, made with Factorio
+2.1.21 + Space Age and the pinned dependencies. Click a thumbnail for the
+1920 × 1080 original. Relative sizes are preserved within each shot.
+
+| Uni-touched biters | Uni-touched spitters |
+| :---: | :---: |
+| [![Four violet biters on slag, increasing from small to behemoth](../images/enemies/biters-thumb.png)](../images/enemies/biters.png) | [![Four violet spitters on slag, increasing from small to behemoth](../images/enemies/spitters-thumb.png)](../images/enemies/spitters.png) |
+| Small, medium, big and behemoth, left to right. | Small, medium, big and behemoth, left to right. |
+
+| Colony defenders | Stomp-a-trons |
+| :---: | :---: |
+| [![Biter and spitter nests above four emerged worm tiers on brown slag](../images/enemies/colony-thumb.png)](../images/enemies/colony.png) | [![Small, medium and big five-legged Stomp-a-trons with Spidertron bodies](../images/enemies/stomp-a-trons-thumb.png)](../images/enemies/stomp-a-trons.png) |
+| Biter nest left, spitter nest right; worms increase from small to behemoth below. | Small, medium and big, left to right. Open the full image to see the yellow sensors. There is no behemoth tier. |
+
+The [capture record](../contributing/screenshots.md#capture-record) identifies
+the source commit, versions, seeds, staging, camera settings and faithful
+thumbnail processing. The landscape and earlier creature concepts remain
+artistic references, separate from these screenshots.
 
 Headless fixtures check spawning, laser damage, loot, colony construction,
-capture targeting and planet isolation. Body/leg alignment, sensors, movement
-and overall combat balance still need graphical playtesting; see the
+capture targeting and planet isolation. This capture pass inspected rendered
+bodies, legs and sensors, and a short walking interval for all three
+Stomp-a-trons. Natural spawn rates, broader animation coverage and overall
+combat balance still need graphical playtesting; see the
 [validation record](../contributing/validation.md#limits-and-save-compatibility).
 
 For exact definitions, see [Uni-touched prototypes](../../prototypes/enemies.lua)

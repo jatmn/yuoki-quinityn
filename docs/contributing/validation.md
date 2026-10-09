@@ -43,9 +43,13 @@ Uni-touched Stomp-a-trons use installed Spidertron torso layers and cloned
 stomper legs at half the original dimensions. The three color palettes follow
 the approved concept, from pale N4 blue through lavender to royal violet, with
 an original yellow sensor overlay. The headless engine can validate the assembly and behavior
-but cannot render it: stock mask boundaries, sensor appearance, body-to-leg
-alignment and movement still need graphical-client inspection. The concept
-board is an artistic reference, not an in-game screenshot. Original stomper
+but cannot render it. A [graphical capture pass on 2026-10-09](screenshots.md#capture-record)
+inspected all three rendered sizes, stock layers, yellow sensors, body-to-leg
+alignment and a short native walking interval with Factorio/Space Age 2.1.21
+and the same pinned dependencies. No obvious separation or sensor placement
+defect was observed in that interval; other orientations, animation states
+and terrain traversal still need playtesting. The gallery contains actual
+editor-staged screenshots; earlier concepts remain artistic references. Original stomper
 health and damage remain; 3%, 7% and 11% replace the original 80% laser resistance.
 Combat pacing and the one-tenth relative spawn weights still need playtesting.
 
