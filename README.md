@@ -2,178 +2,110 @@
 
 <p align="center">
   <a href="graphics/quinityn-landscape.png">
-    <img src="graphics/quinityn-landscape.png" width="640" alt="Quinityn concept artwork: ruined industrial towers and machinery beside purple unicomp seas">
+    <img src="graphics/quinityn-landscape.png" width="640" alt="Quinityn concept artwork: ruined industrial towers beside purple unicomp seas">
   </a>
 </p>
 
-<p align="center"><em>Quinityn concept artwork · Click to view the full-resolution image.</em></p>
-
-<p align="center">
-  <img src="graphics/icons/quinityn-salvage.png" width="112" alt="Quinityn industrial salvage">
-  <img src="graphics/icons/quinityn-science.png" width="112" alt="Quinityn research data: a bottle of purple unicomp">
-</p>
+<p align="center"><em>Concept artwork · Click to view full size.</em></p>
 
 <p align="center"><strong>A forgotten contract world. An ocean of unicomp. An industry waiting to restart.</strong></p>
 
-<p align="center">
-  <strong>Factorio 2.1 + Space Age · Yuoki Industries + Engines · Playable preview</strong>
-</p>
-
 Quinityn takes a world from [YuokiTani's original stories](https://forums.factorio.com/viewtopic.php?t=18145)
-and turns it into a hostile industrial frontier. Pick through buried machinery, pump purple seas of
-**Liquid Unicomp A2**, and rebuild a factory among weathered soil, dead turf,
-ash, slag and poisoned trees. The native biters have already made themselves
-at home.
+and turns it into a hostile industrial frontier. Pick through buried machinery,
+pump purple seas of **Liquid Unicomp A2**, and rebuild a factory among weathered
+soil, dead turf, ash, slag and poisoned trees. The native life has already made
+itself at home.
 
-This planet add-on gives **Yuoki Industries and Yuoki Industries Engines** a
-destination and a progression of their own. Their recipes stay locked until you
-physically land on Quinityn. Once you do, the climb from salvaged parts to advanced
-industry begins.
+This **Factorio 2.1 + Space Age** planet add-on gives **Yuoki Industries and
+Engines** a destination and a progression of their own. Their recipes stay
+locked until you physically land on Quinityn. From there, turn salvaged parts
+into a working industry, build a rocket from local resources, and give your
+factory a reason to keep coming back.
 
-Grey-purple rocks appear only on Quinityn, with 20 big and 16 huge sprite
-variants replacing ordinary mineable rocks. Mining keeps normal stone/coal
-drops and adds 2 or 4 flyash; the first rock reveals science. Each five-pack
-batch needs **five flyash**. Collect 100 ash to research Power and **Fatmice air
-scrubbing**, then automate collection. **Reusable air filters** improve capture
-later; surplus ash can become rocket fuel. Other planets' rocks remain unchanged.
-
-Initial enemy nests and worms generate on brown slag; later colonies can expand
-onto other walkable terrain. In this add-on, Quinityn's **Uni-touched** biters,
-spitters, worms and nests have been altered by living off the surrounding unicomp
-waters. They have distinct shades within a royal-violet palette and take 5% less
-laser damage than their ordinary counterparts. These variants spawn only on
-Quinityn and retain their identity as colonies expand. Use a fresh
-Quinityn surface for this population; existing enemies are preserved.
-
-**Uni-touched Stomp-a-trons** sometimes emerge from Quinityn's biter and spitter
-nests. These five-legged hybrids stand at half the size of their Gleba relatives,
-with Spidertron bodies, yellow sensors and a pale-blue-to-royal-purple progression.
-Each size has one tenth the spawn weight of the corresponding biter or spitter,
-using that nest's same evolution curve. Medium variants begin above 20% evolution
-in biter nests and 40% in spitter nests; big variants begin above 50%.
-They respond to industrial pollution and cannot establish Gleba nests or release
-wrigglers or pentapod eggs.
-
-| Size | Laser resistance | Yuoki industrial salvage | Additional loot |
-| --- | --- | --- | --- |
-| Small | 3% | 1–2 | 1–5 Ancient Data Fragments |
-| Medium | 7% | 3–4 | 4–7 Ancient Data Fragments |
-| Big | 11% | 6–9 | 1 Data Crystal |
-
-Long after Quinityn's foundries fell silent, life continued feeding on their
-waste. Unicomp waters and generations of N4 and F7 consumption transformed
-these creatures, but their mechanical hearts tell an older story. In the
-planet's industrial past, a forgotten experiment grafted a living stomper to a
-Spidertron chassis. The works are dust; the experiment's descendants endure,
-carrying mineral armor, scavenged machinery and fragments of ancient memory.
-This origin is Quinityn add-on lore, not part of YuokiTani's original stories.
-
-**[Get started](#get-started)** · **[Progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md)** ·
-**[Report a bug](https://github.com/jatmn/yuoki-quinityn/issues)** ·
-**[Contribute](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md)**
+**[Get started](#get-started)** · **[Player guides](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/README.md#play-quinityn)** ·
+**[Release notes](https://github.com/jatmn/yuoki-quinityn/blob/main/changelog.txt)** ·
+**[Report a bug](https://github.com/jatmn/yuoki-quinityn/issues)**
 
 ## Your next industrial outpost
 
-| Discover | Build around it |
-| --- | --- |
-| **Purple unicomp seas** | Pump the shoreline for industry, or feed unwanted items into it with shore inserters using native lava disposal. |
-| **A ruined landscape** | Explore weathered soil and dead turf between industrial scars, mixed ash-and-earth margins, clustered machinery stockpiles and coastal ruined districts. Sparse purple dead-tree groves have their own generation controls. |
-| **An empty-inventory challenge** | Start with local N4 and F7 deposits, hand processing and salvage. Work toward water, power, science and a locally built rocket. |
-| **A Yuoki technology journey** | Progress through materials, power, Cimota reconstruction, Mechanical Force, refining, farming, defense, trade and advanced industry. |
-| **Reasons to return** | Manufacture Durotal foundations and feed infinite mining productivity and Yuoki plasma damage research. |
+**An ocean that can become almost anything.** Pump unicomp from the shoreline
+and reconstruct it into the resources your factory needs. Supply power and
+processing capacity, then expand across the sea with Durotal foundations.
+Shore inserters can also dispose of unwanted items in the liquid—choose carefully.
+
+**A factory built from the wreckage.** Local N4 and F7 deposits, collapsed
+stockpiles and hand processing support an empty-inventory landing. Recover the
+first materials, bring water and power online, and work toward advanced machines,
+Mechanical Force, farming, defense and interworld trade.
+
+| Recover the past | Put it to work |
+| :---: | :---: |
+| <img src="graphics/icons/quinityn-salvage.png" width="112" alt="Yuoki industrial salvage: broken machinery and wire"> | <img src="graphics/icons/quinityn-science.png" width="112" alt="Quinityn research data: purple unicomp in a science bottle"> |
+| **Industrial salvage** gives buried machinery a second life as useful starting materials. | **Quinityn research data** turns local materials, Technic Signs and recovered flyash into new technology. |
+
+**Industry with a lasting purpose.** Make Quinityn science in Yuoki factories,
+recover flyash with Fatmice air scrubbers, and export research data for infinite
+mining productivity and Yuoki plasma damage upgrades.
+
+## The locals have changed
+
+Quinityn's **Uni-touched biters, spitters, worms and nests** wear distinct
+royal-violet shades after generations beside the unicomp waters. They resist
+lasers more strongly than their ordinary counterparts, and your pollution
+gives them a reason to visit.
+
+Rarer **Stomp-a-trons** emerge from the same nests: five-legged organic hybrids
+with Spidertron bodies, yellow sensors and colors that deepen from pale blue to
+royal purple as they grow. Their smaller stature hides the strength of their
+Gleba relatives. Bring defenses; their remains hold salvage and ancient data.
+
+Meet the inhabitants in the **[enemy field guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides/enemies.md)**,
+with size variants, combat traits and loot. Their
+[industrial origins](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/lore/quinityn.md)
+belong to this add-on's telling of Quinityn.
 
 ## Land. Salvage. Rebuild. Launch.
 
-1. **Discover Quinityn and travel from Nauvis.** Discovery alone does not unlock
-   its industry: a character must physically land to complete the field survey.
-2. **Make the first machines count.** Crush and press local resources, recover
-   salvage, and build a primitive burner Cimota to begin processing.
-3. **Bring the factories online.** Mining a Quinityn rock reveals science;
-   crafting milestones lead through the components and first factory needed to
-   manufacture it. All three Yuoki factories can produce it; vanilla assemblers
-   cannot.
-4. **Turn an outpost into an industrial world.** Expand over unicomp with
-   Durotal foundations, establish local rocket production, and export research
-   data for continuing upgrades.
+1. **Discover Quinityn and travel from Nauvis.** Physically land to complete the
+   field survey and open its industrial progression.
+2. **Make the first machines count.** Sort salvage, process N4 and F7, and build
+   a primitive burner Cimota for the water your first power plant needs.
+3. **Recover the planet's knowledge.** Mine an ash-coated rock to reveal science,
+   follow the manufacturing milestones, and put your first Yuoki factory to work.
+4. **Build your way out—and a reason to return.** Establish local rocket
+   production, expand over unicomp, and keep the research flowing.
 
-**73 in-game Tips and Tricks chapters** walk you through the stages. Arriving
-with no items is supported after researching discovery; ordinary initial spawn
-and platform travel remain unchanged. For the production details, open the
-[local-resource and progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/progression.md).
+In-game **Tips and Tricks** guide you through the stages. For recipes, milestones
+and production ratios, open the [progression guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides/progression.md)
+and [flyash guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides/flyash.md).
 
 ## Get started
 
-> **Development preview — version 0.1.0.** The validated baseline is Factorio
-> **2.1.21 with Space Age**, plus the pinned **Yuoki 1.3.0** and
-> **Engines 1.3.0** source revisions. Both dependencies now have released
-> **Factorio 2.1** versions on the Mod Portal. A full graphical playthrough and balance review remain
-> outstanding.
+**Playable development preview.** Requires Factorio **2.1.21 or later in 2.1**,
+Space Age, [Yuoki Industries **1.3.0+**](https://mods.factorio.com/mod/Yuoki) and
+[Engines **1.3.0+**](https://mods.factorio.com/mod/yi_engines).
+The recorded test baseline is **2.1.21** with pinned dependency sources;
+later versions and other overhauls need separate testing.
 
-Install **Yuoki 1.3.0** and **Engines 1.3.0** through Factorio's mod manager or
-download them from the [Yuoki Industries](https://mods.factorio.com/mod/Yuoki)
-and [Engines](https://mods.factorio.com/mod/yi_engines) Mod Portal listings.
-Their older Factorio 2.0 releases do not satisfy Quinityn's requirements.
-Build Quinityn from the current source using the
-[installation and packaging guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/development.md),
-or use the preview below. Install its ZIP in your Factorio mods directory
-and enable all three mods with Space Age.
+Build the current source to try the features described here. The downloadable
+[0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
+is an older snapshot and **does not include the Uni-touched enemies**.
+Follow the **[installation guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides/getting-started.md)**
+for either route, dependency details and save compatibility.
 
-The [public 0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
-remains available with installable ZIPs, license notices and checksums.
-This is a Quinityn prerelease; its mod version remains 0.1.0. The bundled
-dependency ZIPs are historical source builds, pinned to:
-
-- Yuoki 1.3.0, commit
-  [`ce7918f`](https://github.com/jatmn/Yuoki-Factorio-2.x/commit/ce7918f2b252f2d79ba86b9ae05d991e7af1f261).
-- Engines 1.3.0, commit
-  [`dd13f42`](https://github.com/jatmn/Yuoki-Engines-Factorio-2.x/commit/dd13f421f68010fd0180cda4fb9273f9b582198e).
-
-Current source builds instead pin Yuoki commit
-`c865cf0`, including its optional adjustable-inserter cleanup. Quinityn respects
-that setting when assigning research and reconciling saves. These source pins
-remain the reproducible test baseline; the published preview ZIPs are unchanged.
-Use the released dependencies for installation, or the installation guide above
-to reproduce the pinned source builds.
-
-Keep a backup of development saves. **Use a fresh Quinityn surface or map to see
-all terrain changes**: generated terrain is not rewritten, and existing
-surfaces can retain saved generation settings. Read the
-[save compatibility notes](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/validation.md#limits-and-save-compatibility)
-before updating an existing factory.
-
-## Tested in the engine, still being shaped by play
-
-The recorded headless-engine checks cover terrain across multiple seeds,
-landing routes, recipe gates, actual unicomp pumping and disposal, burner water
-production, factory science, research and rocket construction/launch. Separate
-resource and finite-stock analyses check the empty-inventory bootstrap.
-
-These checks do not replace a full graphical playthrough. Visual polish, tutorial
-presentation, overall balance and compatibility with other overhaul mods still
-need playtesting. See [validation and limitations](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/validation.md) and the
-[recorded results](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/test-results.txt).
+Back up development saves. Use a **fresh Quinityn surface** to see the current
+terrain and enemy population. Headless checks cover core mechanics; a complete
+graphical playthrough and balance review remain outstanding.
+[Validation and limitations](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/contributing/validation.md)
+describe what has been checked.
 
 ## Built on Yuoki's world
 
-Quinityn's name and contract-world inspiration come from **YuokiTani**. Read the
-[original lore introduction on the Factorio forums](https://forums.factorio.com/viewtopic.php?t=18145),
-posted on December 1, 2015. It links the two original **German-language stories
-(PDFs)** that inspired this planet.
+Quinityn's name and contract-world inspiration come from **YuokiTani**. Its
+unicomp seas, landscape and Uni-touched inhabitants are this add-on's adaptation.
+Read the [lore and original sources](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/lore/quinityn.md).
+Maintained by **jatmn**; playtest feedback, translations and focused contributions
+are welcome. [Contribute](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md).
 
-The unicomp oceans and this particular industrial landscape are this add-on's
-adaptation, not claims about the original stories. Maintained by **jatmn**.
-
-- [Historical research, lore and primary sources](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/research.md)
-- [Forum coverage index](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/forum-index.json)
-- [Engine-generated recipe unlock manifest](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/recipe-unlocks.json)
-- [Artwork origins and generation prompts](graphics/README.md)
-
-Quinityn is licensed under **[CC BY-NC-SA 4.0](LICENSE)**, matching Yuoki
-Industries. Credit the creators, keep adaptations under the same license, and
-respect its noncommercial terms. Engines retains its MIT license; Factorio and
-Space Age material remains subject to Wube's terms. See [NOTICE](NOTICE) for
-attribution and the science icon's third-party artwork exception.
-
-Bug reports, translations, playtest feedback and focused pull requests are
-welcome. Read [CONTRIBUTING.md](https://github.com/jatmn/yuoki-quinityn/blob/main/CONTRIBUTING.md); coding agents should also read
-[AGENTS.md](https://github.com/jatmn/yuoki-quinityn/blob/main/AGENTS.md). Only jatmn and designated maintainers merge into `main`.
+Licensed under **[CC BY-NC-SA 4.0](LICENSE)**, with third-party exceptions in
+[NOTICE](NOTICE). [Artwork provenance](graphics/README.md) records the image sources.

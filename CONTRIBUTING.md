@@ -8,8 +8,8 @@ project can support.
 ## Before starting
 
 1. Search existing issues and open pull requests for overlap.
-2. Read [README.md](README.md), [development](docs/development.md),
-   [progression](docs/progression.md) and [validation](docs/validation.md).
+2. Read [README.md](README.md), [development](docs/contributing/development.md),
+   [progression](docs/guides/progression.md) and [validation](docs/contributing/validation.md).
 3. Discuss major progression, balance, compatibility or tooling changes in an
    issue before implementing them. Keep ordinary fixes small and reviewable.
 4. Fork the repository, create a topic branch and open a PR against `main`.
@@ -19,7 +19,7 @@ project can support.
 Only **jatmn and explicitly designated maintainers** may merge into `main`.
 Contributor credit or a CODEOWNERS entry alone does not grant merge access.
 The owner grants collaborator access only to designated maintainers; see
-[repository administration](docs/repository-administration.md).
+[repository administration](docs/maintainers/repository-administration.md).
 
 ## What belongs here
 
@@ -61,7 +61,7 @@ python3 tools/test.py \
 python3 tools/package.py --dependencies build/dependencies
 ```
 
-Follow [development.md](docs/development.md) for the required engine and setup.
+Follow [development.md](docs/contributing/development.md) for the required engine and setup.
 Use tests that prove the behavior and would fail without a bug fix; do not add
 tests that only repeat the implementation. Report graphical playtesting
 separately from headless checks and resource analysis. If you cannot run a
@@ -70,7 +70,7 @@ must resolve the validation gap before merge.
 
 Re-run affected checks after each update, before requesting review. Include
 commands, versions and results in the PR; do not rely on CI as a substitute for
-local validation. [Lightweight CI](docs/development.md#lightweight-ci) runs Lua,
+local validation. [Lightweight CI](docs/contributing/development.md#lightweight-ci) runs Lua,
 Python, workflow and package checks only for affected surfaces. It never runs
 Factorio or downloads the game/dependency mods. The local gameplay checks above
 remain required for their applicable changes.
@@ -94,7 +94,7 @@ ordinary contribution work. Release Please proposes maintainer release PRs,
 starting at 0.1.1. In each normal PR, update the top `Version: Unreleased`
 section in `changelog.txt` with player-facing notes, creating it if absent and
 preserving numbered history. Automation assigns its version and date; do not
-add CI-only details. See [the release guide](docs/releases.md).
+add CI-only details. See [the release guide](docs/maintainers/releases.md).
 Never include credentials, private logs, player
 data, game binaries or local machine paths in commits.
 
