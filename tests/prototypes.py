@@ -77,13 +77,21 @@ def channels(tint):
   return [tint.get('r', 0), tint.get('g', 0), tint.get('b', 0), tint.get('a', 1)]
  tint=list(tint)
  return tint if len(tint) == 4 else tint + [1]
+def is_sprite(value):
+ return isinstance(value,dict) and any(k in value for k in ['filename','filenames','stripes']) and ('width' in value or 'size' in value)
 def walk_sprites(value):
  if isinstance(value,dict):
-  if any(k in value for k in ['filename','filenames','stripes']) and ('width' in value or 'size' in value):yield value
+  if is_sprite(value):
+   yield value
+   if value.get('draw_as_shadow') or value.get('draw_as_light') or value.get('draw_as_glow'): return
   for key,child in value.items():
    if key!='tint': yield from walk_sprites(child)
  elif isinstance(value,list):
   for child in value: yield from walk_sprites(child)
+def without_tint(value):
+ if isinstance(value,dict): return {k:without_tint(v) for k,v in value.items() if k!='tint'}
+ if isinstance(value,list): return [without_tint(v) for v in value]
+ return value
 purple=[0.8,0.45,1]
 prim=list(walk_sprites(separator['graphics_set']));orig=list(walk_sprites(source['graphics_set']))
 assert len(prim)==len(orig) and len(prim)>=1
@@ -91,7 +99,7 @@ for before,after in zip(orig,prim):
  if before.get('draw_as_shadow') or before.get('draw_as_light') or before.get('draw_as_glow'):
   assert after==before
  else:
-  assert {k:v for k,v in after.items() if k!='tint'}=={k:v for k,v in before.items() if k!='tint'}
+  assert without_tint(after)==without_tint(before)
   got=channels(after.get('tint'))
   for i,c in enumerate(purple): assert abs(got[i]-c)<1e-6
   assert abs(got[3]-1)<1e-6
