@@ -15,8 +15,10 @@ discovery.name = "planet-discovery-quinityn"
 discovery.icon = nil
 discovery.icon_size = nil
 discovery.icons = table.deepcopy(data.raw.planet.quinityn.icons)
-discovery.effects =
-  { { type = "unlock-space-location", space_location = "quinityn", use_icon_overlay_constant = true } }
+discovery.effects = {
+  { type = "unlock-space-location", space_location = "quinityn", use_icon_overlay_constant = true },
+  { type = "unlock-travel-to-space-platforms", modifier = true },
+}
 discovery.localised_name = { "technology-name.planet-discovery-quinityn" }
 discovery.localised_description = { "technology-description.planet-discovery-quinityn" }
 local landing = {

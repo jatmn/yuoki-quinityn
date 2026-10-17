@@ -108,6 +108,10 @@ print('PASS: planet-specific map control membership and visible salvage sorting 
 # Research is anchored beyond space travel; native milestones bootstrap local science.
 assert T['quinityn-arrival']['prerequisites']==['planet-discovery-quinityn']
 assert 'space-science-pack' in [i[0] for i in T['planet-discovery-quinityn']['unit']['ingredients']]
+assert T['planet-discovery-quinityn']['effects']==[
+ {'type':'unlock-space-location','space_location':'quinityn','use_icon_overlay_constant':True},
+ {'type':'unlock-travel-to-space-platforms','modifier':True},
+]
 for name,t in T.items():
  if not name.startswith('quinityn-'):continue
  assert 'planet-discovery-quinityn' in ancestry(name),name
