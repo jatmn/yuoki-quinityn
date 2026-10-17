@@ -44,6 +44,7 @@ Version: Unreleased
     - Limited N4/F7 map-generator planet badges to Quinityn without restoring ore generation elsewhere.
     - Matched the hand-sorting recipe icon to its salvage input and added direct guide/tooltip links.
     - Added missing localized surface units and custom prototype/interface names.
+    - Productivity modules can be used while compiling industrial research data. A normal craft still makes five packs; productivity adds bonus packs without extra ingredients.
   Compatibility:
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.

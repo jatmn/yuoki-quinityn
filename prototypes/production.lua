@@ -139,6 +139,8 @@ data.raw.item["y-pol-waste"].localised_description = { "item-description.quinity
 for _, name in ipairs({ "y-waste-condense", "y_mixedfuel2rocketfuel" }) do
   data.raw.recipe[name].localised_description = { "recipe-description.quinityn-" .. name }
 end
+-- Science packs accept productivity the way other pack recipes do. Leave the helper default off.
+data.raw.recipe["quinityn-research-data"].allow_productivity = true
 -- Dedicated technical qualification: material-intensive, with no fuel/byproduct output.
 recipe(
   "quinityn-technic-sign",

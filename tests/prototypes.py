@@ -443,3 +443,21 @@ assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emis
 assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
 assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')
+science=R['quinityn-research-data']
+assert science['allow_productivity'] is True
+assert science.get('allow_quality',False) is False
+assert {p['name']:p['amount'] for p in science['ingredients']}=={'y-unicomp-raw':1,'y-refined-yres2':1,'y_rwtechsign':1,'y-pol-waste':5}
+assert science['results']==[{'type':'item','name':'quinityn-research-data','amount':5}]
+assert science['energy_required']==5
+assert science['categories']==['quinityn-science']
+assert science['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
+for name in ['quinityn-hand-sort','quinityn-iron','quinityn-copper','quinityn-carbon','quinityn-stone','quinityn-timber',
+ 'quinityn-burner-separator','quinityn-water','quinityn-technic-sign','quinityn-low-density-structure',
+ 'quinityn-processing-unit','quinityn-foundation']:
+ assert R[name].get('allow_productivity',False) is False,name
+for name,slots in [('ye_fassembly1',3),('ye_fassembly2',3),('ye_fassembly_sp',2)]:
+ machine=D['assembling-machine'][name]
+ assert 'productivity' in machine['allowed_effects'],name
+ assert 'quinityn-science' in machine['crafting_categories'],name
+ assert machine['module_slots']==slots,name
+print('PASS: industrial research data accepts productivity; other Quinityn recipes and factory slots unchanged')
