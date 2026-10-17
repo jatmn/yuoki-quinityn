@@ -78,14 +78,14 @@ def channels(tint):
  tint=list(tint)
  return tint if len(tint) == 4 else tint + [1]
 def is_sprite(value):
- return isinstance(value,dict) and any(k in value for k in ['filename','filenames','stripes']) and ('width' in value or 'size' in value)
+ return isinstance(value,dict) and any(k in value for k in ['filename','filenames','stripes'])
 def walk_sprites(value):
  if isinstance(value,dict):
   if is_sprite(value):
    yield value
    if value.get('draw_as_shadow') or value.get('draw_as_light') or value.get('draw_as_glow'): return
   for key,child in value.items():
-   if key!='tint': yield from walk_sprites(child)
+   if key!='tint' and key!='stripes': yield from walk_sprites(child)
  elif isinstance(value,list):
   for child in value: yield from walk_sprites(child)
 def without_tint(value):
@@ -93,9 +93,7 @@ def without_tint(value):
  if isinstance(value,list): return [without_tint(v) for v in value]
  return value
 purple=[0.8,0.45,1]
-prim=list(walk_sprites(separator['graphics_set']));orig=list(walk_sprites(source['graphics_set']))
-assert len(prim)==len(orig) and len(prim)>=1
-for before,after in zip(orig,prim):
+def check_sprite(before, after):
  if before.get('draw_as_shadow') or before.get('draw_as_light') or before.get('draw_as_glow'):
   assert after==before
  else:
@@ -105,6 +103,47 @@ for before,after in zip(orig,prim):
   assert abs(got[3]-1)<1e-6
   base=channels(before.get('tint'))
   assert not all(abs(base[i]-purple[i])<1e-6 for i in range(3))
+def tinted(sprite, **nested):
+ out=dict(sprite)
+ out['tint']=[0.8,0.45,1]
+ out.update(nested)
+ return out
+# A filename-only sprite is still a sprite. Ignoring it, or leaving it untinted, fails.
+assert list(walk_sprites({'layers':[{'filename':'visible-only.png'}]}))==[{'filename':'visible-only.png'}]
+try:
+ check_sprite({'filename':'visible-only.png'}, {'filename':'visible-only.png'})
+except AssertionError:
+ pass
+else:
+ raise AssertionError('filename-only sprite left untinted was accepted')
+stripe={'stripes':[{'filename':'frame.png','width_in_frames':4,'height_in_frames':1}],'hr_version':{'filename':'hr-only.png'}}
+found=list(walk_sprites({'layers':[stripe, {'filename':'shadow.png','draw_as_shadow':True,'hr_version':{'filename':'shadow-hr.png'}}]}))
+assert len(found)==3 and 'stripes' in found[0] and found[1]['filename']=='hr-only.png' and found[2]['filename']=='shadow.png'
+assert all(s.get('filename') not in ('frame.png','shadow-hr.png') for s in found)
+raw={'layers':[
+ {'filename':'visible-only.png'},
+ {'filenames':['a.png','b.png']},
+ {'stripes':[{'filename':'frame.png','width_in_frames':4,'height_in_frames':1}]},
+ {'filename':'shadow.png','draw_as_shadow':True,'hr_version':{'filename':'shadow-hr.png'}},
+ {'filename':'light.png','draw_as_light':True},
+ {'filename':'glow.png','draw_as_glow':True,'hr_version':{'filename':'glow-hr.png'}},
+ {'filename':'visible.png','width':32,'hr_version':{'filename':'visible-hr.png'}},
+]}
+done={'layers':[
+ tinted({'filename':'visible-only.png'}),
+ tinted({'filenames':['a.png','b.png']}),
+ tinted({'stripes':[{'filename':'frame.png','width_in_frames':4,'height_in_frames':1}]}),
+ {'filename':'shadow.png','draw_as_shadow':True,'hr_version':{'filename':'shadow-hr.png'}},
+ {'filename':'light.png','draw_as_light':True},
+ {'filename':'glow.png','draw_as_glow':True,'hr_version':{'filename':'glow-hr.png'}},
+ tinted({'filename':'visible.png','width':32}, hr_version=tinted({'filename':'visible-hr.png'})),
+]}
+left,right=list(walk_sprites(raw)),list(walk_sprites(done))
+assert len(left)==len(right)==8
+for before,after in zip(left,right): check_sprite(before, after)
+prim=list(walk_sprites(separator['graphics_set']));orig=list(walk_sprites(source['graphics_set']))
+assert len(prim)==len(orig) and len(prim)>=1
+for before,after in zip(orig,prim): check_sprite(before, after)
 assert separator['graphics_set']!=source['graphics_set']
 assert separator['fluid_boxes']==source['fluid_boxes']
 assert separator['circuit_connector']==D['assembling-machine']['chemical-plant']['circuit_connector']

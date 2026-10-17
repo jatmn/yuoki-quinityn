@@ -38,7 +38,9 @@ local function tint_visible_sprites(value)
   if type(value) ~= "table" then
     return
   end
-  local is_sprite = (value.filename or value.filenames or value.stripes) and (value.width or value.size)
+  -- filename / filenames / stripes, same signal as sprites() in stomp-a-trons.lua.
+  -- Width and size are not required. Stripe records are not sprites.
+  local is_sprite = value.filename or value.filenames or value.stripes
   if is_sprite then
     if value.draw_as_shadow or value.draw_as_light or value.draw_as_glow then
       return
@@ -46,7 +48,7 @@ local function tint_visible_sprites(value)
     value.tint = { primitive_tint[1], primitive_tint[2], primitive_tint[3] }
   end
   for key, child in pairs(value) do
-    if key ~= "tint" then
+    if key ~= "tint" and key ~= "stripes" then
       tint_visible_sprites(child)
     end
   end
