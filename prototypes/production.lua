@@ -29,6 +29,13 @@ local function recipe(name, ingredients, results, categories, seconds)
     },
   })
 end
+local function with_product_group(name)
+  local recipe_proto = data.raw.recipe[name]
+  local product = recipe_proto.results[1]
+  local source = data.raw[product.type][product.name] or data.raw.tool[product.name]
+  recipe_proto.subgroup = source.subgroup
+  recipe_proto.order = source.order
+end
 data:extend({
   { type = "item-subgroup", name = "quinityn-fieldwork", group = "yuoki", order = "00" },
   { type = "recipe-category", name = "quinityn-separation" },
@@ -148,6 +155,7 @@ recipe(
   { "quinityn-science" },
   5
 )
+with_product_group("quinityn-research-data")
 data.raw.item["y-pol-waste"].localised_description = { "item-description.quinityn-flyash" }
 for _, name in ipairs({ "y-waste-condense", "y_mixedfuel2rocketfuel" }) do
   data.raw.recipe[name].localised_description = { "recipe-description.quinityn-" .. name }
@@ -188,6 +196,7 @@ recipe(
   { "crafting" },
   15
 )
+with_product_group("quinityn-low-density-structure")
 recipe(
   "quinityn-processing-unit",
   { item("y-chip-2", 2), item("y-conductive-wire-1", 4), fluid("sulfuric-acid", 5) },
@@ -195,6 +204,7 @@ recipe(
   { "crafting-with-fluid" },
   10
 )
+with_product_group("quinityn-processing-unit")
 
 -- Emergency dressing cannot become a competing automated ore industry.
 for _, name in ipairs({ "hand-sort", "iron", "copper", "carbon", "stone", "timber" }) do
@@ -228,3 +238,4 @@ recipe(
   { "yuoki-formpress" },
   8
 )
+with_product_group("quinityn-foundation")
