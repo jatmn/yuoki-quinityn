@@ -18,7 +18,7 @@ These deposits are the settled residue of the planet's former industry, an addit
 
 ## Size the science supply
 
-An unmoduled craft at normal quality still uses one flyash per pack and makes five packs; the table below is that baseline. Productivity modules add bonus packs without extra flyash, so a moduled factory produces more packs per minute than the table. The Fatmice columns are what keeps the unmoduled factory supplied. One unfiltered Fatmice supports **30 packs/minute**; one filtered Fatmice with a dedicated washer supports **36 packs/minute**. These are nominal rates with uninterrupted power, inputs and output handling. Factory capacity and the ash supply required to keep it running are:
+An unmoduled craft at normal quality still uses one flyash per pack and makes five packs; the table below is that baseline. Productivity modules add extra packs per craft from the same ingredient set, with no extra flyash. The Fatmice columns are what keeps the unmoduled factory supplied. One unfiltered Fatmice supports **30 packs/minute**; one filtered Fatmice with a dedicated washer supports **36 packs/minute**. These are nominal rates with uninterrupted power, inputs and output handling. Factory capacity and the ash supply required to keep it running are:
 
 | Factory | Packs/minute | Unfiltered Fatmice | Filtered Fatmice + washers |
 | --- | --- | --- | --- |
