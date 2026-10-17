@@ -1,4 +1,5 @@
 local copy = table.deepcopy
+local primitive_tint = { 0.8, 0.45, 1 }
 local function item(name, count)
   return { type = "item", name = name, amount = count }
 end
@@ -33,6 +34,23 @@ data:extend({
   { type = "recipe-category", name = "quinityn-separation" },
   { type = "recipe-category", name = "quinityn-science" },
 })
+local function tint_visible_sprites(value)
+  if type(value) ~= "table" then
+    return
+  end
+  local is_sprite = (value.filename or value.filenames or value.stripes) and (value.width or value.size)
+  if is_sprite then
+    if value.draw_as_shadow or value.draw_as_light or value.draw_as_glow then
+      return
+    end
+    value.tint = { primitive_tint[1], primitive_tint[2], primitive_tint[3] }
+  end
+  for key, child in pairs(value) do
+    if key ~= "tint" then
+      tint_visible_sprites(child)
+    end
+  end
+end
 local separator = copy(data.raw["assembling-machine"]["y-atomic-constructor"])
 -- Keep the existing entity/item ID so placed separators and blueprints survive.
 local old_separator = data.raw["assembling-machine"]["chemical-plant"]
@@ -61,12 +79,13 @@ separator.allowed_effects = {}
 separator.next_upgrade = nil
 separator.fast_replaceable_group = nil
 separator.localised_name = { "entity-name.quinityn-burner-separator" }
+tint_visible_sprites(separator.graphics_set)
 local separator_item = copy(data.raw.item["y-atomic-constructor"])
 separator_item.name = separator.name
 separator_item.place_result = separator.name
 separator_item.subgroup = "quinityn-fieldwork"
 separator_item.localised_name = { "entity-name.quinityn-burner-separator" }
-separator_item.icons = { { icon = "__Yuoki__/graphics/icons/cimota_64.png", icon_size = 64, tint = { 0.8, 0.45, 1 } } }
+separator_item.icons = { { icon = "__Yuoki__/graphics/icons/cimota_64.png", icon_size = 64, tint = primitive_tint } }
 separator_item.icon = nil
 data:extend({
   separator,

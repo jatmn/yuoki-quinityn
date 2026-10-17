@@ -70,7 +70,39 @@ assert unlocks['ye_fassembly1']==['quinityn-basic-factory']
 assert 'unit' not in T['quinityn-materials']
 assert unlocks['quinityn-research-data']==['quinityn-industrial-science']
 separator=D['assembling-machine']['quinityn-burner-separator']
-assert separator['graphics_set']==D['assembling-machine']['y-atomic-constructor']['graphics_set']
+source=D['assembling-machine']['y-atomic-constructor']
+def channels(tint):
+ if tint is None: return [1, 1, 1, 1]
+ if isinstance(tint, dict):
+  return [tint.get('r', 0), tint.get('g', 0), tint.get('b', 0), tint.get('a', 1)]
+ tint=list(tint)
+ return tint if len(tint) == 4 else tint + [1]
+def walk_sprites(value):
+ if isinstance(value,dict):
+  if any(k in value for k in ['filename','filenames','stripes']) and ('width' in value or 'size' in value):yield value
+  for key,child in value.items():
+   if key!='tint': yield from walk_sprites(child)
+ elif isinstance(value,list):
+  for child in value: yield from walk_sprites(child)
+purple=[0.8,0.45,1]
+prim=list(walk_sprites(separator['graphics_set']));orig=list(walk_sprites(source['graphics_set']))
+assert len(prim)==len(orig) and len(prim)>=1
+for before,after in zip(orig,prim):
+ if before.get('draw_as_shadow') or before.get('draw_as_light') or before.get('draw_as_glow'):
+  assert after==before
+ else:
+  assert {k:v for k,v in after.items() if k!='tint'}=={k:v for k,v in before.items() if k!='tint'}
+  got=channels(after.get('tint'))
+  for i,c in enumerate(purple): assert abs(got[i]-c)<1e-6
+  assert abs(got[3]-1)<1e-6
+  base=channels(before.get('tint'))
+  assert not all(abs(base[i]-purple[i])<1e-6 for i in range(3))
+assert separator['graphics_set']!=source['graphics_set']
+assert separator['fluid_boxes']==source['fluid_boxes']
+assert separator['circuit_connector']==D['assembling-machine']['chemical-plant']['circuit_connector']
+item_tint=channels(I['quinityn-burner-separator']['icons'][0]['tint'])
+for i,c in enumerate(purple): assert abs(item_tint[i]-c)<1e-6
+assert R['quinityn-burner-separator']['icons']==I['quinityn-burner-separator']['icons']
 assert separator['crafting_speed']==0.5 and separator['energy_usage']=='180kW'
 assert separator['energy_source']['emissions_per_minute']['pollution']==6
 assert separator['module_slots']==0 and not separator['quality_affects_module_slots']
