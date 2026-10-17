@@ -66,6 +66,19 @@ function M.reconcile()
     for recipe, enabled in pairs(managed) do
       force.recipes[recipe].enabled = enabled
     end
+    if
+      force.technologies["quinityn-arrival"]
+      and force.technologies["quinityn-arrival"].researched
+      and force.technologies["quinityn-surplus"]
+      and not force.technologies["quinityn-surplus"].researched
+    then
+      force.script_trigger_research("quinityn-surplus")
+      for _, effect in pairs(force.technologies["quinityn-surplus"].prototype.effects) do
+        if effect.type == "unlock-recipe" then
+          force.recipes[effect.recipe].enabled = true
+        end
+      end
+    end
     if not settings.startup["yuoki-uc-heavyoil"].value then
       force.recipes["y-heavyoil2uc"].enabled = false
     end

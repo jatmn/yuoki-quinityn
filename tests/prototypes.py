@@ -522,3 +522,44 @@ assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emis
 assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
 assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')
+
+prim=D['assembling-machine']['quinityn-burner-separator']
+assert prim['crafting_categories']==['quinityn-separation','quinityn-primitive-conversion']
+full=D['assembling-machine']['y-atomic-constructor']
+assert full['crafting_categories']==['yuoki-atomics'] and full['crafting_speed']==2 and full['energy_usage']=='1200kW'
+assert 'quinityn-primitive-conversion' not in D['character']['character']['crafting_categories']
+surplus_specs={
+ 'quinityn-stone-to-uc':([('stone',40)],[('y-unicomp-a2',1)]),
+ 'quinityn-wood-to-uc':([('wood',40)],[('y-unicomp-a2',1)]),
+ 'quinityn-uc-to-coal':([('y-unicomp-a2',1)],[('coal',10)]),
+ 'quinityn-uc-to-iron':([('y-unicomp-a2',1)],[('iron-ore',10)]),
+ 'quinityn-uc-to-copper':([('y-unicomp-a2',1)],[('copper-ore',10)]),
+}
+for name,(ing,res) in surplus_specs.items():
+ r=R[name]
+ assert r['categories']==['quinityn-primitive-conversion'] and r['energy_required']==8
+ assert r.get('enabled',True) is False and r['subgroup']=='quinityn-fieldwork' and r['order']==name
+ assert not r.get('allow_productivity',True) and r.get('auto_recycle') is False
+ assert [(p['name'],p['amount']) for p in r['ingredients']]==ing
+ assert [(p['name'],p['amount']) for p in r['results']]==res
+ assert unlocks[name]==['quinityn-surplus']
+surplus=T['quinityn-surplus']
+assert surplus['prerequisites']==['quinityn-arrival'] and 'unit' not in surplus
+assert surplus['research_trigger']=={'type':'craft-item','item':'quinityn-burner-separator','count':1}
+assert 'quinityn-power' not in ancestry('quinityn-surplus')
+assert 'quinityn-cimota' not in ancestry('quinityn-surplus')
+for upstream in ['y-ac-stone2uc','y-ac-wood2uc','y-ac-uc2coal','y-ac-uc2iron-ore','y-ac-uc2copper-ore']:
+ assert unlocks[upstream]==['quinityn-cimota']
+prim_time=lambda r,s: r['energy_required']/s
+prim_chain=prim_time(R['quinityn-wood-to-uc'],0.5)+prim_time(R['quinityn-uc-to-coal'],0.5)
+full_chain=prim_time(R['y-ac-wood2uc'],2)+prim_time(R['y-ac-uc2coal'],2)
+assert prim_chain>full_chain
+wood_in,coal_out=40,10
+full_wood,full_coal=20,20
+assert wood_in/full_wood>coal_out/full_coal
+coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
+if coal_fuel=='4MJ':
+ assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
+assert unlocks['quinityn-water']==['quinityn-arrival']
+assert len(tips)==73
+print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')

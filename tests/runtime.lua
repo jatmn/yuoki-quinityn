@@ -173,6 +173,37 @@ script.on_event(defines.events.on_tick, function(event)
     separator.get_fuel_inventory().insert({ name = "y-res2", count = 10 })
     separator.insert_fluid({ name = "y-liquid-uc2", amount = 100 })
     storage.separator = separator
+    local surplus_tech = force.technologies["quinityn-surplus"]
+    check(surplus_tech and surplus_tech.prototype.research_trigger ~= nil, "surplus technology has no science unit")
+    force.script_trigger_research("quinityn-surplus")
+    for _, effect in pairs(surplus_tech.prototype.effects) do
+      if effect.type == "unlock-recipe" then
+        force.recipes[effect.recipe].enabled = true
+      end
+    end
+    for _, name in ipairs({
+      "quinityn-stone-to-uc",
+      "quinityn-wood-to-uc",
+      "quinityn-uc-to-coal",
+      "quinityn-uc-to-iron",
+      "quinityn-uc-to-copper",
+    }) do
+      check(force.recipes[name].enabled, "surplus unlocks " .. name)
+    end
+    local conversion =
+      surface.create_entity({ name = "quinityn-burner-separator", position = { 0, 18 }, force = force })
+    check(conversion and conversion.valid, "conversion separator placement")
+    check(conversion.set_recipe("quinityn-stone-to-uc"), "primitive separator selects stone to UC")
+    force.technologies["quinityn-cimota"].researched = true
+    force.recipes["y-ac-stone2uc"].enabled = true
+    conversion.set_recipe("y-ac-stone2uc")
+    local active = conversion.get_recipe()
+    check(not active or active.name ~= "y-ac-stone2uc", "primitive separator rejects full Cimota stone recipe")
+    conversion.set_recipe("quinityn-stone-to-uc")
+    conversion.insert({ name = "stone", count = 40 })
+    conversion.get_fuel_inventory().insert({ name = "y-res2", count = 10 })
+    conversion.set_recipe("quinityn-stone-to-uc")
+    storage.conversion_separator = conversion
     local circuit_source = surface.create_entity({ name = "constant-combinator", position = { 4, 12 }, force = force })
     check(circuit_source and circuit_source.valid, "separator circuit source placement")
     for _, wire in ipairs({
@@ -364,6 +395,15 @@ script.on_event(defines.events.on_tick, function(event)
       )
       check(machine.insert({ name = "y-pol-waste", count = 1 }) == 1, machine.name .. " accepts the fifth flyash")
     end
+  elseif event.tick == 2000 then
+    local output = storage.conversion_separator.get_output_inventory()
+    check(output.get_item_count("y-unicomp-a2") >= 1, "primitive stone conversion yields UC-A2")
+    check(
+      output.get_item_count("coal") == 0
+        and output.get_item_count("iron-ore") == 0
+        and output.get_item_count("copper-ore") == 0,
+      "stone-only primitive conversion does not yield coal or ore"
+    )
   elseif event.tick == 2400 then
     for _, machine in ipairs(storage.factories) do
       check(
