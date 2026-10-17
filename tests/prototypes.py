@@ -86,6 +86,50 @@ for name,group in [('quinityn-salvage',I),('quinityn-research-data',D['tool'])]:
  width,height,depth,color=struct.unpack('>IIBB',image[16:26])
  assert width==height==p['icon_size']==256 and depth==8 and color==6
 print('PASS: factory-only science/signs, early factory, primitive Cimota/F7 fuel, decorative coverage and RGBA icons')
+tool=D['tool']
+science=tool['quinityn-research-data']
+assert R['quinityn-research-data']['subgroup']==science['subgroup']=='science-pack'
+assert R['quinityn-research-data']['order']==science['order']=='z[quinityn]'
+assert science['order']>I['promethium-science-pack']['order']
+assert R['quinityn-foundation']['subgroup']==I['quinityn-foundation']['subgroup']=='terrain'
+assert R['quinityn-foundation']['order']==I['quinityn-foundation']['order']=='c[landfill]-h[quinityn]'
+assert R['quinityn-foundation']['order']>I['foundation']['order']=='c[landfill]-g[foundation]'
+assert R['quinityn-low-density-structure']['subgroup']==I['low-density-structure']['subgroup']=='intermediate-product'
+assert R['quinityn-low-density-structure']['order']==I['low-density-structure']['order']=='d[rocket-parts]-a[low-density-structure]'
+assert R['quinityn-processing-unit']['subgroup']==I['processing-unit']['subgroup']=='intermediate-product'
+assert R['quinityn-processing-unit']['order']==I['processing-unit']['order']=='b[circuits]-c[processing-unit]'
+for name in ['quinityn-hand-sort','quinityn-iron','quinityn-copper','quinityn-carbon','quinityn-stone','quinityn-timber',
+             'quinityn-burner-separator','quinityn-water','quinityn-technic-sign']:
+ assert R[name]['subgroup']=='quinityn-fieldwork' and R[name]['order']==name
+assert I['quinityn-salvage']['subgroup']==I['quinityn-burner-separator']['subgroup']=='quinityn-fieldwork'
+assert R['quinityn-research-data']['categories']==['quinityn-science']
+assert R['quinityn-foundation']['categories']==['yuoki-formpress']
+assert R['quinityn-low-density-structure']['categories']==['crafting']
+assert R['quinityn-processing-unit']['categories']==['crafting-with-fluid']
+assert R['quinityn-technic-sign']['categories']==['quinityn-science']
+for name in ['quinityn-research-data','quinityn-foundation','quinityn-low-density-structure','quinityn-processing-unit']:
+ assert R[name]['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}] and R[name].get('enabled',True) is False
+assert unlocks['quinityn-research-data']==['quinityn-industrial-science']
+assert unlocks['quinityn-foundation']==['quinityn-foundation']
+assert unlocks['quinityn-low-density-structure']==unlocks['quinityn-processing-unit']==['quinityn-orbital']
+assert unlocks['quinityn-technic-sign']==['quinityn-industrial-science']
+assert R['quinityn-research-data']['ingredients']==[{'type':'item','name':'y-unicomp-raw','amount':1},{'type':'item','name':'y-refined-yres2','amount':1},
+ {'type':'item','name':'y_rwtechsign','amount':1},{'type':'item','name':'y-pol-waste','amount':5}]
+assert R['quinityn-research-data']['results']==[{'type':'item','name':'quinityn-research-data','amount':5}]
+assert R['quinityn-research-data']['energy_required']==5
+assert R['quinityn-foundation']['ingredients']==[{'type':'item','name':'y_structure_element','amount':2},{'type':'item','name':'y_structure_vessel','amount':1},
+ {'type':'item','name':'y-orange-stuff','amount':5},{'type':'item','name':'stone-brick','amount':10}]
+assert R['quinityn-foundation']['results']==[{'type':'item','name':'quinityn-foundation','amount':4}]
+assert R['quinityn-foundation']['energy_required']==8
+assert R['quinityn-low-density-structure']['ingredients']==[{'type':'item','name':'y_structure_element','amount':2},{'type':'item','name':'y-unicomp-raw','amount':5},
+ {'type':'item','name':'plastic-bar','amount':5}]
+assert R['quinityn-low-density-structure']['results']==[{'type':'item','name':'low-density-structure','amount':1}]
+assert R['quinityn-low-density-structure']['energy_required']==15
+assert R['quinityn-processing-unit']['ingredients']==[{'type':'item','name':'y-chip-2','amount':2},{'type':'item','name':'y-conductive-wire-1','amount':4},
+ {'type':'fluid','name':'sulfuric-acid','amount':5}]
+assert R['quinityn-processing-unit']['results']==[{'type':'item','name':'processing-unit','amount':1}]
+assert R['quinityn-processing-unit']['energy_required']==10
+print('PASS: recipe family grouping for science, foundation and orbital products')
 
 # UI planet badges are derived from control membership, not nonzero settings.
 for name,planet in D['planet'].items():
