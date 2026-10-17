@@ -35,6 +35,7 @@ Version: Unreleased
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:
     - Tinted the placed Primitive Cimota Restructor purple so it matches its recipe icon.
+    - Researching Planet discovery Quinityn unlocks rocket travel to space platforms, even when it is the first planet discovered. An existing save that already researched it gains that permission on load. Landing is still required for the field survey.
     - Shifted Uni-touched enemies, nests, remains and icons to a royal-violet palette with distinct variant shades, retaining their shading and opacity.
     - Corrected the enemy name to Uni-touched: Quinityn natives altered by living off its unicomp waters.
     - Carried the Uni-touched purple tint into Quinityn enemy death bursts without changing ordinary enemy particles.

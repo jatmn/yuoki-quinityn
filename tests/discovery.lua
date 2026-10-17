@@ -28,8 +28,18 @@ return function(surface)
   progression.arrive(player)
   check(not pending.technologies["quinityn-arrival"].researched, "force transfer before discovery stays gated")
 
+  check(not pending.unlock_travel_to_space_platforms, "a new force cannot board a rocket before planet discovery")
+
   -- Make it eligible so discovery's guard cannot mask a wrong-force retry.
   pending.technologies["planet-discovery-quinityn"].researched = true
+  check(pending.unlock_travel_to_space_platforms, "Quinityn discovery alone unlocks rocket travel")
+  check(
+    not pending.technologies["planet-discovery-vulcanus"].researched
+      and not pending.technologies["planet-discovery-gleba"].researched
+      and not pending.technologies["planet-discovery-fulgora"].researched,
+    "rocket travel did not require Vulcanus, Gleba or Fulgora"
+  )
+  check(not pending.technologies["quinityn-arrival"].researched, "rocket travel does not complete the field survey")
   local remote = game.create_force("discovery-remote")
   local remote_character =
     game.surfaces.nauvis.create_entity({ name = "character", position = { 0, 0 }, force = remote })
@@ -47,6 +57,7 @@ return function(surface)
     not remote.technologies["quinityn-arrival"].researched and not remote.recipes["quinityn-hand-sort"].enabled,
     "discovery with remote view or characterless presence does not unlock survey"
   )
+  check(remote.unlock_travel_to_space_platforms, "discovery without a landing still unlocks rocket travel")
   check(
     not pending.technologies["quinityn-arrival"].researched,
     "another force's discovery does not unlock the waiting force"
