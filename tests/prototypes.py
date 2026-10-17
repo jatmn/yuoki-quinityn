@@ -445,7 +445,7 @@ assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinity
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True
-assert science.get('allow_quality',False) is False
+assert science['allow_quality'] is False
 assert {p['name']:p['amount'] for p in science['ingredients']}=={'y-unicomp-raw':1,'y-refined-yres2':1,'y_rwtechsign':1,'y-pol-waste':5}
 assert science['results']==[{'type':'item','name':'quinityn-research-data','amount':5}]
 assert science['energy_required']==5

@@ -446,11 +446,12 @@ script.on_event(defines.events.on_tick, function(event)
         check_tick = deadline
       end
     end
-    if check_tick == 8500 or check_tick == 15000 then
-      check_tick = check_tick + 1
+    local absolute = 2401 + check_tick
+    if absolute == 8500 or absolute == 15000 then
+      absolute = absolute + 1
     end
-    check(check_tick < 15000, "productivity fixture finishes before benchmark end")
-    storage.productivity_check_tick = 2401 + check_tick
+    check(absolute < 15000, "productivity fixture finishes before benchmark end")
+    storage.productivity_check_tick = absolute
   elseif event.tick == storage.productivity_check_tick then
     for _, pair in ipairs(storage.productivity_pairs or {}) do
       local moduled, control = pair.moduled, pair.control
