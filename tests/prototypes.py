@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==73
+assert len(tips)==84
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 73 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 84 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -288,6 +288,79 @@ for n in [robotics,network,advanced]:
  assert {'logistic-science-pack','chemical-science-pack'}<={i[0] for i in T[n]['unit']['ingredients']}
  assert 'chemical-science-pack' in ancestry(n)
 print('PASS: separate Y2/P3/research center, endgame science/costs and robot manufacturing plus lab gates')
+
+def tech_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+def assert_unlocks(tech,recipes):
+ got=tech_unlocks(tech)
+ want=set(recipes)
+ assert got==want,(tech,got,want)
+assert_unlocks('quinityn-defense',['y_wood_wall','y-mud-wall','y-bullet-case','y_turret_gun1f12','yi_cannon_shell'])
+assert_unlocks('quinityn-advanced-defense',['y_turret_gun2f12','y-ammo-hohlspitz','y-ammo-acid-2','y-ammo-poison',
+ 'y-ammo-krakon','y-ammo-explosiv','y-ammo-biggun'])
+assert_unlocks('quinityn-durotal-walls',['y-rare-wall-basic'])
+assert_unlocks('quinityn-forcefield-walls',['y-wall-forcefield'])
+assert_unlocks('quinityn-hardic-walls',['y_wall22_hardic'])
+assert_unlocks('quinityn-ammunition-cases',['y_ammo_case'])
+assert_unlocks('quinityn-laser-turret',['y_turret_laser22f12'])
+assert_unlocks('quinityn-plasma-weapons',['y_turret_plasma','y_ammo_plasma'])
+assert_unlocks('quinityn-chemical-weapons',['y_turret_flame','y_ammo_flame'])
+assert_unlocks('quinityn-poison-mines',['yi_mine_impact'])
+assert_unlocks('quinityn-plasma-mines',['yi_mine_plasma'])
+assert_unlocks('quinityn-artillery-shells',['yi_artillery_shell'])
+assert_unlocks('quinityn-zero-time-weapon',['y-weapon-ztt'])
+defense_split_owners={
+ 'y_wood_wall':'quinityn-defense','y-mud-wall':'quinityn-defense','y-bullet-case':'quinityn-defense',
+ 'y_turret_gun1f12':'quinityn-defense','yi_cannon_shell':'quinityn-defense',
+ 'y_turret_gun2f12':'quinityn-advanced-defense','y-ammo-hohlspitz':'quinityn-advanced-defense',
+ 'y-ammo-acid-2':'quinityn-advanced-defense','y-ammo-poison':'quinityn-advanced-defense',
+ 'y-ammo-krakon':'quinityn-advanced-defense','y-ammo-explosiv':'quinityn-advanced-defense',
+ 'y-ammo-biggun':'quinityn-advanced-defense',
+ 'y-rare-wall-basic':'quinityn-durotal-walls','y-wall-forcefield':'quinityn-forcefield-walls',
+ 'y_wall22_hardic':'quinityn-hardic-walls','y-rare-wall-adv':'quinityn-reactors','y_ammo_case':'quinityn-ammunition-cases',
+ 'y_turret_laser22f12':'quinityn-laser-turret','y_turret_plasma':'quinityn-plasma-weapons',
+ 'y_ammo_plasma':'quinityn-plasma-weapons','y_turret_flame':'quinityn-chemical-weapons',
+ 'y_ammo_flame':'quinityn-chemical-weapons','yi_mine_impact':'quinityn-poison-mines',
+ 'yi_mine_plasma':'quinityn-plasma-mines','yi_artillery_shell':'quinityn-artillery-shells',
+ 'y-weapon-ztt':'quinityn-zero-time-weapon',
+}
+for recipe,owner in defense_split_owners.items():
+ assert unlocks[recipe]==[owner],(recipe,unlocks.get(recipe))
+assert 'y-weapon-ztt' not in tech_unlocks('quinityn-quantum-power')
+powered={e['recipe'] for e in T['quinityn-powered-armor']['effects'] if e['type']=='unlock-recipe'}
+assert powered=={'yi_ammo_energie','yi_armor_gray','yi_equip_battery_a','yi_equip_legs_a','yi_equip_roboport',
+ 'yi_equip_shield_a','yi_lasergun','yi_minigun','yi_pld_equipment'}
+assert T['quinityn-defense']['unit']['count']==100
+assert T['quinityn-defense']['prerequisites']==['quinityn-power','quinityn-washing']
+assert T['quinityn-advanced-defense']['unit']['count']==160
+assert T['quinityn-advanced-defense']['prerequisites']==['quinityn-defense','quinityn-advanced-components','quinityn-energy-storage']
+assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage']
+assert T['quinityn-walker-1']['prerequisites']==['quinityn-armor-3','quinityn-mastery']
+assert T['quinityn-walker-2']['prerequisites']==['quinityn-walker-1']
+assert 'quinityn-durotal-walls' in ancestry('quinityn-reactors')
+assert 'quinityn-durotal-walls' in ancestry('quinityn-forcefield-walls')
+assert 'quinityn-durotal-walls' in ancestry('quinityn-hardic-walls')
+assert 'quinityn-chemical-weapons' in ancestry('quinityn-poison-mines')
+assert 'quinityn-plasma-weapons' in ancestry('quinityn-plasma-mines')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-plasma-weapons')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-chemical-weapons')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-artillery-shells')
+assert 'artillery' in ancestry('quinityn-artillery-shells')
+assert 'concrete' in ancestry('quinityn-hardic-walls')
+assert 'quinityn-reactors' in ancestry('quinityn-zero-time-weapon')
+assert 'quinityn-advanced-storage' in ancestry('quinityn-zero-time-weapon')
+assert 'quinityn-quantum-power' not in ancestry('quinityn-zero-time-weapon')
+new_defense=['quinityn-durotal-walls','quinityn-forcefield-walls','quinityn-hardic-walls','quinityn-ammunition-cases',
+ 'quinityn-laser-turret','quinityn-plasma-weapons','quinityn-chemical-weapons','quinityn-poison-mines',
+ 'quinityn-plasma-mines','quinityn-artillery-shells','quinityn-zero-time-weapon']
+for n in new_defense:
+ assert 'quinityn-defense' in ancestry(n),n
+ assert 'research_trigger' not in T[n],n
+ assert T[n]['unit']['time']==20,n
+ assert {i[0] for i in T[n]['unit']['ingredients']}=={'automation-science-pack','logistic-science-pack','quinityn-research-data'},n
+assert 'gun2_icon' in str(T['quinityn-advanced-defense'].get('icons',T['quinityn-advanced-defense'].get('icon','')))
+assert 'gun_1_icon' in str(T['quinityn-defense'].get('icons',T['quinityn-defense'].get('icon','')))
+print('PASS: staged defense walls, specialized weapons, ancestry and icons')
 
 # Every active Yuoki module has its own research, including ultimate products
 # outside the ordinary module crafting subgroup. Recipe inputs establish lineage.
@@ -567,7 +640,7 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==73
+assert len(tips)==84
 print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True

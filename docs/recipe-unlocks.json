@@ -10,17 +10,13 @@
     "yi_magnetron"
   ],
   "quinityn-advanced-defense": [
-    "y-wall-forcefield",
-    "y_ammo_flame",
-    "y_ammo_plasma",
-    "y_turret_flame",
-    "y_turret_gun2f12",
-    "y_turret_laser22f12",
-    "y_turret_plasma",
-    "y_wall22_hardic",
-    "yi_artillery_shell",
-    "yi_mine_impact",
-    "yi_mine_plasma"
+    "y-ammo-acid-2",
+    "y-ammo-biggun",
+    "y-ammo-explosiv",
+    "y-ammo-hohlspitz",
+    "y-ammo-krakon",
+    "y-ammo-poison",
+    "y_turret_gun2f12"
   ],
   "quinityn-advanced-efficiency-module": [
     "y-green-module-2"
@@ -135,6 +131,9 @@
     "y-mixing-rich",
     "y-orange-stuff"
   ],
+  "quinityn-ammunition-cases": [
+    "y_ammo_case"
+  ],
   "quinityn-armor-2": [
     "yi_armor_red",
     "yi_equip_shield_b"
@@ -152,6 +151,9 @@
     "quinityn-burner-separator",
     "quinityn-water"
   ],
+  "quinityn-artillery-shells": [
+    "yi_artillery_shell"
+  ],
   "quinityn-basic-factory": [
     "y-basic-t1-mf",
     "ye_fassembly1"
@@ -165,17 +167,13 @@
     "yi_magnetron-recycling"
   ],
   "quinityn-bridge-advanced-defense-recycling": [
-    "y-wall-forcefield-recycling",
-    "y_ammo_flame-recycling",
-    "y_ammo_plasma-recycling",
-    "y_turret_flame-recycling",
-    "y_turret_gun2f12-recycling",
-    "y_turret_laser22f12-recycling",
-    "y_turret_plasma-recycling",
-    "y_wall22_hardic-recycling",
-    "yi_artillery_shell-recycling",
-    "yi_mine_impact-recycling",
-    "yi_mine_plasma-recycling"
+    "y-ammo-acid-2-recycling",
+    "y-ammo-biggun-recycling",
+    "y-ammo-explosiv-recycling",
+    "y-ammo-hohlspitz-recycling",
+    "y-ammo-krakon-recycling",
+    "y-ammo-poison-recycling",
+    "y_turret_gun2f12-recycling"
   ],
   "quinityn-bridge-advanced-efficiency-module-recycling": [
     "y-green-module-2-recycling"
@@ -287,6 +285,9 @@
   "quinityn-bridge-alloying-recycling": [
     "y-orange-stuff-recycling"
   ],
+  "quinityn-bridge-ammunition-cases-recycling": [
+    "y_ammo_case-recycling"
+  ],
   "quinityn-bridge-armor-2-recycling": [
     "yi_armor_red-recycling",
     "yi_equip_shield_b-recycling"
@@ -294,9 +295,16 @@
   "quinityn-bridge-armor-3-recycling": [
     "yi_armor_gold-recycling"
   ],
+  "quinityn-bridge-artillery-shells-recycling": [
+    "yi_artillery_shell-recycling"
+  ],
   "quinityn-bridge-basic-factory-recycling": [
     "y-basic-t1-mf-recycling",
     "ye_fassembly1-recycling"
+  ],
+  "quinityn-bridge-chemical-weapons-recycling": [
+    "y_ammo_flame-recycling",
+    "y_turret_flame-recycling"
   ],
   "quinityn-bridge-cimota-recycling": [
     "y-atomic-constructor-recycling",
@@ -317,19 +325,14 @@
     "y_trockner-recycling"
   ],
   "quinityn-bridge-defense-recycling": [
-    "y-ammo-acid-2-recycling",
-    "y-ammo-biggun-recycling",
-    "y-ammo-explosiv-recycling",
-    "y-ammo-hohlspitz-recycling",
-    "y-ammo-krakon-recycling",
-    "y-ammo-poison-recycling",
     "y-bullet-case-recycling",
     "y-mud-wall-recycling",
-    "y-rare-wall-basic-recycling",
-    "y_ammo_case-recycling",
     "y_turret_gun1f12-recycling",
     "y_wood_wall-recycling",
     "yi_cannon_shell-recycling"
+  ],
+  "quinityn-bridge-durotal-walls-recycling": [
+    "y-rare-wall-basic-recycling"
   ],
   "quinityn-bridge-efficiency-module-recycling": [
     "y-green-module-1-recycling"
@@ -402,8 +405,14 @@
     "ye_sealing-recycling",
     "ye_sealing-recycling"
   ],
+  "quinityn-bridge-forcefield-walls-recycling": [
+    "y-wall-forcefield-recycling"
+  ],
   "quinityn-bridge-fuel-processing-recycling": [
     "y-fuel-reactor-recycling"
+  ],
+  "quinityn-bridge-hardic-walls-recycling": [
+    "y_wall22_hardic-recycling"
   ],
   "quinityn-bridge-husbandry-recycling": [
     "ye_dnasplicer-recycling",
@@ -416,6 +425,9 @@
     "ye_smoked_fish-recycling",
     "ye_smoked_meat-recycling",
     "ye_smoker-recycling"
+  ],
+  "quinityn-bridge-laser-turret-recycling": [
+    "y_turret_laser22f12-recycling"
   ],
   "quinityn-bridge-logistics-recycling": [
     "j-dl-buffer-recycling",
@@ -519,6 +531,16 @@
     "yi_pipe_underground_green-recycling",
     "yi_radar-recycling"
   ],
+  "quinityn-bridge-plasma-mines-recycling": [
+    "yi_mine_plasma-recycling"
+  ],
+  "quinityn-bridge-plasma-weapons-recycling": [
+    "y_ammo_plasma-recycling",
+    "y_turret_plasma-recycling"
+  ],
+  "quinityn-bridge-poison-mines-recycling": [
+    "yi_mine_impact-recycling"
+  ],
   "quinityn-bridge-power-recycling": [
     "y-coal-brikett-recycling",
     "y-coal-dust-recycling",
@@ -568,7 +590,6 @@
     "y-obninsk-turbine-recycling",
     "y-quantrinum-reactor-recycling",
     "y-substation-h-recycling",
-    "y-weapon-ztt-recycling",
     "y_alien_solar2-recycling",
     "y_mox2fuel-recycling",
     "y_mox2fuelsplited-recycling",
@@ -717,6 +738,13 @@
     "y_tile_slagfilled-recycling",
     "y_tile_slagpattern-recycling"
   ],
+  "quinityn-bridge-zero-time-weapon-recycling": [
+    "y-weapon-ztt-recycling"
+  ],
+  "quinityn-chemical-weapons": [
+    "y_ammo_flame",
+    "y_turret_flame"
+  ],
   "quinityn-cimota": [
     "j-cw2uc-recipe",
     "y-ac-calcite2uc",
@@ -777,19 +805,14 @@
     "y_trockner"
   ],
   "quinityn-defense": [
-    "y-ammo-acid-2",
-    "y-ammo-biggun",
-    "y-ammo-explosiv",
-    "y-ammo-hohlspitz",
-    "y-ammo-krakon",
-    "y-ammo-poison",
     "y-bullet-case",
     "y-mud-wall",
-    "y-rare-wall-basic",
-    "y_ammo_case",
     "y_turret_gun1f12",
     "y_wood_wall",
     "yi_cannon_shell"
+  ],
+  "quinityn-durotal-walls": [
+    "y-rare-wall-basic"
   ],
   "quinityn-efficiency-module": [
     "y-green-module-1"
@@ -860,6 +883,9 @@
     "ye_icemaker",
     "ye_sealing"
   ],
+  "quinityn-forcefield-walls": [
+    "y-wall-forcefield"
+  ],
   "quinityn-foundation": [
     "quinityn-foundation"
   ],
@@ -873,6 +899,9 @@
     "ye_dna_plant3",
     "ye_grow_animal2",
     "ye_grow_plant1"
+  ],
+  "quinityn-hardic-walls": [
+    "y_wall22_hardic"
   ],
   "quinityn-husbandry": [
     "ye_cooking_meat",
@@ -901,6 +930,9 @@
   "quinityn-industrial-science": [
     "quinityn-research-data",
     "quinityn-technic-sign"
+  ],
+  "quinityn-laser-turret": [
+    "y_turret_laser22f12"
   ],
   "quinityn-logistics": [
     "j-dl-buffer",
@@ -1002,6 +1034,16 @@
     "yi_radar"
   ],
   "quinityn-plasma-damage": [],
+  "quinityn-plasma-mines": [
+    "yi_mine_plasma"
+  ],
+  "quinityn-plasma-weapons": [
+    "y_ammo_plasma",
+    "y_turret_plasma"
+  ],
+  "quinityn-poison-mines": [
+    "yi_mine_impact"
+  ],
   "quinityn-power": [
     "y-coal-brikett",
     "y-coal-dust",
@@ -1068,7 +1110,6 @@
     "y-obninsk-turbine",
     "y-quantrinum-reactor",
     "y-substation-h",
-    "y-weapon-ztt",
     "y_alien_solar2",
     "y_mox2fuel",
     "y_mox2fuelsplited",
@@ -1221,5 +1262,8 @@
     "y_tile_slagbricks",
     "y_tile_slagfilled",
     "y_tile_slagpattern"
+  ],
+  "quinityn-zero-time-weapon": [
+    "y-weapon-ztt"
   ]
 }
