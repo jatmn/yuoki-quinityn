@@ -326,6 +326,29 @@ defense_split_owners={
 }
 for recipe,owner in defense_split_owners.items():
  assert unlocks[recipe]==[owner],(recipe,unlocks.get(recipe))
+defense_moved_recycling={
+ 'y-ammo-acid-2-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-biggun-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-explosiv-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-hohlspitz-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-krakon-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-poison-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-rare-wall-basic-recycling':'quinityn-bridge-durotal-walls-recycling',
+ 'y_ammo_case-recycling':'quinityn-bridge-ammunition-cases-recycling',
+ 'y-wall-forcefield-recycling':'quinityn-bridge-forcefield-walls-recycling',
+ 'y_wall22_hardic-recycling':'quinityn-bridge-hardic-walls-recycling',
+ 'y_turret_laser22f12-recycling':'quinityn-bridge-laser-turret-recycling',
+ 'y_turret_plasma-recycling':'quinityn-bridge-plasma-weapons-recycling',
+ 'y_ammo_plasma-recycling':'quinityn-bridge-plasma-weapons-recycling',
+ 'y_turret_flame-recycling':'quinityn-bridge-chemical-weapons-recycling',
+ 'y_ammo_flame-recycling':'quinityn-bridge-chemical-weapons-recycling',
+ 'yi_mine_impact-recycling':'quinityn-bridge-poison-mines-recycling',
+ 'yi_mine_plasma-recycling':'quinityn-bridge-plasma-mines-recycling',
+ 'yi_artillery_shell-recycling':'quinityn-bridge-artillery-shells-recycling',
+ 'y-weapon-ztt-recycling':'quinityn-bridge-zero-time-weapon-recycling',
+}
+for recipe,owner in defense_moved_recycling.items():
+ assert unlocks[recipe]==[owner],(recipe,unlocks.get(recipe))
 assert 'y-weapon-ztt' not in tech_unlocks('quinityn-quantum-power')
 powered={e['recipe'] for e in T['quinityn-powered-armor']['effects'] if e['type']=='unlock-recipe'}
 assert powered=={'yi_ammo_energie','yi_armor_gray','yi_equip_battery_a','yi_equip_legs_a','yi_equip_roboport',

@@ -156,11 +156,14 @@ local function defense_unlocks()
     end
   end
   local function assert_new_unlocks(tech, expected)
+    ensure_prereqs(tech)
+    for _, name in ipairs(expected) do
+      check(not force.recipes[name].enabled, tech .. " stays locked before research: " .. name)
+    end
     local before = {}
     for _, name in ipairs(defense_recipes) do
       before[name] = force.recipes[name].enabled
     end
-    ensure_prereqs(tech)
     force.technologies[tech].researched = true
     mark(tech)
     progression.reconcile()
@@ -215,19 +218,7 @@ local function defense_unlocks()
   assert_new_unlocks("quinityn-poison-mines", { "yi_mine_impact" })
   assert_new_unlocks("quinityn-plasma-mines", { "yi_mine_plasma" })
   assert_new_unlocks("quinityn-artillery-shells", { "yi_artillery_shell" })
-  ensure_prereqs("quinityn-reactors")
-  force.technologies["quinityn-reactors"].researched = true
-  mark("quinityn-reactors")
-  progression.reconcile()
-  check(force.recipes["y-rare-wall-adv"].enabled, "reactors enables Krakon wall")
-  check(not force.recipes["y-weapon-ztt"].enabled, "reactors leaves D-ZTT locked")
-  for tier, recipes in pairs(tier_recipes) do
-    if tier ~= "quinityn-zero-time-weapon" and not researched[tier] then
-      for _, name in ipairs(recipes) do
-        check(not force.recipes[name].enabled, "reactors leaves unresearched " .. tier .. " locked: " .. name)
-      end
-    end
-  end
+  assert_new_unlocks("quinityn-reactors", { "y-rare-wall-adv" })
   assert_new_unlocks("quinityn-zero-time-weapon", { "y-weapon-ztt" })
   local quantum_unlocks = {}
   for _, effect in pairs(prototypes.technology["quinityn-quantum-power"].effects) do
