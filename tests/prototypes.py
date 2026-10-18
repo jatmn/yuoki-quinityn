@@ -42,7 +42,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==73
+assert len(tips)==77
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -52,7 +52,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 73 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 77 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -515,7 +515,28 @@ assert unlocks['y-electric-air-heater']==unlocks['y-rmvpol']==['quinityn-air-scr
 assert not R['y-rmvpol'].get('hidden',False)
 for name in ['j-airfilter','j-airfilter_dirty','j-airfilter_cleaning']:
  assert unlocks[name]==['quinityn-air-filters'] and not R[name].get('enabled',True)
-assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines'}<=ancestry('quinityn-air-filters')
+def direct_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+assert direct_unlocks('quinityn-washing')=={'y-dirtwasher','y-filtering-dust','y-pressed_dry_mud','y-pure-copper','y-pure-iron','y-release-cwater','y-refined-copper','y-refined-iron'}
+assert direct_unlocks('quinityn-archaeology')=={'y-wash-dirt','y-wash-special'}
+assert direct_unlocks('quinityn-unicomp-compression')=={'y-press-richdust'}
+assert direct_unlocks('quinityn-slag-materials')=={'y_slag_granulate','y_slag_brick','y_slag_brick_burn','y_steinmehl'}
+assert direct_unlocks('quinityn-slag-paving')=={'y_tile_slagbricks','y_tile_slagfilled','y_tile_slagpattern'}
+assert {'quinityn-washing','quinityn-excavation'}<=ancestry('quinityn-archaeology')
+assert 'quinityn-washing' in ancestry('quinityn-unicomp-compression')
+assert 'quinityn-washing' in ancestry('quinityn-slag-materials')
+assert 'quinityn-slag-materials' in ancestry('quinityn-slag-paving')
+assert 'quinityn-slag-materials' in ancestry('quinityn-air-filters')
+assert 'quinityn-slag-materials' in ancestry('quinityn-defense')
+assert 'quinityn-slag-materials' in ancestry('quinityn-crystal-processing')
+assert 'quinityn-archaeology' in ancestry('quinityn-quantum')
+assert 'quinityn-cimota' not in unlocks.get('y-press-richdust',[])
+assert unlocks['y_mc_dirtwasher']==['quinityn-mastery']
+assert unlocks['y_pure_copper_wtool']==['quinityn-tooling']
+assert unlocks['y_mud2solidfuel']==['quinityn-power']
+assert unlocks['y-digfdirt']==['quinityn-excavation']
+assert unlocks['y_data_crystal']==['quinityn-quantum']
+assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines','quinityn-slag-materials'}<=ancestry('quinityn-air-filters')
 assert next(p['amount'] for p in R['j-airfilter_dirty']['ingredients'] if p['name']=='j-airfilter')==1
 assert {p['name']:p['amount'] for p in R['j-airfilter_cleaning']['results']}=={'j-airfilter':1,'y-pol-waste':6}
 assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emissions_multiplier',1)
@@ -567,7 +588,7 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==73
+assert len(tips)==77
 print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True

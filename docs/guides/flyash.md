@@ -14,7 +14,7 @@ These deposits are the settled residue of the planet's former industry, an addit
 
 ## Close the filter loop
 
-**Reusable air filters** comes later, after Fatmice, Washing and Engines. Make filters from iron sticks, stone dust and coal dust. A filtered capture consumes a filter, 60 water and 0.2 MF in 10 seconds, removes twice the pollution while operating, and returns a dirty filter. Wash it in a dirt washer with 110 water and 8 coal dust: **1 clean filter + 6 flyash**, with no wastewater. Return the clean filter to the Fatmice. The filtered capture provides six ash per ten seconds versus five unfiltered; budget a separate washer and coal-dust supply. Keep at least two filters circulating per Fatmice, plus transport buffers, so washing does not leave capture waiting for its only filter. The unfiltered recipe remains available.
+**Reusable air filters** comes later, after Fatmice, Washing, Engines, and Slag materials and stone flour. Make filters from iron sticks, stone dust and coal dust. A filtered capture consumes a filter, 60 water and 0.2 MF in 10 seconds, removes twice the pollution while operating, and returns a dirty filter. Wash it in a dirt washer with 110 water and 8 coal dust: **1 clean filter + 6 flyash**, with no wastewater. Return the clean filter to the Fatmice. The filtered capture provides six ash per ten seconds versus five unfiltered; budget a separate washer and coal-dust supply. Keep at least two filters circulating per Fatmice, plus transport buffers, so washing does not leave capture waiting for its only filter. The unfiltered recipe remains available.
 
 ## Size the science supply
 

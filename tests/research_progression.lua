@@ -69,7 +69,49 @@ local function module_unlocks()
     check(force.technologies["quinityn-" .. name].researched, "completed research preserved: " .. name)
   end
 end
+local function washing_split()
+  local force = game.create_force("washing-split")
+  force.technologies["quinityn-washing"].researched = true
+  progression.reconcile()
+  local retained = {
+    "y-dirtwasher",
+    "y-filtering-dust",
+    "y-pressed_dry_mud",
+    "y-pure-copper",
+    "y-pure-iron",
+    "y-release-cwater",
+    "y-refined-copper",
+    "y-refined-iron",
+  }
+  for _, recipe in ipairs(retained) do
+    check(force.recipes[recipe].enabled, "washing retains " .. recipe)
+  end
+  local split = {
+    archaeology = { "y-wash-dirt", "y-wash-special" },
+    ["unicomp-compression"] = { "y-press-richdust" },
+    ["slag-materials"] = { "y_slag_granulate", "y_slag_brick", "y_slag_brick_burn", "y_steinmehl" },
+    ["slag-paving"] = { "y_tile_slagbricks", "y_tile_slagfilled", "y_tile_slagpattern" },
+  }
+  for tier, recipes in pairs(split) do
+    check(not force.technologies["quinityn-" .. tier].researched, tier .. " starts locked")
+    for _, recipe in ipairs(recipes) do
+      check(not force.recipes[recipe].enabled, tier .. " keeps " .. recipe .. " locked")
+    end
+  end
+  check(force.technologies["quinityn-washing"].researched, "washing completion preserved")
+  check(not force.recipes["y_mud2solidfuel"].enabled, "power recipe stays off washing alone")
+  check(not force.recipes["y_mc_dirtwasher"].enabled, "mastery washer stays off washing alone")
+  for _, tier in ipairs({ "archaeology", "unicomp-compression", "slag-materials", "slag-paving" }) do
+    local recipes = split[tier]
+    force.technologies["quinityn-" .. tier].researched = true
+    progression.reconcile()
+    for _, recipe in ipairs(recipes) do
+      check(force.recipes[recipe].enabled, tier .. " unlocks " .. recipe)
+    end
+  end
+end
 script.on_init(function()
+  washing_split()
   module_unlocks()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
