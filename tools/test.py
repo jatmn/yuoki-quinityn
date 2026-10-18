@@ -39,6 +39,18 @@ for seed in [1,42,8675309]:
  run(f'generate-{seed}',base+['--create',str(save),'--map-gen-seed',str(seed)],'rich starter deposit: y-res2=')
 run('worldgen',[sys.executable,str(ROOT/'tests/worldgen.py'),str(a.output)],'PASS')
 run('runtime',base+['--benchmark',str(a.output/'seed-42.zip'),'--benchmark-ticks','15001','--benchmark-runs','1'],'QUINITYN RUNTIME TESTS PASSED')
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/surplus_migration")\n')
+ setting_override=harness/'settings-updates.lua'
+ run('surplus-migration-create',base+['--create',str(a.output/'surplus-migration.zip')],'QUINITYN SURPLUS MIGRATION SETUP')
+ # Inserter cleanup exists only beside an adjustable-inserter mod. This startup
+ # setting is always defined, so the reload is a real configuration change.
+ setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-uc-heavyoil"]); setting.forced_value=false; setting.hidden=true\n')
+ run('surplus-migration-reload',base+['--benchmark',str(a.output/'surplus-migration.zip'),'--benchmark-ticks','60','--benchmark-runs','1'],'QUINITYN SURPLUS MIGRATION PASSED')
+finally:
+ setting_override.unlink(missing_ok=True)
+ (mods/'mod-settings.dat').unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Native paired surfaces verify the independent planet controls through map generation.
 try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/enemies")\n')

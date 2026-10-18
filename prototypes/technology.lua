@@ -35,6 +35,23 @@ for _, name in ipairs({ "hand-sort", "iron", "copper", "carbon", "stone", "timbe
   table.insert(landing.effects, unlock("quinityn-" .. name))
 end
 data:extend({ discovery, landing })
+data:extend({
+  {
+    type = "technology",
+    name = "quinityn-surplus",
+    icons = icons("stone"),
+    prerequisites = { "quinityn-arrival" },
+    effects = {
+      unlock("quinityn-stone-to-uc"),
+      unlock("quinityn-wood-to-uc"),
+      unlock("quinityn-uc-to-coal"),
+      unlock("quinityn-uc-to-iron"),
+      unlock("quinityn-uc-to-copper"),
+    },
+    research_trigger = { type = "craft-item", item = "quinityn-burner-separator", count = 1 },
+    order = "y-a2",
+  },
+})
 -- A single shared foundation followed by focused industrial disciplines.
 local stages = {
   {

@@ -522,6 +522,53 @@ assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emis
 assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
 assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')
+
+prim=D['assembling-machine']['quinityn-burner-separator']
+assert prim['crafting_categories']==['quinityn-separation','quinityn-primitive-conversion']
+full=D['assembling-machine']['y-atomic-constructor']
+assert full['crafting_categories']==['yuoki-atomics'] and full['crafting_speed']==2 and full['energy_usage']=='1200kW'
+assert 'quinityn-primitive-conversion' not in D['character']['character']['crafting_categories']
+surplus_specs={
+ 'quinityn-stone-to-uc':([('stone',40)],[('y-unicomp-a2',1)]),
+ 'quinityn-wood-to-uc':([('wood',40)],[('y-unicomp-a2',1)]),
+ 'quinityn-uc-to-coal':([('y-unicomp-a2',1)],[('coal',10)]),
+ 'quinityn-uc-to-iron':([('y-unicomp-a2',1)],[('iron-ore',10)]),
+ 'quinityn-uc-to-copper':([('y-unicomp-a2',1)],[('copper-ore',10)]),
+}
+for name,(ing,res) in surplus_specs.items():
+ r=R[name]
+ assert r['categories']==['quinityn-primitive-conversion'] and r['energy_required']==8
+ assert r.get('enabled',True) is False and r['subgroup']=='quinityn-fieldwork' and r['order']==name
+ assert not r.get('allow_productivity',True) and r.get('auto_recycle') is False
+ assert [(p['name'],p['amount']) for p in r['ingredients']]==ing
+ assert [(p['name'],p['amount']) for p in r['results']]==res
+ assert unlocks[name]==['quinityn-surplus']
+surplus=T['quinityn-surplus']
+assert surplus['prerequisites']==['quinityn-arrival'] and 'unit' not in surplus
+assert surplus['research_trigger']=={'type':'craft-item','item':'quinityn-burner-separator','count':1}
+assert 'quinityn-power' not in ancestry('quinityn-surplus')
+assert 'quinityn-cimota' not in ancestry('quinityn-surplus')
+for upstream in ['y-ac-stone2uc','y-ac-wood2uc','y-ac-uc2coal','y-ac-uc2iron-ore','y-ac-uc2copper-ore']:
+ assert unlocks[upstream]==['quinityn-cimota']
+prim_time=lambda r,s: r['energy_required']/s
+prim_chain=prim_time(R['quinityn-wood-to-uc'],0.5)+prim_time(R['quinityn-uc-to-coal'],0.5)
+full_chain=prim_time(R['y-ac-wood2uc'],2)+prim_time(R['y-ac-uc2coal'],2)
+assert prim_chain>full_chain
+def recipe_amount(recipe_name,field,item_name):
+ recipe=R[recipe_name]
+ parts=[p for p in (recipe.get(field) or []) if p.get('name')==item_name]
+ assert len(parts)==1 and isinstance(parts[0].get('amount'),(int,float)) and parts[0]['amount']>0, recipe_name+' missing '+item_name+' in '+field
+ return parts[0]['amount']
+wood_in,coal_out=40,10
+full_wood=recipe_amount('y-ac-wood2uc','ingredients','wood')
+full_coal=recipe_amount('y-ac-uc2coal','results','coal')
+assert wood_in/full_wood>coal_out/full_coal, 'Primitive wood-to-coal yield must stay below the loaded full Cimota recipes'
+coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
+if coal_fuel=='4MJ':
+ assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
+assert unlocks['quinityn-water']==['quinityn-arrival']
+assert len(tips)==73
+print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True
 assert science['allow_quality'] is False
@@ -532,7 +579,8 @@ assert science['categories']==['quinityn-science']
 assert science['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
 for name in ['quinityn-hand-sort','quinityn-iron','quinityn-copper','quinityn-carbon','quinityn-stone','quinityn-timber',
  'quinityn-burner-separator','quinityn-water','quinityn-technic-sign','quinityn-low-density-structure',
- 'quinityn-processing-unit','quinityn-foundation']:
+ 'quinityn-processing-unit','quinityn-foundation','quinityn-stone-to-uc','quinityn-wood-to-uc',
+ 'quinityn-uc-to-coal','quinityn-uc-to-iron','quinityn-uc-to-copper']:
  assert R[name].get('allow_productivity',False) is False,name
 for name,slots in [('ye_fassembly1',3),('ye_fassembly2',3),('ye_fassembly_sp',2)]:
  machine=D['assembling-machine'][name]

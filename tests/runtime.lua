@@ -173,6 +173,35 @@ script.on_event(defines.events.on_tick, function(event)
     separator.get_fuel_inventory().insert({ name = "y-res2", count = 10 })
     separator.insert_fluid({ name = "y-liquid-uc2", amount = 100 })
     storage.separator = separator
+    local surplus_tech = force.technologies["quinityn-surplus"]
+    local trigger = surplus_tech.prototype.research_trigger
+    local trigger_item = trigger and trigger.item or nil
+    if trigger_item and type(trigger_item) ~= "string" then
+      trigger_item = trigger_item.name
+    end
+    -- LuaTechnology has no research_unit field; a craft trigger is the unit's absence.
+    check(
+      trigger and trigger.type == "craft-item" and trigger_item == "quinityn-burner-separator" and trigger.count == 1,
+      "surplus is a one-craft trigger"
+    )
+    check(not surplus_tech.researched, "surplus stays locked until the separator is crafted")
+    for _, name in ipairs({
+      "quinityn-stone-to-uc",
+      "quinityn-wood-to-uc",
+      "quinityn-uc-to-coal",
+      "quinityn-uc-to-iron",
+      "quinityn-uc-to-copper",
+    }) do
+      check(not force.recipes[name].enabled, "surplus recipe locked before craft: " .. name)
+    end
+    local surplus_assembler =
+      surface.create_entity({ name = "assembling-machine-1", position = { -8, 12 }, force = force })
+    check(surplus_assembler and surplus_assembler.valid, "surplus craft assembler placement")
+    check(surplus_assembler.set_recipe("quinityn-burner-separator"), "assembler selects primitive Cimota recipe")
+    check(surplus_assembler.insert({ name = "iron-plate", count = 10 }) == 10, "assembler accepts iron plates")
+    check(surplus_assembler.insert({ name = "copper-plate", count = 5 }) == 5, "assembler accepts copper plates")
+    check(surplus_assembler.insert({ name = "stone", count = 10 }) == 10, "assembler accepts stone")
+    storage.surplus_assembler = surplus_assembler
     local circuit_source = surface.create_entity({ name = "constant-combinator", position = { 4, 12 }, force = force })
     check(circuit_source and circuit_source.valid, "separator circuit source placement")
     for _, wire in ipairs({
@@ -364,6 +393,112 @@ script.on_event(defines.events.on_tick, function(event)
       )
       check(machine.insert({ name = "y-pol-waste", count = 1 }) == 1, machine.name .. " accepts the fifth flyash")
     end
+    local assembler = storage.surplus_assembler
+    check(assembler and assembler.valid and assembler.products_finished >= 1, "assembler crafted one primitive Cimota")
+    check(force.technologies["quinityn-surplus"].researched, "crafting the primitive Cimota researches surplus")
+    for _, name in ipairs({
+      "quinityn-stone-to-uc",
+      "quinityn-wood-to-uc",
+      "quinityn-uc-to-coal",
+      "quinityn-uc-to-iron",
+      "quinityn-uc-to-copper",
+    }) do
+      check(force.recipes[name].enabled, "craft trigger unlocks " .. name)
+    end
+    local conversion =
+      surface.create_entity({ name = "quinityn-burner-separator", position = { 0, 18 }, force = force })
+    check(conversion and conversion.valid, "conversion separator placement")
+    -- set_recipe returns removed items, not success, so the selected recipe is the proof.
+    force.recipes["y-ac-stone2uc"].enabled = true
+    conversion.set_recipe("y-ac-stone2uc")
+    check(conversion.get_recipe() == nil, "primitive separator rejects full Cimota stone recipe")
+    check(not force.technologies["quinityn-cimota"].researched, "category rejection does not research full Cimota")
+    force.recipes["y-ac-stone2uc"].enabled = false
+    conversion.set_recipe("quinityn-stone-to-uc")
+    local selected = conversion.get_recipe()
+    check(selected and selected.name == "quinityn-stone-to-uc", "primitive separator selects stone to UC")
+    check(conversion.insert({ name = "stone", count = 40 }) == 40, "conversion separator accepts stone")
+    conversion.get_fuel_inventory().insert({ name = "y-res2", count = 10 })
+    storage.conversion_separator = conversion
+    local surplus_recipe_names = {
+      "quinityn-stone-to-uc",
+      "quinityn-wood-to-uc",
+      "quinityn-uc-to-coal",
+      "quinityn-uc-to-iron",
+      "quinityn-uc-to-copper",
+    }
+    local function check_surplus_recipes_disabled(target)
+      for _, name in ipairs(surplus_recipe_names) do
+        check(not target.recipes[name].enabled, "surplus recipe locked: " .. name)
+      end
+    end
+    local function check_surplus_recipes_enabled(target)
+      for _, name in ipairs(surplus_recipe_names) do
+        check(target.recipes[name].enabled, "surplus recipe enabled: " .. name)
+      end
+    end
+    local surveyed_uncrafted = game.create_force("surveyed-uncrafted")
+    surveyed_uncrafted.technologies["quinityn-arrival"].researched = true
+    check_surplus_recipes_disabled(surveyed_uncrafted)
+    local migration_crafted = game.create_force("migration-crafted")
+    migration_crafted.technologies["quinityn-arrival"].researched = true
+    migration_crafted.technologies["quinityn-materials"].researched = true
+    migration_crafted.recipes["quinityn-uc-to-coal"].enabled = false
+    local done = game.create_force("surplus-done")
+    done.technologies["quinityn-arrival"].researched = true
+    done.technologies["quinityn-surplus"].researched = true
+    done.recipes["quinityn-uc-to-iron"].enabled = false
+    progression.reconcile()
+    check(
+      not surveyed_uncrafted.technologies["quinityn-surplus"].researched,
+      "arrival-only force stays without surplus after reconcile"
+    )
+    check_surplus_recipes_disabled(surveyed_uncrafted)
+    check(migration_crafted.technologies["quinityn-surplus"].researched, "migration force receives surplus")
+    check_surplus_recipes_enabled(migration_crafted)
+    check(
+      done.technologies["quinityn-surplus"].researched and done.recipes["quinityn-uc-to-iron"].enabled,
+      "reconcile keeps recipes enabled when surplus is already researched"
+    )
+    check(
+      not game.forces.unvisited.technologies["quinityn-surplus"].researched
+        and not game.forces.unvisited.recipes["quinityn-stone-to-uc"].enabled,
+      "reconcile leaves an unsurveyed force locked"
+    )
+    progression.reconcile()
+    check(
+      not surveyed_uncrafted.technologies["quinityn-surplus"].researched,
+      "arrival-only force stays without surplus after a second reconcile"
+    )
+    check_surplus_recipes_disabled(surveyed_uncrafted)
+    check(
+      migration_crafted.technologies["quinityn-surplus"].researched
+        and migration_crafted.recipes["quinityn-wood-to-uc"].enabled,
+      "a second reconcile keeps migration surplus unlocked"
+    )
+    check(
+      not game.forces.unvisited.recipes["quinityn-uc-to-copper"].enabled,
+      "a second reconcile still leaves an unsurveyed force locked"
+    )
+    local merge_uncrafted = game.create_force("merge-uncrafted")
+    merge_uncrafted.technologies["quinityn-arrival"].researched = true
+    game.create_force("merge-uncrafted-src").technologies["quinityn-arrival"].researched = true
+    game.merge_forces("merge-uncrafted-src", "merge-uncrafted")
+    local merge_crafted = game.create_force("merge-crafted")
+    merge_crafted.technologies["quinityn-arrival"].researched = true
+    merge_crafted.technologies["quinityn-materials"].researched = true
+    merge_crafted.recipes["quinityn-uc-to-iron"].enabled = false
+    game.create_force("merge-crafted-src")
+    game.merge_forces("merge-crafted-src", "merge-crafted")
+  elseif event.tick == 3600 then
+    local output = storage.conversion_separator.get_output_inventory()
+    check(output.get_item_count("y-unicomp-a2") >= 1, "primitive stone conversion yields UC-A2")
+    check(
+      output.get_item_count("coal") == 0
+        and output.get_item_count("iron-ore") == 0
+        and output.get_item_count("copper-ore") == 0,
+      "stone-only primitive conversion does not yield coal or ore"
+    )
   elseif event.tick == 2400 then
     for _, machine in ipairs(storage.factories) do
       check(
@@ -372,6 +507,7 @@ script.on_event(defines.events.on_tick, function(event)
       )
       check(machine.get_item_count("y-pol-waste") == 0, machine.name .. " consumes five flyash for five science packs")
     end
+    check(storage.surplus_merge_checked, "force merge reconcile ran")
     check(storage.biter_path_land_passed, "biter path succeeds on dry land control")
     check(storage.biter_path_blocked, "biter path cannot cross unicomp moat")
     check(storage.chest.get_item_count("iron-plate") == 0, "inserter discards into unicomp")
@@ -447,7 +583,7 @@ script.on_event(defines.events.on_tick, function(event)
       end
     end
     local absolute = 2401 + check_tick
-    if absolute == 8500 or absolute == 15000 then
+    if absolute == 3600 or absolute == 8500 or absolute == 15000 then
       absolute = absolute + 1
     end
     check(absolute < 15000, "productivity fixture finishes before benchmark end")
@@ -502,6 +638,9 @@ script.on_event(defines.events.on_tick, function(event)
   for _, machine in ipairs(storage.factories or {}) do
     machine.energy = 10000000
   end
+  if storage.surplus_assembler and storage.surplus_assembler.valid then
+    storage.surplus_assembler.energy = 100000000
+  end
   for _, pair in ipairs(storage.productivity_pairs or {}) do
     if pair.moduled and pair.moduled.valid then
       pair.moduled.energy = 10000000
@@ -554,6 +693,32 @@ script.on_event(defines.events.on_tick, function(event)
     storage.runtime_tests_passed = true
     log("QUINITYN RUNTIME TESTS PASSED")
   end
+end)
+
+script.on_event(defines.events.on_forces_merged, function()
+  storage.surplus_merge_checked = true
+  local surplus_recipe_names = {
+    "quinityn-stone-to-uc",
+    "quinityn-wood-to-uc",
+    "quinityn-uc-to-coal",
+    "quinityn-uc-to-iron",
+    "quinityn-uc-to-copper",
+  }
+  local merge_uncrafted = game.forces["merge-uncrafted"]
+  check(
+    not merge_uncrafted.technologies["quinityn-surplus"].researched
+      and not merge_uncrafted.technologies["quinityn-materials"].researched,
+    "merged uncrafted destination stays without materials or surplus"
+  )
+  for _, name in ipairs(surplus_recipe_names) do
+    check(not merge_uncrafted.recipes[name].enabled, "merged uncrafted destination keeps " .. name .. " disabled")
+  end
+  local merge_crafted = game.forces["merge-crafted"]
+  check(merge_crafted.technologies["quinityn-surplus"].researched, "merged crafted destination receives surplus")
+  for _, name in ipairs(surplus_recipe_names) do
+    check(merge_crafted.recipes[name].enabled, "merged crafted destination enables " .. name)
+  end
+  check(game.forces.player.technologies["quinityn-surplus"].researched, "player surplus survives force merge reconcile")
 end)
 
 script.on_event(defines.events.on_script_path_request_finished, function(e)
