@@ -673,6 +673,10 @@ assert set(T['quinityn-refining']['prerequisites'])=={'quinityn-engines','quinit
 assert set(T['quinityn-thermal-smelting']['prerequisites'])=={'quinityn-refining','quinityn-quantum'}
 assert {'quinityn-refining','quinityn-quantum'}<=ancestry('quinityn-thermal-smelting')
 assert 'quinityn-quantum' not in ancestry('quinityn-refining')
+assert set(T['quinityn-washing']['prerequisites'])=={'quinityn-industrial-science','quinityn-basic-factory','quinityn-fuel-processing'}
+assert set(T['quinityn-energy-storage']['prerequisites'])=={'quinityn-power','quinityn-washing','quinityn-advanced-components'}
+assert 'quinityn-excavation' not in ancestry('quinityn-thermal-smelting')
+assert 'quinityn-plant-infrastructure' not in ancestry('quinityn-thermal-smelting')
 assert unlocks['y_data_crystal']==['quinityn-quantum']
 assert unlocks['y-atomic-quantum-composer']==['quinityn-quantum']
 assert 'y_charger' not in {e['recipe'] for e in T['quinityn-quantum']['effects'] if e['type']=='unlock-recipe'}

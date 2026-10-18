@@ -21,6 +21,10 @@ def ancestry(n,seen=None):
  return result
 
 thermal_scope=ancestry('quinityn-thermal-smelting')
+# Dirt digging and the medium substation are sibling technologies. They supply
+# the charger and data-crystal ingredients; they are not thermal prerequisites.
+thermal_support={'quinityn-excavation','quinityn-plant-infrastructure'}
+assert thermal_support.isdisjoint(thermal_scope), 'Thermal support techs became prerequisites: '+str(sorted(thermal_support&thermal_scope))
 
 def run_closure(quinityn_scope=None):
  items={'y-res1','y-res2','quinityn-salvage','y-pol-waste'}
@@ -139,7 +143,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in t['unit']['ingredients']
 print('PASS: local empty-inventory post-discovery rocket and infinite-research science dependency closure')
 
-thermal_items,thermal_fluids,thermal_techs,thermal_recipes,thermal_machines,thermal_power,thermal_produced,thermal_sources,thermal_categories,thermal_iteration=run_closure(thermal_scope)
+thermal_items,thermal_fluids,thermal_techs,thermal_recipes,thermal_machines,thermal_power,thermal_produced,thermal_sources,thermal_categories,thermal_iteration=run_closure(thermal_scope|thermal_support)
 thermal_chain={'y_charger','y_smelter','y_block_heat','y_hps_purecopper','y_hps_pureiron','y_hps_steel'}
 assert thermal_chain<=thermal_produced, 'Thermal smelting chain unreachable: '+str(sorted(thermal_chain-thermal_produced))
 assert 'quinityn-refining' in thermal_techs and 'quinityn-quantum' in thermal_techs
