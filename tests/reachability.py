@@ -21,10 +21,12 @@ def ancestry(n,seen=None):
  return result
 
 thermal_scope=ancestry('quinityn-thermal-smelting')
-# Dirt digging and the medium substation are sibling technologies. They supply
-# the charger and data-crystal ingredients; they are not thermal prerequisites.
-thermal_support={'quinityn-excavation','quinityn-plant-infrastructure'}
+# Quantum requires archaeology, which requires excavation, so dirt digging is a
+# real thermal ancestor. The medium substation is not: it only supplies the
+# compensator inside the quantum composer.
+thermal_support={'quinityn-plant-infrastructure'}
 assert thermal_support.isdisjoint(thermal_scope), 'Thermal support techs became prerequisites: '+str(sorted(thermal_support&thermal_scope))
+assert 'quinityn-excavation' in thermal_scope and 'quinityn-archaeology' in thermal_scope
 
 def run_closure(quinityn_scope=None):
  items={'y-res1','y-res2','quinityn-salvage','y-pol-waste'}

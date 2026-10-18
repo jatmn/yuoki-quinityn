@@ -14,7 +14,7 @@ These deposits are the settled residue of the planet's former industry, an addit
 
 ## Close the filter loop
 
-**Reusable air filters** comes later, after Fatmice, Washing and Engines. Make filters from iron sticks, stone dust and coal dust. A filtered capture consumes a filter, 60 water and 0.2 MF in 10 seconds, removes twice the pollution while operating, and returns a dirty filter. Wash it in a dirt washer with 110 water and 8 coal dust: **1 clean filter + 6 flyash**, with no wastewater. Return the clean filter to the Fatmice. The filtered capture provides six ash per ten seconds versus five unfiltered; budget a separate washer and coal-dust supply. Keep at least two filters circulating per Fatmice, plus transport buffers, so washing does not leave capture waiting for its only filter. The unfiltered recipe remains available.
+**Reusable air filters** comes later, after Fatmice, Washing, Engines, and Slag materials and stone flour. Make filters from iron sticks, stone dust and coal dust. A filtered capture consumes a filter, 60 water and 0.2 MF in 10 seconds, removes twice the pollution while operating, and returns a dirty filter. Wash it in a dirt washer with 110 water and 8 coal dust: **1 clean filter + 6 flyash**, with no wastewater. Return the clean filter to the Fatmice. The filtered capture provides six ash per ten seconds versus five unfiltered; budget a separate washer and coal-dust supply. Keep at least two filters circulating per Fatmice, plus transport buffers, so washing does not leave capture waiting for its only filter. The unfiltered recipe remains available.
 
 ## Size the science supply
 
@@ -34,7 +34,7 @@ A primitive burner Cimota provides only 25 water/s, so even one unfiltered Fatmi
 
 ## Plan research and surplus
 
-Power plus Fatmice needs **100 rock ash**. Reaching filters costs **460 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing and Filters: the additional 360 ash takes 12 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 31,930 Quinityn packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; the capture and cleaning recipes remain unchanged.
+Power plus Fatmice needs **100 rock ash**. Reaching filters costs **520 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing, Slag materials and Filters: the additional 420 ash takes 14 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 32,650 Quinityn packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; the capture and cleaning recipes remain unchanged.
 
 Surplus flyash can feed the [mixed-fuel route to rocket fuel](progression.md#local-oil-and-rockets),
 but every rocket fuel costs 750 ash. Reserve science feed before diverting it.
