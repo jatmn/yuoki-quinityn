@@ -309,6 +309,10 @@ for tech,(parents,count,recipes) in logistics_tiers.items():
  assert quinityn_prerequisites(tech)==parents,tech
  assert T[tech]['unit']['count']==count,tech
  assert direct_unlocks(tech)==recipes,tech
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+for recipe in logistics_kept:
+ assert unlocks[recipe]==['quinityn-logistics'],(recipe,unlocks.get(recipe))
 requests=T['quinityn-logistic-requests']
 assert 'logistic-system' in requests['prerequisites']
 assert 'chemical-science-pack' not in {i[0] for i in requests['unit']['ingredients']}
@@ -317,7 +321,14 @@ advanced_logistics_recipes={
  'y_inserter_smart_LL','y_inserter_smart_RR','y_inserter_smart_leftR2','y_inserter_smart_rightR2'}
 assert direct_unlocks('quinityn-advanced-logistics')==advanced_logistics_recipes
 assert quinityn_prerequisites('quinityn-advanced-logistics')=={'quinityn-logistics','quinityn-quantum'}
-assert direct_unlocks('quinityn-robotics')=={'yi_roboport','yi_logistic-robot','yi_construction-robot'}
+for recipe in advanced_logistics_recipes:
+ assert unlocks[recipe]==['quinityn-advanced-logistics'],(recipe,unlocks.get(recipe))
+ assert unlocks[recipe+'-recycling']==['quinityn-bridge-advanced-logistics-recycling'],recipe
+robotics_stayers={'yi_roboport','yi_logistic-robot','yi_construction-robot'}
+assert direct_unlocks('quinityn-robotics')==robotics_stayers
+for recipe in robotics_stayers:
+ assert unlocks[recipe]==['quinityn-robotics'],(recipe,unlocks.get(recipe))
+ assert unlocks[recipe+'-recycling']==['quinityn-bridge-robotics-recycling'],recipe
 new_logistics={
  'quinityn-expanded-storage','quinityn-large-storage','quinityn-bulk-storage','quinityn-logistic-storage',
  'quinityn-logistic-provider-capacity','quinityn-logistic-bunker','quinityn-logistic-requests','quinityn-wide-logistic-requests'}

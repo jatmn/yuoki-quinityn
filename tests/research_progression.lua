@@ -110,33 +110,44 @@ local function logistics_unlocks()
     check(not force.technologies[id].researched, "new tech unresearched: " .. id)
   end
   check(not force.add_research("quinityn-logistic-requests"), "requests blocked before robotics and logistic system")
-  local steps = {
+  local tiers = {
     { "quinityn-expanded-storage", { "y_c22" } },
     { "quinityn-large-storage", { "y_cg33" } },
     { "quinityn-bulk-storage", { "y_sc44" } },
     { "quinityn-logistic-storage", { "j-dl-provider", "y-rare-chest-log" } },
     { "quinityn-logistic-provider-capacity", { "y_pc22" } },
     { "quinityn-logistic-bunker", { "y-rare-m1bunker-log" } },
+    { "quinityn-logistic-requests", { "j-dl-request", "j-dl-buffer" } },
+    { "quinityn-wide-logistic-requests", { "y_rc22", "y_bc22" } },
   }
-  for _, step in ipairs(steps) do
-    force.technologies[step[1]].researched = true
-    progression.reconcile()
-    for _, name in ipairs(step[2]) do
-      check(recipe_enabled(force, name), step[1] .. " unlocks " .. name)
+  local researched = {}
+  local function assert_tier_locks()
+    for _, tier in ipairs(tiers) do
+      local open = researched[tier[1]] == true
+      for _, name in ipairs(tier[2]) do
+        if open then
+          check(recipe_enabled(force, name), tier[1] .. " unlocks " .. name)
+        else
+          check(not recipe_enabled(force, name), tier[1] .. " stays locked: " .. name)
+        end
+      end
+    end
+    for _, name in ipairs(retained) do
+      check(recipe_enabled(force, name), "retained stays enabled: " .. name)
     end
   end
-  force.technologies["quinityn-robotics"].researched = true
-  force.technologies["logistic-system"].researched = true
-  progression.reconcile()
-  force.technologies["quinityn-logistic-requests"].researched = true
-  progression.reconcile()
-  for _, name in ipairs({ "j-dl-request", "j-dl-buffer" }) do
-    check(recipe_enabled(force, name), "logistic requests unlocks " .. name)
-  end
-  force.technologies["quinityn-wide-logistic-requests"].researched = true
-  progression.reconcile()
-  for _, name in ipairs({ "y_rc22", "y_bc22" }) do
-    check(recipe_enabled(force, name), "wide requests unlocks " .. name)
+  assert_tier_locks()
+  for _, tier in ipairs(tiers) do
+    if tier[1] == "quinityn-logistic-requests" then
+      force.technologies["quinityn-robotics"].researched = true
+      force.technologies["logistic-system"].researched = true
+      progression.reconcile()
+      assert_tier_locks()
+    end
+    force.technologies[tier[1]].researched = true
+    researched[tier[1]] = true
+    progression.reconcile()
+    assert_tier_locks()
   end
   local legacy = game.create_force("logistics-legacy")
   legacy.technologies["quinityn-logistics"].researched = true
