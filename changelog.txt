@@ -8,6 +8,7 @@ Version: Unreleased
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
     - Split mechanical-force research into a first solid-fuel step, a medium pump, an electric motor, a heat generator, steam overheating, a steam turbine, and high-temperature generators. Liquid-fuel and gas engines stay on advanced engines with their fuel recipes. Green transport tubes now require the foundry. Completed engine research keeps the solid-fuel engine, orange tubes, blue and red shafts, gauges, and the flyash rocket-fuel recipes.
+    - Split ore washing into the washer and contaminated-water handling, with separate research for dirt archaeology, rich-dust unicomp compression, slag materials, and slag paving.
     - Split Yuoki logistics into the 60-slot chest and both basic inserters, then separate larger chests from requester and buffer chests.
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
@@ -51,6 +52,7 @@ Version: Unreleased
     - Added missing localized surface units and custom prototype/interface names.
     - Productivity modules can be used while compiling industrial research data. A normal craft still makes five packs; productivity adds bonus packs without extra ingredients.
   Compatibility:
+    - Completed Ore washing and residue recovery stays completed and keeps the dirt washer, pure-ore smelting, and contaminated-water and mud handling. Archaeology, unicomp compression, slag materials, and slag paving require their new research on an existing save.
     - Completed Yuoki logistics stays completed and keeps the 60-slot chest, the fast inserter, and the long inserter. Larger storage and requester or buffer chests require their new research on an existing save.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.

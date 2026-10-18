@@ -165,6 +165,7 @@ script.on_event(defines.events.on_tick, function()
     check(surface.get_total_pollution() < storage.pollution, "operating Fatmice reduces pollution")
     force.technologies["quinityn-engines"].researched = true
     force.technologies["quinityn-washing"].researched = true
+    force.technologies["quinityn-slag-materials"].researched = true
     force.technologies["quinityn-air-filters"].researched = true
     check(
       force.recipes["j-airfilter"].enabled and force.recipes["j-airfilter_cleaning"].enabled,
