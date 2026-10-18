@@ -1137,6 +1137,13 @@
     "y_structure_element",
     "y_structure_vessel"
   ],
+  "quinityn-surplus": [
+    "quinityn-stone-to-uc",
+    "quinityn-wood-to-uc",
+    "quinityn-uc-to-coal",
+    "quinityn-uc-to-iron",
+    "quinityn-uc-to-copper"
+  ],
   "quinityn-tooling": [
     "y-crush-blue_whead",
     "y-crush-green_whead",

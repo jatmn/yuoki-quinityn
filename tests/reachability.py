@@ -118,3 +118,9 @@ print('PASS: local empty-inventory post-discovery rocket and infinite-research s
 assert {'y-rmvpol','j-airfilter_dirty','j-airfilter_cleaning','y-waste-condense','y_mixedfuel2rocketfuel'}<=produced
 assert {'y-electric-air-heater','y-emotor-s','y-dirtwasher'}<=machines
 print('PASS: renewable unfiltered/filtered flyash and alternate rocket fuel are locally producible')
+surplus_recipes={'quinityn-stone-to-uc','quinityn-wood-to-uc','quinityn-uc-to-coal','quinityn-uc-to-iron','quinityn-uc-to-copper'}
+assert surplus_recipes<=produced, 'Primitive surplus recipes unreachable: '+str(sorted(surplus_recipes-produced))
+prim=D['assembling-machine']['quinityn-burner-separator']['crafting_categories']
+assert 'quinityn-primitive-conversion' in prim
+assert set(R['y-liquid2uc']['categories'])&set(prim)==set(), 'Ocean solidification must stay off the primitive Cimota'
+print('PASS: primitive surplus coal/iron/copper from stone and wood; ocean UC solidification stays on full Cimota')

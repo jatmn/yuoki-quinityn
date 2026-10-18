@@ -70,7 +70,7 @@ separator.circuit_connector = copy(old_separator.circuit_connector)
 separator.circuit_wire_max_distance = old_separator.circuit_wire_max_distance
 separator.name = "quinityn-burner-separator"
 separator.minable = { mining_time = 0.2, result = separator.name }
-separator.crafting_categories = { "quinityn-separation" }
+separator.crafting_categories = { "quinityn-separation", "quinityn-primitive-conversion" }
 separator.crafting_speed = 0.5
 separator.energy_usage = "180kW"
 separator.energy_source = {
@@ -148,6 +148,43 @@ recipe(
   5
 )
 recipe("quinityn-water", { fluid("y-liquid-uc2", 1) }, { fluid("water", 100) }, { "quinityn-separation" }, 2)
+data:extend({
+  { type = "recipe-category", name = "quinityn-primitive-conversion" },
+})
+recipe(
+  "quinityn-stone-to-uc",
+  { item("stone", 40) },
+  { item("y-unicomp-a2", 1) },
+  { "quinityn-primitive-conversion" },
+  8
+)
+recipe("quinityn-wood-to-uc", { item("wood", 40) }, { item("y-unicomp-a2", 1) }, { "quinityn-primitive-conversion" }, 8)
+recipe("quinityn-uc-to-coal", { item("y-unicomp-a2", 1) }, { item("coal", 10) }, { "quinityn-primitive-conversion" }, 8)
+recipe(
+  "quinityn-uc-to-iron",
+  { item("y-unicomp-a2", 1) },
+  { item("iron-ore", 10) },
+  { "quinityn-primitive-conversion" },
+  8
+)
+recipe(
+  "quinityn-uc-to-copper",
+  { item("y-unicomp-a2", 1) },
+  { item("copper-ore", 10) },
+  { "quinityn-primitive-conversion" },
+  8
+)
+local stone_to_uc = data.raw.recipe["quinityn-stone-to-uc"]
+stone_to_uc.icons = {
+  { icon = data.raw.item["stone"].icon, icon_size = data.raw.item["stone"].icon_size or 64 },
+}
+stone_to_uc.localised_description = { "recipe-description.quinityn-stone-to-uc" }
+local wood_to_uc = data.raw.recipe["quinityn-wood-to-uc"]
+wood_to_uc.icons = { { icon = data.raw.item["wood"].icon, icon_size = data.raw.item["wood"].icon_size or 64 } }
+wood_to_uc.localised_description = { "recipe-description.quinityn-wood-to-uc" }
+for _, name in ipairs({ "quinityn-uc-to-coal", "quinityn-uc-to-iron", "quinityn-uc-to-copper" }) do
+  data.raw.recipe[name].localised_description = { "recipe-description." .. name }
+end
 recipe(
   "quinityn-research-data",
   { item("y-unicomp-raw", 1), item("y-refined-yres2", 1), item("y_rwtechsign", 1), item("y-pol-waste", 5) },

@@ -66,6 +66,18 @@ function M.reconcile()
     for recipe, enabled in pairs(managed) do
       force.recipes[recipe].enabled = enabled
     end
+    -- Saves that already crafted the separator completed quinityn-materials,
+    -- the same craft-item trigger. Surplus was added later, so that craft does
+    -- not replay. Arrival only records the landing and is not craft evidence.
+    -- script_trigger_research is only valid for a scripted trigger.
+    if
+      force.technologies["quinityn-materials"]
+      and force.technologies["quinityn-materials"].researched
+      and force.technologies["quinityn-surplus"]
+      and not force.technologies["quinityn-surplus"].researched
+    then
+      force.technologies["quinityn-surplus"].researched = true
+    end
     if not settings.startup["yuoki-uc-heavyoil"].value then
       force.recipes["y-heavyoil2uc"].enabled = false
     end

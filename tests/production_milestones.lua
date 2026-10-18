@@ -68,6 +68,10 @@ script.on_event(defines.events.on_tick, function()
     end
     check(not force.recipes["quinityn-research-data"].enabled, "science recipe is still locked")
     check(force.recipes[step[3]].enabled, "milestone recipe is already available: " .. step[3])
+    if step[1] == "materials" then
+      check(not force.technologies["quinityn-surplus"].researched, "surplus locked before the separator craft")
+      check(not force.recipes["quinityn-stone-to-uc"].enabled, "stone conversion locked before the separator craft")
+    end
     local machine = game.surfaces[storage.surface].create_entity({ name = step[2], position = { 0, 0 }, force = force })
     if machine.type == "assembling-machine" then
       check(machine.set_recipe(step[3]), "machine accepts milestone recipe")
@@ -92,6 +96,18 @@ script.on_event(defines.events.on_tick, function()
     or (step[1] ~= "factory" and force.technologies["quinityn-" .. step[1]].researched)
   then
     check(machine.products_finished > 0, "actual production completed " .. step[1])
+    if step[1] == "materials" then
+      check(force.technologies["quinityn-surplus"].researched, "crafting one primitive Cimota researches surplus")
+      for _, name in ipairs({
+        "quinityn-stone-to-uc",
+        "quinityn-wood-to-uc",
+        "quinityn-uc-to-coal",
+        "quinityn-uc-to-iron",
+        "quinityn-uc-to-copper",
+      }) do
+        check(force.recipes[name].enabled, "craft trigger unlocks " .. name)
+      end
+    end
     machine.destroy()
     storage.machine = nil
     storage.step = storage.step + 1
