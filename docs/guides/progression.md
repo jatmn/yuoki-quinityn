@@ -86,7 +86,9 @@ flowchart TD
   Crystals --> Quantum[Quantum materials]
   Storage --> Quantum
   Infrastructure[Industrial fluid and electric infrastructure] --> Compensator[High-flow compensator]
+  Storage --> Compensator
   Compensator --> Quantum
+  Archaeology --> Quantum
   Engines --> Factories[Y2-Factory]
   Machining --> Factories
   Factories --> P3[P3-Factory - 1000 units]
