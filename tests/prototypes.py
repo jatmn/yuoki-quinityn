@@ -272,6 +272,8 @@ for tech,recipes in new_tech_recipes.items():
  assert tech_recipes(tech)==recipes,tech
 assert unlocks['y-coaldust-mixing']==unlocks['y-mixfuel-load']
 assert unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
+assert unlocks['y-repair-krakon']==['quinityn-cimota']
+assert unlocks['y_repair_quantrinum']==['quinityn-quantum']
 comp_tech=unlocks['y_compensator_25'][0]
 assert 'quinityn-quantum' not in ancestry(comp_tech) and 'quinityn-quantum-power' not in ancestry(comp_tech)
 composer_tech=unlocks['y-atomic-quantum-composer'][0]

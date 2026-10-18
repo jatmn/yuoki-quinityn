@@ -2,7 +2,7 @@
 Version: Unreleased
   Features:
     - Split Yuoki power into separate fuel, solar, steam and repair researches instead of one bulk unlock.
-    - Split first-tier energy storage into separate researches for the four initial storage devices and later accumulator, flywheel and compensator steps.
+    - Split first-tier energy storage so disposable batteries and the small accumulator stay together, while the large accumulator, flywheel buffer and high-flow compensator are separate researches.
     - Split advanced electric generation into separate researches for Generator-S sizes, the high-capacity boiler, steam turbine and electric water generator.
     - Craft one Primitive Cimota Restructor to turn surplus stone and wood into coal, iron ore and copper ore before any Quinityn science. The later Cimota Restructor remains faster and more efficient for the same basic conversions.
     - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
