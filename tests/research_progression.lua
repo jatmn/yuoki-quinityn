@@ -173,7 +173,6 @@ local function power_storage_generation_restaging()
   }) do
     check(not legacy.recipes[name].enabled, "legacy moved recipe disabled: " .. name)
   end
-  local one = game.create_force("power-restaging-one-tier")
   local storage_stayers = {
     "y-battery-single-use1",
     "y-battery-single-use2",
@@ -182,11 +181,20 @@ local function power_storage_generation_restaging()
     "y_blocked_capa",
     "y-accumulator-m",
   }
+  -- A fresh force per tier. Toggling researched on one force can leave an
+  -- earlier tier researched, and the sibling check ignores researched tiers.
+  local alone = 0
   for id, recipes in pairs(new_tiers) do
-    for other_id in pairs(new_tiers) do
-      one.technologies[other_id].researched = other_id == id
-    end
+    alone = alone + 1
+    local one = game.create_force("power-restaging-alone-" .. alone)
+    one.technologies[id].researched = true
     progression.reconcile()
+    check(one.technologies[id].researched, id .. " is researched on a fresh force")
+    for other_id in pairs(new_tiers) do
+      if other_id ~= id then
+        check(not one.technologies[other_id].researched, id .. " leaves " .. other_id .. " unresearched")
+      end
+    end
     for _, name in ipairs(recipes) do
       check(one.recipes[name].enabled, id .. " alone enables " .. name)
     end
@@ -200,10 +208,6 @@ local function power_storage_generation_restaging()
     check(not one.recipes["y-seg"].enabled, id .. " leaves small generator locked")
     check(not one.recipes["yi_graphite"].enabled, id .. " leaves graphite locked")
   end
-  for id in pairs(new_tiers) do
-    one.technologies[id].researched = false
-  end
-  progression.reconcile()
 end
 local function module_unlocks()
   local modules = {}
