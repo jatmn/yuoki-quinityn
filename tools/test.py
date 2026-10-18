@@ -43,7 +43,9 @@ try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/surplus_migration")\n')
  setting_override=harness/'settings-updates.lua'
  run('surplus-migration-create',base+['--create',str(a.output/'surplus-migration.zip')],'QUINITYN SURPLUS MIGRATION SETUP')
- setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-inserter-cleanup"]); setting.forced_value=true; setting.hidden=true\n')
+ # Inserter cleanup exists only beside an adjustable-inserter mod. This startup
+ # setting is always defined, so the reload is a real configuration change.
+ setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-uc-heavyoil"]); setting.forced_value=false; setting.hidden=true\n')
  run('surplus-migration-reload',base+['--benchmark',str(a.output/'surplus-migration.zip'),'--benchmark-ticks','60','--benchmark-runs','1'],'QUINITYN SURPLUS MIGRATION PASSED')
 finally:
  setting_override.unlink(missing_ok=True)
