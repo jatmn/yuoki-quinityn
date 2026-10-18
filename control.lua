@@ -51,7 +51,6 @@ local function remember_crusher(entity)
   end
   if storage.offworld_crushers == nil then
     rebuild_offworld_crushers()
-    return
   end
   if surface_is_offworld(entity.surface) then
     storage.offworld_crushers[entity.unit_number] = entity
