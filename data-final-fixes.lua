@@ -5,6 +5,9 @@ data.raw.recipe["y-rmvpol"].disabled = nil
 -- two seconds unfiltered, and remove twice as much pollution while running.
 data.raw.recipe["j-airfilter_dirty"].energy_required = 10
 data.raw.recipe["j-airfilter_dirty"].emissions_multiplier = 2
+-- Neutralization needs two independent fluid inputs and outputs. Yuoki's
+-- washers have only one of each; the chemical plant can run the actual recipe.
+data.raw.recipe["ye_neutralisatzion"].categories = { "chemistry" }
 local stages = require("prototypes.recipe-stages")
 local owned = {}
 local names = {}

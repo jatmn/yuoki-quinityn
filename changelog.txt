@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Add a Quinityn discovery surface preview and animated demonstrations for every progression tip, including primitive conversions, continuous crusher sorting, fluid and power networks, equipment, Yuoki-derived rocket components and infinite research.
+    - Add dedicated primitive-surplus and petrochemistry tips, and order all tips by their research prerequisites.
     - Split Yuoki power into separate fuel, solar, steam and repair researches instead of one bulk unlock.
     - Split first-tier energy storage so disposable batteries and the small accumulator stay together, while the large accumulator, flywheel buffer and high-flow compensator are separate researches.
     - Split advanced electric generation into separate researches for Generator-S sizes, the high-capacity boiler, high-pressure steam turbine and electric water generator.
@@ -10,6 +12,7 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 128 native Tips and Tricks progression chapters.
   Changes:
+    - Run substrat neutralization in a chemical plant, whose separate fluid connections support all four fluids; quantities, duration and research stay unchanged.
     - Separate Cimota science manufacture from trade. Prepare Fame and its machine before the Laika-Gate, require its quantum accumulator, and keep direct Merchant Sign generation with Mastery. Stage biological exports with their products while retaining early canned-corn exports and material imports.
     - Add matching reputation, science and genetic-export demonstrations; update Trade, imported-food and Mastery guidance. Completed research and stock remain, while moved recipes follow their new research owners.
     - Keep containers, canned corn and basic fish packages in Industrial packaging; unlock meat, genetic products, organic metal and imported/smoked-food packaging with their production branches. Canned-corn exports remain available before animal or genetic research. Existing research and stock stay; moved recipes and recycling require their new owner.

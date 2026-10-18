@@ -168,7 +168,12 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==137
+assert len(tips)==140
+for name in tips:
+ scene=D['tips-and-tricks-item'][name].get('simulation',{})
+ assert scene.get('planet')=='quinityn' and scene.get('init') and scene.get('update'),name
+for stage in ['surplus','oil-processing']:
+ assert 'quinityn-'+stage in tips
 # The biology, trade and science process tips ship native simulations at their actual
 # research unlocks; biology_demonstrations executes these declared callbacks
 # exported by tools/test.py from this same engine dump.
