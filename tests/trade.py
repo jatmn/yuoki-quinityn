@@ -56,10 +56,10 @@ for recipe in ['y_chemical_science','y_military_science','y_production_science',
  assert R[recipe]['categories']==['yuoki-atomics']
  assert owners['y-atomic-constructor'][0] in ancestry(owners[recipe][0])
  for part in R[recipe]['ingredients']:
-  if part['name'] in owners:
-   producers=[n for n,r in R.items() if not n.endswith('-recycling')
-              and any(p['name']==part['name'] for p in r.get('results',[]))]
-   assert any(owner in ancestry(owners[recipe][0]) for n in producers for owner in owners.get(n,[])),(recipe,part['name'])
+  # Recipe names need not match their products (for example, Technic Signs).
+  producers=[n for n,r in R.items() if not n.endswith('-recycling')
+             and any(p['name']==part['name'] for p in r.get('results',[]))]
+  assert any(owner in ancestry(owners[recipe][0]) for n in producers for owner in owners.get(n,[])),(recipe,part['name'])
 assert 'space-science-pack' in ancestry('quinityn-space-science')
 assert {'chemical-science-pack','military-science-pack','production-science-pack','utility-science-pack'}<=ancestry('quinityn-utility-science')
 assert 'quinityn-trade' not in ancestry('quinityn-chemical-science')
