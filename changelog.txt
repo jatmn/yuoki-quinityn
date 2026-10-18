@@ -1,11 +1,14 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Split Yuoki power into separate fuel, solar, steam and repair researches instead of one bulk unlock.
+    - Split first-tier energy storage so disposable batteries and the small accumulator stay together, while the large accumulator, flywheel buffer and high-flow compensator are separate researches.
+    - Split advanced electric generation into separate researches for Generator-S sizes, the high-capacity boiler, high-pressure steam turbine and electric water generator.
     - Craft one Primitive Cimota Restructor to turn surplus stone and wood into coal, iron ore and copper ore before any Quinityn science. The later Cimota Restructor remains faster and more efficient for the same basic conversions.
     - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
     - Local biter and spitter nests rarely produce Stomp-a-trons along their existing size evolution curves. They drop industrial salvage and ancient data, never wrigglers or pentapod eggs, and have 3%, 7% and 11% laser resistance.
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
-    - Added 108 native Tips and Tricks progression chapters.
+    - Added 123 native Tips and Tricks progression chapters.
   Changes:
     - Sort industrial salvage by hand or in a Yuoki crusher. Iron, copper, carbon, stone and timber dressing stay hand-crafted.
     - Split industrial refining into chemical processing, biological feedstock, slurry syngas, thermal smelting, foundry melting and asteroid crushing. Completed refining research keeps catalysts, syngas, wood granulation, toxic-dust acid and the basic water generator. Thermal smelting follows Quantrinum research so the heat charger can be built, and unlocks the smelter, hot-block charging and the three smelts together.
@@ -57,6 +60,9 @@ Version: Unreleased
     - Added missing localized surface units and custom prototype/interface names.
     - Productivity modules can be used while compiling industrial research data. A normal craft still makes five packs; productivity adds bonus packs without extra ingredients.
   Compatibility:
+    - Completed Yuoki power, Industrial energy storage and Advanced electric generation research remains completed. Recipes moved into the new technologies stay locked until those technologies are researched. Placed machines and items remain.
+    - Quantrinum and advanced electronics research started after this update requires High-flow compensator research. Research already in progress when an existing save is loaded finishes under its previous prerequisites. Completed Quantrinum and advanced electronics research stays completed.
+    - Crystal accumulator upgrades research started after this update requires Large accumulator research. Research already in progress when an existing save is loaded finishes under its previous prerequisites. Completed Crystal accumulator upgrades research stays completed.
     - Completed Ore washing and residue recovery stays completed and keeps the dirt washer, pure-ore smelting, and contaminated-water and mud handling. Archaeology, unicomp compression, slag materials, and slag paving require their new research on an existing save.
     - Completed Yuoki logistics stays completed and keeps the 60-slot chest, the fast inserter, and the long inserter. Larger storage and requester or buffer chests require their new research on an existing save.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.

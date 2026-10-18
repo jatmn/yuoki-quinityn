@@ -43,7 +43,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==108
+assert len(tips)==123
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -53,7 +53,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 108 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 123 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -250,10 +250,83 @@ for name,t in T.items():
  if t.get('unit'):
   assert 'quinityn-research-data' in [i[0] for i in t['unit']['ingredients']],name
  assert 'sign_tech_icon' not in str(t.get('icons',t.get('icon',''))),name
+def tech_recipes(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+power_stayers={'y-coal-dust','y-coal-brikett','y-wooden-brikett','y-heat-pipe','y-notfall-generator-s2','y_bg-1'}
+assert tech_recipes('quinityn-power')==power_stayers
+storage_stayers={'y-battery-single-use1','y-battery-single-use2','y-battery-single-use3','y-battery-rip1','y_blocked_capa','y-accumulator-m'}
+assert tech_recipes('quinityn-energy-storage')==storage_stayers
+assert tech_recipes('quinityn-advanced-generation')=={'y-seg'}
+reactors_stayers={'y_moxmixer','y_mox1mixed','y_reactor_mox1','y_mox1fuel','y_reactor_mf1','y-obninsk-reactor','y-rare-wall-adv','yi_graphite'}
+assert tech_recipes('quinityn-reactors')==reactors_stayers
+assert 'y_alien_solar2' in tech_recipes('quinityn-quantum-power') and 'y_alien_solar' not in tech_recipes('quinityn-quantum-power')
+new_tech_recipes={
+ 'quinityn-compressed-fuel':{'y-coal-stack'},
+ 'quinityn-mixed-fuel':{'y-coaldust-mixing','y-mixfuel-load'},
+ 'quinityn-residue-fuel':{'y_mud2solidfuel'},
+ 'quinityn-field-repair':{'y-repair-durotal'},
+ 'quinityn-solar-dish':{'y-stirling-solar-dish'},
+ 'quinityn-solar-collector':{'y_alien_solar'},
+ 'quinityn-accumulator-capacity':{'y-accumulator-b'},
+ 'quinityn-flywheel-storage':{'y-ups-flywheel-b'},
+ 'quinityn-high-flow-storage':{'y_compensator_25'},
+ 'quinityn-medium-generation':{'y-meg-s'},
+ 'quinityn-big-generation':{'y-beg'},
+ 'quinityn-huge-generation':{'y-heg'},
+ 'quinityn-high-capacity-boiler':{'y-boiler-iv'},
+ 'quinityn-high-pressure-steam-turbine':{'y-steam-turbine'},
+ 'quinityn-electric-water':{'y-water-gen-e'},
+}
+for tech,recipes in new_tech_recipes.items():
+ assert tech_recipes(tech)==recipes,tech
+sole_owner={
+ 'quinityn-power':power_stayers,
+ 'quinityn-energy-storage':storage_stayers,
+ 'quinityn-advanced-generation':{'y-seg'},
+ 'quinityn-reactors':{'yi_graphite'},
+}
+sole_owner.update(new_tech_recipes)
+for tech,recipes in sole_owner.items():
+ for recipe in sorted(recipes):
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+recycling_sole_owner={
+ 'quinityn-bridge-power-recycling':{'y-coal-brikett-recycling','y-coal-dust-recycling','y-heat-pipe-recycling','y-mixed-fuel-loaded-recycling','y-notfall-generator-s2-recycling','y-wooden-brikett-recycling','y_bg-1-recycling'},
+ 'quinityn-bridge-energy-storage-recycling':{'y-accumulator-m-recycling','y-battery-single-use1-recycling','y-battery-single-use2-recycling','y-battery-single-use3-recycling','y_blocked_capa-recycling'},
+ 'quinityn-bridge-advanced-generation-recycling':{'y-seg-recycling'},
+ 'quinityn-bridge-compressed-fuel-recycling':{'y-coal-stack-recycling'},
+ 'quinityn-bridge-field-repair-recycling':{'y-repair-durotal-recycling'},
+ 'quinityn-bridge-high-pressure-steam-turbine-recycling':{'y-steam-turbine-recycling'},
+ 'quinityn-bridge-solar-dish-recycling':{'y-stirling-solar-dish-recycling'},
+ 'quinityn-bridge-solar-collector-recycling':{'y_alien_solar-recycling'},
+ 'quinityn-bridge-accumulator-capacity-recycling':{'y-accumulator-b-recycling'},
+ 'quinityn-bridge-flywheel-storage-recycling':{'y-ups-flywheel-b-recycling'},
+ 'quinityn-bridge-high-flow-storage-recycling':{'y_compensator_25-recycling'},
+ 'quinityn-bridge-big-generation-recycling':{'y-beg-recycling'},
+ 'quinityn-bridge-high-capacity-boiler-recycling':{'y-boiler-iv-recycling'},
+ 'quinityn-bridge-huge-generation-recycling':{'y-heg-recycling'},
+ 'quinityn-bridge-medium-generation-recycling':{'y-meg-s-recycling'},
+ 'quinityn-bridge-electric-water-recycling':{'y-water-gen-e-recycling'},
+ 'quinityn-bridge-reactors-recycling':{'yi_graphite-recycling'},
+}
+for tech,recipes in recycling_sole_owner.items():
+ for recipe in sorted(recipes):
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+assert unlocks['y-coaldust-mixing']==unlocks['y-mixfuel-load']
+assert unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
+assert unlocks['y-repair-krakon']==['quinityn-cimota']
+assert unlocks['y_repair_quantrinum']==['quinityn-quantum']
+comp_tech=unlocks['y_compensator_25'][0]
+assert 'quinityn-quantum' not in ancestry(comp_tech) and 'quinityn-quantum-power' not in ancestry(comp_tech)
+composer_tech=unlocks['y-atomic-quantum-composer'][0]
+assert comp_tech in ancestry(composer_tech)
+assert unlocks['yi_graphite-recycling']==['quinityn-bridge-reactors-recycling']
+assert unlocks['y-coal-dust-recycling']==['quinityn-bridge-power-recycling']
 for first,upgrade in [('y-crush-unicomp-raw','y-crush-blue_whead'),('y-crush-fuel-raw','y-crush-green_whead'),
  ('y-digfdirt','y-digfdirt2'),('y-pure-iron','y_pure_iron_wtool'),('y-pure-copper','y_pure_copper_wtool'),
  ('y-water-gen','y-water-gen-e'),('y-crusher','y_crusher2'),('y-heat-form-press','y_formpress2'),('y-mining-drill','y-mining-drill-e2'),
- ('y-accumulator-m','y-accumulator-m-t2'),('y-accumulator-b','y-accumulator-b-t2'),
+ ('y-coal-brikett','y-coal-stack'),('y-notfall-generator-s2','y-steam-turbine'),('y-boiler-iv','y-steam-turbine'),
+ ('y-stirling-solar-dish','y_alien_solar'),('y-seg','y-meg-s'),('y-meg-s','y-beg'),('y-beg','y-heg'),
+ ('y-accumulator-m','y-accumulator-b'),('y-accumulator-m','y-accumulator-m-t2'),('y-accumulator-b','y-accumulator-b-t2'),
  ('y-accumulator-b-t2','y-accumulator-b-tx'),('ye_fassembly1','ye_fassembly2'),
  ('y_turret_gun1f12','y_turret_gun2f12'),('yi_armor_gray','yi_armor_red'),('yi_armor_red','yi_armor_gold'),
  ('yi_armor_gold','yi_walker_a'),('yi_walker_a','yi_walker_c'),
@@ -736,7 +809,7 @@ assert 'quinityn-archaeology' in ancestry('quinityn-quantum')
 assert 'quinityn-cimota' not in unlocks.get('y-press-richdust',[])
 assert unlocks['y_mc_dirtwasher']==['quinityn-mastery']
 assert unlocks['y_pure_copper_wtool']==['quinityn-tooling']
-assert unlocks['y_mud2solidfuel']==['quinityn-power']
+assert unlocks['y_mud2solidfuel']==['quinityn-residue-fuel']
 assert unlocks['y-digfdirt']==['quinityn-excavation']
 assert unlocks['y_data_crystal']==['quinityn-quantum']
 assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines','quinityn-slag-materials'}<=ancestry('quinityn-air-filters')
@@ -776,7 +849,7 @@ assert {'quinityn-medium-electric-motor','quinityn-steam-turbine'}<=set(T['quini
 assert direct_unlocks('quinityn-substrat-neutralization')=={'ye_neutralisatzion'}
 assert 'quinityn-genetics' in T['quinityn-substrat-neutralization']['prerequisites']
 assert 'ye_neutralisatzion' not in direct_unlocks('quinityn-engines')
-assert direct_unlocks('quinityn-advanced-generation')=={'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'}
+assert direct_unlocks('quinityn-advanced-generation')=={'y-seg'}
 assert direct_unlocks('quinityn-air-scrubbing')=={
  'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'}
 # One owner each. A second technology unlocking the same recipe would still pass the effect-set checks above.
@@ -791,7 +864,7 @@ sole_owner={
  'quinityn-steam-overheating':{'ye_overheater','ye_makesteam'},
  'quinityn-steam-turbine':{'ye_sturbine','ye_steam2mf','ye_steam3mf'},
  'quinityn-high-temperature-generation':{'ye_tfmw_generator-s','ye_tfmw_turbine-s'},
- 'quinityn-advanced-generation':{'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'},
+ 'quinityn-advanced-generation':{'y-seg'},
  'quinityn-air-scrubbing':{
   'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'},
 }
@@ -876,7 +949,7 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==108
+assert len(tips)==123
 refining_kept={
  'y-sulfuric-acid','y-water-gen','y-water-gen-fluid','y_catalyst_bp','y_catalyst_ft','y_coal2liquid','y_ft',
  'y_granulate_wood','y_rawsyngas1','y_rawsyngas2','y_refinehydrogen','y_regcatbp','y_regcatft'}
