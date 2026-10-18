@@ -698,7 +698,7 @@ return {
   },
   {
     name = "high-flow-storage",
-    prerequisites = { "energy-storage", "plant-infrastructure" },
+    prerequisites = { "accumulator-capacity", "flywheel-storage" },
     count = 80,
     icon = "y_compensator_25",
     recipes = { "y_compensator_25" },

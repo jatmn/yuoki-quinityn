@@ -140,12 +140,12 @@
     "quinityn-burner-separator",
     "quinityn-water"
   ],
+  "quinityn-artillery-shells": [
+    "yi_artillery_shell"
+  ],
   "quinityn-asteroid-crushing": [
     "j_crushing_to_f7",
     "j_crushing_to_n4"
-  ],
-  "quinityn-artillery-shells": [
-    "yi_artillery_shell"
   ],
   "quinityn-basic-factory": [
     "y-basic-t1-mf",
@@ -422,6 +422,9 @@
   "quinityn-bridge-fuel-processing-recycling": [
     "y-fuel-reactor-recycling"
   ],
+  "quinityn-bridge-hardic-walls-recycling": [
+    "y_wall22_hardic-recycling"
+  ],
   "quinityn-bridge-high-capacity-boiler-recycling": [
     "y-boiler-iv-recycling"
   ],
@@ -430,9 +433,6 @@
   ],
   "quinityn-bridge-high-pressure-steam-turbine-recycling": [
     "y-steam-turbine-recycling"
-  ],
-  "quinityn-bridge-hardic-walls-recycling": [
-    "y_wall22_hardic-recycling"
   ],
   "quinityn-bridge-high-temperature-generation-recycling": [
     "ye_tfmw_generator-s-recycling",
@@ -978,6 +978,9 @@
     "ye_grow_animal2",
     "ye_grow_plant1"
   ],
+  "quinityn-hardic-walls": [
+    "y_wall22_hardic"
+  ],
   "quinityn-high-capacity-boiler": [
     "y-boiler-iv"
   ],
@@ -986,9 +989,6 @@
   ],
   "quinityn-high-pressure-steam-turbine": [
     "y-steam-turbine"
-  ],
-  "quinityn-hardic-walls": [
-    "y_wall22_hardic"
   ],
   "quinityn-high-temperature-generation": [
     "ye_tfmw_generator-s",
@@ -1285,14 +1285,14 @@
     "y_tile_slagfilled",
     "y_tile_slagpattern"
   ],
+  "quinityn-slurry-syngas": [
+    "ye_slurry2ethanol"
+  ],
   "quinityn-solar-collector": [
     "y_alien_solar"
   ],
   "quinityn-solar-dish": [
     "y-stirling-solar-dish"
-  ],
-  "quinityn-slurry-syngas": [
-    "ye_slurry2ethanol"
   ],
   "quinityn-steam-overheating": [
     "ye_makesteam",
