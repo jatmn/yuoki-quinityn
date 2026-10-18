@@ -106,12 +106,26 @@ if missing:
  sys.exit(1)
 finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-')
         and t.get('max_level')!='infinite'}
+# These upgrades sit outside the local empty-inventory closure. Most require
+# space science directly, or through speed module 2 for P3. Requester and buffer
+# research requires vanilla logistic-system. That technology's prerequisite is
+# space-science-pack (build an asteroid collector) and its lab cost includes
+# space science packs. The Quinityn requester technologies do not list space
+# science in their own unit, so they are exempt from the ingredient assertion.
+# Ordinary storage and passive-provider tiers must stay in the local closure.
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
- 'science-module','quality-module','p3-factory','research-center','foundry-melting','asteroid-crushing']}
+ 'science-module','quality-module','p3-factory','research-center','foundry-melting','asteroid-crushing',
+ 'logistic-requests','wide-logistic-requests']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
-for name in space_gated-{'quinityn-p3-factory','quinityn-foundry-melting','quinityn-asteroid-crushing'}:
+for name in space_gated-{'quinityn-p3-factory','quinityn-foundry-melting','quinityn-asteroid-crushing',
+ 'quinityn-logistic-requests','quinityn-wide-logistic-requests'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
+assert T['logistic-system']['prerequisites']==['space-science-pack']
+assert 'space-science-pack' in {i[0] for i in T['logistic-system']['unit']['ingredients']}
+for name in ['expanded-storage','large-storage','bulk-storage','logistic-storage','logistic-provider-capacity','logistic-bunker']:
+ assert 'quinityn-'+name in techs, name+' left the local closure'
+assert 'quinityn-logistic-requests' not in techs and 'quinityn-wide-logistic-requests' not in techs
 assert 'ye_fassembly2' in machines
 assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
 print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science')
