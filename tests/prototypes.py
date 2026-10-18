@@ -141,6 +141,14 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
 assert len(tips)==128
+# The seven biology process tips must ship native simulations at their actual
+# research unlocks; executing the scenes is covered by biology_demonstrations.
+for stage in ['agriculture','husbandry','genetics','advanced-genetics',
+              'industrial-biology','trade','trade-biology']:
+ tip=D['tips-and-tricks-item']['quinityn-'+stage]
+ assert tip['trigger']=={'type':'research','technology':'quinityn-'+stage},stage
+ scene=tip['simulation']
+ assert scene['planet']=='quinityn' and scene.get('init') and scene.get('update'),stage
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):

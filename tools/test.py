@@ -19,8 +19,8 @@ harness=mods/'quinityn-tests';harness.mkdir(exist_ok=True)
 engine_data=a.factorio.parents[2]/'data'
 config=a.output/'config.ini';config.write_text('[path]\nread-data='+str(engine_data)+'\nwrite-data='+str(a.output/'runtime')+'\n')
 base=[str(a.factorio),'--config',str(config),'--mod-directory',str(mods)]
-def run(name,args,marker=None):
- result=subprocess.run(args,capture_output=True,text=True,timeout=180)
+def run(name,args,marker=None,timeout=180):
+ result=subprocess.run(args,capture_output=True,text=True,timeout=timeout)
  text=result.stdout+result.stderr;(a.output/(name+'.log')).write_text(text)
  if result.returncode or 'Error Util.cpp' in text or (marker and marker not in text):
   print(text[-6000:]);raise SystemExit(name+' failed; see '+str(a.output/(name+'.log')))
@@ -77,7 +77,11 @@ try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/research_progression")\n')
  run('research-progression-create',base+['--create',str(a.output/'research-progression.zip')],'Factorio initialised')
  run('research-progression',base+['--benchmark',str(a.output/'research-progression.zip'),
-     '--benchmark-ticks','130000','--benchmark-runs','1'],'QUINITYN RESEARCH PROGRESSION TESTS PASSED')
+     '--benchmark-ticks','130000','--benchmark-runs','1'],'QUINITYN RESEARCH PROGRESSION TESTS PASSED',timeout=600)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/biology_demonstrations")\n')
+ run('biology-demonstrations-create',base+['--create',str(a.output/'biology-demonstrations.zip')],'Factorio initialised')
+ run('biology-demonstrations',base+['--benchmark',str(a.output/'biology-demonstrations.zip'),
+     '--benchmark-ticks','220000','--benchmark-runs','1'],'QUINITYN BIOLOGY DEMONSTRATIONS PASSED',timeout=600)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/flyash")\n')
  run('flyash-create',base+['--create',str(a.output/'flyash.zip')],'Factorio initialised')
  run('flyash',base+['--benchmark',str(a.output/'flyash.zip'),

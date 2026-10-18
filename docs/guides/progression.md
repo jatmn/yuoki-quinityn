@@ -275,8 +275,11 @@ Recipe ingredients, outputs and machine stats are unchanged.
 
 Completed technologies and placed machines remain on save upgrades. Moved
 recipes and their recycling effects require their new owners. The broad
-Agriculture/Trade chapters and generated biology tips describe these steps;
-their process animations remain tracked in [#24](https://github.com/jatmn/yuoki-quinityn/issues/24).
+Agriculture/Trade chapters and generated biology tips describe these steps
+and now include native process demonstrations. See the
+[biology demonstration coverage](biology-demonstrations.md) for the seven
+affected tips, recipe sequences and supplied-preview limitations. Other
+process families remain tracked in [#24](https://github.com/jatmn/yuoki-quinityn/issues/24).
 The separate packaging and trade progression work remains in
 [#38](https://github.com/jatmn/yuoki-quinityn/issues/38) and
 [#39](https://github.com/jatmn/yuoki-quinityn/issues/39).
