@@ -1,8 +1,9 @@
 # Biology demonstration coverage
 
-This is the #37 portion of [#24](https://github.com/jatmn/yuoki-quinityn/issues/24),
-covering seven affected tips. It does not complete the other tutorial families,
-the discovery preview, or the separate Packaging/Trade work in #38/#39.
+This covers the #37 and #38 portions of
+[#24](https://github.com/jatmn/yuoki-quinityn/issues/24), covering eight affected
+tips. Other tutorial families, the discovery preview and the separate Trade
+manufacturing work in #39 remain.
 
 Each tip unlocks at the technology in its row. The chapter tips retain their
 broader roadmap text; their animation teaches the currently available stage.
@@ -11,9 +12,10 @@ Later processes have their own research-triggered tips.
 | Final technology / tip | Native process sequence | Machines and operating requirements |
 | --- | --- | --- |
 | `quinityn-agriculture` / Crops, animals and DNA | Initial corn seed → corn → replacement seeds; Vugar seed → Vugar; corn oil → lubricant; cellulose, synthetic wood, sugar and organic feed | C1 Factory, Framed Farm, Form Press, chemical plant and crusher. Water and Mechanical Force use separate ports; press/crusher need fuel. Reserve corn for new seeds. |
+| `quinityn-packaging` / Industrial packaging | Empty package; empty cans → canned corn; empty coolant containers → filled coolant containers → basic fish package | C1 Factory, Form Press, Can Machine and Ice Maker. Requires Agriculture and Fluid handling. Canned corn is a local early export; basic fish needs a brought specimen. The press needs fuel; canning and cooling need Mechanical Force. |
 | `quinityn-husbandry` / Animal husbandry and aquaculture | Initial DNA from science packs; meat breeding; basic fish breeding; blood extraction, slurry dilution, slurry-fed crops and cooking | C1 Factory, Meat Farm, Pool, Can Machine, Framed Farm and furnace. Requires Agriculture, Advanced factories and Fluid handling. Bring starter raw fish; remove blood/slurry as well as items. Furnace needs fuel. |
-| `quinityn-genetics` / First-generation industrial biology | Build the DNA Splicer; replicate initial DNA and make first animal cells; breed first-generation animals; make plant substrate/cells and grow Substratin | Quantum Composer, DNA Splicer, Meat Farm and Framed Farm. Requires Husbandry and Quantum, independently of Trade. Splicer construction uses Quantum materials. |
-| `quinityn-advanced-genetics` / Second-generation industrial biology | Second animal cells → regular breeding; specialized feed → faster breeding; second plant cells → Omtrinit | DNA Splicer, Meat Farm, C1 Factory and Framed Farm. Follows Genetics and Quantum. Feed uses raw fish, cellulose and sugar; collect petroleum/blood outputs. |
+| `quinityn-genetics` / First-generation industrial biology | Build the DNA Splicer; replicate initial DNA and make first animal cells; breed first-generation animals; make plant substrate/cells and grow Substratin; package Omtrinit, Substratin and cells | Quantum Composer, DNA Splicer, Meat Farm and Framed Farm. Requires Husbandry and Quantum, independently of Trade. Splicer construction uses Quantum materials. |
+| `quinityn-advanced-genetics` / Second-generation industrial biology | Second animal cells → regular breeding; specialized feed → faster breeding; second plant cells → Karnis/chitrotin | DNA Splicer, Meat Farm, C1 Factory and Framed Farm. Follows Genetics and Quantum. Feed uses raw fish, cellulose and sugar; collect petroleum/blood outputs. |
 | `quinityn-industrial-biology` / Third-generation industrial biology | Third animal cells → organic metal and its byproducts → pure iron | DNA Splicer, Meat Farm and furnace. Follows Advanced genetics. Account for acid, slurry and Scientific Reputation outputs; furnace needs fuel. |
 | `quinityn-trade` / Laika, trade and reputation | Laika-Gate → Trade Node; export basic fish packages for Merchant Signs and returned containers; export meat packages for UC-A2 and DNA; import sealing | C2 Factory, C1 Factory and Trade Node. Trade follows Quantum and Packaging. Fish/meat feedstock additionally needs Husbandry; these supplied packages are not an early free resource. All trade outputs must be collected. No genetic export is shown as available from early farming. |
 | `quinityn-trade-biology` / Imported aquaculture and smoking | Import Krutag starter → breed Krutag; import PT-ishys and Ji-Ribu-s starters; make white feed → breed both species; build smoker → smoke meat and Ji-Ribu-s | Trade Node, Pool, C1 Factory and smoker. Requires Trade, Husbandry and Slag paving. Imports consume Merchant Signs. Krutag needs vegetable oil; PT-ishys needs water; Ji-Ribu-s needs contaminated water. Smoking consumes recipe wood plus separate burner fuel. |
@@ -51,9 +53,30 @@ The native `biology_demonstrations` fixture runs all sequences without skipping
 machine craft time, checks completion and first-step repeat, and checks research
 isolation. It executes the init/update callbacks exported from the engine's
 actual tip declarations, with isolated test worlds and full-duration crafting.
-Prototype tests also check all seven research triggers and simulation attachments.
+Prototype tests also check all eight research triggers and simulation attachments.
 
-On 2026-10-18, graphical inspection in Factorio/Space Age 2.1.22 with the pinned
+The Husbandry demonstration now ends with raw/cooked meat packaging; Genetics
+with Omtrinit, Substratin and cell packaging; Advanced genetics with Verotin and
+Karnis packaging; Industrial biology with organic-metal packaging. Imported
+aquaculture adds Krutag packages and all four imported/smoked-food cans.
+Trade shows canned-corn export before its existing fish/meat export examples.
+Husbandry keeps its existing prerequisites; Packaging separately supplies the
+containers used by its products. These scenes reuse the same supplied recipe
+inputs and native transport rules described above.
+
+For the packaging additions, graphical checks on the same engine and dependency
+versions inspected the Packaging, Husbandry and Industrial biology effect lists,
+and the Packaging and Industrial biology scenes completed their native crafts.
+A separate connected check grew corn, pressed empty cans, canned the harvested
+corn and exported four cans for 400 Merchant Signs and 16 military science packs
+without Husbandry, Genetics or imported-species research. It supplied machines,
+power, seed, metal and operating fluids, conserved products during manual
+transfers, and ran at 10x simulation speed. This checks the production slice,
+not construction of the Trade Node or a full survival playthrough; Trade's
+Fame/manufacturing progression remains tracked in #39.
+
+Before the packaging additions, on 2026-10-18 graphical inspection in
+Factorio/Space Age 2.1.22 with the pinned
 Yuoki/Engines sources covered all seven sequences, repeat/reopen behavior,
 readable framing, item transport, fluid ports and research/effect UI. A separate
 connected fixture reused harvested crops, meat/blood, DNA and imported starters;

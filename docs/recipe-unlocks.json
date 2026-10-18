@@ -44,7 +44,9 @@
     "ye_futtermittel_c",
     "ye_grow_animal3",
     "ye_grow_animal3fast",
-    "ye_grow_plant2"
+    "ye_grow_plant2",
+    "ye_package_carni",
+    "ye_package_verotin"
   ],
   "quinityn-advanced-logistics": [
     "y-inserter-smart",
@@ -191,7 +193,9 @@
     "y-seg-recycling"
   ],
   "quinityn-bridge-advanced-genetics-recycling": [
-    "ye_futtermittel_c-recycling"
+    "ye_futtermittel_c-recycling",
+    "ye_package_carni-recycling",
+    "ye_package_verotin-recycling"
   ],
   "quinityn-bridge-advanced-logistics-recycling": [
     "y-inserter-smart-long-recycling",
@@ -425,7 +429,10 @@
     "y-fuel-reactor-recycling"
   ],
   "quinityn-bridge-genetics-recycling": [
-    "ye_dnasplicer-recycling"
+    "ye_dnasplicer-recycling",
+    "ye_package_omtrinit-recycling",
+    "ye_package_spliced_cells-recycling",
+    "ye_package_substratin-recycling"
   ],
   "quinityn-bridge-hardic-walls-recycling": [
     "y_wall22_hardic-recycling"
@@ -448,7 +455,12 @@
   ],
   "quinityn-bridge-husbandry-recycling": [
     "ye_meatfarm-recycling",
+    "ye_package_c_meat-recycling",
+    "ye_package_r_meat-recycling",
     "ye_pool-recycling"
+  ],
+  "quinityn-bridge-industrial-biology-recycling": [
+    "ye_package_organic-recycling"
   ],
   "quinityn-bridge-infusion-recycling": [
     "y-alien-infuser-recycling",
@@ -536,23 +548,10 @@
     "ye_fassembly_sp-recycling"
   ],
   "quinityn-bridge-packaging-recycling": [
-    "ye_buechse_blau-recycling",
-    "ye_buechse_braun-recycling",
     "ye_buechse_empty-recycling",
     "ye_buechse_gelb-recycling",
-    "ye_buechse_rosa-recycling",
-    "ye_buechse_white-recycling",
-    "ye_package_c_meat-recycling",
-    "ye_package_carni-recycling",
     "ye_package_empty-recycling",
-    "ye_package_fish1-recycling",
-    "ye_package_fish2-recycling",
-    "ye_package_omtrinit-recycling",
-    "ye_package_organic-recycling",
-    "ye_package_r_meat-recycling",
-    "ye_package_spliced_cells-recycling",
-    "ye_package_substratin-recycling",
-    "ye_package_verotin-recycling"
+    "ye_package_fish1-recycling"
   ],
   "quinityn-bridge-plant-infrastructure-recycling": [
     "y-pipe-ec-recycling",
@@ -774,6 +773,10 @@
     "y_toolhead-recycling"
   ],
   "quinityn-bridge-trade-biology-recycling": [
+    "ye_buechse_blau-recycling",
+    "ye_buechse_braun-recycling",
+    "ye_buechse_rosa-recycling",
+    "ye_buechse_white-recycling",
     "ye_dna_fish2-recycling",
     "ye_fish2-recycling",
     "ye_fish3-recycling",
@@ -781,6 +784,7 @@
     "ye_futtermittel_a-recycling",
     "ye_futtermittel_b-recycling",
     "ye_futtermittel_d-recycling",
+    "ye_package_fish2-recycling",
     "ye_smoked_fish-recycling",
     "ye_smoked_meat-recycling",
     "ye_smoker-recycling"
@@ -993,7 +997,10 @@
     "ye_dna_plant3",
     "ye_dnasplicer",
     "ye_grow_animal2",
-    "ye_grow_plant1"
+    "ye_grow_plant1",
+    "ye_package_omtrinit",
+    "ye_package_spliced_cells",
+    "ye_package_substratin"
   ],
   "quinityn-hardic-walls": [
     "y_wall22_hardic"
@@ -1022,6 +1029,8 @@
     "ye_grow_animal_a",
     "ye_grow_fish1",
     "ye_meatfarm",
+    "ye_package_c_meat",
+    "ye_package_r_meat",
     "ye_pool",
     "ye_pool_slurry",
     "yie_bloodfrommeat"
@@ -1029,6 +1038,7 @@
   "quinityn-industrial-biology": [
     "ye_dna_animal4",
     "ye_grow_animal4",
+    "ye_package_organic",
     "yie_pureiron"
   ],
   "quinityn-industrial-science": [
@@ -1126,23 +1136,10 @@
     "ye_fassembly_sp"
   ],
   "quinityn-packaging": [
-    "ye_buechse_blau",
-    "ye_buechse_braun",
     "ye_buechse_empty",
     "ye_buechse_gelb",
-    "ye_buechse_rosa",
-    "ye_buechse_white",
-    "ye_package_c_meat",
-    "ye_package_carni",
     "ye_package_empty",
-    "ye_package_fish1",
-    "ye_package_fish2",
-    "ye_package_omtrinit",
-    "ye_package_organic",
-    "ye_package_r_meat",
-    "ye_package_spliced_cells",
-    "ye_package_substratin",
-    "ye_package_verotin"
+    "ye_package_fish1"
   ],
   "quinityn-plant-infrastructure": [
     "y-pipe-ec",
@@ -1385,6 +1382,10 @@
     "ypfw_trader_sign"
   ],
   "quinityn-trade-biology": [
+    "ye_buechse_blau",
+    "ye_buechse_braun",
+    "ye_buechse_rosa",
+    "ye_buechse_white",
     "ye_dna_fish2",
     "ye_fish2",
     "ye_fish3",
@@ -1392,6 +1393,7 @@
     "ye_futtermittel_a",
     "ye_futtermittel_b",
     "ye_futtermittel_d",
+    "ye_package_fish2",
     "ye_smoked_fish",
     "ye_smoked_meat",
     "ye_smoker"

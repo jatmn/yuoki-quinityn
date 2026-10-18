@@ -1218,6 +1218,56 @@ local function thermal_prerequisite_lock()
   end
   other_new_locked(force)
 end
+local function packaging_unlocks()
+  local force = game.create_force("packaging-stages")
+  local stages = {
+    { "packaging", { "ye_package_empty", "ye_buechse_empty", "ye_buechse_gelb", "ye_package_fish1" } },
+    { "husbandry", { "ye_package_r_meat", "ye_package_c_meat" } },
+    { "genetics", { "ye_package_omtrinit", "ye_package_substratin", "ye_package_spliced_cells" } },
+    { "advanced-genetics", { "ye_package_verotin", "ye_package_carni" } },
+    { "industrial-biology", { "ye_package_organic" } },
+    {
+      "trade-biology",
+      { "ye_package_fish2", "ye_buechse_blau", "ye_buechse_braun", "ye_buechse_rosa", "ye_buechse_white" },
+    },
+  }
+  local function research_parents(technology)
+    for _, parent in pairs(technology.prerequisites) do
+      research_parents(parent)
+      parent.researched = true
+    end
+  end
+  progression.reconcile()
+  for _, stage in ipairs(stages) do
+    for _, name in ipairs(stage[2]) do
+      check(not force.recipes[name].enabled, "fresh force has no package: " .. name)
+    end
+  end
+  for index, stage in ipairs(stages) do
+    local technology = force.technologies["quinityn-" .. stage[1]]
+    research_parents(technology)
+    check(force.add_research(technology), "package owner is researchable: " .. stage[1])
+    technology.researched = true
+    progression.reconcile()
+    for other_index, other in ipairs(stages) do
+      for _, name in ipairs(other[2]) do
+        check(force.recipes[name].enabled == (other_index <= index), "package follows its branch: " .. name)
+        if force.recipes[name .. "-recycling"] then
+          check(not force.recipes[name .. "-recycling"].enabled, "package recycling waits for recycling: " .. name)
+        end
+      end
+    end
+  end
+  force.technologies.recycling.researched = true
+  progression.reconcile()
+  for _, stage in ipairs(stages) do
+    for _, name in ipairs(stage[2]) do
+      if force.recipes[name .. "-recycling"] then
+        check(force.recipes[name .. "-recycling"].enabled, "package recycling follows both gates: " .. name)
+      end
+    end
+  end
+end
 local function biology_unlocks(surface)
   local force = game.create_force("biology-stages")
   local function research_parents(name)
@@ -1471,6 +1521,7 @@ script.on_init(function()
     end
   end
   surface.set_tiles(tiles)
+  packaging_unlocks()
   biology_unlocks(surface)
   quantum_unlocks(surface)
   storage.surface = surface.index

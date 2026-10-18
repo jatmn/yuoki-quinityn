@@ -1,4 +1,4 @@
--- Ordered recipes taught by the seven biology-related tips. No balance data:
+-- Ordered recipes taught by the eight biology-related tips. No balance data:
 -- ingredient quantities, products, durations and power come from live prototypes.
 return {
   agriculture = {
@@ -14,6 +14,14 @@ return {
     { "ye_fassembly1", "ye_sugar" },
     { "ye_fassembly1", "ye_biomixed" },
   },
+  packaging = {
+    { "ye_fassembly1", "ye_package_empty" },
+    { "y-heat-form-press", "ye_buechse_empty" },
+    { "ye_canmachine", "ye_buechse_gelb" },
+    { "ye_fassembly1", "ye_ice_container_empty" },
+    { "ye_icemaker", "ye_ice_container_filled" },
+    { "ye_fassembly1", "ye_package_fish1" },
+  },
   husbandry = {
     { "ye_fassembly1", "ye_dna_animal0" },
     { "ye_meatfarm", "ye_grow_animal_a" },
@@ -23,6 +31,8 @@ return {
     { "ye_farm", "ye-growcorn_ws" },
     { "ye_farm", "ye_cornb_ws" },
     { "stone-furnace", "ye_cooking_meat" },
+    { "ye_fassembly1", "ye_package_r_meat" },
+    { "ye_fassembly1", "ye_package_c_meat" },
   },
   genetics = {
     { "y-atomic-quantum-composer", "ye_dnasplicer" },
@@ -33,6 +43,9 @@ return {
     { "ye_dnasplicer", "ye_dna_plant3" },
     { "ye_dnasplicer", "ye_dna_plant1" },
     { "ye_farm", "ye_grow_plant1" },
+    { "ye_fassembly1", "ye_package_omtrinit" },
+    { "ye_fassembly1", "ye_package_substratin" },
+    { "ye_fassembly1", "ye_package_spliced_cells" },
   },
   ["advanced-genetics"] = {
     { "ye_dnasplicer", "ye_dna_animal3" },
@@ -41,15 +54,19 @@ return {
     { "ye_meatfarm", "ye_grow_animal3fast" },
     { "ye_dnasplicer", "ye_dna_plant4" },
     { "ye_farm", "ye_grow_plant2" },
+    { "ye_fassembly1", "ye_package_verotin" },
+    { "ye_fassembly1", "ye_package_carni" },
   },
   ["industrial-biology"] = {
     { "ye_dnasplicer", "ye_dna_animal4" },
     { "ye_meatfarm", "ye_grow_animal4" },
     { "stone-furnace", "yie_pureiron" },
+    { "ye_fassembly1", "ye_package_organic" },
   },
   trade = {
     { "ye_fassembly2", "y-stargate" },
     { "ye_fassembly1", "ye_trade_node" },
+    { "ye_trade_node", "ye_buechse_gelb_export" },
     { "ye_trade_node", "ye_export_fish1" },
     { "ye_trade_node", "ye_trademeat1" },
     { "ye_trade_node", "yie_import_sealing" },
@@ -65,5 +82,10 @@ return {
     { "ye_fassembly1", "ye_smoker" },
     { "ye_smoker", "ye_smoked_meat" },
     { "ye_smoker", "ye_smoked_fish" },
+    { "ye_fassembly1", "ye_package_fish2" },
+    { "ye_canmachine", "ye_buechse_blau" },
+    { "ye_canmachine", "ye_buechse_braun" },
+    { "ye_canmachine", "ye_buechse_rosa" },
+    { "ye_canmachine", "ye_buechse_white" },
   },
 }
