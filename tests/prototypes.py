@@ -74,7 +74,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==105
+assert len(tips)==109
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -899,8 +899,70 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==105
+refining_kept={
+ 'y-sulfuric-acid','y-water-gen','y-water-gen-fluid','y_catalyst_bp','y_catalyst_ft','y_coal2liquid','y_ft',
+ 'y_granulate_wood','y_rawsyngas1','y_rawsyngas2','y_refinehydrogen','y_regcatbp','y_regcatft'}
+assert {e['recipe'] for e in T['quinityn-refining']['effects'] if e['type']=='unlock-recipe'}==refining_kept
+thermal={
+ 'y_smelter','y_charger','y_block_heat','y_hps_purecopper','y_hps_pureiron','y_hps_steel'}
+assert {e['recipe'] for e in T['quinityn-thermal-smelting']['effects'] if e['type']=='unlock-recipe'}==thermal
+assert set(T['quinityn-refining']['prerequisites'])=={'quinityn-engines','quinityn-advanced-components'}
+assert set(T['quinityn-thermal-smelting']['prerequisites'])=={'quinityn-refining','quinityn-quantum'}
+assert {'quinityn-refining','quinityn-quantum'}<=ancestry('quinityn-thermal-smelting')
+assert 'quinityn-quantum' not in ancestry('quinityn-refining')
+assert set(T['quinityn-washing']['prerequisites'])=={'quinityn-industrial-science','quinityn-basic-factory','quinityn-fuel-processing'}
+assert set(T['quinityn-energy-storage']['prerequisites'])=={'quinityn-power','quinityn-washing','quinityn-advanced-components'}
+assert 'quinityn-archaeology' in ancestry('quinityn-quantum')
+assert 'quinityn-excavation' in ancestry('quinityn-thermal-smelting')
+assert 'quinityn-plant-infrastructure' not in ancestry('quinityn-thermal-smelting')
+assert unlocks['y_data_crystal']==['quinityn-quantum']
+assert unlocks['y-atomic-quantum-composer']==['quinityn-quantum']
+assert 'y_charger' not in {e['recipe'] for e in T['quinityn-quantum']['effects'] if e['type']=='unlock-recipe'}
+adv_comp={e['recipe'] for e in T['quinityn-advanced-components']['effects'] if e['type']=='unlock-recipe'}
+assert 'y_block_heat' not in adv_comp and 'y_block_cold' in adv_comp
+slurry=R['ye_slurry2ethanol']
+assert slurry['main_product']=='y_syngas_raw'
+assert [p['name'] for p in slurry['results']]==['y_syngas_raw']
+assert {p['name'] for p in slurry['ingredients']}=={'ye_slurry','ye_sugar'}
+bio={'ye_biofuel','ye_granulate_corn','ye_granulate_trifitan','ye_granulate_vuger'}
+assert {e['recipe'] for e in T['quinityn-biological-feedstock']['effects'] if e['type']=='unlock-recipe'}==bio
+assert set(T['quinityn-biological-feedstock']['prerequisites'])=={'quinityn-agriculture'}
+assert {e['recipe'] for e in T['quinityn-slurry-syngas']['effects'] if e['type']=='unlock-recipe'}=={'ye_slurry2ethanol'}
+assert set(T['quinityn-slurry-syngas']['prerequisites'])=={'quinityn-biological-feedstock','quinityn-husbandry'}
+molten={'yi-molten-iron','yi-molten-copper'}
+assert {e['recipe'] for e in T['quinityn-foundry-melting']['effects'] if e['type']=='unlock-recipe'}==molten
+assert set(T['quinityn-foundry-melting']['prerequisites'])=={'quinityn-refining','foundry'}
+assert 'foundry' in ancestry('quinityn-foundry-melting')
+assert 'foundry' not in ancestry('quinityn-refining')
+crush={'j_crushing_to_n4','j_crushing_to_f7'}
+assert {e['recipe'] for e in T['quinityn-asteroid-crushing']['effects'] if e['type']=='unlock-recipe'}==crush
+assert set(T['quinityn-asteroid-crushing']['prerequisites'])=={'quinityn-materials','quinityn-industrial-science','space-platform'}
+assert 'space-platform' in ancestry('quinityn-asteroid-crushing')
+assert 'quinityn-industrial-science' in ancestry('quinityn-asteroid-crushing')
+for recipe in refining_kept:
+ assert unlocks[recipe]==['quinityn-refining'],recipe
+for recipe in thermal:
+ assert unlocks[recipe]==['quinityn-thermal-smelting'],recipe
+for recipe in bio:
+ assert unlocks[recipe]==['quinityn-biological-feedstock'], recipe
+assert unlocks['ye_slurry2ethanol']==['quinityn-slurry-syngas']
+for recipe in molten:
+ assert unlocks[recipe]==['quinityn-foundry-melting'], recipe
+for recipe in crush:
+ assert unlocks[recipe]==['quinityn-asteroid-crushing'], recipe
+for tech in ['quinityn-thermal-smelting','quinityn-biological-feedstock','quinityn-slurry-syngas',
+ 'quinityn-foundry-melting','quinityn-asteroid-crushing']:
+ assert 'quinityn-arrival' in ancestry(tech),tech
+assert R['y_hps_purecopper']['categories']==['yuoki_smelter_recipe']
+assert R['y_hps_pureiron']['categories']==['yuoki_smelter_recipe']
+assert R['y_hps_steel']['categories']==['yuoki_smelter_recipe']
+assert R['y_block_heat']['categories']==['yuoki_charger_recipe']
+assert R['yi-molten-iron']['categories']==['metallurgy']
+assert R['yi-molten-copper']['categories']==['metallurgy']
+assert R['j_crushing_to_n4']['categories']==['crushing']
+assert R['j_crushing_to_f7']['categories']==['crushing']
 print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
+print('PASS: refining split by chemical, biological, thermal, foundry and asteroid processing')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True
 assert science['allow_quality'] is False

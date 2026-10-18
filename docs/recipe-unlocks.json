@@ -4,7 +4,6 @@
     "y-chip-2",
     "y-conductive-coil-1",
     "y_block_cold",
-    "y_block_heat",
     "y_dotzetron",
     "y_structure_electric",
     "yi_magnetron"
@@ -143,12 +142,22 @@
     "quinityn-burner-separator",
     "quinityn-water"
   ],
+  "quinityn-asteroid-crushing": [
+    "j_crushing_to_f7",
+    "j_crushing_to_n4"
+  ],
   "quinityn-artillery-shells": [
     "yi_artillery_shell"
   ],
   "quinityn-basic-factory": [
     "y-basic-t1-mf",
     "ye_fassembly1"
+  ],
+  "quinityn-biological-feedstock": [
+    "ye_biofuel",
+    "ye_granulate_corn",
+    "ye_granulate_trifitan",
+    "ye_granulate_vuger"
   ],
   "quinityn-bridge-advanced-components-recycling": [
     "y-basic-t2-mf-recycling",
@@ -617,7 +626,6 @@
     "y-infused-uca2-recycling",
     "y-quantrinum-charge-recycling",
     "y-quantrinum-recycling",
-    "y_charger-recycling",
     "y_crystal2_combined-recycling",
     "y_repair_quantrinum-recycling",
     "ye_center-recycling",
@@ -689,7 +697,6 @@
     "y_organic_dust-recycling",
     "y_organic_dust-recycling",
     "y_richemulsion-barrel-recycling",
-    "y_smelter-recycling",
     "y_syngas_raw-barrel-recycling",
     "y_usedcatalyst-recycling",
     "y_usedcatalyst-recycling",
@@ -735,6 +742,10 @@
     "y-bluegear-recycling",
     "y_structure_element-recycling",
     "y_structure_vessel-recycling"
+  ],
+  "quinityn-bridge-thermal-smelting-recycling": [
+    "y_charger-recycling",
+    "y_smelter-recycling"
   ],
   "quinityn-bridge-tooling-recycling": [
     "y_drillhead-recycling",
@@ -925,6 +936,10 @@
   ],
   "quinityn-foundation": [
     "quinityn-foundation"
+  ],
+  "quinityn-foundry-melting": [
+    "yi-molten-copper",
+    "yi-molten-iron"
   ],
   "quinityn-fuel-processing": [
     "y-fuel-reactor"
@@ -1147,7 +1162,6 @@
     "y-infused-uca2",
     "y-quantrinum",
     "y-quantrinum-charge",
-    "y_charger",
     "y_data_crystal",
     "y_quantrinum_infusion",
     "y_repair_quantrinum",
@@ -1188,8 +1202,6 @@
     "y_reactor_mox1"
   ],
   "quinityn-refining": [
-    "j_crushing_to_f7",
-    "j_crushing_to_n4",
     "y-sulfuric-acid",
     "y-water-gen",
     "y-water-gen-fluid",
@@ -1198,22 +1210,11 @@
     "y_coal2liquid",
     "y_ft",
     "y_granulate_wood",
-    "y_hps_purecopper",
-    "y_hps_pureiron",
-    "y_hps_steel",
     "y_rawsyngas1",
     "y_rawsyngas2",
     "y_refinehydrogen",
     "y_regcatbp",
-    "y_regcatft",
-    "y_smelter",
-    "ye_biofuel",
-    "ye_granulate_corn",
-    "ye_granulate_trifitan",
-    "ye_granulate_vuger",
-    "ye_slurry2ethanol",
-    "yi-molten-copper",
-    "yi-molten-iron"
+    "y_regcatft"
   ],
   "quinityn-research-center": [
     "ye_science_blue",
@@ -1242,6 +1243,9 @@
     "y_tile_slagfilled",
     "y_tile_slagpattern"
   ],
+  "quinityn-slurry-syngas": [
+    "ye_slurry2ethanol"
+  ],
   "quinityn-steam-overheating": [
     "ye_makesteam",
     "ye_overheater"
@@ -1265,6 +1269,14 @@
     "quinityn-uc-to-coal",
     "quinityn-uc-to-iron",
     "quinityn-uc-to-copper"
+  ],
+  "quinityn-thermal-smelting": [
+    "y_block_heat",
+    "y_charger",
+    "y_hps_purecopper",
+    "y_hps_pureiron",
+    "y_hps_steel",
+    "y_smelter"
   ],
   "quinityn-tooling": [
     "y-crush-blue_whead",

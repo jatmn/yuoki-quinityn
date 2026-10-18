@@ -2,7 +2,8 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **105 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **109 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+
 ## Arrive, then establish industry
 
 Discovery is researched through the normal Space Age route. The connection runs from Nauvis to Quinityn. Discovery or remote viewing alone does not unlock Yuoki; a character must physically arrive. The unlock belongs to the force, so teammates share it. The initial spawn remains unchanged.
