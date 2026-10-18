@@ -534,6 +534,99 @@ script.on_event(defines.events.on_tick, function(event)
     storage.plasma_bonus = force.get_ammo_damage_modifier("plasma")
     force.laboratory_speed_modifier = 999
     check(force.add_research("quinityn-mining-productivity"), "infinite mining research can be selected")
+    storage.productivity_pairs = {}
+    for i, name in ipairs({ "ye_fassembly1", "ye_fassembly2", "ye_fassembly_sp" }) do
+      local x = -25 + i * 8
+      local moduled = surface.create_entity({ name = name, position = { x, 88 }, force = force })
+      local control = surface.create_entity({ name = name, position = { x, 96 }, force = force })
+      check(moduled and moduled.valid and control and control.valid, name .. " productivity fixture placement")
+      check(moduled.set_recipe("quinityn-research-data"), name .. " moduled fixture selects planet science")
+      check(control.set_recipe("quinityn-research-data"), name .. " control fixture selects planet science")
+      local mod_inv = moduled.get_module_inventory()
+      local slots = #mod_inv
+      local inserted = 0
+      while inserted < slots do
+        local count = mod_inv.insert({ name = "productivity-module-3", count = 1 })
+        if count == 0 then
+          break
+        end
+        inserted = inserted + count
+      end
+      check(inserted == slots, name .. " moduled fixture fills every module slot")
+      storage.productivity_pairs[#storage.productivity_pairs + 1] =
+        { moduled = moduled, control = control, name = name }
+    end
+  elseif event.tick == 2401 then
+    local recipe = prototypes.recipe["quinityn-research-data"]
+    local check_tick = 0
+    for _, pair in ipairs(storage.productivity_pairs or {}) do
+      local moduled, control = pair.moduled, pair.control
+      check(moduled.valid and control.valid, pair.name .. " productivity fixtures remain valid")
+      local mod_bonus = moduled.productivity_bonus
+      local ctrl_bonus = control.productivity_bonus
+      check(mod_bonus > 0, pair.name .. " moduled fixture has productivity bonus")
+      check(ctrl_bonus == 0, pair.name .. " control fixture has no productivity bonus")
+      local speed = moduled.crafting_speed
+      local crafts = math.ceil(1 / mod_bonus)
+      local extra_cycles = math.floor(crafts * mod_bonus + 1e-6)
+      pair.crafts = crafts
+      pair.extra_cycles = extra_cycles
+      pair.mod_bonus = mod_bonus
+      for _, machine in ipairs({ moduled, control }) do
+        for _, ingredient in pairs(recipe.ingredients) do
+          machine.insert({ name = ingredient.name, count = ingredient.amount * crafts })
+        end
+      end
+      local deadline = math.ceil(recipe.energy * crafts / speed * 60) + 180
+      if deadline > check_tick then
+        check_tick = deadline
+      end
+    end
+    local absolute = 2401 + check_tick
+    if absolute == 3600 or absolute == 8500 or absolute == 15000 then
+      absolute = absolute + 1
+    end
+    check(absolute < 15000, "productivity fixture finishes before benchmark end")
+    storage.productivity_check_tick = absolute
+  elseif event.tick == storage.productivity_check_tick then
+    for _, pair in ipairs(storage.productivity_pairs or {}) do
+      local moduled, control = pair.moduled, pair.control
+      local crafts, extra_cycles, bonus = pair.crafts, pair.extra_cycles, pair.mod_bonus
+      local mod_out = moduled.get_output_inventory().get_item_count("quinityn-research-data")
+      local ctrl_out = control.get_output_inventory().get_item_count("quinityn-research-data")
+      local expected_mod = (crafts + extra_cycles) * 5
+      local expected_ctrl = crafts * 5
+      check(ctrl_out == expected_ctrl, pair.name .. " control produces baseline science packs")
+      check(mod_out == expected_mod, pair.name .. " moduled produces bonus science packs")
+      check(mod_out > ctrl_out, pair.name .. " moduled output exceeds control")
+      check(
+        moduled.is_crafting() == false and control.is_crafting() == false,
+        pair.name .. " productivity crafts finished"
+      )
+      for _, machine in ipairs({ moduled, control }) do
+        check(machine.get_item_count("y-pol-waste") == 0, pair.name .. " consumes all flyash")
+        for _, ingredient in pairs(prototypes.recipe["quinityn-research-data"].ingredients) do
+          if ingredient.name ~= "y-pol-waste" then
+            check(machine.get_item_count(ingredient.name) == 0, pair.name .. " consumes " .. ingredient.name)
+          end
+        end
+      end
+      local progress = moduled.bonus_progress
+      check(
+        math.abs(progress - (crafts * bonus - extra_cycles)) < 1e-3,
+        pair.name .. " bonus progress matches cycle math"
+      )
+      check(
+        moduled.get_item_count({ name = "quinityn-research-data", quality = "uncommon" }) == 0
+          and moduled.get_item_count({ name = "quinityn-research-data", quality = "rare" }) == 0,
+        pair.name .. " bonus packs stay normal quality"
+      )
+      check(
+        moduled.productivity_bonus > 0 and control.productivity_bonus == 0,
+        pair.name .. " productivity bonus only on moduled machine"
+      )
+    end
+    log("QUINITYN PASS: productivity modules add bonus industrial research data without extra ingredients")
   elseif event.tick == 8500 then
     check(
       force.mining_drill_productivity_bonus > storage.mining_bonus,
@@ -547,6 +640,14 @@ script.on_event(defines.events.on_tick, function(event)
   end
   if storage.surplus_assembler and storage.surplus_assembler.valid then
     storage.surplus_assembler.energy = 100000000
+  end
+  for _, pair in ipairs(storage.productivity_pairs or {}) do
+    if pair.moduled and pair.moduled.valid then
+      pair.moduled.energy = 10000000
+    end
+    if pair.control and pair.control.valid then
+      pair.control.energy = 10000000
+    end
   end
   if storage.lab and storage.lab.valid then
     storage.lab.energy = 10000000

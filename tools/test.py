@@ -47,6 +47,7 @@ try:
  run('surplus-migration-reload',base+['--benchmark',str(a.output/'surplus-migration.zip'),'--benchmark-ticks','60','--benchmark-runs','1'],'QUINITYN SURPLUS MIGRATION PASSED')
 finally:
  setting_override.unlink(missing_ok=True)
+ (mods/'mod-settings.dat').unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Native paired surfaces verify the independent planet controls through map generation.
 try:
