@@ -32,7 +32,7 @@ dump=a.output/'runtime/script-output/data-raw-dump.json'
 # Exercise the callbacks actually attached to the loaded tips, not a parallel
 # list of helper calls. Keep the exported data in the existing test-only mod.
 tips=json.loads(dump.read_text())['tips-and-tricks-item']
-biology_stages=['agriculture','husbandry','genetics','advanced-genetics',
+biology_stages=['agriculture','packaging','husbandry','genetics','advanced-genetics',
                 'industrial-biology','trade','trade-biology']
 callbacks=json.dumps({stage:tips['quinityn-'+stage]['simulation'] for stage in biology_stages})
 delimiter='='
@@ -75,6 +75,23 @@ try:
  run('research-migration-create',base+['--create',str(a.output/'research-migration.zip')],'QUINITYN RESEARCH MIGRATION SETUP')
  legacy.unlink()
  run('research-migration-reload',base+['--benchmark',str(a.output/'research-migration.zip'),'--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN RESEARCH MIGRATION PASSED')
+finally:
+ legacy.unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/packaging_migration")\n')
+ # Reconstruct bulk Packaging separately from historical prerequisite changes.
+ legacy=harness/'data-final-fixes.lua'
+ legacy.write_text('for name,t in pairs(data.raw.technology) do\n'
+  ' if name:match("^quinityn%-") and not name:match("^quinityn%-packaging$") and not name:match("^quinityn%-bridge%-packaging%-") then\n'
+  '  for i=#(t.effects or {}),1,-1 do local e=t.effects[i]; local r=e.recipe or "";\n'
+  '   if (r:match("^ye_package_") or r:match("^ye_buechse_")) and not r:match("_export") then\n'
+  '    local owner=r:match("%-recycling$") and "quinityn-bridge-packaging-recycling" or "quinityn-packaging";\n'
+  '    table.insert(data.raw.technology[owner].effects,table.remove(t.effects,i))\n'
+  '   end\n  end\n end\nend\n')
+ run('packaging-migration-create',base+['--create',str(a.output/'packaging-migration.zip')],'QUINITYN PACKAGING MIGRATION SETUP')
+ legacy.unlink()
+ run('packaging-migration-reload',base+['--benchmark',str(a.output/'packaging-migration.zip'),'--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN PACKAGING MIGRATION PASSED')
 finally:
  legacy.unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')

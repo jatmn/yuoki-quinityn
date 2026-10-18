@@ -45,7 +45,7 @@ script.on_init(function()
     local state = assert(environment.storage.biology_demo, "Tip did not initialize: " .. stage)
     assert(state.surface == surface and state.force == force, "Tip escaped its test world: " .. stage)
     storage.demos[stage] = state
-    if stage == "agriculture" or stage == "husbandry" then
+    if stage == "agriculture" or stage == "packaging" or stage == "husbandry" then
       assert(not force.technologies["quinityn-quantum"].researched)
       assert(not force.technologies["quinityn-trade"].researched)
     elseif stage == "genetics" or stage == "advanced-genetics" or stage == "industrial-biology" then

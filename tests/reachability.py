@@ -117,6 +117,19 @@ assert {'ye_dnasplicer','ye_dna_animal1','ye_grow_animal2','ye_grow_plant1',
         'ye_grow_animal3','ye_grow_animal3fast','ye_grow_plant2','ye_grow_animal4'}<=genetics[6]
 assert {'quinityn-trade','quinityn-trade-biology'}.isdisjoint(genetics[2])
 print('PASS: pre-quantum crops/meat/slurry, basic fish with a supplied starter, and trade-independent genetics loops')
+# Corn can fund the first imported starters without any animal/genetic branch.
+export_scope={n for n in T if n.startswith('quinityn-') and not ancestry(n)&{
+ 'quinityn-husbandry','quinityn-genetics','quinityn-trade-biology'}}
+export=run_closure(export_scope)
+assert {'ye_buechse_empty','ye_buechse_gelb'}<=export[6]
+assert 'ye_trade_node' in export[4] and 'quinityn-trade' in export[2]
+contract=R['ye_buechse_gelb_export']
+assert 'ye_buechse_gelb_export' in export[3]
+assert all(p['name'] in export[0] for p in contract['ingredients'])
+assert set(contract['categories'])&export[8]
+assert any(p['name']=='ypfw_trader_sign' for p in contract['results'])
+assert 'raw-fish' not in export[0]
+print('PASS: local canned-corn export inputs and Trade Node without husbandry, genetics or imported starters')
 required={'rocket-silo','rocket-fuel','low-density-structure','processing-unit','quinityn-research-data','quinityn-burner-separator','y-atomic-constructor','quinityn-foundation'}
 missing=required-items
 print('Closure:',len(items),'items;',len(techs),'technologies;',len(machines),'machines;',iteration+1,'iterations')

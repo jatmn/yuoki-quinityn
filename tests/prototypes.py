@@ -58,6 +58,19 @@ biology_owners={
  'trade-biology':{'ye_fish2','ye_fish3','ye_fish4','ye_dna_fish2','ye_futtermittel_a',
                   'ye_futtermittel_b','ye_futtermittel_d','ye_smoker','ye_smoked_meat','ye_smoked_fish'},
 }
+packaging_owners={
+ 'packaging':{'ye_package_empty','ye_buechse_empty','ye_buechse_gelb','ye_package_fish1'},
+ 'husbandry':{'ye_package_r_meat','ye_package_c_meat'},
+ 'genetics':{'ye_package_omtrinit','ye_package_substratin','ye_package_spliced_cells'},
+ 'advanced-genetics':{'ye_package_verotin','ye_package_carni'},
+ 'industrial-biology':{'ye_package_organic'},
+ 'trade-biology':{'ye_package_fish2','ye_buechse_blau','ye_buechse_braun',
+                  'ye_buechse_rosa','ye_buechse_white'},
+}
+biology_owners['packaging']=set()
+biology_owners['industrial-biology']={'ye_dna_animal4','ye_grow_animal4','yie_pureiron'}
+for stage,recipes in packaging_owners.items():
+ biology_owners[stage]|=recipes
 for stage,recipes in biology_owners.items():
  tech='quinityn-'+stage
  assert unlock_set(tech)==recipes, (tech,unlock_set(tech)^recipes)
@@ -72,6 +85,17 @@ for early in ['agriculture','husbandry','packaging']:
 assert 'quinityn-quantum' in ancestry('quinityn-genetics')
 assert 'quinityn-trade' not in ancestry('quinityn-industrial-biology')
 assert 'quinityn-genetics' not in ancestry('quinityn-trade')
+# Each specialist package must follow a recipe producing its biological input.
+for package,producer in [
+ ('ye_package_r_meat','ye_grow_animal_a'),('ye_package_c_meat','ye_cooking_meat'),
+ ('ye_package_omtrinit','ye_grow_animal2'),('ye_package_substratin','ye_grow_plant1'),
+ ('ye_package_spliced_cells','ye_dna_plant0'),('ye_package_verotin','ye_grow_animal3'),
+ ('ye_package_carni','ye_grow_plant2'),('ye_package_organic','ye_grow_animal4'),
+ ('ye_package_fish2','ye_fish2'),('ye_buechse_blau','ye_fish3'),
+ ('ye_buechse_braun','ye_smoked_meat'),('ye_buechse_rosa','ye_smoked_fish'),
+ ('ye_buechse_white','ye_fish2')]:
+ assert {p['name'] for p in R[package]['ingredients']}&{p['name'] for p in R[producer]['results']}
+ assert unlocks[producer][0] in ancestry(unlocks[package][0]),(package,producer)
 assert set(T['quinityn-trade-biology']['prerequisites'])=={
  'quinityn-trade','quinityn-husbandry','quinityn-slag-paving'}
 for recipe,ingredient in [('ye_fish2','ye_dna_fish2'),('ye_fish3','ye_futtermittel_a'),
@@ -141,10 +165,10 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
 assert len(tips)==128
-# The seven biology process tips must ship native simulations at their actual
+# The eight biology process tips must ship native simulations at their actual
 # research unlocks; biology_demonstrations executes these declared callbacks
 # exported by tools/test.py from this same engine dump.
-for stage in ['agriculture','husbandry','genetics','advanced-genetics',
+for stage in ['agriculture','packaging','husbandry','genetics','advanced-genetics',
               'industrial-biology','trade','trade-biology']:
  tip=D['tips-and-tricks-item']['quinityn-'+stage]
  assert tip['trigger']=={'type':'research','technology':'quinityn-'+stage},stage

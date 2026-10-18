@@ -277,12 +277,44 @@ Completed technologies and placed machines remain on save upgrades. Moved
 recipes and their recycling effects require their new owners. The broad
 Agriculture/Trade chapters and generated biology tips describe these steps
 and now include native process demonstrations. See the
-[biology demonstration coverage](biology-demonstrations.md) for the seven
+[biology demonstration coverage](biology-demonstrations.md) for the eight
 affected tips, recipe sequences and supplied-preview limitations. Other
 process families remain tracked in [#24](https://github.com/jatmn/yuoki-quinityn/issues/24).
-The separate packaging and trade progression work remains in
-[#38](https://github.com/jatmn/yuoki-quinityn/issues/38) and
+Trade manufacturing and reputation progression remain in
 [#39](https://github.com/jatmn/yuoki-quinityn/issues/39).
+
+## Packaging and early exports
+
+**Industrial packaging** still follows Agriculture and Fluid handling. Its four
+recipes make empty packages, empty cans, canned corn and basic fish packages.
+The Can Machine and ice/coolant-container loop remain in Fluid handling.
+Basic fish packaging accepts brought raw fish; Quinityn has no local starter.
+Canned corn provides a local export to earn Merchant Signs at Trade without
+Husbandry, Genetics or imported species. Make cans in the Form Press, can corn
+in the Can Machine, then export it through the Trade Node.
+
+Specialized packaging now unlocks with its contents:
+
+| Research | Packaging |
+| --- | --- |
+| Husbandry | Raw and cooked meat |
+| Genetics | Omtrinit, Substratin and spliced cells |
+| Advanced genetics | Verotin and Karnis (chitrotin) |
+| Industrial biology | Organicum Ferrum |
+| Imported aquaculture and smoking | Krutag packages; PT-ishys, Krutag, smoked meat and smoked fish cans |
+
+Husbandry keeps its existing Agriculture, Advanced factories and Fluid handling
+prerequisites. Research Packaging separately for the containers used by later
+products; cooling remains in Fluid handling. Packaging itself never requires
+the animal, genetic or imported-species branches; Trade still follows Packaging
+and Quantum. Research prerequisites, recipes, machine stats and export returns
+are unchanged.
+
+On upgrade, completed Packaging and biological research stay completed.
+Specialized recipes and recycling wait for their corresponding branch if it
+was not researched. Existing packages and placed machines remain. The Packaging
+tip now demonstrates containers, canned corn and cooled fish; later biology tips
+show their own packaging, and Trade demonstrates the canned-corn export.
 
 ## Flyash, clean air and discovery
 
