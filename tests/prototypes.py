@@ -45,6 +45,35 @@ plant_inf_recipes={
  'yi_pipe_underground_green'}
 def unlock_set(tech):
  return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+# Quantum research must distinguish precursor manufacture from infusion and utilities.
+quantum_materials={'y-atomic-quantum-composer','y-quantrinum','y-crystal-cnd','y_data_crystal',
+ 'y_repair_quantrinum','yi_radar','yi-monument1'}
+infusion={'y-alien-infuser','y-infused-mud','y-infused-uca2','y_quantrinum_infusion'}
+assert unlock_set('quinityn-quantum')==quantum_materials
+assert unlock_set('quinityn-infusion')==infusion
+assert unlock_set('quinityn-quantum-utilities')=={'yi_beacon','ye_center'}
+assert 'quinityn-quantum' in ancestry('quinityn-infusion')
+assert 'quinityn-unicomp-compression' in ancestry('quinityn-quantum')
+assert 'quinityn-infusion' in ancestry('quinityn-quantum-utilities')
+assert unlocks['y-quantrinum-charge']==['quinityn-quantum-power']
+for tech,recipes in [('quinityn-quantum',quantum_materials),('quinityn-infusion',infusion),
+ ('quinityn-quantum-utilities',{'yi_beacon','ye_center'})]:
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],(recipe,unlocks[recipe])
+  if recipe+'-recycling' in R:
+   bridge='quinityn-bridge-'+tech.removeprefix('quinityn-')+'-recycling'
+   assert unlocks[recipe+'-recycling']==[bridge],recipe
+   assert set(T[bridge]['prerequisites'])=={tech,'recycling'}
+# All direct consumers retain material ancestry after moving the infusion recipes.
+for recipe,r in R.items():
+ if recipe.endswith('-recycling'):continue
+ if any(p['name'] in {'y-infused-uca2','y-infused-mud','y_quantrinum_infused'} for p in r.get('ingredients',[])):
+  for tech in unlocks.get(recipe,[]):
+   assert 'quinityn-infusion' in ancestry(tech),(recipe,tech)
+# Charging and local rockets must not wait on the new high-power infusion step.
+for tech in ['quinityn-thermal-smelting','quinityn-orbital']:
+ assert 'quinityn-infusion' not in ancestry(tech)
+ assert 'quinityn-quantum-utilities' not in ancestry(tech)
 assert set(T['quinityn-plant-infrastructure']['prerequisites'])=={'quinityn-power','quinityn-advanced-components'}
 assert unlock_set('quinityn-plant-infrastructure')==plant_inf_recipes
 assert set(T['quinityn-fluid-storage-50k']['prerequisites'])=={'quinityn-plant-infrastructure'}
@@ -75,7 +104,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==125
+assert len(tips)==127
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -471,7 +500,7 @@ assert T['quinityn-defense']['unit']['count']==100
 assert T['quinityn-defense']['prerequisites']==['quinityn-power','quinityn-washing','quinityn-slag-materials']
 assert T['quinityn-advanced-defense']['unit']['count']==160
 assert T['quinityn-advanced-defense']['prerequisites']==['quinityn-defense','quinityn-advanced-components','quinityn-energy-storage']
-assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage','quinityn-laser-turret']
+assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage','quinityn-laser-turret','quinityn-infusion']
 assert 'quinityn-laser-turret' in ancestry('quinityn-powered-armor')
 assert any(p['name']=='y_turret_laser22f12' for p in R['yi_pld_equipment']['ingredients'])
 assert T['quinityn-walker-1']['prerequisites']==['quinityn-armor-3','quinityn-mastery']
@@ -531,7 +560,7 @@ advanced_logistics_recipes={
  'y-inserter-smart','y-inserter-smart-long','y_inserter_diagonal','y_inserter_evade_shortL','y_inserter_evade_shortR',
  'y_inserter_smart_LL','y_inserter_smart_RR','y_inserter_smart_leftR2','y_inserter_smart_rightR2'}
 assert direct_unlocks('quinityn-advanced-logistics')==advanced_logistics_recipes
-assert quinityn_prerequisites('quinityn-advanced-logistics')=={'quinityn-logistics','quinityn-quantum'}
+assert quinityn_prerequisites('quinityn-advanced-logistics')=={'quinityn-logistics','quinityn-infusion'}
 for recipe in advanced_logistics_recipes:
  assert unlocks[recipe]==['quinityn-advanced-logistics'],(recipe,unlocks.get(recipe))
  assert unlocks[recipe+'-recycling']==['quinityn-bridge-advanced-logistics-recycling'],recipe

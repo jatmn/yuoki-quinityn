@@ -1088,7 +1088,8 @@ local function plant_storage_tiers_alone()
     quantum_prerequisites[technology.name] = true
     quantum_prerequisite_count = quantum_prerequisite_count + 1
   end
-  check(quantum_prerequisite_count == 4, "quantum has exactly four prerequisites")
+  check(quantum_prerequisite_count == 5, "quantum has exactly five prerequisites")
+  check(quantum_prerequisites["quinityn-unicomp-compression"], "quantum requires compressed unicomp feedstock")
   check(quantum_prerequisites["quinityn-crystal-processing"] == true, "quantum requires quinityn-crystal-processing")
   check(quantum_prerequisites["quinityn-energy-storage"] == true, "quantum requires quinityn-energy-storage")
   check(quantum_prerequisites["quinityn-high-flow-storage"] == true, "quantum requires quinityn-high-flow-storage")
@@ -1212,6 +1213,117 @@ local function thermal_prerequisite_lock()
   end
   other_new_locked(force)
 end
+local quantum_crafts = {
+  { "y-atomic-quantum-composer", "y-quantrinum" },
+  { "y-atomic-quantum-composer", "y-crystal-cnd" },
+  { "y-atomic-quantum-composer", "y_data_crystal" },
+  { "y-alien-infuser", "y-infused-mud" },
+  { "y-alien-infuser", "y-infused-uca2" },
+  { "y-alien-infuser", "y_quantrinum_infusion" },
+}
+local function quantum_unlocks(surface)
+  local force = game.create_force("quantum-stages")
+  local function research_parents(name)
+    for _, parent in pairs(force.technologies[name].prerequisites) do
+      research_parents(parent.name)
+      parent.researched = true
+    end
+  end
+  local moved = {
+    "y-alien-infuser",
+    "y-infused-mud",
+    "y-infused-uca2",
+    "y_quantrinum_infusion",
+    "yi_beacon",
+    "ye_center",
+    "y-quantrinum-charge",
+  }
+  progression.reconcile()
+  check(not force.recipes["y-atomic-quantum-composer"].enabled, "fresh force has no composer")
+  check(not force.add_research("quinityn-infusion"), "infusion cannot precede composer research")
+  research_parents("quinityn-quantum")
+  force.technologies["quinityn-quantum"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({ "y-atomic-quantum-composer", "y-quantrinum", "y-crystal-cnd", "y_data_crystal" }) do
+    check(force.recipes[name].enabled, "composer has initial material recipe: " .. name)
+  end
+  for _, name in ipairs(moved) do
+    check(not force.recipes[name].enabled, "composer leaves later capability locked: " .. name)
+  end
+  check(force.add_research("quinityn-thermal-smelting"), "thermal charging available before infusion")
+  force.cancel_current_research()
+  check(not force.add_research("quinityn-quantum-utilities"), "utilities wait for infusion")
+  check(force.add_research("quinityn-infusion"), "composer opens separate infusion research")
+  force.technologies["quinityn-infusion"].researched = true
+  progression.reconcile()
+  for i = 1, 4 do
+    check(force.recipes[moved[i]].enabled, "infusion opens its machine and processes: " .. moved[i])
+  end
+  check(not force.recipes.yi_beacon.enabled and not force.recipes.ye_center.enabled, "infusion leaves utilities locked")
+  check(not force.recipes["y-quantrinum-charge"].enabled, "infusion leaves reactor fuel with quantum power")
+  check(force.add_research("quinityn-quantum-utilities"), "infusion opens utility research")
+  force.technologies["quinityn-quantum-utilities"].researched = true
+  progression.reconcile()
+  check(force.recipes.yi_beacon.enabled and force.recipes.ye_center.enabled, "utility research opens both devices")
+  check(not force.recipes["y-quantrinum-charge"].enabled, "utilities do not unlock reactor fuel")
+
+  -- Recreate stale effects from a completed old Quantum research, including
+  -- an already-completed recycling bridge and an existing placed Infuser.
+  local legacy = game.create_force("quantum-legacy")
+  legacy.technologies["quinityn-quantum"].researched = true
+  legacy.technologies.recycling.researched = true
+  legacy.technologies["quinityn-bridge-quantum-recycling"].researched = true
+  local infuser = surface.create_entity({ name = "y-alien-infuser", position = { -10, 10 }, force = legacy })
+  for _, name in ipairs(moved) do
+    legacy.recipes[name].enabled = true
+    if legacy.recipes[name .. "-recycling"] then
+      legacy.recipes[name .. "-recycling"].enabled = true
+    end
+  end
+  progression.reconcile()
+  check(
+    legacy.technologies["quinityn-quantum"].researched and infuser.valid,
+    "upgrade preserves completed Quantum and placed Infuser"
+  )
+  for _, name in ipairs(moved) do
+    check(not legacy.recipes[name].enabled, "upgrade clears stale quantum effect: " .. name)
+    if legacy.recipes[name .. "-recycling"] then
+      check(not legacy.recipes[name .. "-recycling"].enabled, "old bridge cannot retain recycling: " .. name)
+    end
+  end
+  legacy.technologies["quinityn-infusion"].researched = true
+  progression.reconcile()
+  check(legacy.recipes["y-alien-infuser-recycling"].enabled, "recycling bridge follows new infusion research")
+  check(not legacy.recipes["yi_beacon-recycling"].enabled, "utility recycling still waits for utility research")
+  infuser.destroy()
+  storage.quantum_step = 1
+end
+local function quantum_production(surface)
+  local step = storage.quantum_step
+  if not step or step > #quantum_crafts then
+    return
+  end
+  local craft = quantum_crafts[step]
+  local machine = storage.quantum_machine
+  if not machine then
+    machine = surface.create_entity({ name = craft[1], position = { 10, 10 }, force = game.forces["quantum-stages"] })
+    check(machine.set_recipe(craft[2]), "native machine accepts unlocked recipe: " .. craft[2])
+    check(supply(machine, craft[2]), "supply actual ingredients: " .. craft[2])
+    storage.quantum_machine = machine
+  end
+  machine.energy = 1000000000
+  if machine.products_finished > 0 then
+    for _, product in pairs(prototypes.recipe[craft[2]].products) do
+      check(
+        machine.get_output_inventory().get_item_count(product.name) >= product.amount,
+        "native quantum output: " .. product.name
+      )
+    end
+    machine.destroy()
+    storage.quantum_machine = nil
+    storage.quantum_step = step + 1
+  end
+end
 script.on_init(function()
   power_storage_generation_restaging()
   module_unlocks()
@@ -1240,6 +1352,7 @@ script.on_init(function()
     end
   end
   surface.set_tiles(tiles)
+  quantum_unlocks(surface)
   storage.surface = surface.index
   game.create_force("research-other")
   force.technologies["quinityn-advanced-factories"].researched = true
@@ -1260,6 +1373,7 @@ script.on_event(defines.events.on_tick, function()
   end
   local force = game.forces.player
   local surface = game.surfaces[storage.surface]
+  quantum_production(surface)
   local machine = storage.machine
   if machine then
     machine.energy = 100000000
@@ -1383,6 +1497,7 @@ script.on_event(defines.events.on_tick, function()
         "reconciliation preserves previously completed advanced robot research"
       )
       storage.lab.destroy()
+      check(storage.quantum_step > #quantum_crafts, "all composer and infusion processes produced native outputs")
       storage.finished = true
       log("QUINITYN RESEARCH PROGRESSION TESTS PASSED")
     end

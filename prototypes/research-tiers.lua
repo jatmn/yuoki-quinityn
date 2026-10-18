@@ -185,8 +185,22 @@ return {
     },
   },
   {
+    name = "infusion",
+    prerequisites = { "quantum" },
+    count = 200,
+    icon = "y-alien-infuser",
+    recipes = { "y-alien-infuser", "y-infused-mud", "y-infused-uca2", "y_quantrinum_infusion" },
+  },
+  {
+    name = "quantum-utilities",
+    prerequisites = { "infusion" },
+    count = 120,
+    icon = "yi_beacon",
+    recipes = { "yi_beacon", "ye_center" },
+  },
+  {
     name = "quantum-power",
-    prerequisites = { "advanced-storage", "reactors" },
+    prerequisites = { "advanced-storage", "reactors", "infusion" },
     count = 250,
     icon = "y-accumulator-crystal-m",
     recipes = {
@@ -199,6 +213,7 @@ return {
       "y_reactor_mox2",
       "y_mox2fuel",
       "y_mox2fuelsplited",
+      "y-quantrinum-charge",
     },
   },
   {
@@ -367,7 +382,7 @@ return {
   },
   {
     name = "advanced-logistics",
-    prerequisites = { "logistics", "quantum" },
+    prerequisites = { "logistics", "infusion" },
     count = 160,
     icon = "y-inserter-smart",
     recipes = {
@@ -384,7 +399,7 @@ return {
   },
   {
     name = "robotics",
-    prerequisites = { "logistics", "quantum", "energy-storage" },
+    prerequisites = { "logistics", "infusion", "energy-storage" },
     count = 180,
     icon = "yi_roboport",
     science = { "chemical-science-pack" },
@@ -432,7 +447,7 @@ return {
   },
   {
     name = "powered-armor",
-    prerequisites = { "trade", "advanced-defense", "energy-storage", "laser-turret" },
+    prerequisites = { "trade", "advanced-defense", "energy-storage", "laser-turret", "infusion" },
     count = 200,
     icon = "yi_armor_gray",
     recipes = {
@@ -530,7 +545,7 @@ return {
   },
   {
     name = "quantum-modules",
-    prerequisites = { "advanced-productivity-module" },
+    prerequisites = { "advanced-productivity-module", "infusion" },
     count = 300,
     time = 60,
     icon = "y-pink-module-3",
@@ -999,7 +1014,7 @@ return {
   },
   {
     name = "zero-time-weapon",
-    prerequisites = { "reactors", "advanced-storage" },
+    prerequisites = { "reactors", "advanced-storage", "infusion" },
     count = 160,
     icon = "y-weapon-ztt",
     recipes = { "y-weapon-ztt" },
