@@ -10,6 +10,7 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
+    - Split ore washing into the washer and contaminated-water handling, with separate research for dirt archaeology, rich-dust unicomp compression, slag materials, and slag paving.
     - Split Yuoki logistics into the 60-slot chest and both basic inserters, then separate larger chests from requester and buffer chests.
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
@@ -55,6 +56,7 @@ Version: Unreleased
   Compatibility:
     - Completed Yuoki power, Industrial energy storage and Advanced electric generation research remains completed. Recipes moved into the new technologies stay locked until those technologies are researched. Placed machines and items remain.
     - In-progress Quantrinum and advanced electronics research now also requires High-flow compensator research. Completed Quantrinum and advanced electronics research stays completed.
+    - Completed Ore washing and residue recovery stays completed and keeps the dirt washer, pure-ore smelting, and contaminated-water and mud handling. Archaeology, unicomp compression, slag materials, and slag paving require their new research on an existing save.
     - Completed Yuoki logistics stays completed and keeps the 60-slot chest, the fast inserter, and the long inserter. Larger storage and requester or buffer chests require their new research on an existing save.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.

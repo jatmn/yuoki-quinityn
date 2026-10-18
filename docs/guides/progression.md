@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **88 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **100 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -66,6 +66,12 @@ flowchart TD
   Engines --> Filters
   Production --> Excavation[Plain excavation]
   Production --> Washing[Plain washing]
+  Washing --> Archaeology[Dirt archaeology]
+  Excavation --> Archaeology
+  Washing --> Compression[Rich-dust unicomp compression]
+  Washing --> SlagMaterials[Slag materials and stone flour]
+  SlagMaterials --> Paving[Slag paving]
+  SlagMaterials --> Filters
   Excavation --> Tooling[Tool and drill-head processing]
   Washing --> Tooling
   Production --> Machining[Second crusher and form press]
@@ -111,9 +117,13 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Durotal repair tools | Durotal and Fuelnium compaction, Quinityn industrial science | 40 |
 | Stirling solar dish | Yuoki power and infrastructure | 40 |
 | Alien solar collector | Stirling solar dish | 120 |
-| Reusable air filters | Fatmice air scrubbing, Ore washing and residue recovery, Mechanical Force engineering | 100 |
+| Reusable air filters | Fatmice air scrubbing, Ore washing and residue recovery, Mechanical Force engineering, Slag materials and stone flour | 100 |
 | Deep excavation | Quinityn industrial science, First Yuoki factory, Fuelnium reactor fuel | 50 |
 | Ore washing and residue recovery | Quinityn industrial science, First Yuoki factory, Fuelnium reactor fuel | 40 |
+| Dirt archaeology | Ore washing and residue recovery, Deep excavation | 60 |
+| Rich-dust unicomp compression | Ore washing and residue recovery | 60 |
+| Slag materials and stone flour | Ore washing and residue recovery | 60 |
+| Slag paving | Slag materials and stone flour | 40 |
 | Tool-assisted processing | Deep excavation, Ore washing and residue recovery | 80 |
 | Advanced crushing and forming | Quinityn industrial science, First Yuoki factory, Fuelnium reactor fuel | 80 |
 | Advanced industrial components | Reconstructed petrochemistry | 100 |
@@ -131,7 +141,7 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Yuoki research center | P3-Factory, Mastercrafted industry | 5,000 |
 | Advanced Mechanical Force engines | Y2-Factory, Advanced industrial components | 180 |
 | Advanced transport tubes | Mechanical force engineering, Advanced industrial components | 120 |
-| Crystal and emulsion processing | Yuoki industrial refining, Ore washing and residue recovery | 150 |
+| Crystal and emulsion processing | Yuoki industrial refining, Ore washing and residue recovery, Slag materials and stone flour | 150 |
 | Animal husbandry and aquaculture | Yuoki agronomy and biology, Y2-Factory, Industrial fluid handling | 160 |
 | First-generation industrial biology | Animal husbandry and aquaculture | 200 |
 | Second-generation industrial biology | First-generation industrial biology, Quantrinum and advanced electronics | 250 |
@@ -248,3 +258,5 @@ The supported baseline is the required Yuoki/Engines/Space Age set. Other overha
 ### Updating an existing development save
 
 Completed technologies stay completed. Recipes moved into the new upgrade technologies require those new technologies to be researched; this deliberately replaces the old bulk unlocks. Existing buildings and items remain. If you already completed **Yuoki power and infrastructure**, **Industrial energy storage** or **Advanced electric generation**, those technologies stay completed; recipes that moved wait for the new technologies; placed machines and items stay. Discovery and arrival are required for a new force; debug teleporting an undiscovered force is not a supported starting-planet mode.
+
+Completed ore washing and residue recovery stays completed and keeps the dirt washer, pure-ore smelting, and contaminated-water and mud handling. Archaeology, rich-dust unicomp compression, slag materials, and slag paving are new research; their recipes stay locked until that research is done. Buildings and items already placed are not removed.
