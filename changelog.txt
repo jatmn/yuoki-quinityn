@@ -10,6 +10,8 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
+    - Split contract-world defense into early walls and the BruteMan cannon, Maudlin bullet types, later Durotal, forcefield, and Hardic walls, and separate laser, plasma, chemical, mine, artillery, and D-ZTT research. Krakon walls stay with reactor research. Existing completed defense research does not grant the recipes that moved.
+    - Powered armor now requires the Eisenwulf laser turret research, because its personal laser defense is built from that turret. Armor and walker recipes are otherwise unchanged.
     - Split mechanical-force research into a first solid-fuel step, a medium pump, an electric motor, a heat generator, steam overheating, a steam turbine, and high-temperature generators. Liquid-fuel and gas engines stay on advanced engines with their fuel recipes. Green transport tubes now require the foundry. Completed engine research keeps the solid-fuel engine, orange tubes, blue and red shafts, gauges, and the flyash rocket-fuel recipes.
     - Split ore washing into the washer and contaminated-water handling, with separate research for dirt archaeology, rich-dust unicomp compression, slag materials, and slag paving.
     - Split Yuoki logistics into the 60-slot chest and both basic inserters, then separate larger chests from requester and buffer chests.

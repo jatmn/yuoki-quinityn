@@ -87,7 +87,6 @@ end
 overrides["y-heat-pipe"] = "power"
 overrides["ye_canister2plates_smelt"] = "fluid-handling"
 overrides["y_turret_gun1f12"] = "defense"
-overrides["y-weapon-ztt"] = "quantum-power"
 overrides["ye_center"] = "quantum"
 overrides["y-quantrinum-reactor"] = "quantum-power"
 overrides["y-mf1-q1"] = "quantum-power"
