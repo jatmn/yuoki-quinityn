@@ -135,6 +135,10 @@
     "y-mixing-rich",
     "y-orange-stuff"
   ],
+  "quinityn-archaeology": [
+    "y-wash-dirt",
+    "y-wash-special"
+  ],
   "quinityn-armor-2": [
     "yi_armor_red",
     "yi_equip_shield_b"
@@ -692,6 +696,16 @@
   "quinityn-bridge-science-module-recycling": [
     "y_modul_science-recycling"
   ],
+  "quinityn-bridge-slag-materials-recycling": [
+    "y_slag_brick-recycling",
+    "y_slag_granulate-recycling",
+    "y_steinmehl-recycling"
+  ],
+  "quinityn-bridge-slag-paving-recycling": [
+    "y_tile_slagbricks-recycling",
+    "y_tile_slagfilled-recycling",
+    "y_tile_slagpattern-recycling"
+  ],
   "quinityn-bridge-structures-recycling": [
     "y-bluegear-recycling",
     "y_structure_element-recycling",
@@ -722,13 +736,7 @@
     "y-dirtwasher-recycling",
     "y-pure-copper-recycling",
     "y-pure-iron-recycling",
-    "y-pure-iron-recycling",
-    "y_slag_brick-recycling",
-    "y_slag_granulate-recycling",
-    "y_steinmehl-recycling",
-    "y_tile_slagbricks-recycling",
-    "y_tile_slagfilled-recycling",
-    "y_tile_slagpattern-recycling"
+    "y-pure-iron-recycling"
   ],
   "quinityn-bridge-wide-logistic-requests-recycling": [
     "y_rc22-recycling"
@@ -1160,6 +1168,17 @@
   "quinityn-science-module": [
     "y_modul_science"
   ],
+  "quinityn-slag-materials": [
+    "y_slag_brick",
+    "y_slag_brick_burn",
+    "y_slag_granulate",
+    "y_steinmehl"
+  ],
+  "quinityn-slag-paving": [
+    "y_tile_slagbricks",
+    "y_tile_slagfilled",
+    "y_tile_slagpattern"
+  ],
   "quinityn-structures": [
     "y-bluegear",
     "y_structure_element",
@@ -1223,6 +1242,9 @@
   "quinityn-ultimate-efficiency-module": [
     "y_modul_green_op"
   ],
+  "quinityn-unicomp-compression": [
+    "y-press-richdust"
+  ],
   "quinityn-walker-1": [
     "yi_equip_generator_a",
     "yi_walker_a"
@@ -1233,22 +1255,12 @@
   "quinityn-washing": [
     "y-dirtwasher",
     "y-filtering-dust",
-    "y-press-richdust",
     "y-pressed_dry_mud",
     "y-pure-copper",
     "y-pure-iron",
     "y-refined-copper",
     "y-refined-iron",
-    "y-release-cwater",
-    "y-wash-dirt",
-    "y-wash-special",
-    "y_slag_brick",
-    "y_slag_brick_burn",
-    "y_slag_granulate",
-    "y_steinmehl",
-    "y_tile_slagbricks",
-    "y_tile_slagfilled",
-    "y_tile_slagpattern"
+    "y-release-cwater"
   ],
   "quinityn-wide-logistic-requests": [
     "y_bc22",
