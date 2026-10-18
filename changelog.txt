@@ -8,6 +8,7 @@ Version: Unreleased
     - Added 61 native Tips and Tricks progression chapters.
   Changes:
     - Split contract-world defense into early walls and the BruteMan cannon, Maudlin bullet types, later Durotal, forcefield, and Hardic walls, and separate laser, plasma, chemical, mine, artillery, and D-ZTT research. Krakon walls stay with reactor research. Existing completed defense research does not grant the recipes that moved.
+    - Powered armor now requires the Eisenwulf laser turret research, because its personal laser defense is built from that turret. Armor and walker recipes are otherwise unchanged.
     - Added a Quinityn thumbnail for the mod portal and in-game mod browser.
     - Added Quinityn-only grey-purple rocks with normal stone/coal drops and small flyash samples; ordinary rocks and other planets are unchanged.
     - Reveal industrial science by mining a Quinityn rock and require five flyash per five science packs.

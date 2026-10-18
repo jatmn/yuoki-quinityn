@@ -334,7 +334,9 @@ assert T['quinityn-defense']['unit']['count']==100
 assert T['quinityn-defense']['prerequisites']==['quinityn-power','quinityn-washing']
 assert T['quinityn-advanced-defense']['unit']['count']==160
 assert T['quinityn-advanced-defense']['prerequisites']==['quinityn-defense','quinityn-advanced-components','quinityn-energy-storage']
-assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage']
+assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage','quinityn-laser-turret']
+assert 'quinityn-laser-turret' in ancestry('quinityn-powered-armor')
+assert any(p['name']=='y_turret_laser22f12' for p in R['yi_pld_equipment']['ingredients'])
 assert T['quinityn-walker-1']['prerequisites']==['quinityn-armor-3','quinityn-mastery']
 assert T['quinityn-walker-2']['prerequisites']==['quinityn-walker-1']
 assert 'quinityn-durotal-walls' in ancestry('quinityn-reactors')

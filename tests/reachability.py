@@ -95,16 +95,25 @@ if missing:
 finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-')
         and t.get('max_level')!='infinite'}
 # These specific upgrades require orbital science, directly or through speed 2
-# for P3. Keep the empty-inventory rocket proof and every other finite unlock local.
+# for P3. Yuoki artillery shells still cost only red, green, and Quinityn packs,
+# but vanilla artillery also requires space science and Vulcanus metallurgic
+# science, so that one technology is outside this local closure.
+# Keep the empty-inventory rocket proof and every other finite unlock local.
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
  'science-module','quality-module','p3-factory','research-center','artillery-shells']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
 for name in space_gated-{'quinityn-p3-factory','quinityn-artillery-shells'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
+shell=T['quinityn-artillery-shells']
+assert {i[0] for i in shell['unit']['ingredients']}=={
+ 'automation-science-pack','logistic-science-pack','quinityn-research-data'}
+assert 'artillery' in shell['prerequisites']
+artillery_packs={i[0] for i in T['artillery']['unit']['ingredients']}
+assert {'space-science-pack','metallurgic-science-pack'}<=artillery_packs
 assert 'ye_fassembly2' in machines
 assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
-print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science')
+print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science; Yuoki artillery shells await vanilla artillery')
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes

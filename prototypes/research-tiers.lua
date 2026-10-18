@@ -456,7 +456,7 @@ return {
   },
   {
     name = "powered-armor",
-    prerequisites = { "trade", "advanced-defense", "energy-storage" },
+    prerequisites = { "trade", "advanced-defense", "energy-storage", "laser-turret" },
     count = 200,
     icon = "yi_armor_gray",
     recipes = {
