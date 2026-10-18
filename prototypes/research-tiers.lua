@@ -710,7 +710,7 @@ return {
   },
   {
     name = "asteroid-crushing",
-    prerequisites = { "materials" },
+    prerequisites = { "materials", "industrial-science" },
     count = 50,
     icon = "y-res1",
     science_prerequisites = { "space-platform" },

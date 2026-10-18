@@ -360,7 +360,7 @@ for early,later in [('y-crusher','y-heat-form-press'),('y-smelt-crush-res1','y-u
  ('y_structure_element','ye_fassembly1'),('y-chip-1','ye_fassembly1')]:
  assert unlocks[early][0] in ancestry(unlocks[later][0]),(early,later)
 for name,t in T.items():
- if name.startswith('quinityn-') and t.get('unit') and name!='quinityn-asteroid-crushing':
+ if name.startswith('quinityn-') and t.get('unit'):
   assert 'quinityn-industrial-science' in ancestry(name),name
 print('PASS: eight crafting milestones, separate rock discovery and factory unlocks and science-rooted lab research')
 
@@ -593,8 +593,9 @@ assert 'foundry' in ancestry('quinityn-foundry-melting')
 assert 'foundry' not in ancestry('quinityn-refining')
 crush={'j_crushing_to_n4','j_crushing_to_f7'}
 assert {e['recipe'] for e in T['quinityn-asteroid-crushing']['effects'] if e['type']=='unlock-recipe'}==crush
-assert set(T['quinityn-asteroid-crushing']['prerequisites'])=={'quinityn-materials','space-platform'}
+assert set(T['quinityn-asteroid-crushing']['prerequisites'])=={'quinityn-materials','quinityn-industrial-science','space-platform'}
 assert 'space-platform' in ancestry('quinityn-asteroid-crushing')
+assert 'quinityn-industrial-science' in ancestry('quinityn-asteroid-crushing')
 for tech in ['quinityn-thermal-smelting','quinityn-biological-feedstock','quinityn-slurry-syngas',
  'quinityn-foundry-melting','quinityn-asteroid-crushing']:
  assert 'quinityn-arrival' in ancestry(tech),tech
