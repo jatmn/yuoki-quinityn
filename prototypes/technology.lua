@@ -71,12 +71,12 @@ local stages = {
   { "defense", { "power", "washing", "slag-materials" }, 100, "y_turret_gun1f12" },
   {
     "quantum",
-    { "crystal-processing", "energy-storage", "high-flow-storage", "archaeology" },
+    { "crystal-processing", "energy-storage", "high-flow-storage", "archaeology", "unicomp-compression" },
     250,
     "y-atomic-quantum-composer",
   },
   { "trade", { "quantum", "packaging" }, 300, "y-stargate" },
-  { "mastery", { "trade", "maintenance", "reactors" }, 500, "y_trade_ultimate" },
+  { "mastery", { "trade", "maintenance", "reactors", "infusion" }, 500, "y_trade_ultimate" },
   { "orbital", { "quantum" }, 200, "rocket-silo" },
 }
 for _, tier in ipairs(require("prototypes.research-tiers")) do

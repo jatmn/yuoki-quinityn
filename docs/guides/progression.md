@@ -91,6 +91,10 @@ flowchart TD
   Storage --> Quantum
   Compensator --> Quantum
   Archaeology --> Quantum
+  Compression --> Quantum
+  Quantum --> Infusion[Alien infusion]
+  Infusion --> Utilities[Infused industrial utilities]
+  Quantum --> Thermal[Thermal smelting and charging]
   Engines --> Factories[Y2-Factory]
   Machining --> Factories
   Factories --> P3[P3-Factory - 1000 units]
@@ -138,7 +142,9 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | High-flow compensator | Large accumulator, Flywheel buffer | 80 |
 | Crystal accumulator upgrades | Large accumulator, Quantrinum and advanced electronics | 160 |
 | Mixed-oxide reactor engineering | Yuoki industrial refining, Advanced industrial components, Contract world defense, Advanced electric generation | 160 |
-| Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering | 250 |
+| Alien infusion | Quantrinum and advanced electronics | 200 |
+| Infused industrial utilities | Alien infusion | 120 |
+| Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering, Alien infusion | 250 |
 | Industrial fluid handling | Mechanical force engineering | 80 |
 | Y2-Factory | Mechanical force engineering, Advanced crushing and forming | 140 |
 | P3-Factory | Y2-Factory, Advanced Mechanical Force engines, Yuoki speed module 2 | 1,000 |
@@ -150,13 +156,13 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | First-generation industrial biology | Animal husbandry and aquaculture | 200 |
 | Second-generation industrial biology | First-generation industrial biology, Quantrinum and advanced electronics | 250 |
 | Third-generation industrial biology | Second-generation industrial biology | 300 |
-| Advanced industrial inserters | Yuoki logistics, Quantrinum and advanced electronics | 160 |
-| Yuoki robotics | Yuoki logistics, Quantrinum and advanced electronics, Industrial energy storage | 180 |
+| Advanced industrial inserters | Yuoki logistics, Alien infusion | 160 |
+| Yuoki robotics | Yuoki logistics, Alien infusion, Industrial energy storage | 180 |
 | 8080 network expansion | Yuoki robotics | 300 |
 | YI Logistiker production | Yuoki robotics | Craft 500 YI Logistikers; no packs |
 | Advanced Yuoki robots | YI Logistiker production | 1,000 |
 | Advanced industrial defenses | Contract world defense, Advanced industrial components, Industrial energy storage | 160 |
-| Yuoki powered armor | Laika trade network, Advanced industrial defenses, Industrial energy storage | 200 |
+| Yuoki powered armor | Laika trade network, Advanced industrial defenses, Industrial energy storage, Eisenwulf laser turret, Alien infusion | 200 |
 | Yuoki powered armor II | Yuoki powered armor, Crystal accumulator upgrades | 240 |
 | Yuoki powered armor III | Yuoki powered armor II | 300 |
 | Yuoki walker | Yuoki powered armor III, Mastercrafted industry | 400 |
@@ -167,7 +173,7 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Yuoki efficiency module 2 | Yuoki efficiency module, Quantrinum and advanced electronics | 200 |
 | T&O productivity module | Advanced industrial components, vanilla Modules | 50 |
 | Coolaid productivity module | T&O productivity module, Quantrinum and advanced electronics | 200 |
-| Mantis-S productivity module | Coolaid productivity module | 300 |
+| Mantis-S productivity module | Coolaid productivity module, Alien infusion | 300 |
 | Just Techanic! module | Yuoki speed module 2, Yuoki efficiency module 2 | 1,000 |
 | Green Ultimate Product module | Yuoki efficiency module 2, Mastercrafted industry | 5,000 |
 | Science Baby! module | Yuoki speed module 2, Yuoki efficiency module 2, Mantis-S productivity module, Mastercrafted industry | 5,000 |
@@ -202,6 +208,32 @@ Module science uses **Nauvis, space and Quinityn packs only**, with no other-pla
 Ordinary first and second tiers match vanilla module costs and timing in Factorio 2.1.21 + Space Age, with Quinityn science added. Later tiers use Nauvis production/utility science in place of other-planet science. The 5,000-unit capstones reflect their strong effects: Green Ultimate reduces consumption by 80%, Science Baby! adds 25% productivity, and YI Quality adds 10% quality plus 5% productivity at normal quality. YI Quality also follows vanilla Quality module 2, avoiding the other-planet gate on vanilla tier 3.
 
 The tree separates **upgrades** while keeping related processing steps and same-tier variants together. For example, empty/charged battery cells are steps of one battery process; long, directional and underground transport variants are not successive machine tiers. Some optional products still need inputs from other industrial branches. Existing non-Yuoki research requirements on upstream unlocks are retained through automatic prerequisite bridges. The engine-generated [recipe manifest](../recipe-unlocks.json) records every assigned unlock for review.
+
+**Quantrinum and advanced electronics** now starts with the 4 MW Quantum Composer
+and its Quantrinum, conductive-crystal and data-crystal recipes. It requires
+crystal processing, energy storage, the high-flow compensator, dirt archaeology
+and rich-dust unicomp compression so its initial feedstocks are available.
+The reputation radar, monument and Quantrinum repair tools remain here.
+**Thermal smelting** follows this material stage: its charger costs 75 data
+crystals, and its research keeps the charger, hot blocks, smelter and three
+initial smelts together. Infusion is not required for this branch or local rockets.
+
+**Alien infusion** is a separate 200-unit research. It supplies the 100 MW Infuser
+and all three initial operations: dry mud, compressed UC-A2 and Quantrinum
+infusion. The machine consumes a Composer, full Cimota, formpress and two
+Fuelnium reactors; Quantrinum infusion also uses conductive crystals from the
+Composer. **Infused industrial utilities** then costs 120 units and opens the
+beacon and Fuseing Center Core. Charged Quantrinum moves with its reactor to existing
+**Quantum power systems**. Infused-material consumers (smart inserters, robots,
+Mantis-S, powered armor, D-ZTT, quantum power and mastery) now require Alien
+infusion. These new researches use red, green and Quinityn science at 20 seconds
+per unit; recipe ingredients and machine power costs are unchanged.
+
+Completed Quantum research and placed buildings remain on save upgrades;
+recipes moved to Infusion, utilities or quantum power wait for their new owner
+research, including recycling bridges. The broad Quantum tip and new
+research-tier tips describe this sequence. Animated demonstrations for these
+final stages remain part of [the tutorial work in #24](https://github.com/jatmn/yuoki-quinityn/issues/24).
 
 ## Flyash, clean air and discovery
 

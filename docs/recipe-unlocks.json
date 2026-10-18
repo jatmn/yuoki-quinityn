@@ -459,6 +459,11 @@
     "ye_smoked_meat-recycling",
     "ye_smoker-recycling"
   ],
+  "quinityn-bridge-infusion-recycling": [
+    "y-alien-infuser-recycling",
+    "y-infused-mud-recycling",
+    "y-infused-uca2-recycling"
+  ],
   "quinityn-bridge-large-storage-recycling": [
     "y_cg33-recycling"
   ],
@@ -630,6 +635,7 @@
     "y-accumulator-b-tx-recycling",
     "y-accumulator-crystal-m-recycling",
     "y-obninsk-turbine-recycling",
+    "y-quantrinum-charge-recycling",
     "y-quantrinum-reactor-recycling",
     "y-substation-h-recycling",
     "y_alien_solar2-recycling",
@@ -639,19 +645,17 @@
     "ye_rheinsberg-recycling"
   ],
   "quinityn-bridge-quantum-recycling": [
-    "y-alien-infuser-recycling",
     "y-atomic-quantum-composer-recycling",
     "y-crystal-cnd-recycling",
-    "y-infused-mud-recycling",
-    "y-infused-uca2-recycling",
-    "y-quantrinum-charge-recycling",
     "y-quantrinum-recycling",
     "y_crystal2_combined-recycling",
     "y_repair_quantrinum-recycling",
-    "ye_center-recycling",
     "yi-monument1-recycling",
-    "yi_beacon-recycling",
     "yi_radar-recycling"
+  ],
+  "quinityn-bridge-quantum-utilities-recycling": [
+    "ye_center-recycling",
+    "yi_beacon-recycling"
   ],
   "quinityn-bridge-reactors-recycling": [
     "y-obninsk-reactor-recycling",
@@ -1035,6 +1039,12 @@
     "quinityn-research-data",
     "quinityn-technic-sign"
   ],
+  "quinityn-infusion": [
+    "y-alien-infuser",
+    "y-infused-mud",
+    "y-infused-uca2",
+    "y_quantrinum_infusion"
+  ],
   "quinityn-large-storage": [
     "y_cg33"
   ],
@@ -1201,19 +1211,12 @@
     "y-quality-module-1"
   ],
   "quinityn-quantum": [
-    "y-alien-infuser",
     "y-atomic-quantum-composer",
     "y-crystal-cnd",
-    "y-infused-mud",
-    "y-infused-uca2",
     "y-quantrinum",
-    "y-quantrinum-charge",
     "y_data_crystal",
-    "y_quantrinum_infusion",
     "y_repair_quantrinum",
-    "ye_center",
     "yi-monument1",
-    "yi_beacon",
     "yi_radar"
   ],
   "quinityn-quantum-modules": [
@@ -1226,6 +1229,7 @@
     "y-mf1-q2",
     "y-mf1-q3",
     "y-obninsk-turbine",
+    "y-quantrinum-charge",
     "y-quantrinum-reactor",
     "y-substation-h",
     "y_alien_solar2",
@@ -1237,6 +1241,10 @@
     "ye_rheins_LT",
     "ye_rheins_MT",
     "ye_rheinsberg"
+  ],
+  "quinityn-quantum-utilities": [
+    "ye_center",
+    "yi_beacon"
   ],
   "quinityn-reactors": [
     "y-obninsk-reactor",
