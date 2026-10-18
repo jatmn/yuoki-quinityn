@@ -69,8 +69,93 @@ local function module_unlocks()
     check(force.technologies["quinityn-" .. name].researched, "completed research preserved: " .. name)
   end
 end
+local function recipe_enabled(force, name)
+  return force.recipes[name].enabled
+end
+local function logistics_unlocks()
+  local moved = {
+    "y_c22",
+    "y_cg33",
+    "y_sc44",
+    "j-dl-provider",
+    "y-rare-chest-log",
+    "y_pc22",
+    "y-rare-m1bunker-log",
+    "j-dl-request",
+    "j-dl-buffer",
+    "y_rc22",
+    "y_bc22",
+  }
+  local retained = { "y_sc11", "y-inserter-fast", "y-inserter-s4" }
+  local new_tech = {
+    "quinityn-expanded-storage",
+    "quinityn-large-storage",
+    "quinityn-bulk-storage",
+    "quinityn-logistic-storage",
+    "quinityn-logistic-provider-capacity",
+    "quinityn-logistic-bunker",
+    "quinityn-logistic-requests",
+    "quinityn-wide-logistic-requests",
+  }
+  local force = game.create_force("logistics-unlocks")
+  force.technologies["quinityn-logistics"].researched = true
+  progression.reconcile()
+  for _, name in ipairs(retained) do
+    check(recipe_enabled(force, name), "logistics keeps " .. name)
+  end
+  for _, name in ipairs(moved) do
+    check(not recipe_enabled(force, name), "logistics alone leaves " .. name .. " locked")
+  end
+  for _, id in ipairs(new_tech) do
+    check(not force.technologies[id].researched, "new tech unresearched: " .. id)
+  end
+  check(not force.add_research("quinityn-logistic-requests"), "requests blocked before robotics and logistic system")
+  local steps = {
+    { "quinityn-expanded-storage", { "y_c22" } },
+    { "quinityn-large-storage", { "y_cg33" } },
+    { "quinityn-bulk-storage", { "y_sc44" } },
+    { "quinityn-logistic-storage", { "j-dl-provider", "y-rare-chest-log" } },
+    { "quinityn-logistic-provider-capacity", { "y_pc22" } },
+    { "quinityn-logistic-bunker", { "y-rare-m1bunker-log" } },
+  }
+  for _, step in ipairs(steps) do
+    force.technologies[step[1]].researched = true
+    progression.reconcile()
+    for _, name in ipairs(step[2]) do
+      check(recipe_enabled(force, name), step[1] .. " unlocks " .. name)
+    end
+  end
+  force.technologies["quinityn-robotics"].researched = true
+  force.technologies["logistic-system"].researched = true
+  progression.reconcile()
+  force.technologies["quinityn-logistic-requests"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({ "j-dl-request", "j-dl-buffer" }) do
+    check(recipe_enabled(force, name), "logistic requests unlocks " .. name)
+  end
+  force.technologies["quinityn-wide-logistic-requests"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({ "y_rc22", "y_bc22" }) do
+    check(recipe_enabled(force, name), "wide requests unlocks " .. name)
+  end
+  local legacy = game.create_force("logistics-legacy")
+  legacy.technologies["quinityn-logistics"].researched = true
+  progression.reconcile()
+  progression.reconcile()
+  for _, name in ipairs(retained) do
+    check(recipe_enabled(legacy, name), "legacy keeps " .. name)
+  end
+  for _, name in ipairs(moved) do
+    check(not recipe_enabled(legacy, name), "legacy leaves moved locked: " .. name)
+  end
+  check(legacy.technologies["quinityn-logistics"].researched, "legacy logistics stays completed")
+  for _, id in ipairs(new_tech) do
+    check(not legacy.technologies[id].researched, "legacy does not grant " .. id)
+  end
+end
 script.on_init(function()
   module_unlocks()
+  logistics_unlocks()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then
