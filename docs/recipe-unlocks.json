@@ -134,6 +134,10 @@
   "quinityn-ammunition-cases": [
     "y_ammo_case"
   ],
+  "quinityn-archaeology": [
+    "y-wash-dirt",
+    "y-wash-special"
+  ],
   "quinityn-armor-2": [
     "yi_armor_red",
     "yi_equip_shield_b"
@@ -302,6 +306,9 @@
     "y-basic-t1-mf-recycling",
     "ye_fassembly1-recycling"
   ],
+  "quinityn-bridge-bulk-storage-recycling": [
+    "y_sc44-recycling"
+  ],
   "quinityn-bridge-chemical-weapons-recycling": [
     "y_ammo_flame-recycling",
     "y_turret_flame-recycling"
@@ -385,6 +392,9 @@
     "y-mining-drill-e2-recycling",
     "y-underground-drill-recycling"
   ],
+  "quinityn-bridge-expanded-storage-recycling": [
+    "y_c22-recycling"
+  ],
   "quinityn-bridge-fluid-handling-recycling": [
     "ye_canister-recycling",
     "ye_canister-recycling",
@@ -426,23 +436,30 @@
     "ye_smoked_meat-recycling",
     "ye_smoker-recycling"
   ],
+  "quinityn-bridge-large-storage-recycling": [
+    "y_cg33-recycling"
+  ],
   "quinityn-bridge-laser-turret-recycling": [
     "y_turret_laser22f12-recycling"
   ],
-  "quinityn-bridge-logistics-recycling": [
+  "quinityn-bridge-logistic-bunker-recycling": [
+    "y-rare-m1bunker-log-recycling"
+  ],
+  "quinityn-bridge-logistic-provider-capacity-recycling": [
+    "y_pc22-recycling"
+  ],
+  "quinityn-bridge-logistic-requests-recycling": [
     "j-dl-buffer-recycling",
+    "j-dl-request-recycling"
+  ],
+  "quinityn-bridge-logistic-storage-recycling": [
     "j-dl-provider-recycling",
-    "j-dl-request-recycling",
+    "y-rare-chest-log-recycling"
+  ],
+  "quinityn-bridge-logistics-recycling": [
     "y-inserter-fast-recycling",
     "y-inserter-s4-recycling",
-    "y-rare-chest-log-recycling",
-    "y-rare-m1bunker-log-recycling",
-    "y_c22-recycling",
-    "y_cg33-recycling",
-    "y_pc22-recycling",
-    "y_rc22-recycling",
-    "y_sc11-recycling",
-    "y_sc44-recycling"
+    "y_sc11-recycling"
   ],
   "quinityn-bridge-maintenance-recycling": [
     "y_maintance_workshop-recycling"
@@ -700,6 +717,16 @@
   "quinityn-bridge-science-module-recycling": [
     "y_modul_science-recycling"
   ],
+  "quinityn-bridge-slag-materials-recycling": [
+    "y_slag_brick-recycling",
+    "y_slag_granulate-recycling",
+    "y_steinmehl-recycling"
+  ],
+  "quinityn-bridge-slag-paving-recycling": [
+    "y_tile_slagbricks-recycling",
+    "y_tile_slagfilled-recycling",
+    "y_tile_slagpattern-recycling"
+  ],
   "quinityn-bridge-structures-recycling": [
     "y-bluegear-recycling",
     "y_structure_element-recycling",
@@ -730,16 +757,16 @@
     "y-dirtwasher-recycling",
     "y-pure-copper-recycling",
     "y-pure-iron-recycling",
-    "y-pure-iron-recycling",
-    "y_slag_brick-recycling",
-    "y_slag_granulate-recycling",
-    "y_steinmehl-recycling",
-    "y_tile_slagbricks-recycling",
-    "y_tile_slagfilled-recycling",
-    "y_tile_slagpattern-recycling"
+    "y-pure-iron-recycling"
+  ],
+  "quinityn-bridge-wide-logistic-requests-recycling": [
+    "y_rc22-recycling"
   ],
   "quinityn-bridge-zero-time-weapon-recycling": [
     "y-weapon-ztt-recycling"
+  ],
+  "quinityn-bulk-storage": [
+    "y_sc44"
   ],
   "quinityn-chemical-weapons": [
     "y_ammo_flame",
@@ -862,6 +889,9 @@
     "y-mining-drill-e2",
     "y-underground-drill"
   ],
+  "quinityn-expanded-storage": [
+    "y_c22"
+  ],
   "quinityn-fluid-handling": [
     "ye_can_blood_empty",
     "ye_can_blood_fill",
@@ -931,24 +961,30 @@
     "quinityn-research-data",
     "quinityn-technic-sign"
   ],
+  "quinityn-large-storage": [
+    "y_cg33"
+  ],
   "quinityn-laser-turret": [
     "y_turret_laser22f12"
   ],
-  "quinityn-logistics": [
+  "quinityn-logistic-bunker": [
+    "y-rare-m1bunker-log"
+  ],
+  "quinityn-logistic-provider-capacity": [
+    "y_pc22"
+  ],
+  "quinityn-logistic-requests": [
     "j-dl-buffer",
+    "j-dl-request"
+  ],
+  "quinityn-logistic-storage": [
     "j-dl-provider",
-    "j-dl-request",
+    "y-rare-chest-log"
+  ],
+  "quinityn-logistics": [
     "y-inserter-fast",
     "y-inserter-s4",
-    "y-rare-chest-log",
-    "y-rare-m1bunker-log",
-    "y_bc22",
-    "y_c22",
-    "y_cg33",
-    "y_pc22",
-    "y_rc22",
-    "y_sc11",
-    "y_sc44"
+    "y_sc11"
   ],
   "quinityn-maintenance": [
     "y_drillhead_repair",
@@ -1173,6 +1209,17 @@
   "quinityn-science-module": [
     "y_modul_science"
   ],
+  "quinityn-slag-materials": [
+    "y_slag_brick",
+    "y_slag_brick_burn",
+    "y_slag_granulate",
+    "y_steinmehl"
+  ],
+  "quinityn-slag-paving": [
+    "y_tile_slagbricks",
+    "y_tile_slagfilled",
+    "y_tile_slagpattern"
+  ],
   "quinityn-structures": [
     "y-bluegear",
     "y_structure_element",
@@ -1236,6 +1283,9 @@
   "quinityn-ultimate-efficiency-module": [
     "y_modul_green_op"
   ],
+  "quinityn-unicomp-compression": [
+    "y-press-richdust"
+  ],
   "quinityn-walker-1": [
     "yi_equip_generator_a",
     "yi_walker_a"
@@ -1246,22 +1296,16 @@
   "quinityn-washing": [
     "y-dirtwasher",
     "y-filtering-dust",
-    "y-press-richdust",
     "y-pressed_dry_mud",
     "y-pure-copper",
     "y-pure-iron",
     "y-refined-copper",
     "y-refined-iron",
-    "y-release-cwater",
-    "y-wash-dirt",
-    "y-wash-special",
-    "y_slag_brick",
-    "y_slag_brick_burn",
-    "y_slag_granulate",
-    "y_steinmehl",
-    "y_tile_slagbricks",
-    "y_tile_slagfilled",
-    "y_tile_slagpattern"
+    "y-release-cwater"
+  ],
+  "quinityn-wide-logistic-requests": [
+    "y_bc22",
+    "y_rc22"
   ],
   "quinityn-zero-time-weapon": [
     "y-weapon-ztt"

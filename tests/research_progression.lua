@@ -239,8 +239,154 @@ local function defense_unlocks()
     end
   end
 end
+local function washing_split()
+  local force = game.create_force("washing-split")
+  force.technologies["quinityn-washing"].researched = true
+  progression.reconcile()
+  local retained = {
+    "y-dirtwasher",
+    "y-filtering-dust",
+    "y-pressed_dry_mud",
+    "y-pure-copper",
+    "y-pure-iron",
+    "y-release-cwater",
+    "y-refined-copper",
+    "y-refined-iron",
+  }
+  for _, recipe in ipairs(retained) do
+    check(force.recipes[recipe].enabled, "washing retains " .. recipe)
+  end
+  local split = {
+    archaeology = { "y-wash-dirt", "y-wash-special" },
+    ["unicomp-compression"] = { "y-press-richdust" },
+    ["slag-materials"] = { "y_slag_granulate", "y_slag_brick", "y_slag_brick_burn", "y_steinmehl" },
+    ["slag-paving"] = { "y_tile_slagbricks", "y_tile_slagfilled", "y_tile_slagpattern" },
+  }
+  for tier, recipes in pairs(split) do
+    check(not force.technologies["quinityn-" .. tier].researched, tier .. " starts locked")
+    for _, recipe in ipairs(recipes) do
+      check(not force.recipes[recipe].enabled, tier .. " keeps " .. recipe .. " locked")
+    end
+  end
+  check(force.technologies["quinityn-washing"].researched, "washing completion preserved")
+  check(not force.recipes["y_mud2solidfuel"].enabled, "power recipe stays off washing alone")
+  check(not force.recipes["y_mc_dirtwasher"].enabled, "mastery washer stays off washing alone")
+  for _, tier in ipairs({ "archaeology", "unicomp-compression", "slag-materials", "slag-paving" }) do
+    force.technologies["quinityn-" .. tier].researched = true
+    progression.reconcile()
+    for other, recipes in pairs(split) do
+      for _, recipe in ipairs(recipes) do
+        if other == tier then
+          check(force.recipes[recipe].enabled, tier .. " unlocks " .. recipe)
+        else
+          check(not force.recipes[recipe].enabled, tier .. " leaves " .. other .. " " .. recipe .. " locked")
+        end
+      end
+    end
+    force.technologies["quinityn-" .. tier].researched = false
+    progression.reconcile()
+  end
+end
+
+local function recipe_enabled(force, name)
+  return force.recipes[name].enabled
+end
+local function logistics_unlocks()
+  local moved = {
+    "y_c22",
+    "y_cg33",
+    "y_sc44",
+    "j-dl-provider",
+    "y-rare-chest-log",
+    "y_pc22",
+    "y-rare-m1bunker-log",
+    "j-dl-request",
+    "j-dl-buffer",
+    "y_rc22",
+    "y_bc22",
+  }
+  local retained = { "y_sc11", "y-inserter-fast", "y-inserter-s4" }
+  local new_tech = {
+    "quinityn-expanded-storage",
+    "quinityn-large-storage",
+    "quinityn-bulk-storage",
+    "quinityn-logistic-storage",
+    "quinityn-logistic-provider-capacity",
+    "quinityn-logistic-bunker",
+    "quinityn-logistic-requests",
+    "quinityn-wide-logistic-requests",
+  }
+  local force = game.create_force("logistics-unlocks")
+  force.technologies["quinityn-logistics"].researched = true
+  progression.reconcile()
+  for _, name in ipairs(retained) do
+    check(recipe_enabled(force, name), "logistics keeps " .. name)
+  end
+  for _, name in ipairs(moved) do
+    check(not recipe_enabled(force, name), "logistics alone leaves " .. name .. " locked")
+  end
+  for _, id in ipairs(new_tech) do
+    check(not force.technologies[id].researched, "new tech unresearched: " .. id)
+  end
+  check(not force.add_research("quinityn-logistic-requests"), "requests blocked before robotics and logistic system")
+  local tiers = {
+    { "quinityn-expanded-storage", { "y_c22" } },
+    { "quinityn-large-storage", { "y_cg33" } },
+    { "quinityn-bulk-storage", { "y_sc44" } },
+    { "quinityn-logistic-storage", { "j-dl-provider", "y-rare-chest-log" } },
+    { "quinityn-logistic-provider-capacity", { "y_pc22" } },
+    { "quinityn-logistic-bunker", { "y-rare-m1bunker-log" } },
+    { "quinityn-logistic-requests", { "j-dl-request", "j-dl-buffer" } },
+    { "quinityn-wide-logistic-requests", { "y_rc22", "y_bc22" } },
+  }
+  local researched = {}
+  local function assert_tier_locks()
+    for _, tier in ipairs(tiers) do
+      local open = researched[tier[1]] == true
+      for _, name in ipairs(tier[2]) do
+        if open then
+          check(recipe_enabled(force, name), tier[1] .. " unlocks " .. name)
+        else
+          check(not recipe_enabled(force, name), tier[1] .. " stays locked: " .. name)
+        end
+      end
+    end
+    for _, name in ipairs(retained) do
+      check(recipe_enabled(force, name), "retained stays enabled: " .. name)
+    end
+  end
+  assert_tier_locks()
+  for _, tier in ipairs(tiers) do
+    if tier[1] == "quinityn-logistic-requests" then
+      force.technologies["quinityn-robotics"].researched = true
+      force.technologies["logistic-system"].researched = true
+      progression.reconcile()
+      assert_tier_locks()
+    end
+    force.technologies[tier[1]].researched = true
+    researched[tier[1]] = true
+    progression.reconcile()
+    assert_tier_locks()
+  end
+  local legacy = game.create_force("logistics-legacy")
+  legacy.technologies["quinityn-logistics"].researched = true
+  progression.reconcile()
+  progression.reconcile()
+  for _, name in ipairs(retained) do
+    check(recipe_enabled(legacy, name), "legacy keeps " .. name)
+  end
+  for _, name in ipairs(moved) do
+    check(not recipe_enabled(legacy, name), "legacy leaves moved locked: " .. name)
+  end
+  check(legacy.technologies["quinityn-logistics"].researched, "legacy logistics stays completed")
+  for _, id in ipairs(new_tech) do
+    check(not legacy.technologies[id].researched, "legacy does not grant " .. id)
+  end
+end
 script.on_init(function()
+  washing_split()
   module_unlocks()
+  logistics_unlocks()
   defense_unlocks()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
