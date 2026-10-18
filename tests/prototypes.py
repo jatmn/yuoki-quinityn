@@ -576,11 +576,16 @@ assert set(T['quinityn-refining']['prerequisites'])=={'quinityn-engines','quinit
 thermal={
  'y_smelter','y_charger','y_block_heat','y_hps_purecopper','y_hps_pureiron','y_hps_steel'}
 assert {e['recipe'] for e in T['quinityn-thermal-smelting']['effects'] if e['type']=='unlock-recipe'}==thermal
-assert set(T['quinityn-thermal-smelting']['prerequisites'])=={'quinityn-refining'}
+assert set(T['quinityn-thermal-smelting']['prerequisites'])=={'quinityn-refining','quinityn-quantum'}
 assert 'y_charger' not in {e['recipe'] for e in T['quinityn-quantum']['effects'] if e['type']=='unlock-recipe'}
 adv_comp={e['recipe'] for e in T['quinityn-advanced-components']['effects'] if e['type']=='unlock-recipe'}
 assert 'y_block_heat' not in adv_comp and 'y_block_cold' in adv_comp
-assert 'quinityn-quantum' not in ancestry('quinityn-thermal-smelting')
+assert 'quinityn-quantum' in ancestry('quinityn-thermal-smelting')
+assert 'quinityn-quantum' not in ancestry('quinityn-refining')
+slurry=R['ye_slurry2ethanol']
+assert slurry['main_product']=='y_syngas_raw'
+assert [p['name'] for p in slurry['results']]==['y_syngas_raw']
+assert {p['name'] for p in slurry['ingredients']}=={'ye_slurry','ye_sugar'}
 bio={'ye_biofuel','ye_granulate_corn','ye_granulate_trifitan','ye_granulate_vuger'}
 assert {e['recipe'] for e in T['quinityn-biological-feedstock']['effects'] if e['type']=='unlock-recipe'}==bio
 assert set(T['quinityn-biological-feedstock']['prerequisites'])=={'quinityn-agriculture'}
@@ -596,6 +601,17 @@ assert {e['recipe'] for e in T['quinityn-asteroid-crushing']['effects'] if e['ty
 assert set(T['quinityn-asteroid-crushing']['prerequisites'])=={'quinityn-materials','quinityn-industrial-science','space-platform'}
 assert 'space-platform' in ancestry('quinityn-asteroid-crushing')
 assert 'quinityn-industrial-science' in ancestry('quinityn-asteroid-crushing')
+for recipe in refining_kept:
+ assert unlocks[recipe]==['quinityn-refining'],recipe
+for recipe in thermal:
+ assert unlocks[recipe]==['quinityn-thermal-smelting'],recipe
+for recipe in bio:
+ assert unlocks[recipe]==['quinityn-biological-feedstock'], recipe
+assert unlocks['ye_slurry2ethanol']==['quinityn-slurry-syngas']
+for recipe in molten:
+ assert unlocks[recipe]==['quinityn-foundry-melting'], recipe
+for recipe in crush:
+ assert unlocks[recipe]==['quinityn-asteroid-crushing'], recipe
 for tech in ['quinityn-thermal-smelting','quinityn-biological-feedstock','quinityn-slurry-syngas',
  'quinityn-foundry-melting','quinityn-asteroid-crushing']:
  assert 'quinityn-arrival' in ancestry(tech),tech

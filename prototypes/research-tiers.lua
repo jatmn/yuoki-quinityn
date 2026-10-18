@@ -89,7 +89,7 @@ return {
   },
   {
     name = "washing",
-    prerequisites = { "industrial-science", "basic-factory", "fuel-processing" },
+    prerequisites = { "industrial-science", "basic-factory", "fuel-processing", "excavation" },
     count = 40,
     icon = "y-dirtwasher",
     recipes = {
@@ -159,7 +159,7 @@ return {
   },
   {
     name = "energy-storage",
-    prerequisites = { "power", "washing", "advanced-components" },
+    prerequisites = { "power", "washing", "advanced-components", "plant-infrastructure" },
     count = 100,
     icon = "y-accumulator-m",
     recipes = {
@@ -669,7 +669,7 @@ return {
   },
   {
     name = "thermal-smelting",
-    prerequisites = { "refining" },
+    prerequisites = { "refining", "quantum" },
     count = 80,
     icon = "y_smelter",
     recipes = {

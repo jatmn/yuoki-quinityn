@@ -162,10 +162,10 @@ local function refining_capability_unlocks()
   }) do
     check(force.recipes[name].enabled, "biological feedstock enables " .. name)
   end
-  check(not force.recipes["ye_slurry2ethanol"].enabled, "biological feedstock leaves slurry ethanol locked")
+  check(not force.recipes["ye_slurry2ethanol"].enabled, "biological feedstock leaves slurry Frumital-R gas locked")
   force.technologies["quinityn-slurry-syngas"].researched = true
   progression.reconcile()
-  check(force.recipes["ye_slurry2ethanol"].enabled, "slurry syngas enables ethanol")
+  check(force.recipes["ye_slurry2ethanol"].enabled, "slurry syngas enables Frumital-R gas")
   force.technologies["quinityn-foundry-melting"].researched = true
   progression.reconcile()
   check(
@@ -193,9 +193,102 @@ local function refining_capability_unlocks()
     check(not other.recipes[name].enabled, "other force without new tech keeps " .. name .. " locked")
   end
 end
+local function refining_tier_alone()
+  local stayers = {
+    ["y-sulfuric-acid"] = true,
+    ["y-water-gen"] = true,
+    ["y-water-gen-fluid"] = true,
+    ["y_catalyst_bp"] = true,
+    ["y_catalyst_ft"] = true,
+    ["y_coal2liquid"] = true,
+    ["y_ft"] = true,
+    ["y_granulate_wood"] = true,
+    ["y_rawsyngas1"] = true,
+    ["y_rawsyngas2"] = true,
+    ["y_refinehydrogen"] = true,
+    ["y_regcatbp"] = true,
+    ["y_regcatft"] = true,
+  }
+  local tiers = {
+    {
+      force = "refining-alone-1",
+      tech = "quinityn-thermal-smelting",
+      recipes = {
+        "y_smelter",
+        "y_charger",
+        "y_block_heat",
+        "y_hps_purecopper",
+        "y_hps_pureiron",
+        "y_hps_steel",
+      },
+    },
+    {
+      force = "refining-alone-2",
+      tech = "quinityn-biological-feedstock",
+      recipes = { "ye_biofuel", "ye_granulate_corn", "ye_granulate_trifitan", "ye_granulate_vuger" },
+    },
+    {
+      force = "refining-alone-3",
+      tech = "quinityn-slurry-syngas",
+      recipes = { "ye_slurry2ethanol" },
+    },
+    {
+      force = "refining-alone-4",
+      tech = "quinityn-foundry-melting",
+      recipes = { "yi-molten-iron", "yi-molten-copper" },
+    },
+    {
+      force = "refining-alone-5",
+      tech = "quinityn-asteroid-crushing",
+      recipes = { "j_crushing_to_n4", "j_crushing_to_f7" },
+    },
+  }
+  local other_recipes = {
+    ["quinityn-thermal-smelting"] = {
+      "y_smelter",
+      "y_charger",
+      "y_block_heat",
+      "y_hps_purecopper",
+      "y_hps_pureiron",
+      "y_hps_steel",
+    },
+    ["quinityn-biological-feedstock"] = {
+      "ye_biofuel",
+      "ye_granulate_corn",
+      "ye_granulate_trifitan",
+      "ye_granulate_vuger",
+    },
+    ["quinityn-slurry-syngas"] = { "ye_slurry2ethanol" },
+    ["quinityn-foundry-melting"] = { "yi-molten-iron", "yi-molten-copper" },
+    ["quinityn-asteroid-crushing"] = { "j_crushing_to_n4", "j_crushing_to_f7" },
+  }
+  for _, tier in ipairs(tiers) do
+    local force = game.create_force(tier.force)
+    force.technologies[tier.tech].researched = true
+    progression.reconcile()
+    for _, recipe in ipairs(tier.recipes) do
+      check(force.recipes[recipe].enabled, tier.tech .. " alone enables " .. recipe)
+    end
+    for name in pairs(stayers) do
+      check(not force.recipes[name].enabled, tier.tech .. " alone leaves stayer " .. name .. " locked")
+    end
+    for other_tech, recipes in pairs(other_recipes) do
+      if other_tech ~= tier.tech then
+        check(
+          not force.technologies[other_tech].researched,
+          tier.tech .. " alone leaves " .. other_tech .. " unresearched"
+        )
+        for _, recipe in ipairs(recipes) do
+          check(not force.recipes[recipe].enabled, tier.tech .. " alone leaves " .. recipe .. " locked")
+        end
+      end
+    end
+  end
+end
 script.on_init(function()
   module_unlocks()
   refining_capability_unlocks()
+  refining_tier_alone()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then
