@@ -1,3 +1,4 @@
+local copy = require("util").table.deepcopy
 local progression = require("__yuoki-quinityn__/scripts/progression")
 local discovery_tests = require("__yuoki-quinityn__/tests/discovery")
 local function check(condition, message)
@@ -5,6 +6,9 @@ local function check(condition, message)
     error("QUINITYN TEST FAILED: " .. message)
   end
   log("QUINITYN PASS: " .. message)
+end
+local function offworld_tracked(unit_number)
+  return remote.call("yuoki-quinityn", "offworld_crusher_tracked", unit_number) == true
 end
 script.on_init(function()
   local force = game.forces.player
@@ -166,6 +170,166 @@ script.on_event(defines.events.on_tick, function(event)
     check(force.recipes["quinityn-water"].enabled, "landing unlocks water bootstrap")
     check(not force.recipes["y-crusher"].enabled, "landing does not grant advanced Yuoki recipes")
     check(not force.technologies["quinityn-materials"].researched, "materials still need research")
+    local crusher_fixture = {
+      { 66, 10 },
+      { 67, 10 },
+      { 68, 10 },
+      { 69, 10 },
+      { 70, 10 },
+      { 66, 11 },
+      { 67, 11 },
+      { 68, 11 },
+      { 69, 11 },
+      { 70, 11 },
+      { 66, 12 },
+      { 67, 12 },
+      { 68, 12 },
+      { 69, 12 },
+      { 70, 12 },
+      { 66, 13 },
+      { 67, 13 },
+      { 68, 13 },
+      { 69, 13 },
+      { 70, 13 },
+      { 66, 14 },
+      { 67, 14 },
+      { 68, 14 },
+      { 69, 14 },
+      { 70, 14 },
+    }
+    local crusher_tiles = {}
+    for _, pos in ipairs(crusher_fixture) do
+      crusher_tiles[#crusher_tiles + 1] = { name = "quinityn-basalt", position = pos }
+    end
+    surface.set_tiles(crusher_tiles)
+    for _, entity in ipairs(surface.find_entities_filtered({ area = { { 65.9, 9.9 }, { 70.1, 14.1 } } })) do
+      entity.destroy()
+    end
+    local crusher_spec = {
+      name = "y-crusher",
+      position = { 68, 12 },
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+    }
+    check(surface.can_place_entity(crusher_spec), "yuoki crusher placement on quinityn")
+    local crusher = surface.create_entity(crusher_spec)
+    check(crusher and crusher.valid, "yuoki crusher created")
+    check(crusher.set_recipe("quinityn-hand-sort"), "crusher selects salvage sorting before materials research")
+    -- This engine's set_recipe returns a truthy value for an incompatible recipe and clears
+    -- the selection. get_recipe() is the reject signal, not the call's return value.
+    for _, recipe in ipairs({
+      "quinityn-iron",
+      "quinityn-copper",
+      "quinityn-carbon",
+      "quinityn-stone",
+      "quinityn-timber",
+    }) do
+      check(crusher.set_recipe("quinityn-hand-sort"), "crusher keeps salvage sorting selected")
+      crusher.set_recipe(recipe)
+      local current = crusher.get_recipe()
+      check(not current or current.name == "quinityn-hand-sort", "crusher rejects dressing recipe " .. recipe)
+      if not current then
+        check(crusher.set_recipe("quinityn-hand-sort"), "crusher restores salvage sorting after reject")
+      end
+    end
+    for _, reject in ipairs({
+      { "assembling-machine-1", { 66, 10 } },
+      { "y-heat-form-press", { 67, 10 } },
+      { "quinityn-burner-separator", { 69, 10 } },
+    }) do
+      local machine = surface.create_entity({ name = reject[1], position = reject[2], force = force })
+      check(machine and machine.valid, reject[1] .. " placement")
+      machine.set_recipe("quinityn-hand-sort")
+      check(not machine.get_recipe(), reject[1] .. " rejects salvage sorting")
+      machine.destroy()
+    end
+    storage.crusher = crusher
+    -- Real burner inserters move the salvage. y_crusher2 collides 1.2 tiles from its
+    -- center, so an inserter one tile away overlaps the machine and cannot reach a
+    -- chest. Leave a two-tile gap. A north-facing burner inserter picks up one tile
+    -- north and drops 1.2 tiles south, matching the unicomp disposal inserter above.
+    -- This recipe has no fluid, so the crusher's fluid boxes stay off and no pipe is used.
+    local crusher2_tiles = {}
+    for x = 48, 52 do
+      for y = 21, 29 do
+        crusher2_tiles[#crusher2_tiles + 1] = { name = "quinityn-basalt", position = { x, y } }
+      end
+    end
+    surface.set_tiles(crusher2_tiles)
+    for _, entity in ipairs(surface.find_entities_filtered({ area = { { 47.5, 20.5 }, { 52.5, 29.5 } } })) do
+      entity.destroy()
+    end
+    local crusher2_spec = {
+      name = "y_crusher2",
+      position = { 50, 25 },
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+    }
+    check(surface.can_place_entity(crusher2_spec), "advanced crusher placement on quinityn")
+    local crusher2 = surface.create_entity(crusher2_spec)
+    check(
+      crusher2 and crusher2.set_recipe("quinityn-hand-sort"),
+      "advanced crusher selects salvage sorting before advanced machining"
+    )
+    storage.crusher2 = crusher2
+    local nauvis = game.surfaces.nauvis
+    nauvis.request_to_generate_chunks({ 0, 0 }, 1)
+    nauvis.force_generate_chunk_requests()
+    storage.nauvis_crusher = nauvis.create_entity({
+      name = "y-crusher",
+      position = { 0, 0 },
+      force = force,
+      raise_built = true,
+    })
+    check(offworld_tracked(storage.nauvis_crusher.unit_number), "nauvis crusher built after load is tracked")
+    storage.nauvis_crusher.get_fuel_inventory().insert({ name = "coal", count = 5 })
+    -- Select recipe before loading salvage; a cleared recipe would leave the machine empty.
+    storage.nauvis_crusher.set_recipe("quinityn-hand-sort")
+    local nauvis_recipe = storage.nauvis_crusher.get_recipe()
+    check(nauvis_recipe and nauvis_recipe.name == "quinityn-hand-sort", "nauvis crusher active recipe is hand-sort")
+    check(
+      storage.nauvis_crusher.insert({ name = "quinityn-salvage", count = 1 }) == 1,
+      "nauvis crusher accepts exactly one salvage"
+    )
+    check(
+      storage.nauvis_crusher.get_inventory(defines.inventory.crafter_input).get_item_count("quinityn-salvage") == 1,
+      "nauvis crusher input holds exactly one salvage"
+    )
+    storage.nauvis_crusher.get_inventory(defines.inventory.crafter_input).clear()
+    storage.nauvis_crusher.get_fuel_inventory().clear()
+    storage.nauvis_crusher.set_recipe(nil)
+    local nauvis_crusher2_spec = {
+      name = "y_crusher2",
+      position = { 16, 8 },
+      force = force,
+      raise_built = true,
+    }
+    check(nauvis.can_place_entity(nauvis_crusher2_spec), "offworld y_crusher2 placement on nauvis")
+    storage.nauvis_crusher2 = nauvis.create_entity(nauvis_crusher2_spec)
+    check(offworld_tracked(storage.nauvis_crusher2.unit_number), "offworld y_crusher2 built after load is tracked")
+    local quinityn_built_tiles = {}
+    for x = 79, 81 do
+      for y = 19, 21 do
+        quinityn_built_tiles[#quinityn_built_tiles + 1] = { name = "quinityn-basalt", position = { x, y } }
+      end
+    end
+    surface.set_tiles(quinityn_built_tiles)
+    for _, entity in ipairs(surface.find_entities_filtered({ area = { { 78.9, 18.9 }, { 81.1, 21.1 } } })) do
+      entity.destroy()
+    end
+    local quinityn_built_spec = {
+      name = "y-crusher",
+      position = { 80, 20 },
+      force = force,
+      raise_built = true,
+    }
+    check(surface.can_place_entity(quinityn_built_spec), "quinityn built-after-load crusher placement")
+    local quinityn_built = surface.create_entity(quinityn_built_spec)
+    check(quinityn_built and quinityn_built.valid, "quinityn built-after-load crusher created")
+    check(not offworld_tracked(quinityn_built.unit_number), "quinityn crusher built after load is not tracked")
+    quinityn_built.destroy({ raise_destroy = true })
+    crusher.get_fuel_inventory().insert({ name = "coal", count = 10 })
+    crusher.insert({ name = "quinityn-salvage", count = 1 })
     -- Isolated real machine fixture; ingredients and fuel are injected to test operation.
     local separator = surface.create_entity({ name = "quinityn-burner-separator", position = { 0, 12 }, force = force })
     check(separator and separator.valid, "burner separator placement")
@@ -273,6 +437,59 @@ script.on_event(defines.events.on_tick, function(event)
       "new force remains locked"
     )
     force.technologies["quinityn-materials"].researched = true
+    local salvage_source = surface.create_entity({ name = "steel-chest", position = { 50, 22 }, force = force })
+    check(salvage_source and salvage_source.valid, "salvage source chest placement")
+    salvage_source.insert({ name = "quinityn-salvage", count = 5 })
+    local load_spec = {
+      name = "burner-inserter",
+      position = { 50, 23 },
+      direction = defines.direction.north,
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+    }
+    check(surface.can_place_entity(load_spec), "salvage load inserter placement")
+    local load_inserter = surface.create_entity(load_spec)
+    check(load_inserter and load_inserter.valid, "salvage load inserter created")
+    load_inserter.get_fuel_inventory().clear()
+    check(
+      load_inserter.get_fuel_inventory().insert({ name = "coal", count = 10 }) == 10,
+      "salvage load inserter takes coal"
+    )
+    local unload_spec = {
+      name = "burner-inserter",
+      position = { 50, 27 },
+      direction = defines.direction.north,
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+    }
+    check(surface.can_place_entity(unload_spec), "salvage unload inserter placement")
+    local unload_inserter = surface.create_entity(unload_spec)
+    check(unload_inserter and unload_inserter.valid, "salvage unload inserter created")
+    unload_inserter.get_fuel_inventory().clear()
+    check(
+      unload_inserter.get_fuel_inventory().insert({ name = "coal", count = 10 }) == 10,
+      "salvage unload inserter takes coal"
+    )
+    local salvage_sink = surface.create_entity({ name = "steel-chest", position = { 50, 28 }, force = force })
+    check(salvage_sink and salvage_sink.valid, "salvage sink chest placement")
+    -- Productivity is allowed on the machine, but this recipe sets allow_productivity
+    -- false. The engine rejects the module while the recipe is selected and ejects
+    -- one inserted beforehand, so the bonus cannot change the inserter-line yields.
+    local modules = storage.crusher2.get_module_inventory()
+    storage.crusher2.set_recipe(nil)
+    check(
+      modules.insert({ name = "productivity-module", count = 1 }) == 1,
+      "advanced crusher module slot accepts a productivity module"
+    )
+    check(
+      storage.crusher2.set_recipe("quinityn-hand-sort") and storage.crusher2.get_recipe().name == "quinityn-hand-sort",
+      "salvage sorting stays selected after a productivity module is inserted"
+    )
+    check(modules.get_item_count("productivity-module") == 0, "salvage sorting ejects a productivity module")
+    storage.salvage_source = salvage_source
+    storage.salvage_sink = salvage_sink
+    storage.salvage_load_inserter = load_inserter
+    storage.salvage_unload_inserter = unload_inserter
     check(force.recipes["y-crusher"].enabled, "materials research unlocks crusher")
     check(
       force.recipes["y-crush-unicomp-raw"].enabled and not force.recipes["y-crush-blue_whead"].enabled,
@@ -367,12 +584,349 @@ script.on_event(defines.events.on_tick, function(event)
     assembler.set_recipe("quinityn-research-data")
     check(assembler.get_recipe() == nil, "vanilla assembler rejects planet science")
     -- Programmatic research setters do not necessarily emit finished events; checked separately below.
+  elseif event.tick == 2 then
+    local platform_surface = storage.platform.surface
+    check(
+      platform_surface.count_entities_filtered({ name = { "y-crusher", "y_crusher2" } }) == 0,
+      "test platform has no yuoki crusher after setup"
+    )
+    local platform_tiles = {}
+    for x = 8, 13 do
+      for y = -1, 1 do
+        platform_tiles[#platform_tiles + 1] = { name = "space-platform-foundation", position = { x, y } }
+      end
+    end
+    platform_surface.set_tiles(platform_tiles)
+    local platform_spec = {
+      name = "y-crusher",
+      position = { 9, 0 },
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+      raise_built = true,
+    }
+    check(platform_surface.can_place_entity(platform_spec), "yuoki crusher placement on the test platform")
+    local platform_crusher = platform_surface.create_entity(platform_spec)
+    check(platform_crusher and platform_crusher.valid, "yuoki crusher created on the test platform")
+    check(
+      platform_surface.count_entities_filtered({ name = "y-crusher" }) == 1,
+      "test platform has exactly one y-crusher"
+    )
+    check(offworld_tracked(platform_crusher.unit_number), "space platform crusher is tracked")
+    check(not platform_crusher.get_recipe(), "space platform build does not select salvage sorting")
+    storage.platform_crusher = platform_crusher
+    storage.platform_crusher_unit = platform_crusher.unit_number
+    local platform_inventory = game.create_inventory(1)
+    platform_inventory[1].set_stack("blueprint")
+    platform_inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local platform_ghosts = platform_inventory[1].build_blueprint({
+      surface = platform_surface,
+      force = force,
+      position = { 12, 0 },
+      skip_fog_of_war = true,
+      build_mode = defines.build_mode.forced,
+    })
+    platform_inventory.destroy()
+    local _, platform_revived
+    if #platform_ghosts == 1 then
+      check(not platform_ghosts[1].get_recipe(), "platform blueprint ghost does not keep salvage sorting")
+      _, platform_revived = platform_ghosts[1].revive({ raise_revive = true })
+    else
+      check(#platform_ghosts == 0, "platform blueprint places no crusher ghost")
+      local platform_ghost = platform_surface.create_entity({
+        name = "entity-ghost",
+        inner_name = "y-crusher",
+        position = { 12, 0 },
+        force = force,
+      })
+      check(platform_ghost and platform_ghost.valid, "platform crusher ghost created")
+      platform_ghost.set_recipe("quinityn-hand-sort")
+      _, platform_revived = platform_ghost.revive({ raise_revive = true })
+    end
+    check(platform_revived and platform_revived.valid, "platform crusher ghost revived")
+    check(not platform_revived.get_recipe(), "platform revive does not select salvage sorting")
+    check(platform_revived.products_finished == 0, "platform revive finishes no salvage sorts")
+    check(offworld_tracked(platform_revived.unit_number), "revived platform crusher is tracked")
+  elseif event.tick == 3 then
+    local home = surface.find_entities_filtered({ name = "character", limit = 1 })[1]
+    check(home and home.valid, "quinityn character can attempt salvage sorting")
+    check(home.insert({ name = "quinityn-salvage", count = 1 }) == 1, "quinityn character receives salvage")
+    local queued = home.begin_crafting({ recipe = "quinityn-hand-sort", count = 1 })
+    local crafting_queue = home.crafting_queue
+    check(queued == 1 and crafting_queue and #crafting_queue == 1, "hand crafting queues salvage sorting on quinityn")
+    home.cancel_crafting({ index = 1, count = 1 })
+    local queue_after = home.crafting_queue
+    check(not queue_after or #queue_after == 0, "quinityn hand craft can be cancelled")
+    local nauvis = game.surfaces.nauvis
+    nauvis.request_to_generate_chunks({ 36, -12 }, 1)
+    nauvis.force_generate_chunk_requests()
+    local character_tiles = {}
+    for x = 34, 38 do
+      for y = -14, -10 do
+        character_tiles[#character_tiles + 1] = { name = "grass-1", position = { x, y } }
+      end
+    end
+    nauvis.set_tiles(character_tiles)
+    for _, entity in ipairs(nauvis.find_entities_filtered({ area = { { 34, -14 }, { 39, -9 } } })) do
+      entity.destroy()
+    end
+    local nauvis_character = nauvis.create_entity({ name = "character", position = { 36, -12 }, force = force })
+    check(nauvis_character and nauvis_character.valid, "nauvis character created")
+    check(nauvis_character.insert({ name = "quinityn-salvage", count = 1 }) == 1, "nauvis character receives salvage")
+    local offworld_queued = nauvis_character.begin_crafting({ recipe = "quinityn-hand-sort", count = 1 })
+    check(
+      offworld_queued == 0 and nauvis_character.crafting_queue == nil,
+      "hand crafting cannot queue salvage sorting off quinityn"
+    )
+  elseif event.tick == 300 then
+    check(force.recipes["quinityn-hand-sort"].enabled, "hand-sort stays enabled for native selection")
+    local native_tiles = {}
+    for x = 22, 26 do
+      for y = -2, 2 do
+        native_tiles[#native_tiles + 1] = { name = "grass-1", position = { x, y } }
+      end
+    end
+    game.surfaces.nauvis.set_tiles(native_tiles)
+    for _, entity in ipairs(game.surfaces.nauvis.find_entities_filtered({ area = { { 21.5, -2.5 }, { 26.5, 2.5 } } })) do
+      entity.destroy()
+    end
+    local inventory = game.create_inventory(1)
+    inventory[1].set_stack("blueprint")
+    inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local ghosts = inventory[1].build_blueprint({
+      surface = game.surfaces.nauvis,
+      force = force,
+      position = { 24, 0 },
+      skip_fog_of_war = true,
+    })
+    check(#ghosts == 1, "native offworld blueprint places one crusher ghost")
+    local _, native = ghosts[1].revive({ raise_revive = true })
+    check(native and native.valid, "native offworld crusher revived")
+    check(not native.get_recipe(), "native blueprint does not select salvage sorting off quinityn")
+    check(native.products_finished == 0, "native offworld crusher finishes no salvage sorts")
+    check(offworld_tracked(native.unit_number), "revived offworld crusher is tracked")
+    storage.native_crusher = native
+    inventory.destroy()
+  elseif event.tick == 301 then
+    check(
+      storage.crusher.get_recipe().name == "quinityn-hand-sort",
+      "quinityn crusher keeps salvage sorting before copy"
+    )
+    storage.native_crusher.copy_settings(storage.crusher)
+    check(not storage.native_crusher.get_recipe(), "copy settings does not select salvage sorting off quinityn")
+    storage.platform_crusher.copy_settings(storage.crusher)
+    check(
+      not storage.platform_crusher.get_recipe(),
+      "copy settings does not select salvage sorting on a space platform"
+    )
+    check(
+      storage.crusher.get_recipe().name == "quinityn-hand-sort",
+      "quinityn crusher keeps salvage sorting after copy"
+    )
+  elseif event.tick == 320 then
+    local switched_spec = {
+      name = "y-crusher",
+      position = { 8, 8 },
+      force = force,
+      raise_built = true,
+    }
+    check(game.surfaces.nauvis.can_place_entity(switched_spec), "switched offworld crusher placement")
+    storage.switched_crusher = game.surfaces.nauvis.create_entity(switched_spec)
+    check(
+      offworld_tracked(storage.switched_crusher.unit_number),
+      "offworld crusher is tracked before hand-sort is selected"
+    )
+    check(not storage.switched_crusher.get_recipe(), "switched offworld crusher has no recipe yet")
+    storage.switched_crusher_unit = storage.switched_crusher.unit_number
+  elseif event.tick == 325 then
+    local clone = storage.nauvis_crusher.clone({ position = { 8, 0 }, surface = game.surfaces.nauvis })
+    check(clone and clone.valid, "nauvis crusher clone created")
+    storage.clone_unit = clone.unit_number
+    check(offworld_tracked(storage.clone_unit), "cloned offworld crusher is tracked")
+    clone.destroy({ raise_destroy = true })
+    check(not offworld_tracked(storage.clone_unit), "destroyed clone is not tracked")
+  elseif event.tick == 330 then
+    storage.switched_crusher.set_recipe("quinityn-hand-sort")
+    local switched_recipe = storage.switched_crusher.get_recipe()
+    check(
+      switched_recipe and switched_recipe.name == "quinityn-hand-sort",
+      "switched crusher active recipe is hand-sort"
+    )
+    storage.switched_crusher.get_fuel_inventory().insert({ name = "coal", count = 5 })
+    check(
+      storage.switched_crusher.insert({ name = "quinityn-salvage", count = 1 }) == 1,
+      "switched crusher accepts exactly one salvage"
+    )
+    storage.switched_crusher.get_inventory(defines.inventory.crafter_input).clear()
+    storage.switched_crusher.get_fuel_inventory().clear()
+    storage.switched_crusher.set_recipe(nil)
+  elseif event.tick == 640 then
+    local mined_inventory = game.create_inventory(10)
+    check(storage.switched_crusher.mine({ inventory = mined_inventory }), "switched offworld crusher mined")
+    mined_inventory.destroy()
+    check(not offworld_tracked(storage.switched_crusher_unit), "mined offworld crusher is not tracked")
+  elseif event.tick == 650 then
+    storage.nauvis_crusher2_unit = storage.nauvis_crusher2.unit_number
+    check(storage.nauvis_crusher2.die(), "offworld y_crusher2 dies")
+    check(not offworld_tracked(storage.nauvis_crusher2_unit), "destroyed offworld crusher is not tracked")
+  elseif event.tick == 660 then
+    local legacy_spec = {
+      name = "y-crusher",
+      position = { 8, 16 },
+      force = force,
+    }
+    check(game.surfaces.nauvis.can_place_entity(legacy_spec), "legacy offworld crusher placement")
+    storage.legacy_crusher = game.surfaces.nauvis.create_entity(legacy_spec)
+    check(
+      not offworld_tracked(storage.legacy_crusher.unit_number),
+      "crusher created without a build event is not tracked yet"
+    )
+    remote.call("yuoki-quinityn", "clear_offworld_crusher_list")
+  elseif event.tick == 662 then
+    check(offworld_tracked(storage.legacy_crusher.unit_number), "migration rebuilds the offworld crusher list")
+    check(offworld_tracked(storage.nauvis_crusher.unit_number), "migration keeps the loaded nauvis crusher")
+    check(not offworld_tracked(storage.crusher.unit_number), "migration does not track quinityn crushers")
+    check(not offworld_tracked(storage.switched_crusher_unit), "migration keeps mined crusher untracked")
+    check(not offworld_tracked(storage.nauvis_crusher2_unit), "migration keeps died crusher untracked")
+  elseif event.tick == 670 then
+    local guard_settings = copy(game.surfaces.nauvis.map_gen_settings)
+    guard_settings.seed = 8675309
+    storage.salvage_guard_surface = game.create_surface("salvage-guard-surface", guard_settings)
+    storage.salvage_guard_surface.request_to_generate_chunks({ 0, 0 }, 2)
+    storage.salvage_guard_surface.force_generate_chunk_requests()
+    for _, entity in ipairs(storage.salvage_guard_surface.find_entities_filtered({ area = { { -2, -2 }, { 2, 2 } } })) do
+      entity.destroy()
+    end
+    local guard_spec = {
+      name = "y-crusher",
+      position = { 16, 16 },
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+      raise_built = true,
+    }
+    check(storage.salvage_guard_surface.can_place_entity(guard_spec), "salvage guard surface crusher placement")
+    local guard_crusher = storage.salvage_guard_surface.create_entity(guard_spec)
+    check(guard_crusher and guard_crusher.valid, "salvage guard surface crusher created")
+    storage.salvage_guard_unit = guard_crusher.unit_number
+    check(offworld_tracked(storage.salvage_guard_unit), "salvage guard surface crusher is tracked")
+    game.delete_surface(storage.salvage_guard_surface)
+  elseif event.tick == 672 then
+    check(not offworld_tracked(storage.salvage_guard_unit), "crusher on a deleted surface is not tracked")
+  elseif event.tick == 680 then
+    local nauvis = game.surfaces.nauvis
+    nauvis.request_to_generate_chunks({ 120, 120 }, 2)
+    nauvis.force_generate_chunk_requests()
+    local robot_tiles = {}
+    for x = 112, 136 do
+      for y = 112, 128 do
+        robot_tiles[#robot_tiles + 1] = { name = "refined-concrete", position = { x, y } }
+      end
+    end
+    nauvis.set_tiles(robot_tiles)
+    for _, entity in ipairs(nauvis.find_entities_filtered({ area = { { 111, 111 }, { 137, 129 } } })) do
+      entity.destroy()
+    end
+    local roboport = nauvis.create_entity({ name = "roboport", position = { 116, 120 }, force = force })
+    check(roboport and roboport.valid, "offworld roboport created")
+    roboport.energy = 100000000
+    check(
+      roboport.get_inventory(defines.inventory.roboport_robot).insert({ name = "construction-robot", count = 1 }) == 1,
+      "offworld roboport receives a construction robot"
+    )
+    local provider = nauvis.create_entity({ name = "passive-provider-chest", position = { 122, 120 }, force = force })
+    check(provider.insert({ name = "y-crusher", count = 1 }) == 1, "provider holds one yuoki crusher")
+    local robot_inventory = game.create_inventory(1)
+    robot_inventory[1].set_stack("blueprint")
+    robot_inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local robot_ghosts = robot_inventory[1].build_blueprint({
+      surface = nauvis,
+      force = force,
+      position = { 130, 120 },
+      skip_fog_of_war = true,
+    })
+    robot_inventory.destroy()
+    check(#robot_ghosts == 1, "robot blueprint places one crusher ghost")
+    check(not robot_ghosts[1].get_recipe(), "robot blueprint ghost does not keep salvage sorting")
+  elseif event.tick == 1100 then
+    local built =
+      game.surfaces.nauvis.find_entities_filtered({ name = "y-crusher", position = { 130, 120 }, radius = 1 })
+    check(#built == 1, "construction robot builds one offworld crusher")
+    check(not built[1].get_recipe(), "robot build does not select salvage sorting off quinityn")
+    check(built[1].products_finished == 0, "robot-built crusher finishes no salvage sorts")
+    check(offworld_tracked(built[1].unit_number), "robot-built offworld crusher is tracked")
+    check(
+      #game.surfaces.nauvis.find_entities_filtered({ name = "entity-ghost", position = { 130, 120 }, radius = 1 }) == 0,
+      "construction robot revives the offworld crusher ghost"
+    )
+  elseif event.tick == 400 then
+    local out = storage.crusher.get_output_inventory()
+    check(storage.crusher.products_finished == 1, "quinityn crusher finishes one salvage sort")
+    check(out.get_item_count("y-res1") == 2, "salvage sort yields two N4")
+    check(out.get_item_count("y-res2") == 2, "salvage sort yields two F7")
+    check(out.get_item_count("stone") == 2, "salvage sort yields two stone")
+    check(out.get_item_count("wood") == 1, "salvage sort yields one wood")
+    check(storage.crusher.get_item_count("quinityn-salvage") == 0, "salvage ingredient is consumed")
+    for _, item in ipairs({ "y-res1", "y-res2", "stone", "wood" }) do
+      while out.insert({ name = item, count = 100 }) == 100 do
+      end
+    end
+    storage.crusher.get_fuel_inventory().insert({ name = "coal", count = 5 })
+    check(
+      storage.crusher.insert({ name = "quinityn-salvage", count = 1 }) == 1,
+      "blocked crusher still accepts salvage"
+    )
+  elseif event.tick == 800 then
+    -- A full output does not leave the ingredient waiting. The crusher consumes it and
+    -- holds the finished craft at progress 1, so products_finished stays 1 until space exists.
+    check(storage.crusher.products_finished == 1, "blocked crusher keeps one finished sort")
+    check(storage.crusher.crafting_progress == 1, "blocked crusher holds the finished craft")
+    check(
+      storage.crusher.get_item_count("quinityn-salvage") == 0,
+      "blocked crusher consumes salvage into the held craft"
+    )
+    if defines.entity_status.full_output ~= nil then
+      check(storage.crusher.status == defines.entity_status.full_output, "blocked crusher reports full output")
+    end
+  elseif event.tick == 802 then
+    storage.crusher.get_output_inventory().clear()
+    check(
+      storage.crusher.get_recipe().name == "quinityn-hand-sort",
+      "crusher keeps salvage sorting selected while blocked"
+    )
+    storage.crusher.get_fuel_inventory().insert({ name = "coal", count = 10 })
   elseif event.tick == 480 then
     check(
       storage.separator.get_fluid_count("water") > 0,
       "primitive Cimota produces water burning raw F7 without grid power"
     )
     check(storage.pump_pipe.get_fluid_count("y-liquid-uc2") > 0, "offshore pump actually extracts Yuoki liquid unicomp")
+  elseif event.tick == 1000 then
+    local out = storage.crusher.get_output_inventory()
+    check(storage.crusher.products_finished == 2, "quinityn crusher resumes after blocked output")
+    check(out.get_item_count("y-res1") == 2, "resumed salvage sort yields two N4")
+    check(out.get_item_count("y-res2") == 2, "resumed salvage sort yields two F7")
+    check(out.get_item_count("stone") == 2, "resumed salvage sort yields two stone")
+    check(out.get_item_count("wood") == 1, "resumed salvage sort yields one wood")
   elseif event.tick == 1200 then
     for _, machine in ipairs(storage.factories) do
       check(
@@ -583,7 +1137,7 @@ script.on_event(defines.events.on_tick, function(event)
       end
     end
     local absolute = 2401 + check_tick
-    if absolute == 3600 or absolute == 8500 or absolute == 15000 then
+    if absolute == 3600 or absolute == 4000 or absolute == 8500 or absolute == 15000 then
       absolute = absolute + 1
     end
     check(absolute < 15000, "productivity fixture finishes before benchmark end")
@@ -627,6 +1181,20 @@ script.on_event(defines.events.on_tick, function(event)
       )
     end
     log("QUINITYN PASS: productivity modules add bonus industrial research data without extra ingredients")
+  elseif event.tick == 4000 then
+    check(storage.crusher2.get_recipe().name == "quinityn-hand-sort", "advanced crusher keeps salvage sorting recipe")
+    check(storage.salvage_sink.get_item_count("y-res1") == 10, "advanced crusher inserter line yields ten N4")
+    check(storage.salvage_sink.get_item_count("y-res2") == 10, "advanced crusher inserter line yields ten F7")
+    check(storage.salvage_sink.get_item_count("stone") == 10, "advanced crusher inserter line yields ten stone")
+    check(storage.salvage_sink.get_item_count("wood") == 5, "advanced crusher inserter line yields five wood")
+    check(
+      storage.salvage_source.get_item_count("quinityn-salvage") == 0,
+      "advanced crusher inserter line consumes all salvage"
+    )
+    check(
+      storage.crusher2.get_output_inventory().is_empty(),
+      "advanced crusher inserter line leaves machine output empty"
+    )
   elseif event.tick == 8500 then
     check(
       force.mining_drill_productivity_bonus > storage.mining_bonus,
@@ -647,6 +1215,15 @@ script.on_event(defines.events.on_tick, function(event)
     end
     if pair.control and pair.control.valid then
       pair.control.energy = 10000000
+    end
+  end
+  if storage.crusher2 and storage.crusher2.valid then
+    storage.crusher2.energy = 10000000
+  end
+  for _, inserter in ipairs({ storage.salvage_load_inserter, storage.salvage_unload_inserter }) do
+    local fuel = inserter and inserter.valid and inserter.get_fuel_inventory()
+    if fuel and fuel.get_item_count("coal") < 5 then
+      fuel.insert({ name = "coal", count = 10 })
     end
   end
   if storage.lab and storage.lab.valid then

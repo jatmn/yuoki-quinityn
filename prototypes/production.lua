@@ -245,10 +245,12 @@ recipe(
 )
 with_product_group("quinityn-processing-unit")
 
--- Emergency dressing cannot become a competing automated ore industry.
-for _, name in ipairs({ "hand-sort", "iron", "copper", "carbon", "stone", "timber" }) do
+-- Emergency ore dressing cannot become a competing automated ore industry.
+-- Salvage sorting stays hand-craftable and also runs in Yuoki crushers.
+for _, name in ipairs({ "iron", "copper", "carbon", "stone", "timber" }) do
   data.raw.recipe["quinityn-" .. name].categories = { "hand-crafting" }
 end
+data.raw.recipe["quinityn-hand-sort"].categories = { "hand-crafting", "y-crushing" }
 
 local foundation_item = copy(data.raw.item.foundation)
 foundation_item.name = "quinityn-foundation"
