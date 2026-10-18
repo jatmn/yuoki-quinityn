@@ -69,6 +69,176 @@ local function module_unlocks()
     check(force.technologies["quinityn-" .. name].researched, "completed research preserved: " .. name)
   end
 end
+local function defense_unlocks()
+  local defense_recipes = {
+    "y_wood_wall",
+    "y-mud-wall",
+    "y-bullet-case",
+    "y_turret_gun1f12",
+    "yi_cannon_shell",
+    "y-rare-wall-basic",
+    "y_ammo_case",
+    "y-ammo-hohlspitz",
+    "y-ammo-acid-2",
+    "y-ammo-poison",
+    "y-ammo-krakon",
+    "y-ammo-explosiv",
+    "y-ammo-biggun",
+    "y_turret_gun2f12",
+    "y-wall-forcefield",
+    "y_wall22_hardic",
+    "y_turret_laser22f12",
+    "y_turret_plasma",
+    "y_ammo_plasma",
+    "y_turret_flame",
+    "y_ammo_flame",
+    "yi_mine_impact",
+    "yi_mine_plasma",
+    "yi_artillery_shell",
+    "y-weapon-ztt",
+    "y-rare-wall-adv",
+  }
+  local new_tiers = {
+    ["quinityn-durotal-walls"] = true,
+    ["quinityn-forcefield-walls"] = true,
+    ["quinityn-hardic-walls"] = true,
+    ["quinityn-ammunition-cases"] = true,
+    ["quinityn-laser-turret"] = true,
+    ["quinityn-plasma-weapons"] = true,
+    ["quinityn-chemical-weapons"] = true,
+    ["quinityn-poison-mines"] = true,
+    ["quinityn-plasma-mines"] = true,
+    ["quinityn-artillery-shells"] = true,
+    ["quinityn-zero-time-weapon"] = true,
+  }
+  local tier_recipes = {
+    ["quinityn-durotal-walls"] = { "y-rare-wall-basic" },
+    ["quinityn-forcefield-walls"] = { "y-wall-forcefield" },
+    ["quinityn-hardic-walls"] = { "y_wall22_hardic" },
+    ["quinityn-ammunition-cases"] = { "y_ammo_case" },
+    ["quinityn-laser-turret"] = { "y_turret_laser22f12" },
+    ["quinityn-plasma-weapons"] = { "y_turret_plasma", "y_ammo_plasma" },
+    ["quinityn-chemical-weapons"] = { "y_turret_flame", "y_ammo_flame" },
+    ["quinityn-poison-mines"] = { "yi_mine_impact" },
+    ["quinityn-plasma-mines"] = { "yi_mine_plasma" },
+    ["quinityn-artillery-shells"] = { "yi_artillery_shell" },
+    ["quinityn-zero-time-weapon"] = { "y-weapon-ztt" },
+  }
+  local force = game.create_force("defense-unlocks")
+  for name, t in pairs(force.technologies) do
+    if not name:match("^quinityn%-bridge%-") then
+      t.researched = false
+    end
+  end
+  local researched = {}
+  local function mark(tech)
+    researched[tech] = true
+  end
+  local function prereq_name(prereq)
+    return type(prereq) == "string" and prereq or prereq.name
+  end
+  local function ensure_prereqs(tech)
+    for _, prereq in pairs(prototypes.technology[tech].prerequisites or {}) do
+      local name = prereq_name(prereq)
+      if name == "concrete" or name == "artillery" then
+        force.technologies[name].researched = true
+      elseif name:sub(1, 9) == "quinityn-" and not researched[name] and not new_tiers[name] then
+        ensure_prereqs(name)
+        force.technologies[name].researched = true
+        mark(name)
+        progression.reconcile()
+      elseif name:sub(1, 9) == "quinityn-" and new_tiers[name] and not researched[name] then
+        ensure_prereqs(name)
+        force.technologies[name].researched = true
+        mark(name)
+        progression.reconcile()
+      end
+    end
+  end
+  local function assert_new_unlocks(tech, expected)
+    ensure_prereqs(tech)
+    for _, name in ipairs(expected) do
+      check(not force.recipes[name].enabled, tech .. " stays locked before research: " .. name)
+    end
+    local before = {}
+    for _, name in ipairs(defense_recipes) do
+      before[name] = force.recipes[name].enabled
+    end
+    force.technologies[tech].researched = true
+    mark(tech)
+    progression.reconcile()
+    local newly = {}
+    for _, name in ipairs(defense_recipes) do
+      if force.recipes[name].enabled and not before[name] then
+        newly[name] = true
+      end
+    end
+    for _, name in ipairs(expected) do
+      check(newly[name], tech .. " newly enables " .. name)
+      newly[name] = nil
+    end
+    for name in pairs(newly) do
+      check(false, tech .. " unexpectedly enabled " .. name)
+    end
+    for tier, recipes in pairs(tier_recipes) do
+      if tier ~= tech and not researched[tier] then
+        for _, name in ipairs(recipes) do
+          check(not force.recipes[name].enabled, tech .. " leaves unresearched " .. tier .. " locked: " .. name)
+        end
+      end
+    end
+  end
+  force.technologies["quinityn-defense"].researched = true
+  mark("quinityn-defense")
+  progression.reconcile()
+  for _, name in ipairs({ "y_wood_wall", "y-mud-wall", "y-bullet-case", "y_turret_gun1f12", "yi_cannon_shell" }) do
+    check(force.recipes[name].enabled, "defense enables " .. name)
+  end
+  for _, name in ipairs(defense_recipes) do
+    if
+      name ~= "y_wood_wall"
+      and name ~= "y-mud-wall"
+      and name ~= "y-bullet-case"
+      and name ~= "y_turret_gun1f12"
+      and name ~= "yi_cannon_shell"
+    then
+      check(not force.recipes[name].enabled, "defense leaves locked: " .. name)
+    end
+  end
+  check(not force.recipes.yi_armor_gray.enabled, "defense leaves armor locked")
+  force.technologies.concrete.researched = true
+  force.technologies.artillery.researched = true
+  assert_new_unlocks("quinityn-durotal-walls", { "y-rare-wall-basic" })
+  assert_new_unlocks("quinityn-ammunition-cases", { "y_ammo_case" })
+  assert_new_unlocks("quinityn-forcefield-walls", { "y-wall-forcefield" })
+  assert_new_unlocks("quinityn-hardic-walls", { "y_wall22_hardic" })
+  assert_new_unlocks("quinityn-chemical-weapons", { "y_turret_flame", "y_ammo_flame" })
+  assert_new_unlocks("quinityn-plasma-weapons", { "y_turret_plasma", "y_ammo_plasma" })
+  assert_new_unlocks("quinityn-laser-turret", { "y_turret_laser22f12" })
+  assert_new_unlocks("quinityn-poison-mines", { "yi_mine_impact" })
+  assert_new_unlocks("quinityn-plasma-mines", { "yi_mine_plasma" })
+  assert_new_unlocks("quinityn-artillery-shells", { "yi_artillery_shell" })
+  assert_new_unlocks("quinityn-reactors", { "y-rare-wall-adv" })
+  assert_new_unlocks("quinityn-zero-time-weapon", { "y-weapon-ztt" })
+  local quantum_unlocks = {}
+  for _, effect in pairs(prototypes.technology["quinityn-quantum-power"].effects) do
+    if effect.type == "unlock-recipe" then
+      quantum_unlocks[effect.recipe] = true
+    end
+  end
+  local before_quantum = {}
+  for _, name in ipairs(defense_recipes) do
+    before_quantum[name] = force.recipes[name].enabled
+  end
+  force.technologies["quinityn-quantum-power"].researched = true
+  progression.reconcile()
+  check(force.recipes["y-weapon-ztt"].enabled, "quantum power preserves D-ZTT")
+  for _, name in ipairs(defense_recipes) do
+    if not quantum_unlocks[name] then
+      check(force.recipes[name].enabled == before_quantum[name], "quantum power unchanged defense recipe: " .. name)
+    end
+  end
+end
 local function washing_split()
   local force = game.create_force("washing-split")
   force.technologies["quinityn-washing"].researched = true
@@ -415,12 +585,12 @@ local function logistics_unlocks()
     check(not legacy.technologies[id].researched, "legacy does not grant " .. id)
   end
 end
-
 script.on_init(function()
   washing_split()
   module_unlocks()
   engine_unlocks()
   logistics_unlocks()
+  defense_unlocks()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then
