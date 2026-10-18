@@ -43,7 +43,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==81
+assert len(tips)==103
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -53,7 +53,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 81 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 103 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -298,6 +298,103 @@ for n in [robotics,network,advanced]:
  assert 'chemical-science-pack' in ancestry(n)
 print('PASS: separate Y2/P3/research center, endgame science/costs and robot manufacturing plus lab gates')
 
+def tech_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+def assert_unlocks(tech,recipes):
+ got=tech_unlocks(tech)
+ want=set(recipes)
+ assert got==want,(tech,got,want)
+assert_unlocks('quinityn-defense',['y_wood_wall','y-mud-wall','y-bullet-case','y_turret_gun1f12','yi_cannon_shell'])
+assert_unlocks('quinityn-advanced-defense',['y_turret_gun2f12','y-ammo-hohlspitz','y-ammo-acid-2','y-ammo-poison',
+ 'y-ammo-krakon','y-ammo-explosiv','y-ammo-biggun'])
+assert_unlocks('quinityn-durotal-walls',['y-rare-wall-basic'])
+assert_unlocks('quinityn-forcefield-walls',['y-wall-forcefield'])
+assert_unlocks('quinityn-hardic-walls',['y_wall22_hardic'])
+assert_unlocks('quinityn-ammunition-cases',['y_ammo_case'])
+assert_unlocks('quinityn-laser-turret',['y_turret_laser22f12'])
+assert_unlocks('quinityn-plasma-weapons',['y_turret_plasma','y_ammo_plasma'])
+assert_unlocks('quinityn-chemical-weapons',['y_turret_flame','y_ammo_flame'])
+assert_unlocks('quinityn-poison-mines',['yi_mine_impact'])
+assert_unlocks('quinityn-plasma-mines',['yi_mine_plasma'])
+assert_unlocks('quinityn-artillery-shells',['yi_artillery_shell'])
+assert_unlocks('quinityn-zero-time-weapon',['y-weapon-ztt'])
+defense_split_owners={
+ 'y_wood_wall':'quinityn-defense','y-mud-wall':'quinityn-defense','y-bullet-case':'quinityn-defense',
+ 'y_turret_gun1f12':'quinityn-defense','yi_cannon_shell':'quinityn-defense',
+ 'y_turret_gun2f12':'quinityn-advanced-defense','y-ammo-hohlspitz':'quinityn-advanced-defense',
+ 'y-ammo-acid-2':'quinityn-advanced-defense','y-ammo-poison':'quinityn-advanced-defense',
+ 'y-ammo-krakon':'quinityn-advanced-defense','y-ammo-explosiv':'quinityn-advanced-defense',
+ 'y-ammo-biggun':'quinityn-advanced-defense',
+ 'y-rare-wall-basic':'quinityn-durotal-walls','y-wall-forcefield':'quinityn-forcefield-walls',
+ 'y_wall22_hardic':'quinityn-hardic-walls','y-rare-wall-adv':'quinityn-reactors','y_ammo_case':'quinityn-ammunition-cases',
+ 'y_turret_laser22f12':'quinityn-laser-turret','y_turret_plasma':'quinityn-plasma-weapons',
+ 'y_ammo_plasma':'quinityn-plasma-weapons','y_turret_flame':'quinityn-chemical-weapons',
+ 'y_ammo_flame':'quinityn-chemical-weapons','yi_mine_impact':'quinityn-poison-mines',
+ 'yi_mine_plasma':'quinityn-plasma-mines','yi_artillery_shell':'quinityn-artillery-shells',
+ 'y-weapon-ztt':'quinityn-zero-time-weapon',
+}
+for recipe,owner in defense_split_owners.items():
+ assert unlocks[recipe]==[owner],(recipe,unlocks.get(recipe))
+defense_moved_recycling={
+ 'y-ammo-acid-2-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-biggun-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-explosiv-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-hohlspitz-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-krakon-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-ammo-poison-recycling':'quinityn-bridge-advanced-defense-recycling',
+ 'y-rare-wall-basic-recycling':'quinityn-bridge-durotal-walls-recycling',
+ 'y_ammo_case-recycling':'quinityn-bridge-ammunition-cases-recycling',
+ 'y-wall-forcefield-recycling':'quinityn-bridge-forcefield-walls-recycling',
+ 'y_wall22_hardic-recycling':'quinityn-bridge-hardic-walls-recycling',
+ 'y_turret_laser22f12-recycling':'quinityn-bridge-laser-turret-recycling',
+ 'y_turret_plasma-recycling':'quinityn-bridge-plasma-weapons-recycling',
+ 'y_ammo_plasma-recycling':'quinityn-bridge-plasma-weapons-recycling',
+ 'y_turret_flame-recycling':'quinityn-bridge-chemical-weapons-recycling',
+ 'y_ammo_flame-recycling':'quinityn-bridge-chemical-weapons-recycling',
+ 'yi_mine_impact-recycling':'quinityn-bridge-poison-mines-recycling',
+ 'yi_mine_plasma-recycling':'quinityn-bridge-plasma-mines-recycling',
+ 'yi_artillery_shell-recycling':'quinityn-bridge-artillery-shells-recycling',
+ 'y-weapon-ztt-recycling':'quinityn-bridge-zero-time-weapon-recycling',
+}
+for recipe,owner in defense_moved_recycling.items():
+ assert unlocks[recipe]==[owner],(recipe,unlocks.get(recipe))
+assert 'y-weapon-ztt' not in tech_unlocks('quinityn-quantum-power')
+powered={e['recipe'] for e in T['quinityn-powered-armor']['effects'] if e['type']=='unlock-recipe'}
+assert powered=={'yi_ammo_energie','yi_armor_gray','yi_equip_battery_a','yi_equip_legs_a','yi_equip_roboport',
+ 'yi_equip_shield_a','yi_lasergun','yi_minigun','yi_pld_equipment'}
+assert T['quinityn-defense']['unit']['count']==100
+assert T['quinityn-defense']['prerequisites']==['quinityn-power','quinityn-washing','quinityn-slag-materials']
+assert T['quinityn-advanced-defense']['unit']['count']==160
+assert T['quinityn-advanced-defense']['prerequisites']==['quinityn-defense','quinityn-advanced-components','quinityn-energy-storage']
+assert T['quinityn-powered-armor']['prerequisites']==['quinityn-trade','quinityn-advanced-defense','quinityn-energy-storage','quinityn-laser-turret']
+assert 'quinityn-laser-turret' in ancestry('quinityn-powered-armor')
+assert any(p['name']=='y_turret_laser22f12' for p in R['yi_pld_equipment']['ingredients'])
+assert T['quinityn-walker-1']['prerequisites']==['quinityn-armor-3','quinityn-mastery']
+assert T['quinityn-walker-2']['prerequisites']==['quinityn-walker-1']
+assert 'quinityn-durotal-walls' in ancestry('quinityn-reactors')
+assert 'quinityn-durotal-walls' in ancestry('quinityn-forcefield-walls')
+assert 'quinityn-durotal-walls' in ancestry('quinityn-hardic-walls')
+assert 'quinityn-chemical-weapons' in ancestry('quinityn-poison-mines')
+assert 'quinityn-plasma-weapons' in ancestry('quinityn-plasma-mines')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-plasma-weapons')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-chemical-weapons')
+assert 'quinityn-ammunition-cases' in ancestry('quinityn-artillery-shells')
+assert 'artillery' in ancestry('quinityn-artillery-shells')
+assert 'concrete' in ancestry('quinityn-hardic-walls')
+assert 'quinityn-reactors' in ancestry('quinityn-zero-time-weapon')
+assert 'quinityn-advanced-storage' in ancestry('quinityn-zero-time-weapon')
+assert 'quinityn-quantum-power' not in ancestry('quinityn-zero-time-weapon')
+new_defense=['quinityn-durotal-walls','quinityn-forcefield-walls','quinityn-hardic-walls','quinityn-ammunition-cases',
+ 'quinityn-laser-turret','quinityn-plasma-weapons','quinityn-chemical-weapons','quinityn-poison-mines',
+ 'quinityn-plasma-mines','quinityn-artillery-shells','quinityn-zero-time-weapon']
+for n in new_defense:
+ assert 'quinityn-defense' in ancestry(n),n
+ assert 'research_trigger' not in T[n],n
+ assert T[n]['unit']['time']==20,n
+ assert {i[0] for i in T[n]['unit']['ingredients']}=={'automation-science-pack','logistic-science-pack','quinityn-research-data'},n
+assert 'gun2_icon' in str(T['quinityn-advanced-defense'].get('icons',T['quinityn-advanced-defense'].get('icon','')))
+assert 'gun_1_icon' in str(T['quinityn-defense'].get('icons',T['quinityn-defense'].get('icon','')))
+print('PASS: staged defense walls, specialized weapons, ancestry and icons')
 def direct_unlocks(tech):
  return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
 def quinityn_prerequisites(tech):
@@ -618,13 +715,122 @@ assert unlocks['y-electric-air-heater']==unlocks['y-rmvpol']==['quinityn-air-scr
 assert not R['y-rmvpol'].get('hidden',False)
 for name in ['j-airfilter','j-airfilter_dirty','j-airfilter_cleaning']:
  assert unlocks[name]==['quinityn-air-filters'] and not R[name].get('enabled',True)
-assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines'}<=ancestry('quinityn-air-filters')
+def direct_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+assert direct_unlocks('quinityn-washing')=={'y-dirtwasher','y-filtering-dust','y-pressed_dry_mud','y-pure-copper','y-pure-iron','y-release-cwater','y-refined-copper','y-refined-iron'}
+assert direct_unlocks('quinityn-archaeology')=={'y-wash-dirt','y-wash-special'}
+assert direct_unlocks('quinityn-unicomp-compression')=={'y-press-richdust'}
+assert direct_unlocks('quinityn-slag-materials')=={'y_slag_granulate','y_slag_brick','y_slag_brick_burn','y_steinmehl'}
+assert direct_unlocks('quinityn-slag-paving')=={'y_tile_slagbricks','y_tile_slagfilled','y_tile_slagpattern'}
+for tech in ['quinityn-washing','quinityn-archaeology','quinityn-unicomp-compression','quinityn-slag-materials','quinityn-slag-paving']:
+ for recipe in direct_unlocks(tech):
+  assert unlocks[recipe]==[tech],(recipe,unlocks[recipe])
+assert {'quinityn-washing','quinityn-excavation'}<=ancestry('quinityn-archaeology')
+assert 'quinityn-washing' in ancestry('quinityn-unicomp-compression')
+assert 'quinityn-washing' in ancestry('quinityn-slag-materials')
+assert 'quinityn-slag-materials' in ancestry('quinityn-slag-paving')
+assert 'quinityn-slag-materials' in ancestry('quinityn-air-filters')
+assert 'quinityn-slag-materials' in ancestry('quinityn-defense')
+assert 'quinityn-slag-materials' in ancestry('quinityn-crystal-processing')
+assert 'quinityn-archaeology' in ancestry('quinityn-quantum')
+assert 'quinityn-cimota' not in unlocks.get('y-press-richdust',[])
+assert unlocks['y_mc_dirtwasher']==['quinityn-mastery']
+assert unlocks['y_pure_copper_wtool']==['quinityn-tooling']
+assert unlocks['y_mud2solidfuel']==['quinityn-power']
+assert unlocks['y-digfdirt']==['quinityn-excavation']
+assert unlocks['y_data_crystal']==['quinityn-quantum']
+assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines','quinityn-slag-materials'}<=ancestry('quinityn-air-filters')
 assert next(p['amount'] for p in R['j-airfilter_dirty']['ingredients'] if p['name']=='j-airfilter')==1
 assert {p['name']:p['amount'] for p in R['j-airfilter_cleaning']['results']}=={'j-airfilter':1,'y-pol-waste':6}
 assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emissions_multiplier',1)
 assert 6/R['j-airfilter_dirty']['energy_required']>1/R['y-rmvpol']['energy_required']
 assert unlocks['y-waste-condense']==unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
+def direct_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+def quinityn_prerequisites(tech):
+ return {p for p in T[tech]['prerequisites'] if p.startswith('quinityn-')}
+engines_kept={
+ 'y-1stirling-engine','y-mf1a','y-mf1a1','y-mf1f','y-mftrans-shaft','y-mftrans-shaft-ground',
+ 'y-mftrans-shaft-ground-red','y-mftrans-shaft-red','y-mfwater','y-mwater-pump','y-sfe',
+ 'y-waste-condense','y_flowcheck_10','y_gauge_analog','y_mixedfuel2rocketfuel',
+ 'ye_tranport_tube_orange','ye_tranport_tube_orange_splitter','ye_tranport_tube_orange_underground','ye_water2mf'}
+assert direct_unlocks('quinityn-engines')==engines_kept
+advanced_engine_recipes={'y-ffe','y-mf2a','y-mf2b','y-mf2c','y-mf2d','y-mf2e','ye_gasmotor'}
+assert direct_unlocks('quinityn-advanced-engines')==advanced_engine_recipes
+assert quinityn_prerequisites('quinityn-advanced-engines')=={'quinityn-advanced-factories','quinityn-advanced-components'}
+transmission_recipes={'ye_buechsenblech','ye_tranport_tube_green','ye_tranport_tube_green_splitter','ye_tranport_tube_green_underground'}
+assert direct_unlocks('quinityn-advanced-transmission')==transmission_recipes
+assert quinityn_prerequisites('quinityn-advanced-transmission')=={'quinityn-engines','quinityn-advanced-components'}
+assert 'foundry' in ancestry('quinityn-advanced-transmission') and 'foundry' not in ancestry('quinityn-engines')
+assert direct_unlocks('quinityn-medium-mf-pump')=={'ye_wpump_m','y_mpump_mf','y_mpump_water'}
+assert quinityn_prerequisites('quinityn-medium-mf-pump')=={'quinityn-engines','quinityn-advanced-components'}
+assert direct_unlocks('quinityn-medium-electric-motor')=={'ye_emotor_m','ye_motorm_mf'}
+assert direct_unlocks('quinityn-mf-heat-generator')=={'ye_mfheatmotor_m','ye_mf_mfheatmotor_m'}
+assert 'quinityn-medium-electric-motor' in T['quinityn-mf-heat-generator']['prerequisites']
+assert 'ye_emotor_m' not in direct_unlocks('quinityn-mf-heat-generator')
+assert direct_unlocks('quinityn-steam-overheating')=={'ye_overheater','ye_makesteam'}
+assert direct_unlocks('quinityn-steam-turbine')=={'ye_sturbine','ye_steam2mf','ye_steam3mf'}
+assert 'quinityn-steam-overheating' in T['quinityn-steam-turbine']['prerequisites']
+assert direct_unlocks('quinityn-high-temperature-generation')=={'ye_tfmw_generator-s','ye_tfmw_turbine-s'}
+assert {'quinityn-medium-electric-motor','quinityn-steam-turbine'}<=set(T['quinityn-high-temperature-generation']['prerequisites'])
+assert direct_unlocks('quinityn-substrat-neutralization')=={'ye_neutralisatzion'}
+assert 'quinityn-genetics' in T['quinityn-substrat-neutralization']['prerequisites']
+assert 'ye_neutralisatzion' not in direct_unlocks('quinityn-engines')
+assert direct_unlocks('quinityn-advanced-generation')=={'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'}
+assert direct_unlocks('quinityn-air-scrubbing')=={
+ 'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'}
+# One owner each. A second technology unlocking the same recipe would still pass the effect-set checks above.
+sole_owner={
+ 'quinityn-engines':engines_kept,
+ 'quinityn-advanced-engines':advanced_engine_recipes,
+ 'quinityn-advanced-transmission':transmission_recipes,
+ 'quinityn-medium-mf-pump':{'ye_wpump_m','y_mpump_mf','y_mpump_water'},
+ 'quinityn-substrat-neutralization':{'ye_neutralisatzion'},
+ 'quinityn-medium-electric-motor':{'ye_emotor_m','ye_motorm_mf'},
+ 'quinityn-mf-heat-generator':{'ye_mfheatmotor_m','ye_mf_mfheatmotor_m'},
+ 'quinityn-steam-overheating':{'ye_overheater','ye_makesteam'},
+ 'quinityn-steam-turbine':{'ye_sturbine','ye_steam2mf','ye_steam3mf'},
+ 'quinityn-high-temperature-generation':{'ye_tfmw_generator-s','ye_tfmw_turbine-s'},
+ 'quinityn-advanced-generation':{'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'},
+ 'quinityn-air-scrubbing':{
+  'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'},
+}
+for tech,recipes in sole_owner.items():
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+assert 'quinityn-advanced-engines' in ancestry('quinityn-p3-factory')
+for tech in T:
+ if tech.startswith('quinityn-') and tech in {
+  'quinityn-medium-mf-pump','quinityn-substrat-neutralization','quinityn-medium-electric-motor',
+  'quinityn-mf-heat-generator','quinityn-steam-overheating','quinityn-steam-turbine',
+  'quinityn-high-temperature-generation'}:
+  assert 'quinityn-arrival' in ancestry(tech),tech
+assert D['assembling-machine']['ye_emotor_m']['energy_usage']=='350kW'
+assert D['assembling-machine']['ye_mfheatmotor_m']['energy_usage']=='6MW'
+assert D['assembling-machine']['ye_overheater']['energy_usage']=='28MW'
+assert D['assembling-machine']['ye_wpump_m']['crafting_speed']==4
+assert D['assembling-machine']['y-mwater-pump']['crafting_speed']==1
+assert R['y-mf2a']['categories']==['yrcat-mf1b'] and R['y-mf2b']['categories']==['yrcat-mf1b']
+assert R['y-mf2c']['categories']==['yrcat-mf1gm'] and R['y-mf2d']['categories']==['yrcat-mf1gm']
+def steam_ingredient(recipe,fluid):
+ for p in R[recipe]['ingredients']:
+  if p.get('type')=='fluid' and p['name']==fluid:return p
+ raise AssertionError(recipe+' missing '+fluid)
+def mf_result(recipe):
+ for p in R[recipe]['results']:
+  if p.get('type')=='fluid' and p['name']=='y-mechanical-force':return p
+ raise AssertionError(recipe+' missing mechanical force')
+s2=steam_ingredient('ye_steam2mf','steam');s3=steam_ingredient('ye_steam3mf','steam')
+assert s2['amount']==560 and s2.get('minimum_temperature')==500
+assert s3['amount']==800 and s3.get('minimum_temperature')==950
+assert mf_result('ye_steam2mf')['amount']==25 and mf_result('ye_steam3mf')['amount']==75
+for name in ['ye_tranport_tube_green','ye_tranport_tube_green_splitter','ye_tranport_tube_green_underground']:
+ assert 'metallurgy' in R[name]['categories']
+ assert any(p['name']=='tungsten-plate' for p in R[name]['ingredients'])
+for name in ['y-mftrans-shaft-red','y-mftrans-shaft-ground-red']:
+ assert not any(p.get('name')=='tungsten-plate' for p in R[name]['ingredients'])
 print('PASS: Quinityn-only rock discovery/loot, dedicated Fatmice, later reusable filters and flyash rocket fuel')
+print('PASS: staged mechanical-force engine and transmission unlocks')
 
 prim=D['assembling-machine']['quinityn-burner-separator']
 assert prim['crafting_categories']==['quinityn-separation','quinityn-primitive-conversion']
@@ -670,7 +876,7 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==81
+assert len(tips)==103
 print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True
