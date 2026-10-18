@@ -298,6 +298,9 @@
     "y-basic-t1-mf-recycling",
     "ye_fassembly1-recycling"
   ],
+  "quinityn-bridge-bulk-storage-recycling": [
+    "y_sc44-recycling"
+  ],
   "quinityn-bridge-cimota-recycling": [
     "y-atomic-constructor-recycling",
     "y-repair-krakon-recycling"
@@ -382,6 +385,9 @@
     "y-mining-drill-e2-recycling",
     "y-underground-drill-recycling"
   ],
+  "quinityn-bridge-expanded-storage-recycling": [
+    "y_c22-recycling"
+  ],
   "quinityn-bridge-fluid-handling-recycling": [
     "ye_canister-recycling",
     "ye_canister-recycling",
@@ -417,20 +423,27 @@
     "ye_smoked_meat-recycling",
     "ye_smoker-recycling"
   ],
-  "quinityn-bridge-logistics-recycling": [
+  "quinityn-bridge-large-storage-recycling": [
+    "y_cg33-recycling"
+  ],
+  "quinityn-bridge-logistic-bunker-recycling": [
+    "y-rare-m1bunker-log-recycling"
+  ],
+  "quinityn-bridge-logistic-provider-capacity-recycling": [
+    "y_pc22-recycling"
+  ],
+  "quinityn-bridge-logistic-requests-recycling": [
     "j-dl-buffer-recycling",
+    "j-dl-request-recycling"
+  ],
+  "quinityn-bridge-logistic-storage-recycling": [
     "j-dl-provider-recycling",
-    "j-dl-request-recycling",
+    "y-rare-chest-log-recycling"
+  ],
+  "quinityn-bridge-logistics-recycling": [
     "y-inserter-fast-recycling",
     "y-inserter-s4-recycling",
-    "y-rare-chest-log-recycling",
-    "y-rare-m1bunker-log-recycling",
-    "y_c22-recycling",
-    "y_cg33-recycling",
-    "y_pc22-recycling",
-    "y_rc22-recycling",
-    "y_sc11-recycling",
-    "y_sc44-recycling"
+    "y_sc11-recycling"
   ],
   "quinityn-bridge-maintenance-recycling": [
     "y_maintance_workshop-recycling"
@@ -717,6 +730,12 @@
     "y_tile_slagfilled-recycling",
     "y_tile_slagpattern-recycling"
   ],
+  "quinityn-bridge-wide-logistic-requests-recycling": [
+    "y_rc22-recycling"
+  ],
+  "quinityn-bulk-storage": [
+    "y_sc44"
+  ],
   "quinityn-cimota": [
     "j-cw2uc-recipe",
     "y-ac-calcite2uc",
@@ -839,6 +858,9 @@
     "y-mining-drill-e2",
     "y-underground-drill"
   ],
+  "quinityn-expanded-storage": [
+    "y_c22"
+  ],
   "quinityn-fluid-handling": [
     "ye_can_blood_empty",
     "ye_can_blood_fill",
@@ -902,21 +924,27 @@
     "quinityn-research-data",
     "quinityn-technic-sign"
   ],
-  "quinityn-logistics": [
+  "quinityn-large-storage": [
+    "y_cg33"
+  ],
+  "quinityn-logistic-bunker": [
+    "y-rare-m1bunker-log"
+  ],
+  "quinityn-logistic-provider-capacity": [
+    "y_pc22"
+  ],
+  "quinityn-logistic-requests": [
     "j-dl-buffer",
+    "j-dl-request"
+  ],
+  "quinityn-logistic-storage": [
     "j-dl-provider",
-    "j-dl-request",
+    "y-rare-chest-log"
+  ],
+  "quinityn-logistics": [
     "y-inserter-fast",
     "y-inserter-s4",
-    "y-rare-chest-log",
-    "y-rare-m1bunker-log",
-    "y_bc22",
-    "y_c22",
-    "y_cg33",
-    "y_pc22",
-    "y_rc22",
-    "y_sc11",
-    "y_sc44"
+    "y_sc11"
   ],
   "quinityn-maintenance": [
     "y_drillhead_repair",
@@ -1221,5 +1249,9 @@
     "y_tile_slagbricks",
     "y_tile_slagfilled",
     "y_tile_slagpattern"
+  ],
+  "quinityn-wide-logistic-requests": [
+    "y_bc22",
+    "y_rc22"
   ]
 }
