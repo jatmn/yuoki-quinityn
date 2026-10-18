@@ -28,18 +28,7 @@
     "y-mf2c",
     "y-mf2d",
     "y-mf2e",
-    "ye_emotor_m",
-    "ye_gasmotor",
-    "ye_makesteam",
-    "ye_mf_mfheatmotor_m",
-    "ye_mfheatmotor_m",
-    "ye_motorm_mf",
-    "ye_overheater",
-    "ye_steam2mf",
-    "ye_steam3mf",
-    "ye_sturbine",
-    "ye_tfmw_generator-s",
-    "ye_tfmw_turbine-s"
+    "ye_gasmotor"
   ],
   "quinityn-advanced-factories": [
     "ye_fassembly2"
@@ -90,8 +79,7 @@
     "y-accumulator-m-t2"
   ],
   "quinityn-advanced-transmission": [
-    "y-mftrans-shaft-ground-red",
-    "y-mftrans-shaft-red",
+    "ye_buechsenblech",
     "ye_tranport_tube_green",
     "ye_tranport_tube_green_splitter",
     "ye_tranport_tube_green_underground"
@@ -184,13 +172,7 @@
   ],
   "quinityn-bridge-advanced-engines-recycling": [
     "y-ffe-recycling",
-    "ye_emotor_m-recycling",
-    "ye_gasmotor-recycling",
-    "ye_mfheatmotor_m-recycling",
-    "ye_overheater-recycling",
-    "ye_sturbine-recycling",
-    "ye_tfmw_generator-s-recycling",
-    "ye_tfmw_turbine-s-recycling"
+    "ye_gasmotor-recycling"
   ],
   "quinityn-bridge-advanced-factories-recycling": [
     "ye_fassembly2-recycling"
@@ -236,8 +218,8 @@
     "y-accumulator-m-t2-recycling"
   ],
   "quinityn-bridge-advanced-transmission-recycling": [
-    "y-mftrans-shaft-ground-red-recycling",
-    "y-mftrans-shaft-red-recycling",
+    "ye_buechsenblech-recycling",
+    "ye_buechsenblech-recycling",
     "ye_tranport_tube_green-recycling",
     "ye_tranport_tube_green_splitter-recycling",
     "ye_tranport_tube_green_underground-recycling"
@@ -362,14 +344,14 @@
   "quinityn-bridge-engines-recycling": [
     "y-1stirling-engine-recycling",
     "y-mftrans-shaft-ground-recycling",
+    "y-mftrans-shaft-ground-red-recycling",
     "y-mftrans-shaft-recycling",
+    "y-mftrans-shaft-red-recycling",
     "y-mwater-pump-recycling",
     "y-pol-waste-recycling",
     "y-sfe-recycling",
     "y_flowcheck_10-recycling",
     "y_gauge-recycling",
-    "ye_buechsenblech-recycling",
-    "ye_buechsenblech-recycling",
     "ye_can_blood-recycling",
     "ye_can_co-recycling",
     "ye_can_cw-recycling",
@@ -385,8 +367,7 @@
     "ye_can_water-recycling",
     "ye_tranport_tube_orange-recycling",
     "ye_tranport_tube_orange_splitter-recycling",
-    "ye_tranport_tube_orange_underground-recycling",
-    "ye_wpump_m-recycling"
+    "ye_tranport_tube_orange_underground-recycling"
   ],
   "quinityn-bridge-excavation-recycling": [
     "y-mining-drill-e2-recycling",
@@ -423,6 +404,10 @@
   ],
   "quinityn-bridge-hardic-walls-recycling": [
     "y_wall22_hardic-recycling"
+  ],
+  "quinityn-bridge-high-temperature-generation-recycling": [
+    "ye_tfmw_generator-s-recycling",
+    "ye_tfmw_turbine-s-recycling"
   ],
   "quinityn-bridge-husbandry-recycling": [
     "ye_dnasplicer-recycling",
@@ -497,6 +482,15 @@
     "y_drillhead_broken-recycling",
     "y_quantrinum_infused-recycling",
     "y_toolhead_broken-recycling"
+  ],
+  "quinityn-bridge-medium-electric-motor-recycling": [
+    "ye_emotor_m-recycling"
+  ],
+  "quinityn-bridge-medium-mf-pump-recycling": [
+    "ye_wpump_m-recycling"
+  ],
+  "quinityn-bridge-mf-heat-generator-recycling": [
+    "ye_mfheatmotor_m-recycling"
   ],
   "quinityn-bridge-modules-recycling": [
     "y-speed-module-1-recycling"
@@ -727,6 +721,12 @@
     "y_tile_slagfilled-recycling",
     "y_tile_slagpattern-recycling"
   ],
+  "quinityn-bridge-steam-overheating-recycling": [
+    "ye_overheater-recycling"
+  ],
+  "quinityn-bridge-steam-turbine-recycling": [
+    "ye_sturbine-recycling"
+  ],
   "quinityn-bridge-structures-recycling": [
     "y-bluegear-recycling",
     "y_structure_element-recycling",
@@ -867,6 +867,8 @@
     "y-mf1f",
     "y-mftrans-shaft",
     "y-mftrans-shaft-ground",
+    "y-mftrans-shaft-ground-red",
+    "y-mftrans-shaft-red",
     "y-mfwater",
     "y-mwater-pump",
     "y-sfe",
@@ -874,15 +876,10 @@
     "y_flowcheck_10",
     "y_gauge_analog",
     "y_mixedfuel2rocketfuel",
-    "y_mpump_mf",
-    "y_mpump_water",
-    "ye_buechsenblech",
-    "ye_neutralisatzion",
     "ye_tranport_tube_orange",
     "ye_tranport_tube_orange_splitter",
     "ye_tranport_tube_orange_underground",
-    "ye_water2mf",
-    "ye_wpump_m"
+    "ye_water2mf"
   ],
   "quinityn-excavation": [
     "y-digfdirt",
@@ -932,6 +929,10 @@
   ],
   "quinityn-hardic-walls": [
     "y_wall22_hardic"
+  ],
+  "quinityn-high-temperature-generation": [
+    "ye_tfmw_generator-s",
+    "ye_tfmw_turbine-s"
   ],
   "quinityn-husbandry": [
     "ye_cooking_meat",
@@ -1012,6 +1013,19 @@
     "y-crush-unicomp-raw",
     "y-crusher",
     "y-mining-drill"
+  ],
+  "quinityn-medium-electric-motor": [
+    "ye_emotor_m",
+    "ye_motorm_mf"
+  ],
+  "quinityn-medium-mf-pump": [
+    "y_mpump_mf",
+    "y_mpump_water",
+    "ye_wpump_m"
+  ],
+  "quinityn-mf-heat-generator": [
+    "ye_mf_mfheatmotor_m",
+    "ye_mfheatmotor_m"
   ],
   "quinityn-mining-productivity": [],
   "quinityn-modules": [
@@ -1220,10 +1234,22 @@
     "y_tile_slagfilled",
     "y_tile_slagpattern"
   ],
+  "quinityn-steam-overheating": [
+    "ye_makesteam",
+    "ye_overheater"
+  ],
+  "quinityn-steam-turbine": [
+    "ye_steam2mf",
+    "ye_steam3mf",
+    "ye_sturbine"
+  ],
   "quinityn-structures": [
     "y-bluegear",
     "y_structure_element",
     "y_structure_vessel"
+  ],
+  "quinityn-substrat-neutralization": [
+    "ye_neutralisatzion"
   ],
   "quinityn-surplus": [
     "quinityn-stone-to-uc",
