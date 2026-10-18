@@ -49,7 +49,15 @@ in the real save's `control.lua`.
 
 The native `biology_demonstrations` fixture runs all sequences without skipping
 machine craft time, checks completion and first-step repeat, and checks research
-isolation. Prototype tests check all seven research triggers and simulation
-attachments. Graphical inspection is still needed to establish readable framing,
-visible transport, fluid connections and UI/reopen behavior; automated completion
-alone does not establish teaching quality.
+isolation. It executes the init/update callbacks exported from the engine's
+actual tip declarations, with isolated test worlds and full-duration crafting.
+Prototype tests also check all seven research triggers and simulation attachments.
+
+On 2026-10-18, graphical inspection in Factorio/Space Age 2.1.22 with the pinned
+Yuoki/Engines sources covered all seven sequences, repeat/reopen behavior,
+readable framing, item transport, fluid ports and research/effect UI. A separate
+connected fixture reused harvested crops, meat/blood, DNA and imported starters;
+its supplementary inputs and infrastructure were staged. These checks do not
+establish survival progression pacing or balance. Future scene changes still
+need graphical inspection; automated completion alone does not establish
+teaching quality.

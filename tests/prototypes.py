@@ -142,7 +142,8 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
 assert len(tips)==128
 # The seven biology process tips must ship native simulations at their actual
-# research unlocks; executing the scenes is covered by biology_demonstrations.
+# research unlocks; biology_demonstrations executes these declared callbacks
+# exported by tools/test.py from this same engine dump.
 for stage in ['agriculture','husbandry','genetics','advanced-genetics',
               'industrial-biology','trade','trade-biology']:
  tip=D['tips-and-tricks-item']['quinityn-'+stage]

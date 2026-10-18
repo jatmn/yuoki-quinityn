@@ -29,6 +29,16 @@ def run(name,args,marker=None,timeout=180):
 (mods/'mod-settings.dat').unlink(missing_ok=True)
 run('load',base+['--dump-data'],'Factorio initialised')
 dump=a.output/'runtime/script-output/data-raw-dump.json'
+# Exercise the callbacks actually attached to the loaded tips, not a parallel
+# list of helper calls. Keep the exported data in the existing test-only mod.
+tips=json.loads(dump.read_text())['tips-and-tricks-item']
+biology_stages=['agriculture','husbandry','genetics','advanced-genetics',
+                'industrial-biology','trade','trade-biology']
+callbacks=json.dumps({stage:tips['quinityn-'+stage]['simulation'] for stage in biology_stages})
+delimiter='='
+while ']'+delimiter+']' in callbacks:delimiter+='='
+(harness/'biology_callbacks.lua').write_text(
+ 'return helpers.json_to_table(['+delimiter+'['+callbacks+']'+delimiter+'])\n')
 for name in ['prototypes','stomp_a_trons','reachability','bootstrap_budget']:
  run(name,[sys.executable,str(ROOT/'tests'/f'{name}.py'),str(dump)],'PASS')
 run('localization',[sys.executable,str(ROOT/'tests/localization.py'),str(dump),
