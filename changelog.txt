@@ -58,8 +58,8 @@ Version: Unreleased
     - Productivity modules can be used while compiling industrial research data. A normal craft still makes five packs; productivity adds bonus packs without extra ingredients.
   Compatibility:
     - Completed Yuoki power, Industrial energy storage and Advanced electric generation research remains completed. Recipes moved into the new technologies stay locked until those technologies are researched. Placed machines and items remain.
-    - In-progress Quantrinum and advanced electronics research now also requires High-flow compensator research. Completed Quantrinum and advanced electronics research stays completed.
-    - In-progress Crystal accumulator upgrades research now also requires Large accumulator research. Completed Crystal accumulator upgrades research stays completed.
+    - Quantrinum and advanced electronics research started after this update requires High-flow compensator research. Research already in progress when an existing save is loaded finishes under its previous prerequisites. Completed Quantrinum and advanced electronics research stays completed.
+    - Crystal accumulator upgrades research started after this update requires Large accumulator research. Research already in progress when an existing save is loaded finishes under its previous prerequisites. Completed Crystal accumulator upgrades research stays completed.
     - Completed Ore washing and residue recovery stays completed and keeps the dirt washer, pure-ore smelting, and contaminated-water and mud handling. Archaeology, unicomp compression, slag materials, and slag paving require their new research on an existing save.
     - Completed Yuoki logistics stays completed and keeps the 60-slot chest, the fast inserter, and the long inserter. Larger storage and requester or buffer chests require their new research on an existing save.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
