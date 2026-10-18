@@ -52,14 +52,17 @@ assert set(T['quinityn-fluid-storage-80k']['prerequisites'])=={'quinityn-fluid-s
 assert unlock_set('quinityn-fluid-storage-80k')=={'y-tank-8000'}
 for tank,volume in [('y-tank-1000',15000),('y-tank-4500',50000),('y-tank-8000',80000)]:
  assert D['storage-tank'][tank]['fluid_box']['volume']==volume,tank
-for name in ['yi_radar','yi-monument1','y-crystal-cnd','y-atomic-quantum-composer']:
- assert 'quinityn-quantum' in unlocks[name],name
+for recipe in plant_inf_recipes:
+ assert unlocks[recipe]==['quinityn-plant-infrastructure'],(recipe,unlocks.get(recipe))
+assert unlocks['y-tank-4500']==['quinityn-fluid-storage-50k'],unlocks.get('y-tank-4500')
+assert unlocks['y-tank-8000']==['quinityn-fluid-storage-80k'],unlocks.get('y-tank-8000')
+for recipe in ['yi_radar','yi-monument1','y-crystal-cnd','y-atomic-quantum-composer']:
+ assert unlocks[recipe]==['quinityn-quantum'],(recipe,unlocks.get(recipe))
 wonder_machines=[n for n,m in D['assembling-machine'].items() if 'yuoki-wonder' in m.get('crafting_categories',[])]
 assert wonder_machines==['y-atomic-quantum-composer']
 assert 'yuoki-wonder' in R['yi_radar']['categories']
 monument_cnd=[p for p in R['yi-monument1']['ingredients'] if p['name']=='y-crystal-cnd']
 assert len(monument_cnd)==1 and monument_cnd[0]['amount']==6
-assert unlocks['y-substation-m']==['quinityn-plant-infrastructure']
 assert any(p['name']=='y-substation-m' for p in R['y_compensator_25']['ingredients'])
 assert 'quinityn-quantum' not in ancestry('quinityn-plant-infrastructure')
 assert 'quinityn-quantum' not in ancestry('quinityn-fluid-storage-50k')
