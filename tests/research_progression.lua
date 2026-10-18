@@ -1071,6 +1071,9 @@ local function plant_storage_tiers_alone()
   forceQuantum.technologies["quinityn-crystal-processing"].researched = true
   forceQuantum.technologies["quinityn-energy-storage"].researched = true
   forceQuantum.technologies["quinityn-archaeology"].researched = true
+  forceQuantum.technologies["quinityn-accumulator-capacity"].researched = true
+  forceQuantum.technologies["quinityn-flywheel-storage"].researched = true
+  forceQuantum.technologies["quinityn-high-flow-storage"].researched = true
   progression.reconcile()
   check(not recipe_enabled(forceQuantum, "yi_radar"), "quantum baseline locks yi_radar")
   check(not recipe_enabled(forceQuantum, "yi-monument1"), "quantum baseline locks yi-monument1")
@@ -1085,9 +1088,10 @@ local function plant_storage_tiers_alone()
     quantum_prerequisites[technology.name] = true
     quantum_prerequisite_count = quantum_prerequisite_count + 1
   end
-  check(quantum_prerequisite_count == 3, "quantum has exactly three prerequisites")
+  check(quantum_prerequisite_count == 4, "quantum has exactly four prerequisites")
   check(quantum_prerequisites["quinityn-crystal-processing"] == true, "quantum requires quinityn-crystal-processing")
   check(quantum_prerequisites["quinityn-energy-storage"] == true, "quantum requires quinityn-energy-storage")
+  check(quantum_prerequisites["quinityn-high-flow-storage"] == true, "quantum requires quinityn-high-flow-storage")
   check(quantum_prerequisites["quinityn-archaeology"] == true, "quantum requires quinityn-archaeology")
   check(
     forceQuantum.technologies["quinityn-crystal-processing"].researched,
@@ -1096,6 +1100,10 @@ local function plant_storage_tiers_alone()
   check(
     forceQuantum.technologies["quinityn-energy-storage"].researched,
     "quantum chain researched quinityn-energy-storage"
+  )
+  check(
+    forceQuantum.technologies["quinityn-high-flow-storage"].researched,
+    "quantum chain researched quinityn-high-flow-storage"
   )
   check(forceQuantum.technologies["quinityn-archaeology"].researched, "quantum chain researched quinityn-archaeology")
   check(
@@ -1206,7 +1214,6 @@ local function thermal_prerequisite_lock()
 end
 script.on_init(function()
   power_storage_generation_restaging()
-  washing_split()
   module_unlocks()
   engine_unlocks()
   logistics_unlocks()

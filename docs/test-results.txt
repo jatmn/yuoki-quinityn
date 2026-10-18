@@ -5,7 +5,7 @@ Validated 2026-10-07; research progression based on main 1f78ba4d19456ce4c36a0ab
 
 FULL RUNNER: tools/test.py
 PASS load; pinned unmodified dependencies, native prototype dump.
-PASS prototypes; visit gates, technology DAG, 124 guide chapters, all linked prototypes,
+PASS prototypes; visit gates, technology DAG, 125 guide chapters, all linked prototypes,
   factory-only science/signs, eight manufacturing milestones and rock discovery,
   Quinityn-only rock placement, unchanged normal rock loot, all 36 rock sprite variants,
   dedicated Fatmice and later filters, existing rocket-fuel chain, foundations/science sinks.
