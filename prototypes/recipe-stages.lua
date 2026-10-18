@@ -70,7 +70,7 @@ local overrides = {
   ["y-iron-case"] = "materials",
   ["y-quantrinum-reactor"] = "quantum",
   ["y-stargate"] = "trade",
-  ["ye_trade_node"] = "agriculture",
+  ["ye_trade_node"] = "trade",
   ["ye_fame"] = "trade",
   ["ye_science_blue"] = "quantum",
 }

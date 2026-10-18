@@ -1,4 +1,5 @@
 data:extend({ { type = "tips-and-tricks-item-category", name = "quinityn", order = "l[quinityn]" } })
+local biology_simulations = require("prototypes.biology-simulations")
 local chapters = {
   { "briefing", "planet-discovery-quinityn", "[planet=quinityn]" },
   { "bootstrap", "quinityn-arrival", "[item=quinityn-salvage]" },
@@ -31,6 +32,7 @@ for i, chapter in ipairs(chapters) do
       trigger = { type = "research", technology = chapter[2] },
       localised_name = { "tips-and-tricks-item-name.quinityn-" .. chapter[1] },
       localised_description = { "tips-and-tricks-item-description.quinityn-" .. chapter[1] },
+      simulation = biology_simulations[chapter[1]],
     },
   })
 end
@@ -47,6 +49,7 @@ for i, tier in ipairs(require("prototypes.research-tiers")) do
       trigger = { type = "research", technology = "quinityn-" .. tier.name },
       localised_name = { "technology-name.quinityn-" .. tier.name },
       localised_description = { "technology-description.quinityn-" .. tier.name },
+      simulation = biology_simulations[tier.name],
     },
   })
 end
