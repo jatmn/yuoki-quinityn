@@ -1,4 +1,7 @@
 {
+  "quinityn-accumulator-capacity": [
+    "y-accumulator-b"
+  ],
   "quinityn-advanced-components": [
     "y-basic-t2-mf",
     "y-chip-2",
@@ -33,12 +36,7 @@
     "ye_fassembly2"
   ],
   "quinityn-advanced-generation": [
-    "y-beg",
-    "y-boiler-iv",
-    "y-heg",
-    "y-meg-s",
-    "y-seg",
-    "y-water-gen-e"
+    "y-seg"
   ],
   "quinityn-advanced-genetics": [
     "ye_dna_animal3",
@@ -153,11 +151,17 @@
     "y-basic-t1-mf",
     "ye_fassembly1"
   ],
+  "quinityn-big-generation": [
+    "y-beg"
+  ],
   "quinityn-biological-feedstock": [
     "ye_biofuel",
     "ye_granulate_corn",
     "ye_granulate_trifitan",
     "ye_granulate_vuger"
+  ],
+  "quinityn-bridge-accumulator-capacity-recycling": [
+    "y-accumulator-b-recycling"
   ],
   "quinityn-bridge-advanced-components-recycling": [
     "y-basic-t2-mf-recycling",
@@ -187,12 +191,7 @@
     "ye_fassembly2-recycling"
   ],
   "quinityn-bridge-advanced-generation-recycling": [
-    "y-beg-recycling",
-    "y-boiler-iv-recycling",
-    "y-heg-recycling",
-    "y-meg-s-recycling",
-    "y-seg-recycling",
-    "y-water-gen-e-recycling"
+    "y-seg-recycling"
   ],
   "quinityn-bridge-advanced-genetics-recycling": [
     "ye_fish2-recycling"
@@ -297,6 +296,9 @@
     "y-basic-t1-mf-recycling",
     "ye_fassembly1-recycling"
   ],
+  "quinityn-bridge-big-generation-recycling": [
+    "y-beg-recycling"
+  ],
   "quinityn-bridge-bulk-storage-recycling": [
     "y_sc44-recycling"
   ],
@@ -314,6 +316,9 @@
   "quinityn-bridge-compacting-recycling": [
     "y-raw-fuelnium-recycling",
     "y-unicomp-raw-recycling"
+  ],
+  "quinityn-bridge-compressed-fuel-recycling": [
+    "y-coal-stack-recycling"
   ],
   "quinityn-bridge-crystal-processing-recycling": [
     "y_crystal_dust-recycling",
@@ -335,20 +340,20 @@
   "quinityn-bridge-efficiency-module-recycling": [
     "y-green-module-1-recycling"
   ],
+  "quinityn-bridge-electric-water-recycling": [
+    "y-water-gen-e-recycling"
+  ],
   "quinityn-bridge-electronics-recycling": [
     "y-chip-1-recycling",
     "y-conductive-wire-1-recycling",
     "y_chip_plate-recycling"
   ],
   "quinityn-bridge-energy-storage-recycling": [
-    "y-accumulator-b-recycling",
     "y-accumulator-m-recycling",
     "y-battery-single-use1-recycling",
     "y-battery-single-use2-recycling",
     "y-battery-single-use3-recycling",
-    "y-ups-flywheel-b-recycling",
-    "y_blocked_capa-recycling",
-    "y_compensator_25-recycling"
+    "y_blocked_capa-recycling"
   ],
   "quinityn-bridge-engines-recycling": [
     "y-1stirling-engine-recycling",
@@ -385,6 +390,9 @@
   "quinityn-bridge-expanded-storage-recycling": [
     "y_c22-recycling"
   ],
+  "quinityn-bridge-field-repair-recycling": [
+    "y-repair-durotal-recycling"
+  ],
   "quinityn-bridge-fluid-handling-recycling": [
     "ye_canister-recycling",
     "ye_canister-recycling",
@@ -411,6 +419,9 @@
   "quinityn-bridge-fluid-storage-80k-recycling": [
     "y-tank-8000-recycling"
   ],
+  "quinityn-bridge-flywheel-storage-recycling": [
+    "y-ups-flywheel-b-recycling"
+  ],
   "quinityn-bridge-forcefield-walls-recycling": [
     "y-wall-forcefield-recycling"
   ],
@@ -420,9 +431,21 @@
   "quinityn-bridge-hardic-walls-recycling": [
     "y_wall22_hardic-recycling"
   ],
+  "quinityn-bridge-high-capacity-boiler-recycling": [
+    "y-boiler-iv-recycling"
+  ],
+  "quinityn-bridge-high-flow-storage-recycling": [
+    "y_compensator_25-recycling"
+  ],
+  "quinityn-bridge-high-pressure-steam-turbine-recycling": [
+    "y-steam-turbine-recycling"
+  ],
   "quinityn-bridge-high-temperature-generation-recycling": [
     "ye_tfmw_generator-s-recycling",
     "ye_tfmw_turbine-s-recycling"
+  ],
+  "quinityn-bridge-huge-generation-recycling": [
+    "y-heg-recycling"
   ],
   "quinityn-bridge-husbandry-recycling": [
     "ye_dnasplicer-recycling",
@@ -501,6 +524,9 @@
   "quinityn-bridge-medium-electric-motor-recycling": [
     "ye_emotor_m-recycling"
   ],
+  "quinityn-bridge-medium-generation-recycling": [
+    "y-meg-s-recycling"
+  ],
   "quinityn-bridge-medium-mf-pump-recycling": [
     "ye_wpump_m-recycling"
   ],
@@ -566,22 +592,16 @@
   "quinityn-bridge-power-recycling": [
     "y-coal-brikett-recycling",
     "y-coal-dust-recycling",
-    "y-coal-stack-recycling",
     "y-heat-pipe-recycling",
     "y-mixed-fuel-loaded-recycling",
     "y-mixed-fuel-recycling",
     "y-mixed-fuel-recycling",
     "y-notfall-generator-s2-recycling",
-    "y-repair-durotal-recycling",
     "y-seg-p-recycling",
-    "y-steam-turbine-recycling",
-    "y-stirling-solar-dish-recycling",
     "y-wooden-brikett-recycling",
-    "y_alien_solar-recycling",
     "y_bg-1-recycling",
     "y_mftank-recycling",
-    "y_old_bodenlampe-recycling",
-    "yi_graphite-recycling"
+    "y_old_bodenlampe-recycling"
   ],
   "quinityn-bridge-powered-armor-recycling": [
     "yi_ammo_energie-recycling",
@@ -638,7 +658,8 @@
     "y-rare-wall-adv-recycling",
     "y_mox1fuel-recycling",
     "y_mox1mixed-recycling",
-    "y_moxmixer-recycling"
+    "y_moxmixer-recycling",
+    "yi_graphite-recycling"
   ],
   "quinityn-bridge-refining-fluid-handling": [
     "empty-y-con_water-barrel",
@@ -731,6 +752,12 @@
     "y_tile_slagbricks-recycling",
     "y_tile_slagfilled-recycling",
     "y_tile_slagpattern-recycling"
+  ],
+  "quinityn-bridge-solar-collector-recycling": [
+    "y_alien_solar-recycling"
+  ],
+  "quinityn-bridge-solar-dish-recycling": [
+    "y-stirling-solar-dish-recycling"
   ],
   "quinityn-bridge-steam-overheating-recycling": [
     "ye_overheater-recycling"
@@ -835,6 +862,9 @@
     "y-raw-fuelnium",
     "y-unicomp-raw"
   ],
+  "quinityn-compressed-fuel": [
+    "y-coal-stack"
+  ],
   "quinityn-crystal-processing": [
     "y_chunks1",
     "y_chunks2",
@@ -859,21 +889,21 @@
   "quinityn-efficiency-module": [
     "y-green-module-1"
   ],
+  "quinityn-electric-water": [
+    "y-water-gen-e"
+  ],
   "quinityn-electronics": [
     "y-chip-1",
     "y-conductive-wire-1",
     "y_chip_plate"
   ],
   "quinityn-energy-storage": [
-    "y-accumulator-b",
     "y-accumulator-m",
     "y-battery-rip1",
     "y-battery-single-use1",
     "y-battery-single-use2",
     "y-battery-single-use3",
-    "y-ups-flywheel-b",
-    "y_blocked_capa",
-    "y_compensator_25"
+    "y_blocked_capa"
   ],
   "quinityn-engines": [
     "y-1stirling-engine",
@@ -904,6 +934,9 @@
   "quinityn-expanded-storage": [
     "y_c22"
   ],
+  "quinityn-field-repair": [
+    "y-repair-durotal"
+  ],
   "quinityn-fluid-handling": [
     "ye_can_blood_empty",
     "ye_can_blood_fill",
@@ -931,6 +964,9 @@
   "quinityn-fluid-storage-80k": [
     "y-tank-8000"
   ],
+  "quinityn-flywheel-storage": [
+    "y-ups-flywheel-b"
+  ],
   "quinityn-forcefield-walls": [
     "y-wall-forcefield"
   ],
@@ -955,9 +991,21 @@
   "quinityn-hardic-walls": [
     "y_wall22_hardic"
   ],
+  "quinityn-high-capacity-boiler": [
+    "y-boiler-iv"
+  ],
+  "quinityn-high-flow-storage": [
+    "y_compensator_25"
+  ],
+  "quinityn-high-pressure-steam-turbine": [
+    "y-steam-turbine"
+  ],
   "quinityn-high-temperature-generation": [
     "ye_tfmw_generator-s",
     "ye_tfmw_turbine-s"
+  ],
+  "quinityn-huge-generation": [
+    "y-heg"
   ],
   "quinityn-husbandry": [
     "ye_cooking_meat",
@@ -1043,6 +1091,9 @@
     "ye_emotor_m",
     "ye_motorm_mf"
   ],
+  "quinityn-medium-generation": [
+    "y-meg-s"
+  ],
   "quinityn-medium-mf-pump": [
     "y_mpump_mf",
     "y_mpump_water",
@@ -1053,6 +1104,10 @@
     "ye_mfheatmotor_m"
   ],
   "quinityn-mining-productivity": [],
+  "quinityn-mixed-fuel": [
+    "y-coaldust-mixing",
+    "y-mixfuel-load"
+  ],
   "quinityn-modules": [
     "y-speed-module-1"
   ],
@@ -1118,19 +1173,10 @@
   "quinityn-power": [
     "y-coal-brikett",
     "y-coal-dust",
-    "y-coal-stack",
-    "y-coaldust-mixing",
     "y-heat-pipe",
-    "y-mixfuel-load",
     "y-notfall-generator-s2",
-    "y-repair-durotal",
-    "y-steam-turbine",
-    "y-stirling-solar-dish",
     "y-wooden-brikett",
-    "y_alien_solar",
-    "y_bg-1",
-    "y_mud2solidfuel",
-    "yi_graphite"
+    "y_bg-1"
   ],
   "quinityn-powered-armor": [
     "yi_ammo_energie",
@@ -1199,7 +1245,8 @@
     "y_mox1mixed",
     "y_moxmixer",
     "y_reactor_mf1",
-    "y_reactor_mox1"
+    "y_reactor_mox1",
+    "yi_graphite"
   ],
   "quinityn-refining": [
     "y-sulfuric-acid",
@@ -1219,6 +1266,9 @@
   "quinityn-research-center": [
     "ye_science_blue",
     "yie_science_blue_gen"
+  ],
+  "quinityn-residue-fuel": [
+    "y_mud2solidfuel"
   ],
   "quinityn-robot-network-expansion": [
     "j_yi_roboport1"
@@ -1245,6 +1295,12 @@
   ],
   "quinityn-slurry-syngas": [
     "ye_slurry2ethanol"
+  ],
+  "quinityn-solar-collector": [
+    "y_alien_solar"
+  ],
+  "quinityn-solar-dish": [
+    "y-stirling-solar-dish"
   ],
   "quinityn-steam-overheating": [
     "ye_makesteam",

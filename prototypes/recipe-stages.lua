@@ -83,7 +83,6 @@ for _, tier in ipairs(require("prototypes.research-tiers")) do
   end
 end
 overrides["y-heat-pipe"] = "power"
-overrides["yi_graphite"] = "power"
 overrides["ye_canister2plates_smelt"] = "fluid-handling"
 overrides["y_turret_gun1f12"] = "defense"
 overrides["ye_center"] = "quantum"

@@ -22,6 +22,193 @@ local function supply(machine, recipe)
   end
   return true
 end
+local function power_storage_generation_restaging()
+  local power_stayers = {
+    "y-coal-dust",
+    "y-coal-brikett",
+    "y-wooden-brikett",
+    "y-heat-pipe",
+    "y-notfall-generator-s2",
+    "y_bg-1",
+  }
+  local moved_power = {
+    "y-coal-stack",
+    "y-coaldust-mixing",
+    "y-mixfuel-load",
+    "y_mud2solidfuel",
+    "y-repair-durotal",
+    "y-stirling-solar-dish",
+    "y_alien_solar",
+    "y-steam-turbine",
+    "yi_graphite",
+  }
+  local accumulators = {
+    "y-accumulator-m",
+    "y-accumulator-b",
+    "y-ups-flywheel-b",
+    "y_compensator_25",
+    "y-accumulator-m-t2",
+    "y-accumulator-b-t2",
+    "y-accumulator-b-tx",
+    "y-accumulator-crystal-m",
+  }
+  local function all_disabled(force, names)
+    for _, name in ipairs(names) do
+      check(not force.recipes[name].enabled, "initially locked: " .. name)
+    end
+  end
+  local new_tiers = {
+    ["quinityn-compressed-fuel"] = { "y-coal-stack" },
+    ["quinityn-mixed-fuel"] = { "y-coaldust-mixing", "y-mixfuel-load" },
+    ["quinityn-residue-fuel"] = { "y_mud2solidfuel" },
+    ["quinityn-field-repair"] = { "y-repair-durotal" },
+    ["quinityn-solar-dish"] = { "y-stirling-solar-dish" },
+    ["quinityn-solar-collector"] = { "y_alien_solar" },
+    ["quinityn-accumulator-capacity"] = { "y-accumulator-b" },
+    ["quinityn-flywheel-storage"] = { "y-ups-flywheel-b" },
+    ["quinityn-high-flow-storage"] = { "y_compensator_25" },
+    ["quinityn-medium-generation"] = { "y-meg-s" },
+    ["quinityn-big-generation"] = { "y-beg" },
+    ["quinityn-huge-generation"] = { "y-heg" },
+    ["quinityn-high-capacity-boiler"] = { "y-boiler-iv" },
+    ["quinityn-high-pressure-steam-turbine"] = { "y-steam-turbine" },
+    ["quinityn-electric-water"] = { "y-water-gen-e" },
+  }
+  local function other_new_tiers_locked(force)
+    for id, recipes in pairs(new_tiers) do
+      if not force.technologies[id].researched then
+        for _, name in ipairs(recipes) do
+          check(not force.recipes[name].enabled, "unresearched " .. id .. " leaves " .. name .. " locked")
+        end
+      end
+    end
+  end
+  local fresh = game.create_force("power-restaging-fresh")
+  progression.reconcile()
+  all_disabled(fresh, power_stayers)
+  all_disabled(fresh, moved_power)
+  all_disabled(fresh, accumulators)
+  fresh.technologies["quinityn-power"].researched = true
+  progression.reconcile()
+  for _, name in ipairs(power_stayers) do
+    check(fresh.recipes[name].enabled, "power enables: " .. name)
+  end
+  other_new_tiers_locked(fresh)
+  all_disabled(fresh, moved_power)
+  all_disabled(fresh, accumulators)
+  fresh.technologies["quinityn-energy-storage"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({
+    "y-battery-single-use1",
+    "y-battery-single-use2",
+    "y-battery-single-use3",
+    "y-battery-rip1",
+    "y_blocked_capa",
+    "y-accumulator-m",
+  }) do
+    check(fresh.recipes[name].enabled, "energy storage enables: " .. name)
+  end
+  other_new_tiers_locked(fresh)
+  check(not fresh.recipes["y-accumulator-b"].enabled, "large accumulator still locked after first storage")
+  check(not fresh.recipes["y-ups-flywheel-b"].enabled, "flywheel still locked after first storage")
+  check(not fresh.recipes["y_compensator_25"].enabled, "compensator still locked after first storage")
+  fresh.technologies["quinityn-accumulator-capacity"].researched = true
+  progression.reconcile()
+  check(fresh.recipes["y-accumulator-b"].enabled, "large accumulator research enables large accumulator")
+  other_new_tiers_locked(fresh)
+  check(not fresh.recipes["y-ups-flywheel-b"].enabled, "flywheel still locked after large accumulator only")
+  check(not fresh.recipes["y_compensator_25"].enabled, "compensator still locked after large accumulator only")
+  fresh.technologies["quinityn-flywheel-storage"].researched = true
+  progression.reconcile()
+  check(fresh.recipes["y-ups-flywheel-b"].enabled, "flywheel research enables flywheel")
+  other_new_tiers_locked(fresh)
+  check(not fresh.recipes["y_compensator_25"].enabled, "compensator still locked after flywheel only")
+  fresh.technologies["quinityn-high-flow-storage"].researched = true
+  progression.reconcile()
+  check(fresh.recipes["y_compensator_25"].enabled, "high-flow storage enables compensator")
+  other_new_tiers_locked(fresh)
+  local gen = game.create_force("power-restaging-generation")
+  progression.reconcile()
+  gen.technologies["quinityn-advanced-generation"].researched = true
+  progression.reconcile()
+  check(gen.recipes["y-seg"].enabled, "advanced generation enables small generator")
+  for _, name in ipairs({ "y-meg-s", "y-beg", "y-heg", "y-boiler-iv", "y-water-gen-e" }) do
+    check(not gen.recipes[name].enabled, "advanced generation alone leaves locked: " .. name)
+  end
+  other_new_tiers_locked(gen)
+  local legacy = game.create_force("power-restaging-legacy")
+  legacy.technologies["quinityn-power"].researched = true
+  legacy.technologies["quinityn-energy-storage"].researched = true
+  legacy.technologies["quinityn-advanced-generation"].researched = true
+  progression.reconcile()
+  check(legacy.technologies["quinityn-power"].researched, "legacy power stays researched")
+  check(legacy.technologies["quinityn-energy-storage"].researched, "legacy storage stays researched")
+  check(legacy.technologies["quinityn-advanced-generation"].researched, "legacy generation stays researched")
+  for _, name in ipairs(power_stayers) do
+    check(legacy.recipes[name].enabled, "legacy power recipes enabled: " .. name)
+  end
+  for _, name in ipairs(moved_power) do
+    check(not legacy.recipes[name].enabled, "legacy moved power recipes disabled: " .. name)
+  end
+  for _, name in ipairs({
+    "y-battery-single-use1",
+    "y-battery-single-use2",
+    "y-battery-single-use3",
+    "y-battery-rip1",
+    "y_blocked_capa",
+    "y-accumulator-m",
+    "y-seg",
+  }) do
+    check(legacy.recipes[name].enabled, "legacy retained recipe enabled: " .. name)
+  end
+  for _, name in ipairs({
+    "y-accumulator-b",
+    "y-ups-flywheel-b",
+    "y_compensator_25",
+    "y-meg-s",
+    "y-beg",
+    "y-heg",
+    "y-boiler-iv",
+    "y-water-gen-e",
+  }) do
+    check(not legacy.recipes[name].enabled, "legacy moved recipe disabled: " .. name)
+  end
+  local storage_stayers = {
+    "y-battery-single-use1",
+    "y-battery-single-use2",
+    "y-battery-single-use3",
+    "y-battery-rip1",
+    "y_blocked_capa",
+    "y-accumulator-m",
+  }
+  -- A fresh force per tier. Toggling researched on one force can leave an
+  -- earlier tier researched, and the sibling check ignores researched tiers.
+  local alone = 0
+  for id, recipes in pairs(new_tiers) do
+    alone = alone + 1
+    local one = game.create_force("power-restaging-alone-" .. alone)
+    one.technologies[id].researched = true
+    progression.reconcile()
+    check(one.technologies[id].researched, id .. " is researched on a fresh force")
+    for other_id in pairs(new_tiers) do
+      if other_id ~= id then
+        check(not one.technologies[other_id].researched, id .. " leaves " .. other_id .. " unresearched")
+      end
+    end
+    for _, name in ipairs(recipes) do
+      check(one.recipes[name].enabled, id .. " alone enables " .. name)
+    end
+    other_new_tiers_locked(one)
+    for _, name in ipairs(power_stayers) do
+      check(not one.recipes[name].enabled, id .. " leaves power stayer locked: " .. name)
+    end
+    for _, name in ipairs(storage_stayers) do
+      check(not one.recipes[name].enabled, id .. " leaves storage stayer locked: " .. name)
+    end
+    check(not one.recipes["y-seg"].enabled, id .. " leaves small generator locked")
+    check(not one.recipes["yi_graphite"].enabled, id .. " leaves graphite locked")
+  end
+end
 local function module_unlocks()
   local modules = {}
   for name, item in pairs(prototypes.item) do
@@ -1018,6 +1205,8 @@ local function thermal_prerequisite_lock()
   other_new_locked(force)
 end
 script.on_init(function()
+  power_storage_generation_restaging()
+  washing_split()
   module_unlocks()
   engine_unlocks()
   logistics_unlocks()
