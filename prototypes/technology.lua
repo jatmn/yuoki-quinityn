@@ -64,7 +64,7 @@ local stages = {
   { "power", { "industrial-science", "basic-factory", "fuel-processing" }, 60, "y-steam-turbine" },
   { "cimota", { "power" }, 100, "y-atomic-constructor" },
   { "engines", { "cimota" }, 120, "y-sfe" },
-  { "refining", { "engines", "advanced-components" }, 150, "y_smelter" },
+  { "refining", { "engines", "advanced-components" }, 150, "y_catalyst_bp" },
   { "agriculture", { "refining" }, 180, "ye_farm" },
   { "logistics", { "advanced-components" }, 100, "y-inserter-fast" },
   { "defense", { "power", "washing" }, 100, "y_turret_gun1f12" },

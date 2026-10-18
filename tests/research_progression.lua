@@ -69,8 +69,133 @@ local function module_unlocks()
     check(force.technologies["quinityn-" .. name].researched, "completed research preserved: " .. name)
   end
 end
+local function refining_capability_unlocks()
+  local kept = {
+    ["y-sulfuric-acid"] = true,
+    ["y-water-gen"] = true,
+    ["y-water-gen-fluid"] = true,
+    ["y_catalyst_bp"] = true,
+    ["y_catalyst_ft"] = true,
+    ["y_coal2liquid"] = true,
+    ["y_ft"] = true,
+    ["y_granulate_wood"] = true,
+    ["y_rawsyngas1"] = true,
+    ["y_rawsyngas2"] = true,
+    ["y_refinehydrogen"] = true,
+    ["y_regcatbp"] = true,
+    ["y_regcatft"] = true,
+  }
+  local moved = {
+    ["y_smelter"] = true,
+    ["y_charger"] = true,
+    ["y_block_heat"] = true,
+    ["y_hps_purecopper"] = true,
+    ["y_hps_pureiron"] = true,
+    ["y_hps_steel"] = true,
+    ["ye_biofuel"] = true,
+    ["ye_granulate_corn"] = true,
+    ["ye_granulate_trifitan"] = true,
+    ["ye_granulate_vuger"] = true,
+    ["ye_slurry2ethanol"] = true,
+    ["yi-molten-iron"] = true,
+    ["yi-molten-copper"] = true,
+    ["j_crushing_to_n4"] = true,
+    ["j_crushing_to_f7"] = true,
+  }
+  local new_tech = {
+    "quinityn-thermal-smelting",
+    "quinityn-biological-feedstock",
+    "quinityn-slurry-syngas",
+    "quinityn-foundry-melting",
+    "quinityn-asteroid-crushing",
+  }
+  local force = game.create_force("refining-capability")
+  for name, t in pairs(force.technologies) do
+    if not name:match("^quinityn%-bridge%-") then
+      t.researched = true
+    end
+  end
+  for _, name in ipairs(new_tech) do
+    force.technologies[name].researched = false
+  end
+  force.technologies["quinityn-refining"].researched = true
+  progression.reconcile()
+  for name in pairs(kept) do
+    check(force.recipes[name].enabled, "refining keeps " .. name)
+  end
+  for name in pairs(moved) do
+    check(not force.recipes[name].enabled, "refining alone leaves " .. name .. " locked")
+  end
+  force.technologies["quinityn-thermal-smelting"].researched = true
+  progression.reconcile()
+  for name in pairs({
+    ["y_smelter"] = true,
+    ["y_charger"] = true,
+    ["y_block_heat"] = true,
+    ["y_hps_purecopper"] = true,
+    ["y_hps_pureiron"] = true,
+    ["y_hps_steel"] = true,
+  }) do
+    check(force.recipes[name].enabled, "thermal smelting enables " .. name)
+  end
+  for name in pairs(moved) do
+    if
+      not ({
+        ["y_smelter"] = true,
+        ["y_charger"] = true,
+        ["y_block_heat"] = true,
+        ["y_hps_purecopper"] = true,
+        ["y_hps_pureiron"] = true,
+        ["y_hps_steel"] = true,
+      })[name]
+    then
+      check(not force.recipes[name].enabled, "thermal smelting leaves " .. name .. " locked")
+    end
+  end
+  force.technologies["quinityn-biological-feedstock"].researched = true
+  progression.reconcile()
+  for name in pairs({
+    ["ye_biofuel"] = true,
+    ["ye_granulate_corn"] = true,
+    ["ye_granulate_trifitan"] = true,
+    ["ye_granulate_vuger"] = true,
+  }) do
+    check(force.recipes[name].enabled, "biological feedstock enables " .. name)
+  end
+  check(not force.recipes["ye_slurry2ethanol"].enabled, "biological feedstock leaves slurry ethanol locked")
+  force.technologies["quinityn-slurry-syngas"].researched = true
+  progression.reconcile()
+  check(force.recipes["ye_slurry2ethanol"].enabled, "slurry syngas enables ethanol")
+  force.technologies["quinityn-foundry-melting"].researched = true
+  progression.reconcile()
+  check(
+    force.recipes["yi-molten-iron"].enabled and force.recipes["yi-molten-copper"].enabled,
+    "foundry melting enables molten recipes"
+  )
+  check(not force.recipes["j_crushing_to_n4"].enabled, "foundry melting leaves asteroid crushing locked")
+  force.technologies["quinityn-asteroid-crushing"].researched = true
+  progression.reconcile()
+  check(
+    force.recipes["j_crushing_to_n4"].enabled and force.recipes["j_crushing_to_f7"].enabled,
+    "asteroid crushing enables crushing recipes"
+  )
+  local other = game.create_force("refining-capability-other")
+  for name, t in pairs(other.technologies) do
+    if not name:match("^quinityn%-bridge%-") then
+      t.researched = true
+    end
+  end
+  for _, name in ipairs(new_tech) do
+    other.technologies[name].researched = false
+  end
+  progression.reconcile()
+  for name in pairs(moved) do
+    check(not other.recipes[name].enabled, "other force without new tech keeps " .. name .. " locked")
+  end
+end
 script.on_init(function()
   module_unlocks()
+  refining_capability_unlocks()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then

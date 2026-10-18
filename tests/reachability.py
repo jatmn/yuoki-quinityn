@@ -98,9 +98,9 @@ finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith
 # for P3. Keep the empty-inventory rocket proof and every other finite unlock local.
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
- 'science-module','quality-module','p3-factory','research-center']}
+ 'science-module','quality-module','p3-factory','research-center','foundry-melting','asteroid-crushing']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
-for name in space_gated-{'quinityn-p3-factory'}:
+for name in space_gated-{'quinityn-p3-factory','quinityn-foundry-melting','quinityn-asteroid-crushing'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
 assert 'ye_fassembly2' in machines
 assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
