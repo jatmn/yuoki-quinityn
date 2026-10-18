@@ -1,10 +1,8 @@
 local progression = require("scripts.progression")
 script.on_event(defines.events.on_entity_spawned, require("scripts.stomp-a-trons"))
 
--- The recipe carries the Quinityn surface condition, but a fueled crusher still
--- finishes quinityn-hand-sort after set_recipe on a surface where that property is 0.
--- Hold the craft only while the prototype still declares that condition.
-local salvage_sort = "quinityn-hand-sort"
+-- Off-world Yuoki crushers are recorded so a save without this list can be rebuilt.
+-- Native blueprint selection already rejects quinityn-hand-sort when quinityn-industry is not 1.
 local crusher_names = { "y-crusher", "y_crusher2" }
 local crusher_event_filters = {
   { filter = "name", name = "y-crusher" },
@@ -13,19 +11,6 @@ local crusher_event_filters = {
 
 local function is_crusher_name(name)
   return name == "y-crusher" or name == "y_crusher2"
-end
-
-local function salvage_sort_is_surface_locked()
-  local conditions = prototypes.recipe[salvage_sort].surface_conditions
-  if not conditions then
-    return false
-  end
-  for _, condition in pairs(conditions) do
-    if condition.property == "quinityn-industry" and condition.min == 1 and condition.max == 1 then
-      return true
-    end
-  end
-  return false
 end
 
 local function surface_is_offworld(surface)
@@ -81,7 +66,6 @@ end
 
 local function on_startup()
   progression.reconcile()
-  storage.salvage_sort_surface_locked = salvage_sort_is_surface_locked()
   rebuild_offworld_crushers()
 end
 
@@ -122,6 +106,7 @@ local build_events = {
   defines.events.on_robot_built_entity,
   defines.events.script_raised_built,
   defines.events.script_raised_revive,
+  defines.events.on_space_platform_built_entity,
 }
 for _, build_event in ipairs(build_events) do
   script.on_event(build_event, on_crusher_built, crusher_event_filters)
@@ -146,24 +131,8 @@ script.on_event({ defines.events.on_surface_deleted, defines.events.on_surface_c
 end)
 
 script.on_event(defines.events.on_tick, function()
-  if storage.salvage_sort_surface_locked == nil then
-    storage.salvage_sort_surface_locked = salvage_sort_is_surface_locked()
-  end
   if storage.offworld_crushers == nil then
     rebuild_offworld_crushers()
-  end
-  if not storage.salvage_sort_surface_locked then
-    return
-  end
-  for unit_number, machine in pairs(storage.offworld_crushers) do
-    if not machine.valid then
-      storage.offworld_crushers[unit_number] = nil
-    else
-      local recipe = machine.get_recipe()
-      if recipe and recipe.name == salvage_sort and machine.crafting_progress > 0 then
-        machine.crafting_progress = 0
-      end
-    end
   end
 end)
 

@@ -295,6 +295,9 @@ script.on_event(defines.events.on_tick, function(event)
       storage.nauvis_crusher.get_inventory(defines.inventory.crafter_input).get_item_count("quinityn-salvage") == 1,
       "nauvis crusher input holds exactly one salvage"
     )
+    storage.nauvis_crusher.get_inventory(defines.inventory.crafter_input).clear()
+    storage.nauvis_crusher.get_fuel_inventory().clear()
+    storage.nauvis_crusher.set_recipe(nil)
     local nauvis_crusher2_spec = {
       name = "y_crusher2",
       position = { 16, 8 },
@@ -581,9 +584,70 @@ script.on_event(defines.events.on_tick, function(event)
     assembler.set_recipe("quinityn-research-data")
     check(assembler.get_recipe() == nil, "vanilla assembler rejects planet science")
     -- Programmatic research setters do not necessarily emit finished events; checked separately below.
+  elseif event.tick == 2 then
+    local platform_surface = storage.platform.surface
+    check(
+      platform_surface.count_entities_filtered({ name = { "y-crusher", "y_crusher2" } }) == 0,
+      "test platform has no yuoki crusher after setup"
+    )
+    local platform_tiles = {}
+    for x = 8, 10 do
+      for y = -1, 1 do
+        platform_tiles[#platform_tiles + 1] = { name = "space-platform-foundation", position = { x, y } }
+      end
+    end
+    platform_surface.set_tiles(platform_tiles)
+    local platform_spec = {
+      name = "y-crusher",
+      position = { 9, 0 },
+      force = force,
+      build_check_type = defines.build_check_type.manual,
+      raise_built = true,
+    }
+    check(platform_surface.can_place_entity(platform_spec), "yuoki crusher placement on the test platform")
+    local platform_crusher = platform_surface.create_entity(platform_spec)
+    check(platform_crusher and platform_crusher.valid, "yuoki crusher created on the test platform")
+    check(
+      platform_surface.count_entities_filtered({ name = "y-crusher" }) == 1,
+      "test platform has exactly one y-crusher"
+    )
+    check(offworld_tracked(platform_crusher.unit_number), "space platform crusher is tracked")
+    storage.platform_crusher_unit = platform_crusher.unit_number
   elseif event.tick == 300 then
-    check(storage.nauvis_crusher.products_finished == 0, "nauvis crusher cannot craft quinityn salvage sorting")
-    check(storage.nauvis_crusher.crafting_progress == 0, "nauvis crusher holds salvage sorting at zero progress")
+    check(force.recipes["quinityn-hand-sort"].enabled, "hand-sort stays enabled for native selection")
+    local native_tiles = {}
+    for x = 22, 26 do
+      for y = -2, 2 do
+        native_tiles[#native_tiles + 1] = { name = "grass-1", position = { x, y } }
+      end
+    end
+    game.surfaces.nauvis.set_tiles(native_tiles)
+    for _, entity in ipairs(game.surfaces.nauvis.find_entities_filtered({ area = { { 21.5, -2.5 }, { 26.5, 2.5 } } })) do
+      entity.destroy()
+    end
+    local inventory = game.create_inventory(1)
+    inventory[1].set_stack("blueprint")
+    inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local ghosts = inventory[1].build_blueprint({
+      surface = game.surfaces.nauvis,
+      force = force,
+      position = { 24, 0 },
+      skip_fog_of_war = true,
+    })
+    check(#ghosts == 1, "native offworld blueprint places one crusher ghost")
+    local _, native = ghosts[1].revive({ raise_revive = true })
+    check(native and native.valid, "native offworld crusher revived")
+    check(not native.get_recipe(), "native blueprint does not select salvage sorting off quinityn")
+    check(native.products_finished == 0, "native offworld crusher finishes no salvage sorts")
+    check(offworld_tracked(native.unit_number), "revived offworld crusher is tracked")
+    inventory.destroy()
   elseif event.tick == 320 then
     local switched_spec = {
       name = "y-crusher",
@@ -618,9 +682,9 @@ script.on_event(defines.events.on_tick, function(event)
       storage.switched_crusher.insert({ name = "quinityn-salvage", count = 1 }) == 1,
       "switched crusher accepts exactly one salvage"
     )
-  elseif event.tick == 630 then
-    check(storage.switched_crusher.products_finished == 0, "switched crusher cannot finish hand-sort off quinityn")
-    check(storage.switched_crusher.crafting_progress == 0, "switched crusher holds hand-sort at zero progress")
+    storage.switched_crusher.get_inventory(defines.inventory.crafter_input).clear()
+    storage.switched_crusher.get_fuel_inventory().clear()
+    storage.switched_crusher.set_recipe(nil)
   elseif event.tick == 640 then
     local mined_inventory = game.create_inventory(10)
     check(storage.switched_crusher.mine({ inventory = mined_inventory }), "switched offworld crusher mined")
