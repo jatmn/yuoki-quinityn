@@ -522,6 +522,9 @@ assert direct_unlocks('quinityn-archaeology')=={'y-wash-dirt','y-wash-special'}
 assert direct_unlocks('quinityn-unicomp-compression')=={'y-press-richdust'}
 assert direct_unlocks('quinityn-slag-materials')=={'y_slag_granulate','y_slag_brick','y_slag_brick_burn','y_steinmehl'}
 assert direct_unlocks('quinityn-slag-paving')=={'y_tile_slagbricks','y_tile_slagfilled','y_tile_slagpattern'}
+for tech in ['quinityn-washing','quinityn-archaeology','quinityn-unicomp-compression','quinityn-slag-materials','quinityn-slag-paving']:
+ for recipe in direct_unlocks(tech):
+  assert unlocks[recipe]==[tech],(recipe,unlocks[recipe])
 assert {'quinityn-washing','quinityn-excavation'}<=ancestry('quinityn-archaeology')
 assert 'quinityn-washing' in ancestry('quinityn-unicomp-compression')
 assert 'quinityn-washing' in ancestry('quinityn-slag-materials')

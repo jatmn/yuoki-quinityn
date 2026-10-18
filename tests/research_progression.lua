@@ -102,12 +102,19 @@ local function washing_split()
   check(not force.recipes["y_mud2solidfuel"].enabled, "power recipe stays off washing alone")
   check(not force.recipes["y_mc_dirtwasher"].enabled, "mastery washer stays off washing alone")
   for _, tier in ipairs({ "archaeology", "unicomp-compression", "slag-materials", "slag-paving" }) do
-    local recipes = split[tier]
     force.technologies["quinityn-" .. tier].researched = true
     progression.reconcile()
-    for _, recipe in ipairs(recipes) do
-      check(force.recipes[recipe].enabled, tier .. " unlocks " .. recipe)
+    for other, recipes in pairs(split) do
+      for _, recipe in ipairs(recipes) do
+        if other == tier then
+          check(force.recipes[recipe].enabled, tier .. " unlocks " .. recipe)
+        else
+          check(not force.recipes[recipe].enabled, tier .. " leaves " .. other .. " " .. recipe .. " locked")
+        end
+      end
     end
+    force.technologies["quinityn-" .. tier].researched = false
+    progression.reconcile()
   end
 end
 script.on_init(function()
