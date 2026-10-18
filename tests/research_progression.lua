@@ -69,8 +69,52 @@ local function module_unlocks()
     check(force.technologies["quinityn-" .. name].researched, "completed research preserved: " .. name)
   end
 end
+local function plant_infrastructure_split()
+  local force = game.create_force("plant-split")
+  local locked = {
+    "y-tank-1000",
+    "y-tank-4500",
+    "y-tank-8000",
+    "yi_radar",
+    "yi-monument1",
+    "y-pipe-hc",
+    "y-substation-m",
+    "y_signal_pole",
+    "y-tinylamp",
+  }
+  for _, name in ipairs(locked) do
+    check(not force.recipes[name].enabled, "fresh force locks " .. name)
+  end
+  force.technologies["quinityn-plant-infrastructure"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({ "y-tank-1000", "y-pipe-hc", "y-substation-m", "y_signal_pole", "y-tinylamp" }) do
+    check(force.recipes[name].enabled, "plant infrastructure enables " .. name)
+  end
+  for _, name in ipairs({ "y-tank-4500", "y-tank-8000", "yi_radar", "yi-monument1" }) do
+    check(not force.recipes[name].enabled, "plant infrastructure leaves " .. name .. " locked")
+  end
+  check(
+    not force.technologies["quinityn-fluid-storage-50k"].researched
+      and not force.technologies["quinityn-fluid-storage-80k"].researched,
+    "plant infrastructure leaves tank tiers unresearched"
+  )
+  force.technologies["quinityn-fluid-storage-50k"].researched = true
+  progression.reconcile()
+  check(force.recipes["y-tank-4500"].enabled, "50k tank research enables y-tank-4500")
+  check(not force.recipes["y-tank-8000"].enabled, "50k tank research leaves y-tank-8000 locked")
+  force.technologies["quinityn-fluid-storage-80k"].researched = true
+  progression.reconcile()
+  check(force.recipes["y-tank-8000"].enabled, "80k tank research enables y-tank-8000")
+  force.technologies["quinityn-quantum"].researched = true
+  progression.reconcile()
+  check(
+    force.recipes["yi_radar"].enabled and force.recipes["yi-monument1"].enabled,
+    "quantum enables radar and monument"
+  )
+end
 script.on_init(function()
   module_unlocks()
+  plant_infrastructure_split()
   local force = game.forces.player
   for name, t in pairs(force.technologies) do
     if not withheld[name] and not name:match("^quinityn%-bridge%-") then

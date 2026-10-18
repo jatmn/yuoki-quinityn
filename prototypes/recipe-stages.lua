@@ -107,7 +107,8 @@ overrides["y-1stirling-engine"] = "engines"
 overrides["y-repair-krakon"] = "cimota"
 overrides["y_repair_quantrinum"] = "quantum"
 overrides["y-fuel-cell-c"] = "trade"
-overrides["yi_radar"] = "plant-infrastructure"
+overrides["yi_radar"] = "quantum"
+overrides["yi-monument1"] = "quantum"
 local M = {}
 function M.owned(r)
   local name = r.name
