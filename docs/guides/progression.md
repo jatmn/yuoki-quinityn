@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **125 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **128 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -106,9 +106,18 @@ flowchart TD
   Robotics --> RobotProduction[Craft 500 YI Logistikers]
   RobotProduction --> AdvancedRobots[Advanced robots - 1000 science units]
   Refining --> Crops[Crop production]
-  Crops --> Animals[Husbandry and later genetics]
+  Crops --> Animals[Husbandry]
   Factories --> Animals
+  Animals --> Genetics[Genetics and DNA splicing]
+  Quantum --> Genetics
+  Genetics --> AdvancedGenetics[Advanced genetics]
+  AdvancedGenetics --> Biology[Industrial biology]
   Quantum --> Trade[Trade and later mastery]
+  Crops --> Packaging[Packaging]
+  Packaging --> Trade
+  Trade --> TradeBiology[Imported aquaculture and smoking]
+  Animals --> TradeBiology
+  Paving --> TradeBiology
   Quantum --> Orbital[Orbital manufacturing]
 ```
 
@@ -153,9 +162,10 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Advanced transport tubes | Mechanical force engineering, Advanced industrial components | 120 |
 | Crystal and emulsion processing | Yuoki industrial refining, Ore washing and residue recovery, Slag materials and stone flour | 150 |
 | Animal husbandry and aquaculture | Yuoki agronomy and biology, Y2-Factory, Industrial fluid handling | 160 |
-| First-generation industrial biology | Animal husbandry and aquaculture | 200 |
+| First-generation industrial biology | Animal husbandry and aquaculture, Quantrinum and advanced electronics | 200 |
 | Second-generation industrial biology | First-generation industrial biology, Quantrinum and advanced electronics | 250 |
 | Third-generation industrial biology | Second-generation industrial biology | 300 |
+| Imported aquaculture and smoking | Laika trade network, Animal husbandry and aquaculture, Slag paving | 160 |
 | Advanced industrial inserters | Yuoki logistics, Alien infusion | 160 |
 | Yuoki robotics | Yuoki logistics, Alien infusion, Industrial energy storage | 180 |
 | 8080 network expansion | Yuoki robotics | 300 |
@@ -234,6 +244,42 @@ recipes moved to Infusion, utilities or quantum power wait for their new owner
 research, including recycling bridges. The broad Quantum tip and new
 research-tier tips describe this sequence. Animated demonstrations for these
 final stages remain part of [the tutorial work in #24](https://github.com/jatmn/yuoki-quinityn/issues/24).
+
+## Crops, husbandry, genetics and imported species
+
+Agriculture keeps ordinary corn and Vugar, seeds, oil, cellulose, synthetic wood
+and sugar. **Husbandry** adds meat farms, pools and initial animal DNA made by
+ordinary crafting from logistic and chemical science packs. Grow meat, blood
+and slurry, then use slurry for the enriched corn/Vugar recipes. Basic fish
+breeding remains here, but needs starter raw fish brought from elsewhere:
+Quinityn's unicomp sea contains no raw fish. Neither early technology requires
+Quantum or Trade.
+
+**Genetics** now follows Quantum materials as well as Husbandry. The Composer
+can build its DNA splicer, using Scientific Reputation from Quantum production.
+The splicer recovers DNA from meat and blood and supplies first-generation
+Krakon, plant cells and substrate. **Advanced genetics** keeps second-generation
+livestock, carnivorous plants and the specialized feed for faster breeding;
+**Industrial biology** keeps the third generation and organic-metal processing.
+These DNA, food and output loops remain independent of Trade.
+
+**Trade** grants both the Laika-Gate and Trade Node: the node consumes a complete
+gate. Packaging still precedes Trade, and existing exports can fund imports.
+**Imported aquaculture and smoking** follows Trade, Husbandry and Slag paving,
+costing 160 red, green and Quinityn packs at 20 seconds per unit. It groups
+Krutag starter DNA, PT-ishys/Ji-Ribu-s starter imports, their three pool recipes,
+white feed and the smoker with its meat/fish recipes. Slag paving supplies the
+smoker's brick tiles; Husbandry supplies pools and raw meat. Smoked fish uses
+Ji-Ribu-s. Krutag no longer appears in Advanced genetics before its import source.
+Recipe ingredients, outputs and machine stats are unchanged.
+
+Completed technologies and placed machines remain on save upgrades. Moved
+recipes and their recycling effects require their new owners. The broad
+Agriculture/Trade chapters and generated biology tips describe these steps;
+their process animations remain tracked in [#24](https://github.com/jatmn/yuoki-quinityn/issues/24).
+The separate packaging and trade progression work remains in
+[#38](https://github.com/jatmn/yuoki-quinityn/issues/38) and
+[#39](https://github.com/jatmn/yuoki-quinityn/issues/39).
 
 ## Flyash, clean air and discovery
 

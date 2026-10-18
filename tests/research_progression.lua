@@ -1213,6 +1213,120 @@ local function thermal_prerequisite_lock()
   end
   other_new_locked(force)
 end
+local function biology_unlocks(surface)
+  local force = game.create_force("biology-stages")
+  local function research_parents(name)
+    for _, parent in pairs(force.technologies[name].prerequisites) do
+      research_parents(parent.name)
+      parent.researched = true
+    end
+  end
+  local imported = {
+    "ye_dna_fish2",
+    "ye_futtermittel_a",
+    "ye_futtermittel_b",
+    "ye_futtermittel_d",
+    "ye_fish2",
+    "ye_fish3",
+    "ye_fish4",
+    "ye_smoker",
+    "ye_smoked_meat",
+    "ye_smoked_fish",
+  }
+  progression.reconcile()
+  check(not force.recipes.ye_farm.enabled and not force.recipes.ye_dna_animal0.enabled, "fresh force has no biology")
+  research_parents("quinityn-husbandry")
+  force.technologies["quinityn-husbandry"].researched = true
+  progression.reconcile()
+  for _, name in ipairs({
+    "ye_farm",
+    "ye_dna_animal0",
+    "ye_grow_animal_a",
+    "ye_grow_fish1",
+    "ye_pool",
+    "ye-growcorn_ws",
+  }) do
+    check(force.recipes[name].enabled, "early farming available: " .. name)
+  end
+  check(not force.technologies["quinityn-quantum"].researched, "husbandry does not require quantum")
+  check(not force.technologies["quinityn-trade"].researched, "husbandry does not require trade")
+  check(not force.add_research("quinityn-genetics"), "genetics waits for quantum")
+  check(
+    not force.recipes.ye_dnasplicer.enabled and not force.recipes.ye_dna_animal1.enabled,
+    "early husbandry has no splicer"
+  )
+  check(not force.recipes.ye_trade_node.enabled, "agriculture does not grant Trade Node")
+  for _, name in ipairs(imported) do
+    check(not force.recipes[name].enabled, "husbandry leaves import/smoking locked: " .. name)
+  end
+  research_parents("quinityn-genetics")
+  check(force.add_research("quinityn-genetics"), "quantum opens genetics")
+  force.technologies["quinityn-genetics"].researched = true
+  progression.reconcile()
+  check(
+    force.recipes.ye_dnasplicer.enabled and force.recipes.ye_dna_animal1.enabled,
+    "genetics grants splicer and DNA recovery"
+  )
+  research_parents("quinityn-advanced-genetics")
+  force.technologies["quinityn-advanced-genetics"].researched = true
+  progression.reconcile()
+  check(force.recipes.ye_futtermittel_c.enabled, "fast second-generation breeding has its feed")
+  check(not force.recipes.ye_fish2.enabled, "advanced genetics cannot bypass fish imports")
+  research_parents("quinityn-trade")
+  force.technologies["quinityn-trade"].researched = true
+  progression.reconcile()
+  check(force.recipes.ye_trade_node.enabled and force.recipes["y-stargate"].enabled, "Trade Node follows its gate")
+  check(not force.add_research("quinityn-trade-biology"), "smoker research waits for slag paving")
+  research_parents("quinityn-trade-biology")
+  check(force.add_research("quinityn-trade-biology"), "trade and usable husbandry open imported biology")
+  force.technologies["quinityn-trade-biology"].researched = true
+  progression.reconcile()
+  for _, name in ipairs(imported) do
+    check(force.recipes[name].enabled, "complete imported species/smoking loop unlocked: " .. name)
+  end
+
+  -- Reconstruct old completed Agriculture/Husbandry/Advanced Genetics effects.
+  -- This tests production reconciliation, not a historical save file upgrade.
+  local legacy = game.create_force("biology-legacy")
+  local moved = { "ye_trade_node", "ye_dnasplicer", "ye_dna_animal1" }
+  for _, name in ipairs(imported) do
+    moved[#moved + 1] = name
+  end
+  for _, stage in ipairs({ "agriculture", "husbandry", "advanced-genetics" }) do
+    legacy.technologies["quinityn-" .. stage].researched = true
+  end
+  legacy.technologies.recycling.researched = true
+  legacy.technologies["quinityn-bridge-husbandry-recycling"].researched = true
+  local smoker = surface.create_entity({ name = "ye_smoker", position = { -16, -16 }, force = legacy })
+  for _, name in ipairs(moved) do
+    legacy.recipes[name].enabled = true
+    if legacy.recipes[name .. "-recycling"] then
+      legacy.recipes[name .. "-recycling"].enabled = true
+    end
+  end
+  progression.reconcile()
+  for _, stage in ipairs({ "agriculture", "husbandry", "advanced-genetics" }) do
+    check(legacy.technologies["quinityn-" .. stage].researched, "completed biology preserved: " .. stage)
+  end
+  check(smoker.valid and legacy.recipes.ye_dna_animal0.enabled, "placed smoker and early DNA preserved")
+  for _, name in ipairs(moved) do
+    check(not legacy.recipes[name].enabled, "stale biology effect removed: " .. name)
+    if legacy.recipes[name .. "-recycling"] then
+      check(not legacy.recipes[name .. "-recycling"].enabled, "stale biology recycling removed: " .. name)
+    end
+  end
+  legacy.technologies["quinityn-genetics"].researched = true
+  legacy.technologies["quinityn-trade"].researched = true
+  legacy.technologies["quinityn-trade-biology"].researched = true
+  progression.reconcile()
+  for _, name in ipairs(moved) do
+    check(legacy.recipes[name].enabled, "new owner restores recipe: " .. name)
+    if legacy.recipes[name .. "-recycling"] then
+      check(legacy.recipes[name .. "-recycling"].enabled, "new owner restores recycling: " .. name)
+    end
+  end
+  smoker.destroy()
+end
 local quantum_crafts = {
   { "y-atomic-quantum-composer", "y-quantrinum" },
   { "y-atomic-quantum-composer", "y-crystal-cnd" },
@@ -1352,6 +1466,7 @@ script.on_init(function()
     end
   end
   surface.set_tiles(tiles)
+  biology_unlocks(surface)
   quantum_unlocks(surface)
   storage.surface = surface.index
   game.create_force("research-other")

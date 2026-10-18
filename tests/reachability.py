@@ -28,13 +28,14 @@ thermal_support={'quinityn-plant-infrastructure'}
 assert thermal_support.isdisjoint(thermal_scope), 'Thermal support techs became prerequisites: '+str(sorted(thermal_support&thermal_scope))
 assert 'quinityn-excavation' in thermal_scope and 'quinityn-archaeology' in thermal_scope
 
-def run_closure(quinityn_scope=None):
- items={'y-res1','y-res2','quinityn-salvage','y-pol-waste'}
+def run_closure(quinityn_scope=None,starter_items=()):
+ items={'y-res1','y-res2','quinityn-salvage','y-pol-waste'}|set(starter_items)
  fluids=set(); categories={'crafting','hand-crafting'}
  techs={'planet-discovery-quinityn','quinityn-arrival'}
  recipes={n for n,r in R.items() if r.get('enabled',True)}
  crafted=set(); machines=set(); power=False
  sources={n:'hand mining / salvage on Quinityn' for n in items}
+ sources.update({n:'explicitly supplied starter specimen' for n in starter_items})
  produced=set()
  def available(p):
   return p['name'] in (fluids if p.get('type')=='fluid' else items)
@@ -98,6 +99,24 @@ def run_closure(quinityn_scope=None):
  return items,fluids,techs,recipes,machines,power,produced,sources,categories,iteration
 
 items,fluids,techs,recipes,machines,power,produced,sources,categories,iteration=run_closure()
+# Early farming must work with quantum/trade/genetics withheld. Basic fish
+# need a brought specimen: Quinityn's unicomp sea is not a source of raw fish.
+early_scope={n for n in T if n.startswith('quinityn-') and not ancestry(n)&{
+ 'quinityn-quantum','quinityn-trade','quinityn-genetics'}}
+early=run_closure(early_scope)
+assert {'ye-growcorn','ye_cornb','ye_dna_animal0','ye_grow_animal_a',
+        'ye_pool_slurry','ye-growcorn_ws','ye_cornb_ws'}<=early[6]
+assert {'ye_rawmeat','ye_dna'}<=early[0] and {'ye_blood','ye_slurry'}<=early[1]
+assert 'ye_grow_fish1' not in early[6], 'Basic fish unexpectedly gained a local starter'
+fish=run_closure(early_scope,{'raw-fish'})
+assert 'ye_grow_fish1' in fish[6] and 'ye_pool' in fish[4]
+# Genetics keeps its complete DNA/plant/animal loops without trade imports.
+genetics_scope={n for n in T if n.startswith('quinityn-') and 'quinityn-trade' not in ancestry(n)}
+genetics=run_closure(genetics_scope,{'raw-fish'})
+assert {'ye_dnasplicer','ye_dna_animal1','ye_grow_animal2','ye_grow_plant1',
+        'ye_grow_animal3','ye_grow_animal3fast','ye_grow_plant2','ye_grow_animal4'}<=genetics[6]
+assert {'quinityn-trade','quinityn-trade-biology'}.isdisjoint(genetics[2])
+print('PASS: pre-quantum crops/meat/slurry, basic fish with a supplied starter, and trade-independent genetics loops')
 required={'rocket-silo','rocket-fuel','low-density-structure','processing-unit','quinityn-research-data','quinityn-burner-separator','y-atomic-constructor','quinityn-foundation'}
 missing=required-items
 print('Closure:',len(items),'items;',len(techs),'technologies;',len(machines),'machines;',iteration+1,'iterations')

@@ -45,6 +45,42 @@ plant_inf_recipes={
  'yi_pipe_underground_green'}
 def unlock_set(tech):
  return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+# Farming remains useful before trade; machines, starters and their consumers
+# must share a reachable research path rather than merely exposing a recipe.
+assert unlocks['ye_trade_node']==['quinityn-trade'], 'Trade Node must follow its Laika-Gate ingredient'
+biology_owners={
+ 'husbandry':{'ye_dna_animal0','ye_grow_animal_a','ye_grow_fish1','ye_meatfarm','ye_pool',
+              'ye_pool_slurry','ye_cooking_meat','yie_bloodfrommeat','ye-growcorn_ws','ye_cornb_ws'},
+ 'genetics':{'ye_dnasplicer','ye_dna_animal1','ye_dna_animal2','ye_grow_animal2',
+             'ye_dna_plant0','ye_dna_plant1','ye_dna_plant3','ye_grow_plant1'},
+ 'advanced-genetics':{'ye_dna_animal3','ye_grow_animal3','ye_grow_animal3fast',
+                      'ye_dna_plant4','ye_grow_plant2','ye_futtermittel_c'},
+ 'trade-biology':{'ye_fish2','ye_fish3','ye_fish4','ye_dna_fish2','ye_futtermittel_a',
+                  'ye_futtermittel_b','ye_futtermittel_d','ye_smoker','ye_smoked_meat','ye_smoked_fish'},
+}
+for stage,recipes in biology_owners.items():
+ tech='quinityn-'+stage
+ assert unlock_set(tech)==recipes, (tech,unlock_set(tech)^recipes)
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],recipe
+  if recipe+'-recycling' in R:
+   bridge='quinityn-bridge-'+stage+'-recycling'
+   assert unlocks[recipe+'-recycling']==[bridge],recipe
+   assert set(T[bridge]['prerequisites'])=={tech,'recycling'}
+for early in ['agriculture','husbandry','packaging']:
+ assert {'quinityn-trade','quinityn-genetics','quinityn-quantum'}.isdisjoint(ancestry('quinityn-'+early))
+assert 'quinityn-quantum' in ancestry('quinityn-genetics')
+assert 'quinityn-trade' not in ancestry('quinityn-industrial-biology')
+assert 'quinityn-genetics' not in ancestry('quinityn-trade')
+assert set(T['quinityn-trade-biology']['prerequisites'])=={
+ 'quinityn-trade','quinityn-husbandry','quinityn-slag-paving'}
+for recipe,ingredient in [('ye_fish2','ye_dna_fish2'),('ye_fish3','ye_futtermittel_a'),
+ ('ye_fish4','ye_futtermittel_b'),('ye_smoked_fish','ye_fish4'),('ye_grow_animal3fast','ye_futtermittel_c')]:
+ assert ingredient in {p['name'] for p in R[recipe]['ingredients']}
+ assert unlocks[ingredient][0] in ancestry(unlocks[recipe][0]), (recipe,ingredient)
+assert R['ye_dna_animal0']['categories']==['crafting']
+assert {p['name'] for p in R['ye_dna_animal0']['ingredients']}=={'logistic-science-pack','chemical-science-pack'}
+print('PASS: early farming, quantum splicing and complete trade-species/smoking ownership')
 # Quantum research must distinguish precursor manufacture from infusion and utilities.
 quantum_materials={'y-atomic-quantum-composer','y-quantrinum','y-crystal-cnd','y_data_crystal',
  'y_repair_quantrinum','yi_radar','yi-monument1'}
@@ -104,7 +140,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==127
+assert len(tips)==128
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
