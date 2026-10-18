@@ -69,6 +69,10 @@ packaging_owners={
 }
 biology_owners['packaging']=set()
 biology_owners['industrial-biology']={'ye_dna_animal4','ye_grow_animal4','yie_pureiron'}
+biology_owners['trade-biology'] |= {
+ 'ye_buechse_blau_export','ye_buechse_fleisch_export','ye_buechse_rosa_export',
+ 'ye_buechse_weiss_export','ye_export_fish1','ye_export_fish2','ye_tradeblood',
+ 'ye_trademeat1','ye_trademeat2'}
 for stage,recipes in packaging_owners.items():
  biology_owners[stage]|=recipes
 for stage,recipes in biology_owners.items():
@@ -164,12 +168,14 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==128
-# The eight biology process tips must ship native simulations at their actual
+assert len(tips)==137
+# The biology, trade and science process tips ship native simulations at their actual
 # research unlocks; biology_demonstrations executes these declared callbacks
 # exported by tools/test.py from this same engine dump.
 for stage in ['agriculture','packaging','husbandry','genetics','advanced-genetics',
-              'industrial-biology','trade','trade-biology']:
+              'industrial-biology','trade','trade-biology','reputation','mastery',
+              'chemical-science','military-science','production-science','utility-science',
+              'space-science','genetic-trade','advanced-genetic-trade','industrial-biology-trade']:
  tip=D['tips-and-tricks-item']['quinityn-'+stage]
  assert tip['trigger']=={'type':'research','technology':'quinityn-'+stage},stage
  scene=tip['simulation']

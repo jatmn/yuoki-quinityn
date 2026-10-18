@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **128 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **137 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -112,7 +112,10 @@ flowchart TD
   Quantum --> Genetics
   Genetics --> AdvancedGenetics[Advanced genetics]
   AdvancedGenetics --> Biology[Industrial biology]
-  Quantum --> Trade[Trade and later mastery]
+  Infusion --> Reputation[Industrial reputation]
+  FlywheelBuf --> Reputation
+  Reputation --> Trade[Laika trade network]
+  QuantumPower[Quantum power systems] --> Trade
   Crops --> Packaging[Packaging]
   Packaging --> Trade
   Trade --> TradeBiology[Imported aquaculture and smoking]
@@ -264,7 +267,8 @@ livestock, carnivorous plants and the specialized feed for faster breeding;
 These DNA, food and output loops remain independent of Trade.
 
 **Trade** grants both the Laika-Gate and Trade Node: the node consumes a complete
-gate. Packaging still precedes Trade, and existing exports can fund imports.
+gate. Industrial reputation supplies its first 10 Fame, Quantum power supplies
+its accumulator, and Packaging supplies the first canned-corn export.
 **Imported aquaculture and smoking** follows Trade, Husbandry and Slag paving,
 costing 160 red, green and Quinityn packs at 20 seconds per unit. It groups
 Krutag starter DNA, PT-ishys/Ji-Ribu-s starter imports, their three pool recipes,
@@ -277,11 +281,58 @@ Completed technologies and placed machines remain on save upgrades. Moved
 recipes and their recycling effects require their new owners. The broad
 Agriculture/Trade chapters and generated biology tips describe these steps
 and now include native process demonstrations. See the
-[biology demonstration coverage](biology-demonstrations.md) for the eight
+[biology and trade demonstration coverage](biology-demonstrations.md) for the 18
 affected tips, recipe sequences and supplied-preview limitations. Other
 process families remain tracked in [#24](https://github.com/jatmn/yuoki-quinityn/issues/24).
-Trade manufacturing and reputation progression remain in
-[#39](https://github.com/jatmn/yuoki-quinityn/issues/39).
+
+## Reputation, trade and local science manufacture
+
+**Industrial reputation** follows Alien infusion and Flywheel storage. Build
+the Ancient Monument (`y-fame-gen`) from an Infuser, flywheel and 100 UC-A2. At its normal speed
+and 2 MW working draw it makes one Fame in 1,800 seconds without material inputs,
+or in 900 seconds from 25 Technic Signs. Reserve ten Fame for the first gate.
+No trade machine or Mastery is required to generate this startup stock.
+
+Trade requires Reputation, Quantum power and Packaging. Build the Laika-Gate,
+then either trade there or consume it to build a Trade Node. Export four cans
+of corn for 400 Merchant Signs and 16 military science packs. One Merchant Sign
+imports four sealing; ten import one canning-metal sheet. These first exchanges
+work without Husbandry or Genetics. Fame, Merchant Signs, Technic Signs and
+Scientific Reputation are different resources; collect every contract output.
+
+Later exchanges follow the goods they consume:
+
+| Research | Prerequisites | Exchange capability |
+| --- | --- | --- |
+| Imported aquaculture and smoking | Trade, Husbandry, Slag paving | Imported starters, fish/meat/blood exchanges and all four later canned-food exports |
+| Genetic product exports | Trade, Genetics | Substratin, Omtrinit and spliced-cell packages |
+| Advanced genetic exports | Genetic product exports, Advanced genetics | Verotin (also consumes Fame) and Karnis packages |
+| Organic metal exports | Advanced genetic exports, Industrial biology | Organic-metal packages |
+
+These export technologies do not move genetic production behind Trade.
+Mastery retains the ultimate trader together with direct Merchant Sign
+generation: 50 MW and 30 seconds per sign, without material inputs. Its other
+mastercrafted upgrades remain together.
+
+Five separate Cimota researches unlock local manufacture after the corresponding
+vanilla science technology and their ingredient capabilities:
+
+| Cimota research | Additional Quinityn capabilities | Recipe |
+| --- | --- | --- |
+| Chemical science | Cimota, Advanced components | Reactor fuel, basic chips and engine units → chemical packs |
+| Military science | Cimota, Advanced defense, Hardic walls | Hardic walls and ammunition → military packs |
+| Production science | Cimota, Tooling, Productivity module, Logistics | Toolheads, modules, inserters and signs → production packs |
+| Utility science and Scientific Reputation | Cimota, Energy storage, Advanced components; also vanilla production/military science | Batteries, chips, MF components and signs → utility packs; separate ordinary crafting consumes six ground science types for Scientific Reputation |
+| Space science | Trade and Orbital manufacturing | 6,000 Merchant Signs → 6 space packs |
+
+Space conversion still needs the first vanilla orbital-science milestone.
+The other four science steps do not require Trade. Recipe quantities, machines
+and power costs are unchanged. Water, power, Quinityn science and local rockets
+remain reachable without trading or Mastery.
+
+On upgrade, completed Trade and Mastery remain completed, as do existing
+entities and stock. Moved effects follow their new owners, including recycling
+bridges; an already completed old technology does not grant a new research.
 
 ## Packaging and early exports
 
@@ -306,9 +357,9 @@ Specialized packaging now unlocks with its contents:
 Husbandry keeps its existing Agriculture, Advanced factories and Fluid handling
 prerequisites. Research Packaging separately for the containers used by later
 products; cooling remains in Fluid handling. Packaging itself never requires
-the animal, genetic or imported-species branches; Trade still follows Packaging
-and Quantum. Research prerequisites, recipes, machine stats and export returns
-are unchanged.
+the animal, genetic or imported-species branches; Trade follows Packaging,
+Industrial reputation and Quantum power. Recipes, machine stats and export
+returns are unchanged.
 
 On upgrade, completed Packaging and biological research stay completed.
 Specialized recipes and recycling wait for their corresponding branch if it

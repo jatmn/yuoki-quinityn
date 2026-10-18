@@ -71,7 +71,7 @@ def run_closure(quinityn_scope=None,starter_items=()):
    power=True;fluids.add('steam')
   for n in sorted(recipes):
    r=R[n]
-   if 'recycling' in r.get('categories',[]) or r.get('hidden') or r.get('subgroup','').startswith(('yie_trades','y-stargate')):continue
+   if set(r.get('categories',[])) & {'recycling','yuoki-stargate'} or r.get('hidden'):continue
    if not set(r.get('categories',['crafting']))&categories:continue
    if not all(available(p) for p in r.get('ingredients',[])):continue
    conditions=r.get('surface_conditions',[])
@@ -119,7 +119,7 @@ assert {'quinityn-trade','quinityn-trade-biology'}.isdisjoint(genetics[2])
 print('PASS: pre-quantum crops/meat/slurry, basic fish with a supplied starter, and trade-independent genetics loops')
 # Corn can fund the first imported starters without any animal/genetic branch.
 export_scope={n for n in T if n.startswith('quinityn-') and not ancestry(n)&{
- 'quinityn-husbandry','quinityn-genetics','quinityn-trade-biology'}}
+ 'quinityn-husbandry','quinityn-genetics','quinityn-trade-biology','quinityn-mastery'}}
 export=run_closure(export_scope)
 assert {'ye_buechse_empty','ye_buechse_gelb'}<=export[6]
 assert 'ye_trade_node' in export[4] and 'quinityn-trade' in export[2]
@@ -129,6 +129,9 @@ assert all(p['name'] in export[0] for p in contract['ingredients'])
 assert set(contract['categories'])&export[8]
 assert any(p['name']=='ypfw_trader_sign' for p in contract['results'])
 assert 'raw-fish' not in export[0]
+assert 'quinityn-mastery' not in export[2]
+assert {'y-fame-gen','y-accumulator-crystal-m','y-stargate','ye_trade_node'}<=export[0]
+assert export[7]['y-fame'] in {'y-fame','y_fame_tech'}
 print('PASS: local canned-corn export inputs and Trade Node without husbandry, genetics or imported starters')
 required={'rocket-silo','rocket-fuel','low-density-structure','processing-unit','quinityn-research-data','quinityn-burner-separator','y-atomic-constructor','quinityn-foundation'}
 missing=required-items
@@ -160,7 +163,7 @@ finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
  'science-module','quality-module','p3-factory','research-center','foundry-melting','asteroid-crushing',
- 'advanced-transmission','artillery-shells','logistic-requests','wide-logistic-requests']}
+ 'advanced-transmission','artillery-shells','logistic-requests','wide-logistic-requests','space-science']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
 for name in space_gated-{'quinityn-p3-factory','quinityn-foundry-melting','quinityn-asteroid-crushing',
  'quinityn-advanced-transmission','quinityn-artillery-shells','quinityn-logistic-requests','quinityn-wide-logistic-requests'}:

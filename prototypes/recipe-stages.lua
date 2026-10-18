@@ -99,6 +99,24 @@ overrides["y_repair_quantrinum"] = "quantum"
 overrides["y-fuel-cell-c"] = "trade"
 overrides["yi_radar"] = "quantum"
 overrides["yi-monument1"] = "quantum"
+-- Local manufacture must not inherit commercial ownership from a crafting tab.
+overrides["ypfw_trader_sign"] = "mastery"
+-- Initial exchanges retain the first corn -> Merchant Signs -> material import loop.
+for _, name in ipairs({
+  "y-stargate",
+  "ye_trade_node",
+  "y-fuel-cell-c",
+  "ye_buechse_gelb_export",
+  "y_exchange_b1",
+  "y_exchange_b2",
+  "y_exchange_b3",
+  "y_exchange_b4",
+  "yi_slayerfame",
+  "yie_import_blech_blau",
+  "yie_import_sealing",
+}) do
+  overrides[name] = "trade"
+end
 local M = {}
 function M.owned(r)
   local name = r.name

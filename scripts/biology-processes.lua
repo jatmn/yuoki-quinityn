@@ -1,4 +1,4 @@
--- Ordered recipes taught by the eight biology-related tips. No balance data:
+-- Ordered recipes taught by biology, trade and science tips. No balance data:
 -- ingredient quantities, products, durations and power come from live prototypes.
 return {
   agriculture = {
@@ -64,12 +64,46 @@ return {
     { "ye_fassembly1", "ye_package_organic" },
   },
   trade = {
-    { "ye_fassembly2", "y-stargate" },
+    { "ye_fassembly1", "y-stargate" },
     { "ye_fassembly1", "ye_trade_node" },
     { "ye_trade_node", "ye_buechse_gelb_export" },
-    { "ye_trade_node", "ye_export_fish1" },
-    { "ye_trade_node", "ye_trademeat1" },
     { "ye_trade_node", "yie_import_sealing" },
+    { "ye_trade_node", "yie_import_blech_blau" },
+    { "ye_trade_node", "y_exchange_b1" },
+    { "ye_trade_node", "y_exchange_b2" },
+    { "ye_trade_node", "y_exchange_b3" },
+    { "ye_trade_node", "y_exchange_b4" },
+    { "ye_trade_node", "yi_slayerfame" },
+    { "ye_trade_node", "y-fuel-cell-c" },
+  },
+  reputation = {
+    { "ye_fassembly1", "y-fame-gen" },
+    { "y-fame-gen", "y-fame" },
+    { "y-fame-gen", "y_fame_tech" },
+  },
+  mastery = {
+    { "ye_fassembly1", "y_trade_ultimate" },
+    { "y_trade_ultimate", "ypfw_trader_sign" },
+  },
+  ["chemical-science"] = { { "y-atomic-constructor", "y_chemical_science" } },
+  ["military-science"] = { { "y-atomic-constructor", "y_military_science" } },
+  ["production-science"] = { { "y-atomic-constructor", "y_production_science" } },
+  ["utility-science"] = {
+    { "y-atomic-constructor", "y_high-tech_science" },
+    { "ye_fassembly1", "ye_createbluesigns" },
+  },
+  ["space-science"] = { { "y-atomic-constructor", "y_space_science" } },
+  ["genetic-trade"] = {
+    { "ye_trade_node", "ye_export01" },
+    { "ye_trade_node", "ye_export02" },
+    { "ye_trade_node", "ye_export05" },
+  },
+  ["advanced-genetic-trade"] = {
+    { "ye_trade_node", "ye_export03" },
+    { "ye_trade_node", "ye_export06" },
+  },
+  ["industrial-biology-trade"] = {
+    { "ye_trade_node", "ye_export04" },
   },
   ["trade-biology"] = {
     { "ye_trade_node", "ye_dna_fish2" },
@@ -87,5 +121,14 @@ return {
     { "ye_canmachine", "ye_buechse_braun" },
     { "ye_canmachine", "ye_buechse_rosa" },
     { "ye_canmachine", "ye_buechse_white" },
+    { "ye_trade_node", "ye_buechse_blau_export" },
+    { "ye_trade_node", "ye_buechse_fleisch_export" },
+    { "ye_trade_node", "ye_buechse_rosa_export" },
+    { "ye_trade_node", "ye_buechse_weiss_export" },
+    { "ye_trade_node", "ye_export_fish1" },
+    { "ye_trade_node", "ye_export_fish2" },
+    { "ye_trade_node", "ye_tradeblood" },
+    { "ye_trade_node", "ye_trademeat1" },
+    { "ye_trade_node", "ye_trademeat2" },
   },
 }
