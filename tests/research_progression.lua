@@ -118,6 +118,9 @@ local function washing_split()
   end
 end
 
+local function recipe_enabled(force, name)
+  return force.recipes[name].enabled
+end
 local function logistics_unlocks()
   local moved = {
     "y_c22",
