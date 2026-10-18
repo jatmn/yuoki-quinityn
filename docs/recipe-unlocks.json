@@ -142,12 +142,12 @@
     "quinityn-burner-separator",
     "quinityn-water"
   ],
+  "quinityn-artillery-shells": [
+    "yi_artillery_shell"
+  ],
   "quinityn-asteroid-crushing": [
     "j_crushing_to_f7",
     "j_crushing_to_n4"
-  ],
-  "quinityn-artillery-shells": [
-    "yi_artillery_shell"
   ],
   "quinityn-basic-factory": [
     "y-basic-t1-mf",

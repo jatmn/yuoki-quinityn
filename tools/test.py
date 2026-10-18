@@ -51,6 +51,12 @@ finally:
  setting_override.unlink(missing_ok=True)
  (mods/'mod-settings.dat').unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/salvage_sort_migration")\n')
+ run('salvage-sort-migration-create',base+['--create',str(a.output/'salvage-sort-migration.zip')],'QUINITYN SALVAGE SORT MIGRATION SETUP')
+ run('salvage-sort-migration-reload',base+['--benchmark',str(a.output/'salvage-sort-migration.zip'),'--benchmark-ticks','300','--benchmark-runs','1'],'QUINITYN SALVAGE SORT MIGRATION PASSED')
+finally:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Native paired surfaces verify the independent planet controls through map generation.
 try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/enemies")\n')

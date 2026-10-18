@@ -14,8 +14,9 @@ assert tiles['quinityn-foundation']['minable']['result']=='quinityn-foundation'
 assert tiles['quinityn-foundation']['frozen_variant']=='quinityn-frozen-foundation'
 assert tiles['quinityn-frozen-foundation']['thawed_variant']=='quinityn-foundation'
 assert R['quinityn-foundation']['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
-for n in ['iron','copper','stone','carbon','timber','hand-sort']:
+for n in ['iron','copper','stone','carbon','timber']:
  assert R['quinityn-'+n]['categories']==['hand-crafting']
+assert R['quinityn-hand-sort']['categories']==['hand-crafting','y-crushing']
 assert R['quinityn-research-data']['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
 # Every directly named upstream recipe must be gated, including hidden recycling.
 owned={n for n in R if re.match(r'^(y[-_]|yi[-_]|ye[-_]|yie[-_]|ypfw[-_])',n)}
@@ -258,6 +259,14 @@ assert sort['ingredients']==[{'type':'item','name':'quinityn-salvage','amount':1
 assert {p['name']:p['amount'] for p in sort['results']}=={'y-res1':2,'y-res2':2,'stone':2,'wood':1}
 assert unlocks['quinityn-hand-sort']==['quinityn-arrival']
 assert 'hand-crafting' in D['character']['character']['crafting_categories']
+assert sort.get('allow_productivity') is not True and sort.get('allow_quality') is not True
+assert sort['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
+assert sort['energy_required']==3
+ycrush=sorted(n for n,m in D['assembling-machine'].items() if 'y-crushing' in m.get('crafting_categories',[]))
+assert ycrush==['y-crusher','y_crusher2'], ycrush
+assert 'crushing' not in sort['categories']
+assert 'y-crushing' not in D['assembling-machine']['crusher']['crafting_categories']
+assert D['assembling-machine']['crusher']['crafting_categories']==['crushing']
 print('PASS: planet-specific map control membership and visible salvage sorting identity/unlock')
 
 # Research is anchored beyond space travel; native milestones bootstrap local science.
