@@ -413,6 +413,12 @@
     "ye_sealing-recycling",
     "ye_sealing-recycling"
   ],
+  "quinityn-bridge-fluid-storage-50k-recycling": [
+    "y-tank-4500-recycling"
+  ],
+  "quinityn-bridge-fluid-storage-80k-recycling": [
+    "y-tank-8000-recycling"
+  ],
   "quinityn-bridge-flywheel-storage-recycling": [
     "y-ups-flywheel-b-recycling"
   ],
@@ -562,8 +568,6 @@
     "y-powerlamp-recycling",
     "y-substation-m-recycling",
     "y-tank-1000-recycling",
-    "y-tank-4500-recycling",
-    "y-tank-8000-recycling",
     "y-tinylamp-recycling",
     "y_lampe_44basement_a-recycling",
     "y_lampe_44basement_b-recycling",
@@ -572,10 +576,8 @@
     "y_lampe_neotix-recycling",
     "y_lampe_yuoki-recycling",
     "y_signal_pole-recycling",
-    "yi-monument1-recycling",
     "yi_pipe_green-recycling",
-    "yi_pipe_underground_green-recycling",
-    "yi_radar-recycling"
+    "yi_pipe_underground_green-recycling"
   ],
   "quinityn-bridge-plasma-mines-recycling": [
     "yi_mine_plasma-recycling"
@@ -647,7 +649,9 @@
     "y_crystal2_combined-recycling",
     "y_repair_quantrinum-recycling",
     "ye_center-recycling",
-    "yi_beacon-recycling"
+    "yi-monument1-recycling",
+    "yi_beacon-recycling",
+    "yi_radar-recycling"
   ],
   "quinityn-bridge-reactors-recycling": [
     "y-obninsk-reactor-recycling",
@@ -954,6 +958,12 @@
     "ye_icemaker",
     "ye_sealing"
   ],
+  "quinityn-fluid-storage-50k": [
+    "y-tank-4500"
+  ],
+  "quinityn-fluid-storage-80k": [
+    "y-tank-8000"
+  ],
   "quinityn-flywheel-storage": [
     "y-ups-flywheel-b"
   ],
@@ -1138,8 +1148,6 @@
     "y-powerlamp",
     "y-substation-m",
     "y-tank-1000",
-    "y-tank-4500",
-    "y-tank-8000",
     "y-tinylamp",
     "y_lampe_44basement_a",
     "y_lampe_44basement_b",
@@ -1148,10 +1156,8 @@
     "y_lampe_neotix",
     "y_lampe_yuoki",
     "y_signal_pole",
-    "yi-monument1",
     "yi_pipe_green",
-    "yi_pipe_underground_green",
-    "yi_radar"
+    "yi_pipe_underground_green"
   ],
   "quinityn-plasma-damage": [],
   "quinityn-plasma-mines": [
@@ -1206,7 +1212,9 @@
     "y_quantrinum_infusion",
     "y_repair_quantrinum",
     "ye_center",
-    "yi_beacon"
+    "yi-monument1",
+    "yi_beacon",
+    "yi_radar"
   ],
   "quinityn-quantum-modules": [
     "y-pink-module-3"

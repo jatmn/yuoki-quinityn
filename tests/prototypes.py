@@ -38,12 +38,44 @@ def ancestry(n,seen=None):
  return result
 for n in T:
  if n.startswith('quinityn-'):assert 'quinityn-arrival' in ancestry(n),n
+plant_inf_recipes={
+ 'y-pipe-ec','y-pipe-h','y-pipe-hc','y-pipe-to-ground-ec','y-pipe-to-ground-hc','y-pipe-v',
+ 'y-powerlamp','y-substation-m','y-tank-1000','y-tinylamp','y_lampe_44basement_a','y_lampe_44basement_b',
+ 'y_lampe_66basement','y_lampe_corner','y_lampe_neotix','y_lampe_yuoki','y_signal_pole','yi_pipe_green',
+ 'yi_pipe_underground_green'}
+def unlock_set(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+assert set(T['quinityn-plant-infrastructure']['prerequisites'])=={'quinityn-power','quinityn-advanced-components'}
+assert unlock_set('quinityn-plant-infrastructure')==plant_inf_recipes
+assert set(T['quinityn-fluid-storage-50k']['prerequisites'])=={'quinityn-plant-infrastructure'}
+assert unlock_set('quinityn-fluid-storage-50k')=={'y-tank-4500'}
+assert set(T['quinityn-fluid-storage-80k']['prerequisites'])=={'quinityn-fluid-storage-50k'}
+assert unlock_set('quinityn-fluid-storage-80k')=={'y-tank-8000'}
+for tank,volume in [('y-tank-1000',15000),('y-tank-4500',50000),('y-tank-8000',80000)]:
+ assert D['storage-tank'][tank]['fluid_box']['volume']==volume,tank
+for recipe in plant_inf_recipes:
+ assert unlocks[recipe]==['quinityn-plant-infrastructure'],(recipe,unlocks.get(recipe))
+assert unlocks['y-tank-4500']==['quinityn-fluid-storage-50k'],unlocks.get('y-tank-4500')
+assert unlocks['y-tank-8000']==['quinityn-fluid-storage-80k'],unlocks.get('y-tank-8000')
+for recipe in ['yi_radar','yi-monument1','y-crystal-cnd','y-atomic-quantum-composer']:
+ assert unlocks[recipe]==['quinityn-quantum'],(recipe,unlocks.get(recipe))
+wonder_machines=[n for n,m in D['assembling-machine'].items() if 'yuoki-wonder' in m.get('crafting_categories',[])]
+assert wonder_machines==['y-atomic-quantum-composer']
+assert 'yuoki-wonder' in R['yi_radar']['categories']
+monument_cnd=[p for p in R['yi-monument1']['ingredients'] if p['name']=='y-crystal-cnd']
+assert len(monument_cnd)==1 and monument_cnd[0]['amount']==6
+assert any(p['name']=='y-substation-m' for p in R['y_compensator_25']['ingredients'])
+assert 'quinityn-quantum' not in ancestry('quinityn-plant-infrastructure')
+assert 'quinityn-quantum' not in ancestry('quinityn-fluid-storage-50k')
+assert 'quinityn-quantum' not in ancestry('quinityn-fluid-storage-80k')
+assert 'quinityn-plant-infrastructure' in ancestry('quinityn-fluid-storage-50k')
+assert 'quinityn-plant-infrastructure' in ancestry('quinityn-fluid-storage-80k')
 for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert T[n]['max_level']=='infinite'
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==123
+assert len(tips)==125
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -53,7 +85,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 123 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; {len(tips)} guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -949,7 +981,6 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==123
 refining_kept={
  'y-sulfuric-acid','y-water-gen','y-water-gen-fluid','y_catalyst_bp','y_catalyst_ft','y_coal2liquid','y_ft',
  'y_granulate_wood','y_rawsyngas1','y_rawsyngas2','y_refinehydrogen','y_regcatbp','y_regcatft'}

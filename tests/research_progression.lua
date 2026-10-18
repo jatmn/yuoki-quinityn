@@ -989,6 +989,142 @@ local function logistics_unlocks()
     check(not legacy.technologies[id].researched, "legacy does not grant " .. id)
   end
 end
+local function plant_storage_tiers_alone()
+  local stayers = {
+    "y-pipe-ec",
+    "y-pipe-h",
+    "y-pipe-hc",
+    "y-pipe-to-ground-ec",
+    "y-pipe-to-ground-hc",
+    "y-pipe-v",
+    "y-powerlamp",
+    "y-substation-m",
+    "y-tank-1000",
+    "y-tinylamp",
+    "y_lampe_44basement_a",
+    "y_lampe_44basement_b",
+    "y_lampe_66basement",
+    "y_lampe_corner",
+    "y_lampe_neotix",
+    "y_lampe_yuoki",
+    "y_signal_pole",
+    "yi_pipe_green",
+    "yi_pipe_underground_green",
+  }
+  local force50 = game.create_force("plant-50k-alone")
+  force50.technologies["quinityn-plant-infrastructure"].researched = true
+  progression.reconcile()
+  check(not recipe_enabled(force50, "y-tank-4500"), "50k baseline locks y-tank-4500")
+  check(not recipe_enabled(force50, "y-tank-8000"), "50k baseline locks y-tank-8000")
+  check(not recipe_enabled(force50, "yi_radar"), "50k baseline locks yi_radar")
+  check(not recipe_enabled(force50, "yi-monument1"), "50k baseline locks yi-monument1")
+  for _, name in ipairs(stayers) do
+    check(recipe_enabled(force50, name), "50k baseline enables stayer " .. name)
+  end
+  check(
+    not force50.technologies["quinityn-fluid-storage-50k"].researched
+      and not force50.technologies["quinityn-fluid-storage-80k"].researched
+      and not force50.technologies["quinityn-quantum"].researched,
+    "50k baseline leaves fluid tiers and quantum unresearched"
+  )
+  force50.technologies["quinityn-fluid-storage-50k"].researched = true
+  progression.reconcile()
+  check(recipe_enabled(force50, "y-tank-4500"), "50k research enables y-tank-4500")
+  check(not recipe_enabled(force50, "y-tank-8000"), "50k research leaves y-tank-8000 locked")
+  check(not recipe_enabled(force50, "yi_radar"), "50k research leaves yi_radar locked")
+  check(not recipe_enabled(force50, "yi-monument1"), "50k research leaves yi-monument1 locked")
+  for _, name in ipairs(stayers) do
+    check(recipe_enabled(force50, name), "50k research keeps stayer " .. name)
+  end
+  check(
+    not force50.technologies["quinityn-fluid-storage-80k"].researched
+      and not force50.technologies["quinityn-quantum"].researched,
+    "50k research leaves 80k and quantum unresearched"
+  )
+  local force80 = game.create_force("plant-80k-alone")
+  force80.technologies["quinityn-fluid-storage-50k"].researched = true
+  progression.reconcile()
+  check(not recipe_enabled(force80, "y-tank-8000"), "80k baseline locks y-tank-8000")
+  for _, name in ipairs(stayers) do
+    check(not recipe_enabled(force80, name), "80k baseline locks stayer " .. name)
+  end
+  check(not recipe_enabled(force80, "yi_radar"), "80k baseline locks yi_radar")
+  check(not recipe_enabled(force80, "yi-monument1"), "80k baseline locks yi-monument1")
+  check(recipe_enabled(force80, "y-tank-4500"), "80k baseline enables y-tank-4500 from prerequisite")
+  check(
+    not force80.technologies["quinityn-fluid-storage-80k"].researched
+      and not force80.technologies["quinityn-quantum"].researched,
+    "80k baseline leaves 80k tier and quantum unresearched"
+  )
+  force80.technologies["quinityn-fluid-storage-80k"].researched = true
+  progression.reconcile()
+  check(recipe_enabled(force80, "y-tank-8000"), "80k research enables y-tank-8000")
+  for _, name in ipairs(stayers) do
+    check(not recipe_enabled(force80, name), "80k research keeps stayer locked " .. name)
+  end
+  check(not recipe_enabled(force80, "yi_radar"), "80k research leaves yi_radar locked")
+  check(not recipe_enabled(force80, "yi-monument1"), "80k research leaves yi-monument1 locked")
+  check(recipe_enabled(force80, "y-tank-4500"), "80k research keeps y-tank-4500 enabled")
+  check(not force80.technologies["quinityn-quantum"].researched, "80k research leaves quantum unresearched")
+  check(force80.technologies["quinityn-fluid-storage-50k"].researched, "80k research keeps 50k tier researched")
+  local forceQuantum = game.create_force("plant-quantum-moves")
+  forceQuantum.technologies["quinityn-crystal-processing"].researched = true
+  forceQuantum.technologies["quinityn-energy-storage"].researched = true
+  forceQuantum.technologies["quinityn-archaeology"].researched = true
+  forceQuantum.technologies["quinityn-accumulator-capacity"].researched = true
+  forceQuantum.technologies["quinityn-flywheel-storage"].researched = true
+  forceQuantum.technologies["quinityn-high-flow-storage"].researched = true
+  progression.reconcile()
+  check(not recipe_enabled(forceQuantum, "yi_radar"), "quantum baseline locks yi_radar")
+  check(not recipe_enabled(forceQuantum, "yi-monument1"), "quantum baseline locks yi-monument1")
+  check(not recipe_enabled(forceQuantum, "y-tank-4500"), "quantum baseline locks y-tank-4500")
+  check(not recipe_enabled(forceQuantum, "y-tank-8000"), "quantum baseline locks y-tank-8000")
+  for _, name in ipairs(stayers) do
+    check(not recipe_enabled(forceQuantum, name), "quantum baseline locks stayer " .. name)
+  end
+  local quantum_prerequisites = {}
+  local quantum_prerequisite_count = 0
+  for _, technology in pairs(forceQuantum.technologies["quinityn-quantum"].prerequisites) do
+    quantum_prerequisites[technology.name] = true
+    quantum_prerequisite_count = quantum_prerequisite_count + 1
+  end
+  check(quantum_prerequisite_count == 4, "quantum has exactly four prerequisites")
+  check(quantum_prerequisites["quinityn-crystal-processing"] == true, "quantum requires quinityn-crystal-processing")
+  check(quantum_prerequisites["quinityn-energy-storage"] == true, "quantum requires quinityn-energy-storage")
+  check(quantum_prerequisites["quinityn-high-flow-storage"] == true, "quantum requires quinityn-high-flow-storage")
+  check(quantum_prerequisites["quinityn-archaeology"] == true, "quantum requires quinityn-archaeology")
+  check(
+    forceQuantum.technologies["quinityn-crystal-processing"].researched,
+    "quantum chain researched quinityn-crystal-processing"
+  )
+  check(
+    forceQuantum.technologies["quinityn-energy-storage"].researched,
+    "quantum chain researched quinityn-energy-storage"
+  )
+  check(
+    forceQuantum.technologies["quinityn-high-flow-storage"].researched,
+    "quantum chain researched quinityn-high-flow-storage"
+  )
+  check(forceQuantum.technologies["quinityn-archaeology"].researched, "quantum chain researched quinityn-archaeology")
+  check(
+    not forceQuantum.technologies["quinityn-quantum"].researched,
+    "quantum stays unresearched until its chain is set"
+  )
+  forceQuantum.technologies["quinityn-quantum"].researched = true
+  progression.reconcile()
+  check(recipe_enabled(forceQuantum, "yi_radar"), "quantum research enables yi_radar")
+  check(recipe_enabled(forceQuantum, "yi-monument1"), "quantum research enables yi-monument1")
+  check(not recipe_enabled(forceQuantum, "y-tank-4500"), "quantum research leaves y-tank-4500 locked")
+  check(not recipe_enabled(forceQuantum, "y-tank-8000"), "quantum research leaves y-tank-8000 locked")
+  for _, name in ipairs(stayers) do
+    check(not recipe_enabled(forceQuantum, name), "quantum research keeps stayer locked " .. name)
+  end
+  check(
+    not forceQuantum.technologies["quinityn-fluid-storage-50k"].researched
+      and not forceQuantum.technologies["quinityn-fluid-storage-80k"].researched,
+    "quantum research leaves fluid tiers unresearched"
+  )
+end
 local function thermal_prerequisite_lock()
   local thermal = {
     "y_smelter",
@@ -1078,10 +1214,11 @@ local function thermal_prerequisite_lock()
 end
 script.on_init(function()
   power_storage_generation_restaging()
-  washing_split()
   module_unlocks()
   engine_unlocks()
   logistics_unlocks()
+  washing_split()
+  plant_storage_tiers_alone()
   refining_capability_unlocks()
   refining_tier_alone()
   thermal_prerequisite_lock()
