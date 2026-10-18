@@ -270,6 +270,38 @@ new_tech_recipes={
 }
 for tech,recipes in new_tech_recipes.items():
  assert tech_recipes(tech)==recipes,tech
+sole_owner={
+ 'quinityn-power':power_stayers,
+ 'quinityn-energy-storage':storage_stayers,
+ 'quinityn-advanced-generation':{'y-seg'},
+ 'quinityn-reactors':{'yi_graphite'},
+}
+sole_owner.update(new_tech_recipes)
+for tech,recipes in sole_owner.items():
+ for recipe in sorted(recipes):
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+recycling_sole_owner={
+ 'quinityn-bridge-power-recycling':{'y-coal-brikett-recycling','y-coal-dust-recycling','y-heat-pipe-recycling','y-mixed-fuel-loaded-recycling','y-notfall-generator-s2-recycling','y-wooden-brikett-recycling','y_bg-1-recycling'},
+ 'quinityn-bridge-energy-storage-recycling':{'y-accumulator-m-recycling','y-battery-single-use1-recycling','y-battery-single-use2-recycling','y-battery-single-use3-recycling','y_blocked_capa-recycling'},
+ 'quinityn-bridge-advanced-generation-recycling':{'y-seg-recycling'},
+ 'quinityn-bridge-compressed-fuel-recycling':{'y-coal-stack-recycling'},
+ 'quinityn-bridge-field-repair-recycling':{'y-repair-durotal-recycling'},
+ 'quinityn-bridge-steam-turbine-recycling':{'y-steam-turbine-recycling'},
+ 'quinityn-bridge-solar-dish-recycling':{'y-stirling-solar-dish-recycling'},
+ 'quinityn-bridge-solar-collector-recycling':{'y_alien_solar-recycling'},
+ 'quinityn-bridge-accumulator-capacity-recycling':{'y-accumulator-b-recycling'},
+ 'quinityn-bridge-flywheel-storage-recycling':{'y-ups-flywheel-b-recycling'},
+ 'quinityn-bridge-high-flow-storage-recycling':{'y_compensator_25-recycling'},
+ 'quinityn-bridge-big-generation-recycling':{'y-beg-recycling'},
+ 'quinityn-bridge-high-capacity-boiler-recycling':{'y-boiler-iv-recycling'},
+ 'quinityn-bridge-huge-generation-recycling':{'y-heg-recycling'},
+ 'quinityn-bridge-medium-generation-recycling':{'y-meg-s-recycling'},
+ 'quinityn-bridge-electric-water-recycling':{'y-water-gen-e-recycling'},
+ 'quinityn-bridge-reactors-recycling':{'yi_graphite-recycling'},
+}
+for tech,recipes in recycling_sole_owner.items():
+ for recipe in sorted(recipes):
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
 assert unlocks['y-coaldust-mixing']==unlocks['y-mixfuel-load']
 assert unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
 assert unlocks['y-repair-krakon']==['quinityn-cimota']
