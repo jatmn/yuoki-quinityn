@@ -1141,9 +1141,9 @@
     "y_modul_science"
   ],
   "quinityn-slag-materials": [
-    "y_slag_granulate",
     "y_slag_brick",
     "y_slag_brick_burn",
+    "y_slag_granulate",
     "y_steinmehl"
   ],
   "quinityn-slag-paving": [
