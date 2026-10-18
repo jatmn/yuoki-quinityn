@@ -591,7 +591,7 @@ script.on_event(defines.events.on_tick, function(event)
       "test platform has no yuoki crusher after setup"
     )
     local platform_tiles = {}
-    for x = 8, 10 do
+    for x = 8, 13 do
       for y = -1, 1 do
         platform_tiles[#platform_tiles + 1] = { name = "space-platform-foundation", position = { x, y } }
       end
@@ -612,7 +612,78 @@ script.on_event(defines.events.on_tick, function(event)
       "test platform has exactly one y-crusher"
     )
     check(offworld_tracked(platform_crusher.unit_number), "space platform crusher is tracked")
+    check(not platform_crusher.get_recipe(), "space platform build does not select salvage sorting")
+    storage.platform_crusher = platform_crusher
     storage.platform_crusher_unit = platform_crusher.unit_number
+    local platform_inventory = game.create_inventory(1)
+    platform_inventory[1].set_stack("blueprint")
+    platform_inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local platform_ghosts = platform_inventory[1].build_blueprint({
+      surface = platform_surface,
+      force = force,
+      position = { 12, 0 },
+      skip_fog_of_war = true,
+      build_mode = defines.build_mode.forced,
+    })
+    platform_inventory.destroy()
+    local _, platform_revived
+    if #platform_ghosts == 1 then
+      check(not platform_ghosts[1].get_recipe(), "platform blueprint ghost does not keep salvage sorting")
+      _, platform_revived = platform_ghosts[1].revive({ raise_revive = true })
+    else
+      check(#platform_ghosts == 0, "platform blueprint places no crusher ghost")
+      local platform_ghost = platform_surface.create_entity({
+        name = "entity-ghost",
+        inner_name = "y-crusher",
+        position = { 12, 0 },
+        force = force,
+      })
+      check(platform_ghost and platform_ghost.valid, "platform crusher ghost created")
+      platform_ghost.set_recipe("quinityn-hand-sort")
+      _, platform_revived = platform_ghost.revive({ raise_revive = true })
+    end
+    check(platform_revived and platform_revived.valid, "platform crusher ghost revived")
+    check(not platform_revived.get_recipe(), "platform revive does not select salvage sorting")
+    check(platform_revived.products_finished == 0, "platform revive finishes no salvage sorts")
+    check(offworld_tracked(platform_revived.unit_number), "revived platform crusher is tracked")
+  elseif event.tick == 3 then
+    local home = surface.find_entities_filtered({ name = "character", limit = 1 })[1]
+    check(home and home.valid, "quinityn character can attempt salvage sorting")
+    check(home.insert({ name = "quinityn-salvage", count = 1 }) == 1, "quinityn character receives salvage")
+    local queued = home.begin_crafting({ recipe = "quinityn-hand-sort", count = 1 })
+    local crafting_queue = home.crafting_queue
+    check(queued == 1 and crafting_queue and #crafting_queue == 1, "hand crafting queues salvage sorting on quinityn")
+    home.cancel_crafting({ index = 1, count = 1 })
+    local queue_after = home.crafting_queue
+    check(not queue_after or #queue_after == 0, "quinityn hand craft can be cancelled")
+    local nauvis = game.surfaces.nauvis
+    nauvis.request_to_generate_chunks({ 36, -12 }, 1)
+    nauvis.force_generate_chunk_requests()
+    local character_tiles = {}
+    for x = 34, 38 do
+      for y = -14, -10 do
+        character_tiles[#character_tiles + 1] = { name = "grass-1", position = { x, y } }
+      end
+    end
+    nauvis.set_tiles(character_tiles)
+    for _, entity in ipairs(nauvis.find_entities_filtered({ area = { { 34, -14 }, { 39, -9 } } })) do
+      entity.destroy()
+    end
+    local nauvis_character = nauvis.create_entity({ name = "character", position = { 36, -12 }, force = force })
+    check(nauvis_character and nauvis_character.valid, "nauvis character created")
+    check(nauvis_character.insert({ name = "quinityn-salvage", count = 1 }) == 1, "nauvis character receives salvage")
+    local offworld_queued = nauvis_character.begin_crafting({ recipe = "quinityn-hand-sort", count = 1 })
+    check(
+      offworld_queued == 0 and nauvis_character.crafting_queue == nil,
+      "hand crafting cannot queue salvage sorting off quinityn"
+    )
   elseif event.tick == 300 then
     check(force.recipes["quinityn-hand-sort"].enabled, "hand-sort stays enabled for native selection")
     local native_tiles = {}
@@ -647,7 +718,24 @@ script.on_event(defines.events.on_tick, function(event)
     check(not native.get_recipe(), "native blueprint does not select salvage sorting off quinityn")
     check(native.products_finished == 0, "native offworld crusher finishes no salvage sorts")
     check(offworld_tracked(native.unit_number), "revived offworld crusher is tracked")
+    storage.native_crusher = native
     inventory.destroy()
+  elseif event.tick == 301 then
+    check(
+      storage.crusher.get_recipe().name == "quinityn-hand-sort",
+      "quinityn crusher keeps salvage sorting before copy"
+    )
+    storage.native_crusher.copy_settings(storage.crusher)
+    check(not storage.native_crusher.get_recipe(), "copy settings does not select salvage sorting off quinityn")
+    storage.platform_crusher.copy_settings(storage.crusher)
+    check(
+      not storage.platform_crusher.get_recipe(),
+      "copy settings does not select salvage sorting on a space platform"
+    )
+    check(
+      storage.crusher.get_recipe().name == "quinityn-hand-sort",
+      "quinityn crusher keeps salvage sorting after copy"
+    )
   elseif event.tick == 320 then
     local switched_spec = {
       name = "y-crusher",
@@ -737,6 +825,59 @@ script.on_event(defines.events.on_tick, function(event)
     game.delete_surface(storage.salvage_guard_surface)
   elseif event.tick == 672 then
     check(not offworld_tracked(storage.salvage_guard_unit), "crusher on a deleted surface is not tracked")
+  elseif event.tick == 680 then
+    local nauvis = game.surfaces.nauvis
+    nauvis.request_to_generate_chunks({ 120, 120 }, 2)
+    nauvis.force_generate_chunk_requests()
+    local robot_tiles = {}
+    for x = 112, 136 do
+      for y = 112, 128 do
+        robot_tiles[#robot_tiles + 1] = { name = "refined-concrete", position = { x, y } }
+      end
+    end
+    nauvis.set_tiles(robot_tiles)
+    for _, entity in ipairs(nauvis.find_entities_filtered({ area = { { 111, 111 }, { 137, 129 } } })) do
+      entity.destroy()
+    end
+    local roboport = nauvis.create_entity({ name = "roboport", position = { 116, 120 }, force = force })
+    check(roboport and roboport.valid, "offworld roboport created")
+    roboport.energy = 100000000
+    check(
+      roboport.get_inventory(defines.inventory.roboport_robot).insert({ name = "construction-robot", count = 1 }) == 1,
+      "offworld roboport receives a construction robot"
+    )
+    local provider = nauvis.create_entity({ name = "passive-provider-chest", position = { 122, 120 }, force = force })
+    check(provider.insert({ name = "y-crusher", count = 1 }) == 1, "provider holds one yuoki crusher")
+    local robot_inventory = game.create_inventory(1)
+    robot_inventory[1].set_stack("blueprint")
+    robot_inventory[1].set_blueprint_entities({
+      {
+        entity_number = 1,
+        name = "y-crusher",
+        position = { 0, 0 },
+        recipe = "quinityn-hand-sort",
+      },
+    })
+    local robot_ghosts = robot_inventory[1].build_blueprint({
+      surface = nauvis,
+      force = force,
+      position = { 130, 120 },
+      skip_fog_of_war = true,
+    })
+    robot_inventory.destroy()
+    check(#robot_ghosts == 1, "robot blueprint places one crusher ghost")
+    check(not robot_ghosts[1].get_recipe(), "robot blueprint ghost does not keep salvage sorting")
+  elseif event.tick == 1100 then
+    local built =
+      game.surfaces.nauvis.find_entities_filtered({ name = "y-crusher", position = { 130, 120 }, radius = 1 })
+    check(#built == 1, "construction robot builds one offworld crusher")
+    check(not built[1].get_recipe(), "robot build does not select salvage sorting off quinityn")
+    check(built[1].products_finished == 0, "robot-built crusher finishes no salvage sorts")
+    check(offworld_tracked(built[1].unit_number), "robot-built offworld crusher is tracked")
+    check(
+      #game.surfaces.nauvis.find_entities_filtered({ name = "entity-ghost", position = { 130, 120 }, radius = 1 }) == 0,
+      "construction robot revives the offworld crusher ghost"
+    )
   elseif event.tick == 400 then
     local out = storage.crusher.get_output_inventory()
     check(storage.crusher.products_finished == 1, "quinityn crusher finishes one salvage sort")

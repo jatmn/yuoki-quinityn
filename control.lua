@@ -2,7 +2,8 @@ local progression = require("scripts.progression")
 script.on_event(defines.events.on_entity_spawned, require("scripts.stomp-a-trons"))
 
 -- Off-world Yuoki crushers are recorded so a save without this list can be rebuilt.
--- Native blueprint selection already rejects quinityn-hand-sort when quinityn-industry is not 1.
+-- Native selection rejects quinityn-hand-sort when quinityn-industry is not 1.
+-- A save that already has that recipe selected is cleared once, not on every tick.
 local crusher_names = { "y-crusher", "y_crusher2" }
 local crusher_event_filters = {
   { filter = "name", name = "y-crusher" },
@@ -64,9 +65,54 @@ local function prune_invalid_offworld_crushers()
   end
 end
 
+local function salvage_recipe_is_surface_locked()
+  local recipe = prototypes.recipe["quinityn-hand-sort"]
+  local conditions = recipe and recipe.surface_conditions
+  if not conditions then
+    return false
+  end
+  for _, condition in pairs(conditions) do
+    if condition.property == "quinityn-industry" and condition.min == 1 and condition.max == 1 then
+      return true
+    end
+  end
+  return false
+end
+
+local function spill_cleared_items(machine, returned)
+  if type(returned) ~= "table" then
+    return
+  end
+  for _, stack in pairs(returned) do
+    if type(stack) == "table" and stack.name and stack.count and stack.count > 0 then
+      machine.surface.spill_item_stack({
+        position = machine.position,
+        stack = { name = stack.name, count = stack.count, quality = stack.quality },
+        force = machine.force,
+      })
+    end
+  end
+end
+
+local function clear_saved_offworld_salvage_sort()
+  if not salvage_recipe_is_surface_locked() or storage.offworld_crushers == nil then
+    return
+  end
+  for _, machine in pairs(storage.offworld_crushers) do
+    if machine.valid then
+      local selected = machine.get_recipe()
+      if selected and selected.name == "quinityn-hand-sort" then
+        spill_cleared_items(machine, machine.set_recipe(nil))
+      end
+    end
+  end
+end
+
 local function on_startup()
   progression.reconcile()
   rebuild_offworld_crushers()
+  clear_saved_offworld_salvage_sort()
+  storage.salvage_sort_migration_done = true
 end
 
 script.on_init(on_startup)
@@ -134,6 +180,12 @@ script.on_event(defines.events.on_tick, function()
   if storage.offworld_crushers == nil then
     rebuild_offworld_crushers()
   end
+  -- Old saves have no flag. One pass clears a recipe selected before this migration.
+  if storage.salvage_sort_migration_done then
+    return
+  end
+  clear_saved_offworld_salvage_sort()
+  storage.salvage_sort_migration_done = true
 end)
 
 if script.active_mods["quinityn-tests"] then
@@ -144,6 +196,9 @@ if script.active_mods["quinityn-tests"] then
     end,
     clear_offworld_crusher_list = function()
       storage.offworld_crushers = nil
+    end,
+    clear_salvage_sort_migration_flag = function()
+      storage.salvage_sort_migration_done = nil
     end,
   })
 end
