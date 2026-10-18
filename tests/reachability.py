@@ -94,36 +94,45 @@ if missing:
  sys.exit(1)
 finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-')
         and t.get('max_level')!='infinite'}
-# Eight module technologies, P3 and the research center require orbital science,
-# directly or through speed 2 for P3. Advanced transmission requires the foundry
-# because green tubes use metallurgy; its unit still uses only local packs.
-# Requester and buffer research requires vanilla logistic-system. That
-# technology's prerequisite is space-science-pack (build an asteroid collector)
-# and its lab cost includes space science packs. The Quinityn requester
-# technologies do not list space science in their own unit, so they are exempt
-# from the ingredient assertion. Ordinary storage and passive-provider tiers
-# must stay in the local closure. Keep the empty-inventory rocket proof and
-# every other finite unlock local.
+# These upgrades sit outside the local empty-inventory closure. Most require
+# space science directly, or through speed module 2 for P3. Advanced
+# transmission requires the foundry because green tubes use metallurgy; its
+# unit still uses only local packs. Yuoki artillery shells still cost only
+# red, green, and Quinityn packs, but vanilla artillery also requires space
+# science and Vulcanus metallurgic science. Requester and buffer research
+# requires vanilla logistic-system. That technology's prerequisite is
+# space-science-pack (build an asteroid collector) and its lab cost includes
+# space science packs. The Quinityn requester, artillery, and advanced
+# transmission technologies do not list space science in their own unit, so
+# they are exempt from the ingredient assertion. Ordinary storage,
+# passive-provider, washing, engine follow-ups, and the other defense tiers
+# must stay in the local closure.
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
  'science-module','quality-module','p3-factory','research-center','advanced-transmission',
- 'logistic-requests','wide-logistic-requests']}
+ 'artillery-shells','logistic-requests','wide-logistic-requests']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
-for name in space_gated-{'quinityn-p3-factory','quinityn-advanced-transmission',
- 'quinityn-logistic-requests','quinityn-wide-logistic-requests'}:
+for name in space_gated-{'quinityn-p3-factory','quinityn-advanced-transmission','quinityn-artillery-shells','quinityn-logistic-requests','quinityn-wide-logistic-requests'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
+shell=T['quinityn-artillery-shells']
+assert {i[0] for i in shell['unit']['ingredients']}=={
+ 'automation-science-pack','logistic-science-pack','quinityn-research-data'}
+assert 'artillery' in shell['prerequisites']
+artillery_packs={i[0] for i in T['artillery']['unit']['ingredients']}
+assert {'space-science-pack','metallurgic-science-pack'}<=artillery_packs
 transmission='quinityn-advanced-transmission'
 assert {i[0] for i in T[transmission]['unit']['ingredients']}=={
  'automation-science-pack','logistic-science-pack','quinityn-research-data'},transmission
 assert 'foundry' in T[transmission]['prerequisites'] and 'foundry' not in techs
 assert T['logistic-system']['prerequisites']==['space-science-pack']
 assert 'space-science-pack' in {i[0] for i in T['logistic-system']['unit']['ingredients']}
-for name in ['expanded-storage','large-storage','bulk-storage','logistic-storage','logistic-provider-capacity','logistic-bunker']:
+for name in ['expanded-storage','large-storage','bulk-storage','logistic-storage','logistic-provider-capacity','logistic-bunker','archaeology','unicomp-compression','slag-materials','slag-paving','medium-mf-pump','substrat-neutralization','medium-electric-motor','mf-heat-generator','steam-overheating','steam-turbine','high-temperature-generation','durotal-walls','forcefield-walls','hardic-walls','ammunition-cases','laser-turret','plasma-weapons','chemical-weapons','poison-mines','plasma-mines','zero-time-weapon']:
  assert 'quinityn-'+name in techs, name+' left the local closure'
-assert 'quinityn-logistic-requests' not in techs and 'quinityn-wide-logistic-requests' not in techs
+assert 'quinityn-logistic-requests' not in techs and 'quinityn-wide-logistic-requests' not in techs and 'quinityn-artillery-shells' not in techs and 'quinityn-advanced-transmission' not in techs
+
 assert 'ye_fassembly2' in machines
 assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
-print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science; green tubes await the foundry; requesters await logistic-system')
+print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science; Yuoki artillery shells await vanilla artillery; green tubes await the foundry; requester and buffer research awaits vanilla logistic-system')
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes
