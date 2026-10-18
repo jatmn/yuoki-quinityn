@@ -83,10 +83,12 @@ flowchart TD
   Components --> Refining
   Refining --> Crystals[Crystal processing]
   Components --> Storage[First energy storage]
+  Storage --> LargeAcc[Large accumulator]
+  Storage --> FlywheelBuf[Flywheel buffer]
+  LargeAcc --> Compensator[High-flow compensator]
+  FlywheelBuf --> Compensator
   Crystals --> Quantum[Quantum materials]
   Storage --> Quantum
-  Infrastructure[Industrial fluid and electric infrastructure] --> Compensator[High-flow compensator]
-  Storage --> Compensator
   Compensator --> Quantum
   Archaeology --> Quantum
   Engines --> Factories[Y2-Factory]
@@ -133,7 +135,7 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Industrial energy storage | Yuoki power and infrastructure, Ore washing and residue recovery, Advanced industrial components | 100 |
 | Large accumulator | Industrial energy storage | 80 |
 | Flywheel buffer | Industrial energy storage | 80 |
-| High-flow compensator | Industrial energy storage, Industrial fluid and electric infrastructure | 80 |
+| High-flow compensator | Large accumulator, Flywheel buffer | 80 |
 | Crystal accumulator upgrades | Large accumulator, Quantrinum and advanced electronics | 160 |
 | Mixed-oxide reactor engineering | Yuoki industrial refining, Advanced industrial components, Contract world defense, Advanced electric generation | 160 |
 | Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering | 250 |
