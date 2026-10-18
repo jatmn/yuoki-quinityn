@@ -25,7 +25,22 @@ local function supply(m, recipe, excluded)
     end
   end
 end
+local function expect_ingredient(recipe, name, amount)
+  for _, part in pairs(prototypes.recipe[recipe].ingredients) do
+    if part.name == name then
+      assert(
+        part.type == "item" and part.amount == amount,
+        recipe .. ": expected startup ingredient " .. amount .. " " .. name
+      )
+      return
+    end
+  end
+  error(recipe .. ": expected startup ingredient " .. amount .. " " .. name)
+end
 script.on_init(function()
+  -- Keep these costs independent of supply(), which follows the loaded recipe.
+  expect_ingredient("y_fame_tech", "y_rwtechsign", 25)
+  expect_ingredient("y-stargate", "y-accumulator-crystal-m", 1)
   local force = game.create_force("trade-startup")
   storage.force = force
   storage.surface = game.create_surface("trade-startup", { width = 64, height = 64 })
