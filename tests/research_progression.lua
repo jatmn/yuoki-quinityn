@@ -111,7 +111,25 @@ local function engine_unlocks()
     "ye_tranport_tube_green_splitter",
     "ye_tranport_tube_green_underground",
   }
+  local new_tiers = {
+    ["quinityn-medium-mf-pump"] = { "ye_wpump_m", "y_mpump_mf", "y_mpump_water" },
+    ["quinityn-substrat-neutralization"] = { "ye_neutralisatzion" },
+    ["quinityn-medium-electric-motor"] = { "ye_emotor_m", "ye_motorm_mf" },
+    ["quinityn-mf-heat-generator"] = { "ye_mfheatmotor_m", "ye_mf_mfheatmotor_m" },
+    ["quinityn-steam-overheating"] = { "ye_overheater", "ye_makesteam" },
+    ["quinityn-steam-turbine"] = { "ye_sturbine", "ye_steam2mf", "ye_steam3mf" },
+    ["quinityn-high-temperature-generation"] = { "ye_tfmw_generator-s", "ye_tfmw_turbine-s" },
+  }
   local force = game.create_force("engine-unlocks")
+  local function other_new_tiers_locked()
+    for id, recipes in pairs(new_tiers) do
+      if not force.technologies[id].researched then
+        for _, name in ipairs(recipes) do
+          check(not recipe_enabled(force, name), "unresearched " .. id .. " leaves " .. name .. " locked")
+        end
+      end
+    end
+  end
   force.technologies["quinityn-engines"].researched = true
   progression.reconcile()
   for name in pairs(kept) do
@@ -136,6 +154,7 @@ local function engine_unlocks()
   for _, name in ipairs({ "ye_wpump_m", "y_mpump_mf", "y_mpump_water" }) do
     check(recipe_enabled(force, name), "medium pump unlocks " .. name)
   end
+  other_new_tiers_locked()
   for _, name in ipairs(moved) do
     if name ~= "ye_wpump_m" and name ~= "y_mpump_mf" and name ~= "y_mpump_water" then
       check(not recipe_enabled(force, name), "medium pump alone leaves " .. name .. " locked")
@@ -152,12 +171,14 @@ local function engine_unlocks()
     not recipe_enabled(force, "ye_mfheatmotor_m") and not recipe_enabled(force, "ye_mf_mfheatmotor_m"),
     "medium motor leaves heat generator locked"
   )
+  other_new_tiers_locked()
   force.technologies["quinityn-mf-heat-generator"].researched = true
   progression.reconcile()
   check(
     recipe_enabled(force, "ye_mfheatmotor_m") and recipe_enabled(force, "ye_mf_mfheatmotor_m"),
     "heat generator unlocks recipes"
   )
+  other_new_tiers_locked()
   force.technologies["quinityn-mf-heat-generator"].researched = false
   force.technologies["quinityn-medium-electric-motor"].researched = false
   force.technologies["quinityn-steam-overheating"].researched = true
@@ -170,6 +191,7 @@ local function engine_unlocks()
     not recipe_enabled(force, "ye_steam2mf") and not recipe_enabled(force, "ye_steam3mf"),
     "steam overheating leaves turbine MF recipes locked"
   )
+  other_new_tiers_locked()
   force.technologies["quinityn-steam-turbine"].researched = true
   progression.reconcile()
   check(
@@ -178,6 +200,7 @@ local function engine_unlocks()
       and recipe_enabled(force, "ye_steam3mf"),
     "steam turbine unlocks recipes"
   )
+  other_new_tiers_locked()
   force.technologies["quinityn-steam-turbine"].researched = false
   force.technologies["quinityn-steam-overheating"].researched = false
   force.technologies["quinityn-high-temperature-generation"].researched = true
@@ -186,6 +209,7 @@ local function engine_unlocks()
     recipe_enabled(force, "ye_tfmw_generator-s") and recipe_enabled(force, "ye_tfmw_turbine-s"),
     "HT generation unlocks generators"
   )
+  other_new_tiers_locked()
   force.technologies["quinityn-high-temperature-generation"].researched = false
   force.technologies["quinityn-advanced-engines"].researched = true
   progression.reconcile()
@@ -226,6 +250,21 @@ local function engine_unlocks()
   force.technologies["quinityn-substrat-neutralization"].researched = true
   progression.reconcile()
   check(recipe_enabled(force, "ye_neutralisatzion"), "substrat neutralization unlocks recipe")
+  other_new_tiers_locked()
+  for id, recipes in pairs(new_tiers) do
+    for other_id in pairs(new_tiers) do
+      force.technologies[other_id].researched = other_id == id
+    end
+    progression.reconcile()
+    for _, name in ipairs(recipes) do
+      check(recipe_enabled(force, name), id .. " alone unlocks " .. name)
+    end
+    other_new_tiers_locked()
+  end
+  for id in pairs(new_tiers) do
+    force.technologies[id].researched = false
+  end
+  progression.reconcile()
   local other = game.create_force("engine-other")
   other.technologies["quinityn-engines"].researched = true
   progression.reconcile()

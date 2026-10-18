@@ -555,6 +555,25 @@ assert 'ye_neutralisatzion' not in direct_unlocks('quinityn-engines')
 assert direct_unlocks('quinityn-advanced-generation')=={'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'}
 assert direct_unlocks('quinityn-air-scrubbing')=={
  'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'}
+# One owner each. A second technology unlocking the same recipe would still pass the effect-set checks above.
+sole_owner={
+ 'quinityn-engines':engines_kept,
+ 'quinityn-advanced-engines':advanced_engine_recipes,
+ 'quinityn-advanced-transmission':transmission_recipes,
+ 'quinityn-medium-mf-pump':{'ye_wpump_m','y_mpump_mf','y_mpump_water'},
+ 'quinityn-substrat-neutralization':{'ye_neutralisatzion'},
+ 'quinityn-medium-electric-motor':{'ye_emotor_m','ye_motorm_mf'},
+ 'quinityn-mf-heat-generator':{'ye_mfheatmotor_m','ye_mf_mfheatmotor_m'},
+ 'quinityn-steam-overheating':{'ye_overheater','ye_makesteam'},
+ 'quinityn-steam-turbine':{'ye_sturbine','ye_steam2mf','ye_steam3mf'},
+ 'quinityn-high-temperature-generation':{'ye_tfmw_generator-s','ye_tfmw_turbine-s'},
+ 'quinityn-advanced-generation':{'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'},
+ 'quinityn-air-scrubbing':{
+  'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'},
+}
+for tech,recipes in sole_owner.items():
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
 assert 'quinityn-advanced-engines' in ancestry('quinityn-p3-factory')
 for tech in T:
  if tech.startswith('quinityn-') and tech in {
