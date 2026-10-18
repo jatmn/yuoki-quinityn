@@ -75,7 +75,7 @@ local stages = {
     250,
     "y-atomic-quantum-composer",
   },
-  { "trade", { "quantum", "packaging" }, 300, "y-stargate" },
+  { "trade", { "quantum-power", "reputation", "packaging" }, 300, "y-stargate" },
   { "mastery", { "trade", "maintenance", "reactors", "infusion" }, 500, "y_trade_ultimate" },
   { "orbital", { "quantum" }, 200, "rocket-silo" },
 }

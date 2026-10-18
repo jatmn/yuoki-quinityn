@@ -38,6 +38,10 @@
   "quinityn-advanced-generation": [
     "y-seg"
   ],
+  "quinityn-advanced-genetic-trade": [
+    "ye_export03",
+    "ye_export06"
+  ],
   "quinityn-advanced-genetics": [
     "ye_dna_animal3",
     "ye_dna_plant4",
@@ -496,7 +500,6 @@
     "y_maintance_workshop-recycling"
   ],
   "quinityn-bridge-mastery-recycling": [
-    "y-fame-gen-recycling",
     "y_boiler4_mc-recycling",
     "y_boiler4_tech-recycling",
     "y_mc_dirtwasher-recycling",
@@ -723,6 +726,11 @@
     "ye_steam-barrel-recycling",
     "yie_refrigerant-barrel-recycling"
   ],
+  "quinityn-bridge-reputation-recycling": [
+    "y-fame-gen-recycling",
+    "y-fame-recycling",
+    "y-fame-recycling"
+  ],
   "quinityn-bridge-research-center-recycling": [
     "yie_science_blue_gen-recycling"
   ],
@@ -790,8 +798,6 @@
     "ye_smoker-recycling"
   ],
   "quinityn-bridge-trade-recycling": [
-    "y-fame-recycling",
-    "y-fame-recycling",
     "y-fuel-cell-c-recycling",
     "y-stargate-recycling",
     "y_rwtechsign-recycling",
@@ -818,6 +824,9 @@
   ],
   "quinityn-bulk-storage": [
     "y_sc44"
+  ],
+  "quinityn-chemical-science": [
+    "y_chemical_science"
   ],
   "quinityn-chemical-weapons": [
     "y_ammo_flame",
@@ -989,6 +998,11 @@
   "quinityn-fuel-processing": [
     "y-fuel-reactor"
   ],
+  "quinityn-genetic-trade": [
+    "ye_export01",
+    "ye_export02",
+    "ye_export05"
+  ],
   "quinityn-genetics": [
     "ye_dna_animal1",
     "ye_dna_animal2",
@@ -1041,6 +1055,9 @@
     "ye_package_organic",
     "yie_pureiron"
   ],
+  "quinityn-industrial-biology-trade": [
+    "ye_export04"
+  ],
   "quinityn-industrial-science": [
     "quinityn-research-data",
     "quinityn-technic-sign"
@@ -1082,7 +1099,6 @@
     "y_toolhead_repair"
   ],
   "quinityn-mastery": [
-    "y-fame-gen",
     "y_boiler4_mc",
     "y_boiler4_tech",
     "y_greensign_ulti",
@@ -1095,7 +1111,8 @@
     "y_trade_ultimate",
     "y_unlimited_wood",
     "ye_green_ultimate",
-    "ye_science_ultimate"
+    "ye_science_ultimate",
+    "ypfw_trader_sign"
   ],
   "quinityn-materials": [
     "y-crush-fuel-raw",
@@ -1118,6 +1135,9 @@
   "quinityn-mf-heat-generator": [
     "ye_mf_mfheatmotor_m",
     "ye_mfheatmotor_m"
+  ],
+  "quinityn-military-science": [
+    "y_military_science"
   ],
   "quinityn-mining-productivity": [],
   "quinityn-mixed-fuel": [
@@ -1197,6 +1217,9 @@
     "y-smelt-crush-res1",
     "y-smelt-crush-res2"
   ],
+  "quinityn-production-science": [
+    "y_production_science"
+  ],
   "quinityn-productivity-module": [
     "y-pink-module-1"
   ],
@@ -1264,6 +1287,11 @@
     "y_regcatbp",
     "y_regcatft"
   ],
+  "quinityn-reputation": [
+    "y-fame",
+    "y-fame-gen",
+    "y_fame_tech"
+  ],
   "quinityn-research-center": [
     "ye_science_blue",
     "yie_science_blue_gen"
@@ -1302,6 +1330,9 @@
   ],
   "quinityn-solar-dish": [
     "y-stirling-solar-dish"
+  ],
+  "quinityn-space-science": [
+    "y_space_science"
   ],
   "quinityn-steam-overheating": [
     "ye_makesteam",
@@ -1345,48 +1376,30 @@
     "y_toolhead"
   ],
   "quinityn-trade": [
-    "y-fame",
     "y-fuel-cell-c",
     "y-stargate",
-    "y_chemical_science",
     "y_exchange_b1",
     "y_exchange_b2",
     "y_exchange_b3",
     "y_exchange_b4",
-    "y_fame_tech",
-    "y_high-tech_science",
-    "y_military_science",
-    "y_production_science",
-    "y_space_science",
-    "ye_buechse_blau_export",
-    "ye_buechse_fleisch_export",
     "ye_buechse_gelb_export",
-    "ye_buechse_rosa_export",
-    "ye_buechse_weiss_export",
-    "ye_createbluesigns",
-    "ye_export01",
-    "ye_export02",
-    "ye_export03",
-    "ye_export04",
-    "ye_export05",
-    "ye_export06",
-    "ye_export_fish1",
-    "ye_export_fish2",
     "ye_trade_node",
-    "ye_tradeblood",
-    "ye_trademeat1",
-    "ye_trademeat2",
     "yi_slayerfame",
     "yie_import_blech_blau",
-    "yie_import_sealing",
-    "ypfw_trader_sign"
+    "yie_import_sealing"
   ],
   "quinityn-trade-biology": [
     "ye_buechse_blau",
+    "ye_buechse_blau_export",
     "ye_buechse_braun",
+    "ye_buechse_fleisch_export",
     "ye_buechse_rosa",
+    "ye_buechse_rosa_export",
+    "ye_buechse_weiss_export",
     "ye_buechse_white",
     "ye_dna_fish2",
+    "ye_export_fish1",
+    "ye_export_fish2",
     "ye_fish2",
     "ye_fish3",
     "ye_fish4",
@@ -1396,13 +1409,20 @@
     "ye_package_fish2",
     "ye_smoked_fish",
     "ye_smoked_meat",
-    "ye_smoker"
+    "ye_smoker",
+    "ye_tradeblood",
+    "ye_trademeat1",
+    "ye_trademeat2"
   ],
   "quinityn-ultimate-efficiency-module": [
     "y_modul_green_op"
   ],
   "quinityn-unicomp-compression": [
     "y-press-richdust"
+  ],
+  "quinityn-utility-science": [
+    "y_high-tech_science",
+    "ye_createbluesigns"
   ],
   "quinityn-walker-1": [
     "yi_equip_generator_a",

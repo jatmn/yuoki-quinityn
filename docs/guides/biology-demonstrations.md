@@ -1,9 +1,10 @@
-# Biology demonstration coverage
+# Biology, trade and science demonstration coverage
 
-This covers the #37 and #38 portions of
-[#24](https://github.com/jatmn/yuoki-quinityn/issues/24), covering eight affected
-tips. Other tutorial families, the discovery preview and the separate Trade
-manufacturing work in #39 remain.
+This covers the #37, #38 and #39 portions of
+[#24](https://github.com/jatmn/yuoki-quinityn/issues/24), covering 18 affected
+tips. Other tutorial families and the discovery preview remain. The Mastery
+addition demonstrates its affected Merchant Sign manufacture; demonstrations
+for its other, unchanged machine upgrades remain in #24.
 
 Each tip unlocks at the technology in its row. The chapter tips retain their
 broader roadmap text; their animation teaches the currently available stage.
@@ -17,8 +18,27 @@ Later processes have their own research-triggered tips.
 | `quinityn-genetics` / First-generation industrial biology | Build the DNA Splicer; replicate initial DNA and make first animal cells; breed first-generation animals; make plant substrate/cells and grow Substratin; package Omtrinit, Substratin and cells | Quantum Composer, DNA Splicer, Meat Farm and Framed Farm. Requires Husbandry and Quantum, independently of Trade. Splicer construction uses Quantum materials. |
 | `quinityn-advanced-genetics` / Second-generation industrial biology | Second animal cells → regular breeding; specialized feed → faster breeding; second plant cells → Karnis/chitrotin | DNA Splicer, Meat Farm, C1 Factory and Framed Farm. Follows Genetics and Quantum. Feed uses raw fish, cellulose and sugar; collect petroleum/blood outputs. |
 | `quinityn-industrial-biology` / Third-generation industrial biology | Third animal cells → organic metal and its byproducts → pure iron | DNA Splicer, Meat Farm and furnace. Follows Advanced genetics. Account for acid, slurry and Scientific Reputation outputs; furnace needs fuel. |
-| `quinityn-trade` / Laika, trade and reputation | Laika-Gate → Trade Node; export basic fish packages for Merchant Signs and returned containers; export meat packages for UC-A2 and DNA; import sealing | C2 Factory, C1 Factory and Trade Node. Trade follows Quantum and Packaging. Fish/meat feedstock additionally needs Husbandry; these supplied packages are not an early free resource. All trade outputs must be collected. No genetic export is shown as available from early farming. |
+| `quinityn-trade` / Laika, trade and reputation | Laika-Gate → Trade Node; canned-corn export; sealing/canning-metal imports; all five sign/Fame exchanges and fuel-cell purchase | C1 Factory and Trade Node. Trade follows Reputation, Quantum power and Packaging. The gate consumes ten Fame and a quantum accumulator; the first corn contract needs no animal/genetic research. |
 | `quinityn-trade-biology` / Imported aquaculture and smoking | Import Krutag starter → breed Krutag; import PT-ishys and Ji-Ribu-s starters; make white feed → breed both species; build smoker → smoke meat and Ji-Ribu-s | Trade Node, Pool, C1 Factory and smoker. Requires Trade, Husbandry and Slag paving. Imports consume Merchant Signs. Krutag needs vegetable oil; PT-ishys needs water; Ji-Ribu-s needs contaminated water. Smoking consumes recipe wood plus separate burner fuel. |
+
+The imported-aquaculture sequence also exports all four later canned foods,
+basic fish and Krutag packages, blood, and raw/cooked meat. These exchanges now
+appear with their usable products rather than initial Trade.
+
+The #39 additions use the same research → tip → process mapping:
+
+| Final technology / tip | Native process sequence | Machines and requirements |
+| --- | --- | --- |
+| `quinityn-reputation` | Construct Ancient Monument; passive Fame; Technic Signs → Fame | C1 Factory and Ancient Monument, 2 MW. Infusion and Flywheel storage; no Trade/Mastery. |
+| `quinityn-chemical-science` | Reactor fuel/chips/engine units → chemical packs | Powered Cimota; chemical science and Advanced components. |
+| `quinityn-military-science` | Hardic walls/ammunition → military packs | Powered Cimota; military science, Hardic walls and Advanced defense. |
+| `quinityn-production-science` | Toolheads/modules/inserters/signs → production packs | Powered Cimota; production science and its material branches. |
+| `quinityn-utility-science` | Batteries/chips/MF components/signs → utility packs; six ground science types → Scientific Reputation | Powered Cimota then C1 Factory; utility, production and military science. |
+| `quinityn-space-science` | 6,000 Merchant Signs → 6 space packs | Powered Cimota; Trade, Orbital manufacturing and vanilla space science. |
+| `quinityn-genetic-trade` | Substratin, Omtrinit and spliced-cell exports | Trade Node; Trade and Genetics. Collect all signs, Fame and biological byproducts. |
+| `quinityn-advanced-genetic-trade` | Verotin and Karnis exports | Trade Node; Genetic product exports and Advanced genetics; Verotin also consumes Fame. |
+| `quinityn-industrial-biology-trade` | Organic-metal export | Trade Node; Advanced genetic exports and Industrial biology. |
+| `quinityn-mastery` | Build ultimate trader → direct Merchant Sign generation | C1 Factory and ultimate trader; 50 MW for one sign per 30 seconds. |
 
 The exact ordered machine/recipe pairs live in
 [`scripts/biology-processes.lua`](../../scripts/biology-processes.lua).
@@ -53,13 +73,13 @@ The native `biology_demonstrations` fixture runs all sequences without skipping
 machine craft time, checks completion and first-step repeat, and checks research
 isolation. It executes the init/update callbacks exported from the engine's
 actual tip declarations, with isolated test worlds and full-duration crafting.
-Prototype tests also check all eight research triggers and simulation attachments.
+Prototype tests also check all 18 research triggers and simulation attachments.
 
 The Husbandry demonstration now ends with raw/cooked meat packaging; Genetics
 with Omtrinit, Substratin and cell packaging; Advanced genetics with Verotin and
 Karnis packaging; Industrial biology with organic-metal packaging. Imported
 aquaculture adds Krutag packages and all four imported/smoked-food cans.
-Trade shows canned-corn export before its existing fish/meat export examples.
+Trade shows canned-corn export before its material-import and reputation exchanges.
 Husbandry keeps its existing prerequisites; Packaging separately supplies the
 containers used by its products. These scenes reuse the same supplied recipe
 inputs and native transport rules described above.
@@ -72,8 +92,23 @@ corn and exported four cans for 400 Merchant Signs and 16 military science packs
 without Husbandry, Genetics or imported-species research. It supplied machines,
 power, seed, metal and operating fluids, conserved products during manual
 transfers, and ran at 10x simulation speed. This checks the production slice,
-not construction of the Trade Node or a full survival playthrough; Trade's
-Fame/manufacturing progression remains tracked in #39.
+not construction of the Trade Node or a full survival playthrough. The separate
+#39 startup fixture now produces ten Fame natively from supplied Technic Signs,
+uses that stock to craft a gate and node, exports supplied corn cans and spends
+one earned Merchant Sign on sealing. Power, machines and other construction
+inputs are supplied; this is a connected startup slice, not survival pacing.
+
+For #39, graphical checks on 2026-10-18 used Factorio/Space Age 2.1.22 and the
+pinned dependencies. They inspected the Trade technology UI, ran the connected
+startup fixture in the client, and sampled the 12 affected scene sequences
+through the shipped renderer in isolated preview worlds. A generated ruin in
+the initial preview fixture obscured the machines; disabling entity generation
+in that fixture removed it. The corrected samples showed readable machines and
+input/output labels. Native Tips-menu navigation and reopening were not checked
+in this pass because automated mouse input did not reach those controls;
+full-duration sequence completion and repetition were checked by the engine
+fixture. These samples do not establish full-playthrough pacing or usability
+at every UI scale.
 
 Before the packaging additions, on 2026-10-18 graphical inspection in
 Factorio/Space Age 2.1.22 with the pinned

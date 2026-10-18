@@ -33,13 +33,15 @@ dump=a.output/'runtime/script-output/data-raw-dump.json'
 # list of helper calls. Keep the exported data in the existing test-only mod.
 tips=json.loads(dump.read_text())['tips-and-tricks-item']
 biology_stages=['agriculture','packaging','husbandry','genetics','advanced-genetics',
-                'industrial-biology','trade','trade-biology']
+                'industrial-biology','trade','trade-biology','reputation','mastery',
+                'chemical-science','military-science','production-science','utility-science',
+                'space-science','genetic-trade','advanced-genetic-trade','industrial-biology-trade']
 callbacks=json.dumps({stage:tips['quinityn-'+stage]['simulation'] for stage in biology_stages})
 delimiter='='
 while ']'+delimiter+']' in callbacks:delimiter+='='
 (harness/'biology_callbacks.lua').write_text(
  'return helpers.json_to_table(['+delimiter+'['+callbacks+']'+delimiter+'])\n')
-for name in ['prototypes','stomp_a_trons','reachability','bootstrap_budget']:
+for name in ['trade','prototypes','stomp_a_trons','reachability','bootstrap_budget']:
  run(name,[sys.executable,str(ROOT/'tests'/f'{name}.py'),str(dump)],'PASS')
 run('localization',[sys.executable,str(ROOT/'tests/localization.py'),str(dump),
   str(a.dependencies/'Yuoki'),str(a.dependencies/'yi_engines'),
@@ -95,6 +97,26 @@ try:
 finally:
  legacy.unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/trade_migration")\n')
+ legacy=harness/'data-final-fixes.lua'
+ legacy.write_text('local moved={reputation=true,["chemical-science"]=true,["military-science"]=true,'
+  '["production-science"]=true,["utility-science"]=true,["space-science"]=true,'
+  '["genetic-trade"]=true,["advanced-genetic-trade"]=true,["industrial-biology-trade"]=true}\n'
+  'for name,t in pairs(data.raw.technology) do\n'
+  ' local stage=name:gsub("^quinityn%-bridge%-",""):gsub("^quinityn%-",""):gsub("%-recycling$","")\n'
+  ' for i=#(t.effects or {}),1,-1 do local e=t.effects[i]; local r=e.recipe or ""; local plain=r:gsub("%-recycling$","");\n'
+  '  if moved[stage] or (stage=="trade-biology" and (plain:find("export") or plain:match("^ye_trade"))) or plain=="ypfw_trader_sign" then\n'
+  '   local owner=plain=="y-fame-gen" and "mastery" or "trade";\n'
+  '   local target=r:match("%-recycling$") and "quinityn-bridge-"..owner.."-recycling" or "quinityn-"..owner;\n'
+  '   table.insert(data.raw.technology[target].effects,table.remove(t.effects,i))\n'
+  '  end\n end\nend\n')
+ run('trade-migration-create',base+['--create',str(a.output/'trade-migration.zip')],'QUINITYN TRADE MIGRATION SETUP')
+ legacy.unlink()
+ run('trade-migration-reload',base+['--benchmark',str(a.output/'trade-migration.zip'),'--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN TRADE MIGRATION PASSED')
+finally:
+ legacy.unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Native paired surfaces verify the independent planet controls through map generation.
 try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/enemies")\n')
@@ -116,6 +138,10 @@ try:
  run('research-progression-create',base+['--create',str(a.output/'research-progression.zip')],'Factorio initialised')
  run('research-progression',base+['--benchmark',str(a.output/'research-progression.zip'),
      '--benchmark-ticks','130000','--benchmark-runs','1'],'QUINITYN RESEARCH PROGRESSION TESTS PASSED',timeout=600)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/trade_startup")\n')
+ run('trade-startup-create',base+['--create',str(a.output/'trade-startup.zip')],'Factorio initialised')
+ run('trade-startup',base+['--benchmark',str(a.output/'trade-startup.zip'),
+     '--benchmark-ticks','60000','--benchmark-runs','1'],'QUINITYN TRADE STARTUP PASSED',timeout=600)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/biology_demonstrations")\n')
  run('biology-demonstrations-create',base+['--create',str(a.output/'biology-demonstrations.zip')],'Factorio initialised')
  run('biology-demonstrations',base+['--benchmark',str(a.output/'biology-demonstrations.zip'),

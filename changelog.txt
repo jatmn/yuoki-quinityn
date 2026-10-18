@@ -10,6 +10,8 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
     - Added 128 native Tips and Tricks progression chapters.
   Changes:
+    - Separate Cimota science manufacture from trade. Prepare Fame and its machine before the Laika-Gate, require its quantum accumulator, and keep direct Merchant Sign generation with Mastery. Stage biological exports with their products while retaining early canned-corn exports and material imports.
+    - Add matching reputation, science and genetic-export demonstrations; update Trade, imported-food and Mastery guidance. Completed research and stock remain, while moved recipes follow their new research owners.
     - Keep containers, canned corn and basic fish packages in Industrial packaging; unlock meat, genetic products, organic metal and imported/smoked-food packaging with their production branches. Canned-corn exports remain available before animal or genetic research. Existing research and stock stay; moved recipes and recycling require their new owner.
     - Add a native Packaging demonstration and extend the biology and Trade demonstrations with their matching packages and early canned-corn export.
     - Add native process demonstrations to the Agriculture, Husbandry, Genetics, Advanced genetics, Industrial biology, Trade and Imported aquaculture and smoking tips, showing their machines, ingredients, products and operating supplies.

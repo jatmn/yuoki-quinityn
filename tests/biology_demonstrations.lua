@@ -64,7 +64,7 @@ script.on_event(defines.events.on_tick, function()
       environment.storage.biology_demo = state
       callbacks[stage].update()
       complete = false
-      assert(game.tick - state.started < 90000, "Biology demonstration stalled: " .. state.recipe)
+      assert(game.tick - state.started < state.seconds * 60 + 9000, "Biology demonstration stalled: " .. state.recipe)
     end
   end
   assert(
