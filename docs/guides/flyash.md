@@ -34,7 +34,7 @@ A primitive burner Cimota provides only 25 water/s, so even one unfiltered Fatmi
 
 ## Plan research and surplus
 
-Power plus Fatmice needs **100 rock ash**. Reaching filters costs **520 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing, Slag materials and Filters: the additional 420 ash takes 14 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 32,150 Quinityn packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; the capture and cleaning recipes remain unchanged.
+Power plus Fatmice needs **100 rock ash**. Reaching filters costs **520 Quinityn packs total** across Power, Fatmice, Cimota, Engines, Washing, Slag materials and Filters: the additional 420 ash takes 14 minutes of unfiltered capture with one fully supplied Fatmice, excluding research/construction time. All finite Quinityn research totals 32,650 Quinityn packs; the first level of either infinite technology consumes another 2,000. Scale scrubbing with labs; the capture and cleaning recipes remain unchanged.
 
 Surplus flyash can feed the [mixed-fuel route to rocket fuel](progression.md#local-oil-and-rockets),
 but every rocket fuel costs 750 ash. Reserve science feed before diverting it.
