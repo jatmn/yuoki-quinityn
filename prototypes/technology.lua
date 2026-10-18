@@ -4,6 +4,7 @@ local function icons(name)
     or data.raw.armor[name]
     or data.raw.ammo[name]
     or data.raw.module[name]
+    or data.raw["repair-tool"][name]
   assert(item, "Missing research icon item: " .. name)
   return item.icons and table.deepcopy(item.icons) or { { icon = item.icon, icon_size = item.icon_size or 64 } }
 end
@@ -61,14 +62,14 @@ local stages = {
     "y-crusher",
     { type = "craft-item", item = "quinityn-burner-separator", count = 1 },
   },
-  { "power", { "industrial-science", "basic-factory", "fuel-processing" }, 60, "y-steam-turbine" },
+  { "power", { "industrial-science", "basic-factory", "fuel-processing" }, 60, "y-notfall-generator-s2" },
   { "cimota", { "power" }, 100, "y-atomic-constructor" },
   { "engines", { "cimota" }, 120, "y-sfe" },
   { "refining", { "engines", "advanced-components" }, 150, "y_smelter" },
   { "agriculture", { "refining" }, 180, "ye_farm" },
   { "logistics", { "advanced-components" }, 100, "y-inserter-fast" },
   { "defense", { "power", "washing" }, 100, "y_turret_gun1f12" },
-  { "quantum", { "crystal-processing", "energy-storage" }, 250, "y-atomic-quantum-composer" },
+  { "quantum", { "crystal-processing", "energy-storage", "high-flow-storage" }, 250, "y-atomic-quantum-composer" },
   { "trade", { "quantum", "packaging" }, 300, "y-stargate" },
   { "mastery", { "trade", "maintenance", "reactors" }, 500, "y_trade_ultimate" },
   { "orbital", { "quantum" }, 200, "rocket-silo" },

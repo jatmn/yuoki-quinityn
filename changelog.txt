@@ -1,6 +1,9 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Split Yuoki power into separate fuel, solar, steam and repair researches instead of one bulk unlock.
+    - Split first-tier energy storage into separate researches for the four initial storage devices and later accumulator, flywheel and compensator steps.
+    - Split advanced electric generation into separate researches for Generator-S sizes, the high-capacity boiler, steam turbine and electric water generator.
     - Craft one Primitive Cimota Restructor to turn surplus stone and wood into coal, iron ore and copper ore before any Quinityn science. The later Cimota Restructor remains faster and more efficient for the same basic conversions.
     - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
     - Local biter and spitter nests rarely produce Stomp-a-trons along their existing size evolution curves. They drop industrial salvage and ancient data, never wrigglers or pentapod eggs, and have 3%, 7% and 11% laser resistance.
@@ -49,6 +52,7 @@ Version: Unreleased
     - Added missing localized surface units and custom prototype/interface names.
     - Productivity modules can be used while compiling industrial research data. A normal craft still makes five packs; productivity adds bonus packs without extra ingredients.
   Compatibility:
+    - Completed Yuoki power, Industrial energy storage and Advanced electric generation research remains completed. Recipes moved into the new technologies stay locked until those technologies are researched. Placed machines and items remain.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.
   Testing:

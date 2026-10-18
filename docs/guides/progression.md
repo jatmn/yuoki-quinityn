@@ -2,7 +2,7 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **73 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **88 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
 
 ## Arrive, then establish industry
 
@@ -103,6 +103,12 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Research | Prerequisites within Quinityn | Packs of each required science |
 | --- | --- | --- |
 | Fatmice air scrubbing | Yuoki power and infrastructure | 40 |
+| Compressed coal fuel | Yuoki power and infrastructure | 40 |
+| Loaded mixed fuel | Yuoki power and infrastructure | 60 |
+| Mud residue fuel | Loaded mixed fuel, Ore washing and residue recovery | 40 |
+| Durotal repair tools | Durotal and Fuelnium compaction, Quinityn industrial science | 40 |
+| Stirling solar dish | Yuoki power and infrastructure | 40 |
+| Alien solar collector | Stirling solar dish | 120 |
 | Reusable air filters | Fatmice air scrubbing, Ore washing and residue recovery, Mechanical Force engineering | 100 |
 | Deep excavation | Quinityn industrial science, First Yuoki factory, Fuelnium reactor fuel | 50 |
 | Ore washing and residue recovery | Quinityn industrial science, First Yuoki factory, Fuelnium reactor fuel | 40 |
@@ -111,7 +117,10 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | Advanced industrial components | Reconstructed petrochemistry | 100 |
 | Maintenance workshops | Tool-assisted processing, Advanced crushing and forming, Advanced industrial components, Yuoki logistics | 100 |
 | Industrial energy storage | Yuoki power and infrastructure, Ore washing and residue recovery, Advanced industrial components | 100 |
-| Crystal accumulator upgrades | Industrial energy storage, Quantrinum and advanced electronics | 160 |
+| Large accumulator | Industrial energy storage | 80 |
+| Flywheel buffer | Industrial energy storage | 80 |
+| High-flow compensator | Industrial energy storage, Industrial fluid and electric infrastructure | 80 |
+| Crystal accumulator upgrades | Large accumulator, Quantrinum and advanced electronics | 160 |
 | Mixed-oxide reactor engineering | Yuoki industrial refining, Advanced industrial components, Contract world defense, Advanced electric generation | 160 |
 | Quantum power systems | Crystal accumulator upgrades, Mixed-oxide reactor engineering | 250 |
 | Industrial fluid handling | Mechanical force engineering | 80 |
@@ -149,6 +158,12 @@ The broad base disciplines now cover their first usable production stage. Upgrad
 | YI Quality Module | Mantis-S productivity module, vanilla Quality module 2, Mastercrafted industry | 5,000 |
 | Industrial packaging | Yuoki agronomy and biology, Industrial fluid handling | 120 |
 | Advanced electric generation | Yuoki power and infrastructure, Advanced industrial components, Mechanical force engineering, Yuoki industrial refining | 140 |
+| Medium Generator-S | Advanced electric generation | 80 |
+| Big Generator-S | Medium Generator-S | 80 |
+| Huge Generator-S | Big Generator-S | 100 |
+| High-capacity boiler | Yuoki power and infrastructure, Advanced industrial components, Mechanical force engineering, Yuoki industrial refining | 80 |
+| High-pressure steam turbine | High-capacity boiler | 60 |
+| Electric water generator | Yuoki power and infrastructure, Advanced industrial components, Mechanical force engineering, Yuoki industrial refining | 60 |
 | Industrial fluid and electric infrastructure | Yuoki power and infrastructure, Advanced industrial components | 80 |
 
 Y2 research unlocks only the Y2-Factory at the existing point in the tree. P3 follows advanced engines and Yuoki speed module 2, costing 1,000 each of red, green, blue, purple, yellow and Quinityn science at 30 seconds per unit. Its module prerequisite requires space science. The research center follows P3 and Mastercrafted industry: **5,000 each of automation, logistic, military, chemical, production, utility, space and Quinityn science, at 40 seconds per unit**. Its free Scientific Reputation recipe moves with it. Existing factory ingredients stay unchanged: Scientific Reputation is available earlier as a byproduct of radar construction, Quantrinum production and other recipes. Y2 and local rockets remain reachable without importing space science; P3 and the center wait for an orbital science supply, but neither factory requires the research center for its ingredients.
@@ -230,4 +245,4 @@ The supported baseline is the required Yuoki/Engines/Space Age set. Other overha
 
 ### Updating an existing development save
 
-Completed technologies stay completed. Recipes moved into the new upgrade technologies require those new technologies to be researched; this deliberately replaces the old bulk unlocks. Existing buildings and items remain. Discovery and arrival are required for a new force; debug teleporting an undiscovered force is not a supported starting-planet mode.
+Completed technologies stay completed. Recipes moved into the new upgrade technologies require those new technologies to be researched; this deliberately replaces the old bulk unlocks. Existing buildings and items remain. If you already completed **Yuoki power and infrastructure**, **Industrial energy storage** or **Advanced electric generation**, those technologies stay completed; recipes that moved wait for the new technologies; placed machines and items stay. Discovery and arrival are required for a new force; debug teleporting an undiscovered force is not a supported starting-planet mode.
