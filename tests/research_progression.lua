@@ -497,6 +497,7 @@ local function plant_storage_tiers_alone()
   local forceQuantum = game.create_force("plant-quantum-moves")
   forceQuantum.technologies["quinityn-crystal-processing"].researched = true
   forceQuantum.technologies["quinityn-energy-storage"].researched = true
+  forceQuantum.technologies["quinityn-archaeology"].researched = true
   progression.reconcile()
   check(not recipe_enabled(forceQuantum, "yi_radar"), "quantum baseline locks yi_radar")
   check(not recipe_enabled(forceQuantum, "yi-monument1"), "quantum baseline locks yi-monument1")
@@ -505,6 +506,29 @@ local function plant_storage_tiers_alone()
   for _, name in ipairs(stayers) do
     check(not recipe_enabled(forceQuantum, name), "quantum baseline locks stayer " .. name)
   end
+  local quantum_prerequisites = {}
+  local quantum_prerequisite_count = 0
+  for _, technology in pairs(forceQuantum.technologies["quinityn-quantum"].prerequisites) do
+    quantum_prerequisites[technology.name] = true
+    quantum_prerequisite_count = quantum_prerequisite_count + 1
+  end
+  check(quantum_prerequisite_count == 3, "quantum has exactly three prerequisites")
+  check(quantum_prerequisites["quinityn-crystal-processing"] == true, "quantum requires quinityn-crystal-processing")
+  check(quantum_prerequisites["quinityn-energy-storage"] == true, "quantum requires quinityn-energy-storage")
+  check(quantum_prerequisites["quinityn-archaeology"] == true, "quantum requires quinityn-archaeology")
+  check(
+    forceQuantum.technologies["quinityn-crystal-processing"].researched,
+    "quantum chain researched quinityn-crystal-processing"
+  )
+  check(
+    forceQuantum.technologies["quinityn-energy-storage"].researched,
+    "quantum chain researched quinityn-energy-storage"
+  )
+  check(forceQuantum.technologies["quinityn-archaeology"].researched, "quantum chain researched quinityn-archaeology")
+  check(
+    not forceQuantum.technologies["quinityn-quantum"].researched,
+    "quantum stays unresearched until its chain is set"
+  )
   forceQuantum.technologies["quinityn-quantum"].researched = true
   progression.reconcile()
   check(recipe_enabled(forceQuantum, "yi_radar"), "quantum research enables yi_radar")
