@@ -273,8 +273,16 @@ script.on_event(defines.events.on_tick, function(event)
     nauvis.force_generate_chunk_requests()
     storage.nauvis_crusher = nauvis.create_entity({ name = "y-crusher", position = { 0, 0 }, force = force })
     storage.nauvis_crusher.get_fuel_inventory().insert({ name = "coal", count = 5 })
-    storage.nauvis_crusher.insert({ name = "quinityn-salvage", count = 1 })
-    storage.nauvis_recipe_rejected = not storage.nauvis_crusher.set_recipe("quinityn-hand-sort")
+    -- Select recipe before loading salvage; a cleared recipe would leave the machine empty.
+    storage.nauvis_crusher.set_recipe("quinityn-hand-sort")
+    check(
+      storage.nauvis_crusher.insert({ name = "quinityn-salvage", count = 1 }) == 1,
+      "nauvis crusher accepts exactly one salvage"
+    )
+    check(
+      storage.nauvis_crusher.get_inventory(defines.inventory.crafter_input).get_item_count("quinityn-salvage") == 1,
+      "nauvis crusher input holds exactly one salvage"
+    )
     crusher.get_fuel_inventory().insert({ name = "coal", count = 10 })
     crusher.insert({ name = "quinityn-salvage", count = 1 })
     -- Isolated real machine fixture; ingredients and fuel are injected to test operation.
@@ -503,11 +511,7 @@ script.on_event(defines.events.on_tick, function(event)
     check(assembler.get_recipe() == nil, "vanilla assembler rejects planet science")
     -- Programmatic research setters do not necessarily emit finished events; checked separately below.
   elseif event.tick == 300 then
-    if storage.nauvis_recipe_rejected then
-      check(true, "nauvis crusher rejects salvage sorting recipe")
-    else
-      check(storage.nauvis_crusher.products_finished == 0, "nauvis crusher cannot craft quinityn salvage sorting")
-    end
+    check(storage.nauvis_crusher.products_finished == 0, "nauvis crusher cannot craft quinityn salvage sorting")
   elseif event.tick == 400 then
     local out = storage.crusher.get_output_inventory()
     check(storage.crusher.products_finished == 1, "quinityn crusher finishes one salvage sort")
