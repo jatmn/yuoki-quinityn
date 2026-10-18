@@ -94,17 +94,23 @@ if missing:
  sys.exit(1)
 finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith('quinityn-bridge-')
         and t.get('max_level')!='infinite'}
-# These specific upgrades require orbital science, directly or through speed 2
-# for P3. Keep the empty-inventory rocket proof and every other finite unlock local.
+# Eight module technologies, P3 and the research center require orbital science,
+# directly or through speed 2 for P3. Advanced transmission requires the foundry
+# because green tubes use metallurgy; its unit still uses only local packs.
+# Keep the empty-inventory rocket proof and every other finite unlock local.
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
  'science-module','quality-module','p3-factory','research-center','advanced-transmission']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
 for name in space_gated-{'quinityn-p3-factory','quinityn-advanced-transmission'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
+transmission='quinityn-advanced-transmission'
+assert {i[0] for i in T[transmission]['unit']['ingredients']}=={
+ 'automation-science-pack','logistic-science-pack','quinityn-research-data'},transmission
+assert 'foundry' in T[transmission]['prerequisites'] and 'foundry' not in techs
 assert 'ye_fassembly2' in machines
 assert sources['ye_science_blue'] in {'yi_radar','y-quantrinum','y_quantrinum_infusion'}
-print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science')
+print('PASS: Y2 and reputation byproducts are local; eight advanced modules, P3 and research center await orbital science; green tubes await the foundry')
 assert 'rocket-building' in categories, 'Rocket silo category inaccessible'
 assert all(p['name'] in items for p in R['rocket-part']['ingredients'])
 assert 'rocket-part' in recipes

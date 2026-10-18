@@ -152,6 +152,13 @@ local function engine_unlocks()
     not recipe_enabled(force, "ye_mfheatmotor_m") and not recipe_enabled(force, "ye_mf_mfheatmotor_m"),
     "medium motor leaves heat generator locked"
   )
+  force.technologies["quinityn-mf-heat-generator"].researched = true
+  progression.reconcile()
+  check(
+    recipe_enabled(force, "ye_mfheatmotor_m") and recipe_enabled(force, "ye_mf_mfheatmotor_m"),
+    "heat generator unlocks recipes"
+  )
+  force.technologies["quinityn-mf-heat-generator"].researched = false
   force.technologies["quinityn-medium-electric-motor"].researched = false
   force.technologies["quinityn-steam-overheating"].researched = true
   progression.reconcile()
@@ -163,6 +170,15 @@ local function engine_unlocks()
     not recipe_enabled(force, "ye_steam2mf") and not recipe_enabled(force, "ye_steam3mf"),
     "steam overheating leaves turbine MF recipes locked"
   )
+  force.technologies["quinityn-steam-turbine"].researched = true
+  progression.reconcile()
+  check(
+    recipe_enabled(force, "ye_sturbine")
+      and recipe_enabled(force, "ye_steam2mf")
+      and recipe_enabled(force, "ye_steam3mf"),
+    "steam turbine unlocks recipes"
+  )
+  force.technologies["quinityn-steam-turbine"].researched = false
   force.technologies["quinityn-steam-overheating"].researched = false
   force.technologies["quinityn-high-temperature-generation"].researched = true
   progression.reconcile()

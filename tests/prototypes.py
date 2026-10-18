@@ -553,7 +553,8 @@ assert direct_unlocks('quinityn-substrat-neutralization')=={'ye_neutralisatzion'
 assert 'quinityn-genetics' in T['quinityn-substrat-neutralization']['prerequisites']
 assert 'ye_neutralisatzion' not in direct_unlocks('quinityn-engines')
 assert direct_unlocks('quinityn-advanced-generation')=={'y-seg','y-meg-s','y-beg','y-heg','y-boiler-iv','y-water-gen-e'}
-assert {'y-emotor-s','y-mf1c'}<=direct_unlocks('quinityn-air-scrubbing')
+assert direct_unlocks('quinityn-air-scrubbing')=={
+ 'y-electric-air-heater','y-emotor-s','y-iron-case','y-mf1c','y-rmvpol','y-winding','yie_hard_metals'}
 assert 'quinityn-advanced-engines' in ancestry('quinityn-p3-factory')
 for tech in T:
  if tech.startswith('quinityn-') and tech in {
