@@ -66,12 +66,13 @@ function M.reconcile()
     for recipe, enabled in pairs(managed) do
       force.recipes[recipe].enabled = enabled
     end
-    -- Surveyed saves predate this craft trigger, so the finished separator craft
-    -- does not replay. Researching the technology applies its unlock effects.
+    -- Saves that already crafted the separator completed quinityn-materials,
+    -- the same craft-item trigger. Surplus was added later, so that craft does
+    -- not replay. Arrival only records the landing and is not craft evidence.
     -- script_trigger_research is only valid for a scripted trigger.
     if
-      force.technologies["quinityn-arrival"]
-      and force.technologies["quinityn-arrival"].researched
+      force.technologies["quinityn-materials"]
+      and force.technologies["quinityn-materials"].researched
       and force.technologies["quinityn-surplus"]
       and not force.technologies["quinityn-surplus"].researched
     then

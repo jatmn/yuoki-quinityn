@@ -35,6 +35,7 @@ Version: Unreleased
     - Added expensive factory-only Technic Sign qualification without byproducts.
     - Replaced the separator with a primitive Cimota appearance, at 0.5 crafting speed; raw F7 burns for 1 MJ.
   Fixes:
+    - Surveyed saves that never crafted a Primitive Cimota Restructor no longer gain surplus stone and wood conversions on load. Saves that already finished N4 and F7 crushing keep those conversions.
     - Tinted the placed Primitive Cimota Restructor purple so it matches its recipe icon.
     - Listed Compile industrial research data with the other science packs, and listed Durotal foundations, Durotal low density structures, and Yuoki processing units beside their normal counterparts.
     - Researching Planet discovery Quinityn unlocks rocket travel to space platforms, even when it is the first planet discovered. An existing save that already researched it gains that permission on load. Landing is still required for the field survey.

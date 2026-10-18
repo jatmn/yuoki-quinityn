@@ -554,9 +554,15 @@ prim_time=lambda r,s: r['energy_required']/s
 prim_chain=prim_time(R['quinityn-wood-to-uc'],0.5)+prim_time(R['quinityn-uc-to-coal'],0.5)
 full_chain=prim_time(R['y-ac-wood2uc'],2)+prim_time(R['y-ac-uc2coal'],2)
 assert prim_chain>full_chain
+def recipe_amount(recipe_name,field,item_name):
+ recipe=R[recipe_name]
+ parts=[p for p in (recipe.get(field) or []) if p.get('name')==item_name]
+ assert len(parts)==1 and isinstance(parts[0].get('amount'),(int,float)) and parts[0]['amount']>0, recipe_name+' missing '+item_name+' in '+field
+ return parts[0]['amount']
 wood_in,coal_out=40,10
-full_wood,full_coal=20,20
-assert wood_in/full_wood>coal_out/full_coal
+full_wood=recipe_amount('y-ac-wood2uc','ingredients','wood')
+full_coal=recipe_amount('y-ac-uc2coal','results','coal')
+assert wood_in/full_wood>coal_out/full_coal, 'Primitive wood-to-coal yield must stay below the loaded full Cimota recipes'
 coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
