@@ -67,6 +67,17 @@ try:
  run('salvage-sort-migration-reload',base+['--benchmark',str(a.output/'salvage-sort-migration.zip'),'--benchmark-ticks','300','--benchmark-runs','1'],'QUINITYN SALVAGE SORT MIGRATION PASSED')
 finally:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/research_migration")\n')
+ legacy=harness/'data-final-fixes.lua'
+ legacy.write_text('for name, gate in pairs({["quinityn-quantum"]="quinityn-high-flow-storage", ["quinityn-advanced-storage"]="quinityn-accumulator-capacity"}) do\n'
+  ' local t=data.raw.technology[name]; for i=#t.prerequisites,1,-1 do if t.prerequisites[i]==gate then table.remove(t.prerequisites,i) end end\nend\n')
+ run('research-migration-create',base+['--create',str(a.output/'research-migration.zip')],'QUINITYN RESEARCH MIGRATION SETUP')
+ legacy.unlink()
+ run('research-migration-reload',base+['--benchmark',str(a.output/'research-migration.zip'),'--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN RESEARCH MIGRATION PASSED')
+finally:
+ legacy.unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Native paired surfaces verify the independent planet controls through map generation.
 try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/enemies")\n')
@@ -99,7 +110,7 @@ try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/landing_routes")\n')
  run('landing-routes-create',base+['--create',str(a.output/'landing-routes.zip')],'Factorio initialised')
  run('landing-routes',base+['--benchmark',str(a.output/'landing-routes.zip'),
-     '--benchmark-ticks','22000','--benchmark-runs','1'],'QUINITYN LANDING ROUTE TESTS PASSED')
+     '--benchmark-ticks','22000','--benchmark-runs','1'],'QUINITYN LANDING ROUTE TESTS PASSED',timeout=600)
 finally:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 # Preserve the upstream heavy-oil conversion opt-out through the new tree.

@@ -140,6 +140,11 @@ local function power_storage_generation_restaging()
   legacy.technologies["quinityn-power"].researched = true
   legacy.technologies["quinityn-energy-storage"].researched = true
   legacy.technologies["quinityn-advanced-generation"].researched = true
+  for _, names in ipairs({ moved_power, accumulators, { "y-meg-s", "y-beg", "y-heg", "y-boiler-iv", "y-water-gen-e" } }) do
+    for _, name in ipairs(names) do
+      legacy.recipes[name].enabled = true
+    end
+  end
   progression.reconcile()
   check(legacy.technologies["quinityn-power"].researched, "legacy power stays researched")
   check(legacy.technologies["quinityn-energy-storage"].researched, "legacy storage stays researched")

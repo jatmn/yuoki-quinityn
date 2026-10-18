@@ -53,6 +53,21 @@ end
 function M.reconcile()
   -- New and existing saves: ensure no formerly enabled Yuoki recipe leaks through.
   for _, force in pairs(game.forces) do
+    -- Cancel before completing migration/bridge research, which can rebuild
+    -- the queue. Native cancellation saves spent progress for later resumption.
+    while force.current_research and force.current_research.name:match("^quinityn%-") do
+      local ready = true
+      for _, prerequisite in pairs(force.current_research.prerequisites) do
+        if not prerequisite.researched then
+          ready = false
+          break
+        end
+      end
+      if ready then
+        break
+      end
+      force.cancel_current_research()
+    end
     local managed = {}
     for name, technology in pairs(force.technologies) do
       if name:match("^quinityn%-") then
