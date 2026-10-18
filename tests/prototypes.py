@@ -74,7 +74,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==75
+assert len(tips)==87
 # Localized rich-text links must point at actual prototypes.
 text=(root/'locale/en/quinityn.cfg').read_text()
 for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^\]]+)\]',text):
@@ -84,7 +84,7 @@ for kind,name in re.findall(r'\[(item|entity|fluid|recipe|technology|planet)=([^
  assert exists,f'Broken guide link: {kind}={name}'
 for name in ['quinityn-basalt','quinityn-slag','quinityn-ruined-district','quinityn-unicomp-sea']:
  assert tiles[name]['absorptions_per_second']['pollution']==.000001
-print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 75 guide chapters; foundations; science sinks; pollution')
+print(f'PASS: {len(owned)} named upstream recipe gates; technology DAG; 87 guide chapters; foundations; science sinks; pollution')
 # A compact reviewable manifest is generated from the engine, not a parallel source of truth.
 manifest={n:[e['recipe'] for e in t.get('effects',[]) if e['type']=='unlock-recipe'] for n,t in T.items() if n.startswith('quinityn-')}
 (root/'docs/recipe-unlocks.json').write_text(json.dumps(manifest,indent=2,sort_keys=True)+'\n')
@@ -321,6 +321,100 @@ for n in [robotics,network,advanced]:
  assert 'chemical-science-pack' in ancestry(n)
 print('PASS: separate Y2/P3/research center, endgame science/costs and robot manufacturing plus lab gates')
 
+def direct_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+def quinityn_prerequisites(tech):
+ return {p for p in T[tech]['prerequisites'] if p.startswith('quinityn-')}
+logistics_kept={'y-inserter-fast','y-inserter-s4','y_sc11'}
+assert direct_unlocks('quinityn-logistics')==logistics_kept
+logistics_tiers={
+ 'quinityn-expanded-storage':({'quinityn-logistics'},40,{'y_c22'}),
+ 'quinityn-large-storage':({'quinityn-expanded-storage'},60,{'y_cg33'}),
+ 'quinityn-bulk-storage':({'quinityn-large-storage'},80,{'y_sc44'}),
+ 'quinityn-logistic-storage':({'quinityn-logistics'},80,{'j-dl-provider','y-rare-chest-log'}),
+ 'quinityn-logistic-provider-capacity':({'quinityn-logistic-storage'},40,{'y_pc22'}),
+ 'quinityn-logistic-bunker':({'quinityn-logistic-storage','quinityn-large-storage'},60,{'y-rare-m1bunker-log'}),
+ 'quinityn-logistic-requests':({'quinityn-logistic-storage','quinityn-robotics'},100,{'j-dl-request','j-dl-buffer'}),
+ 'quinityn-wide-logistic-requests':({'quinityn-logistic-requests'},40,{'y_rc22','y_bc22'}),
+}
+for tech,(parents,count,recipes) in logistics_tiers.items():
+ assert quinityn_prerequisites(tech)==parents,tech
+ assert T[tech]['unit']['count']==count,tech
+ assert direct_unlocks(tech)==recipes,tech
+ for recipe in recipes:
+  assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
+for recipe in logistics_kept:
+ assert unlocks[recipe]==['quinityn-logistics'],(recipe,unlocks.get(recipe))
+requests=T['quinityn-logistic-requests']
+assert 'logistic-system' in requests['prerequisites']
+assert 'chemical-science-pack' not in {i[0] for i in requests['unit']['ingredients']}
+advanced_logistics_recipes={
+ 'y-inserter-smart','y-inserter-smart-long','y_inserter_diagonal','y_inserter_evade_shortL','y_inserter_evade_shortR',
+ 'y_inserter_smart_LL','y_inserter_smart_RR','y_inserter_smart_leftR2','y_inserter_smart_rightR2'}
+assert direct_unlocks('quinityn-advanced-logistics')==advanced_logistics_recipes
+assert quinityn_prerequisites('quinityn-advanced-logistics')=={'quinityn-logistics','quinityn-quantum'}
+for recipe in advanced_logistics_recipes:
+ assert unlocks[recipe]==['quinityn-advanced-logistics'],(recipe,unlocks.get(recipe))
+ assert unlocks[recipe+'-recycling']==['quinityn-bridge-advanced-logistics-recycling'],recipe
+robotics_stayers={'yi_roboport','yi_logistic-robot','yi_construction-robot'}
+assert direct_unlocks('quinityn-robotics')==robotics_stayers
+for recipe in robotics_stayers:
+ assert unlocks[recipe]==['quinityn-robotics'],(recipe,unlocks.get(recipe))
+ assert unlocks[recipe+'-recycling']==['quinityn-bridge-robotics-recycling'],recipe
+new_logistics={
+ 'quinityn-expanded-storage','quinityn-large-storage','quinityn-bulk-storage','quinityn-logistic-storage',
+ 'quinityn-logistic-provider-capacity','quinityn-logistic-bunker','quinityn-logistic-requests','quinityn-wide-logistic-requests'}
+for tech in new_logistics:
+ assert 'quinityn-logistics' in ancestry(tech),tech
+ assert 'quinityn-advanced-logistics' not in ancestry(tech),tech
+assert 'quinityn-expanded-storage' in ancestry('quinityn-large-storage')
+assert 'quinityn-large-storage' in ancestry('quinityn-bulk-storage')
+assert 'quinityn-logistic-storage' in ancestry('quinityn-logistic-provider-capacity')
+assert {'quinityn-logistic-storage','quinityn-large-storage'}<=ancestry('quinityn-logistic-bunker')
+assert {'quinityn-logistic-storage','quinityn-robotics','logistic-system'}<=ancestry('quinityn-logistic-requests')
+assert 'quinityn-logistic-requests' in ancestry('quinityn-wide-logistic-requests')
+assert 'logistic-robotics' in ancestry('quinityn-logistics')
+for tech in ['quinityn-logistics','quinityn-expanded-storage','quinityn-large-storage','quinityn-bulk-storage',
+             'quinityn-logistic-storage','quinityn-logistic-provider-capacity','quinityn-logistic-bunker']:
+ assert 'logistic-system' not in ancestry(tech),tech
+for protected in ['quinityn-arrival','quinityn-surplus','quinityn-power','quinityn-industrial-science','quinityn-orbital']:
+ for tech in new_logistics:
+  assert tech not in ancestry(protected),protected+' blocked by '+tech
+for name,size in [('y_sc11',60),('y_c22',100),('y_cg33',140),('y_sc44',220)]:
+ assert D['container'][name]['inventory_size']==size,name
+for name,mode,size in [
+ ('j-dl-provider','passive-provider',60),('y-rare-chest-log','storage',60),('j-dl-request','requester',60),
+ ('j-dl-buffer','buffer',60),('y_pc22','passive-provider',70),('y_rc22','requester',70),('y_bc22','buffer',70),
+ ('y-rare-m1bunker-log','storage',140)]:
+ chest=D['logistic-container'][name]
+ assert chest['inventory_size']==size and chest['logistic_mode']==mode,name
+def insert_reach(ins):
+ pos=ins['insert_position']
+ return pos[1] if isinstance(pos,list) else pos['y']
+fast=D['inserter']['y-inserter-fast'];long=D['inserter']['y-inserter-s4']
+assert abs(insert_reach(fast)-1.2)<1e-6 and abs(insert_reach(long)-4.2)<1e-6
+assert unlocks['y-inserter-fast']==unlocks['y-inserter-s4']==['quinityn-logistics']
+retained_recycling={'y-inserter-fast-recycling','y-inserter-s4-recycling','y_sc11-recycling'}
+assert set(manifest['quinityn-bridge-logistics-recycling'])==retained_recycling
+moved_recycling={
+ 'y_c22-recycling':'quinityn-bridge-expanded-storage-recycling',
+ 'y_cg33-recycling':'quinityn-bridge-large-storage-recycling',
+ 'y_sc44-recycling':'quinityn-bridge-bulk-storage-recycling',
+ 'j-dl-provider-recycling':'quinityn-bridge-logistic-storage-recycling',
+ 'y-rare-chest-log-recycling':'quinityn-bridge-logistic-storage-recycling',
+ 'y_pc22-recycling':'quinityn-bridge-logistic-provider-capacity-recycling',
+ 'y-rare-m1bunker-log-recycling':'quinityn-bridge-logistic-bunker-recycling',
+ 'j-dl-request-recycling':'quinityn-bridge-logistic-requests-recycling',
+ 'j-dl-buffer-recycling':'quinityn-bridge-logistic-requests-recycling',
+ 'y_rc22-recycling':'quinityn-bridge-wide-logistic-requests-recycling',
+}
+if 'y_bc22-recycling' in unlocks:
+ moved_recycling['y_bc22-recycling']='quinityn-bridge-wide-logistic-requests-recycling'
+for recipe,bridge in moved_recycling.items():
+ assert unlocks[recipe]==[bridge],recipe
+ assert recipe not in manifest['quinityn-bridge-logistics-recycling'],recipe
+print('PASS: staged logistics storage, requester and buffer unlocks')
+
 # Every active Yuoki module has its own research, including ultimate products
 # outside the ordinary module crafting subgroup. Recipe inputs establish lineage.
 modules={n for n in D['module'] if n.startswith('y')}
@@ -547,7 +641,31 @@ assert unlocks['y-electric-air-heater']==unlocks['y-rmvpol']==['quinityn-air-scr
 assert not R['y-rmvpol'].get('hidden',False)
 for name in ['j-airfilter','j-airfilter_dirty','j-airfilter_cleaning']:
  assert unlocks[name]==['quinityn-air-filters'] and not R[name].get('enabled',True)
-assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines'}<=ancestry('quinityn-air-filters')
+def direct_unlocks(tech):
+ return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+assert direct_unlocks('quinityn-washing')=={'y-dirtwasher','y-filtering-dust','y-pressed_dry_mud','y-pure-copper','y-pure-iron','y-release-cwater','y-refined-copper','y-refined-iron'}
+assert direct_unlocks('quinityn-archaeology')=={'y-wash-dirt','y-wash-special'}
+assert direct_unlocks('quinityn-unicomp-compression')=={'y-press-richdust'}
+assert direct_unlocks('quinityn-slag-materials')=={'y_slag_granulate','y_slag_brick','y_slag_brick_burn','y_steinmehl'}
+assert direct_unlocks('quinityn-slag-paving')=={'y_tile_slagbricks','y_tile_slagfilled','y_tile_slagpattern'}
+for tech in ['quinityn-washing','quinityn-archaeology','quinityn-unicomp-compression','quinityn-slag-materials','quinityn-slag-paving']:
+ for recipe in direct_unlocks(tech):
+  assert unlocks[recipe]==[tech],(recipe,unlocks[recipe])
+assert {'quinityn-washing','quinityn-excavation'}<=ancestry('quinityn-archaeology')
+assert 'quinityn-washing' in ancestry('quinityn-unicomp-compression')
+assert 'quinityn-washing' in ancestry('quinityn-slag-materials')
+assert 'quinityn-slag-materials' in ancestry('quinityn-slag-paving')
+assert 'quinityn-slag-materials' in ancestry('quinityn-air-filters')
+assert 'quinityn-slag-materials' in ancestry('quinityn-defense')
+assert 'quinityn-slag-materials' in ancestry('quinityn-crystal-processing')
+assert 'quinityn-archaeology' in ancestry('quinityn-quantum')
+assert 'quinityn-cimota' not in unlocks.get('y-press-richdust',[])
+assert unlocks['y_mc_dirtwasher']==['quinityn-mastery']
+assert unlocks['y_pure_copper_wtool']==['quinityn-tooling']
+assert unlocks['y_mud2solidfuel']==['quinityn-power']
+assert unlocks['y-digfdirt']==['quinityn-excavation']
+assert unlocks['y_data_crystal']==['quinityn-quantum']
+assert {'quinityn-air-scrubbing','quinityn-washing','quinityn-engines','quinityn-slag-materials'}<=ancestry('quinityn-air-filters')
 assert next(p['amount'] for p in R['j-airfilter_dirty']['ingredients'] if p['name']=='j-airfilter')==1
 assert {p['name']:p['amount'] for p in R['j-airfilter_cleaning']['results']}=={'j-airfilter':1,'y-pol-waste':6}
 assert R['j-airfilter_dirty']['emissions_multiplier']==2*R['y-rmvpol'].get('emissions_multiplier',1)
@@ -599,7 +717,7 @@ coal_fuel=I.get('coal',{}).get('fuel_value','4MJ')
 if coal_fuel=='4MJ':
  assert int(I['wood']['fuel_value'][:-2])*wood_in>=int(coal_fuel[:-2])*coal_out, 'Primitive wood-to-coal must not multiply fuel energy'
 assert unlocks['quinityn-water']==['quinityn-arrival']
-assert len(tips)==75
+assert len(tips)==87
 print('PASS: primitive surplus conversions, gated full Cimota atomics unchanged, water bootstrap intact')
 science=R['quinityn-research-data']
 assert science['allow_productivity'] is True
