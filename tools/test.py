@@ -41,6 +41,8 @@ delimiter='='
 while ']'+delimiter+']' in callbacks:delimiter+='='
 (harness/'biology_callbacks.lua').write_text(
  'return helpers.json_to_table(['+delimiter+'['+callbacks+']'+delimiter+'])\n')
+tutorials={name.removeprefix('quinityn-'):tip['simulation'] for name,tip in tips.items()
+           if name.startswith('quinityn-') and 'tutorial-demo' in tip.get('simulation',{}).get('init','')}
 for name in ['trade','prototypes','stomp_a_trons','reachability','bootstrap_budget']:
  run(name,[sys.executable,str(ROOT/'tests'/f'{name}.py'),str(dump)],'PASS')
 run('localization',[sys.executable,str(ROOT/'tests/localization.py'),str(dump),
@@ -146,6 +148,20 @@ try:
  run('biology-demonstrations-create',base+['--create',str(a.output/'biology-demonstrations.zip')],'Factorio initialised')
  run('biology-demonstrations',base+['--benchmark',str(a.output/'biology-demonstrations.zip'),
      '--benchmark-ticks','220000','--benchmark-runs','1'],'QUINITYN BIOLOGY DEMONSTRATIONS PASSED',timeout=600)
+ # Each callback runs twice through its actual recipes and operating scenes.
+ # Batches leave room under Factorio's force limit and exercise save reloads.
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/tutorial_demonstrations")\n')
+ stages=sorted(tutorials)
+ for offset in range(0,len(stages),16):
+  callbacks=json.dumps({stage:tutorials[stage] for stage in stages[offset:offset+16]})
+  delimiter='='
+  while ']'+delimiter+']' in callbacks:delimiter+='='
+  (harness/'tutorial_callbacks.lua').write_text(
+   'return helpers.json_to_table(['+delimiter+'['+callbacks+']'+delimiter+'])\n')
+  name='tutorial-demonstrations-'+str(offset//16)
+  run(name+'-create',base+['--create',str(a.output/(name+'.zip'))],'Factorio initialised')
+  run(name,base+['--benchmark',str(a.output/(name+'.zip')),
+      '--benchmark-ticks','200000','--benchmark-runs','1'],'QUINITYN TUTORIAL DEMONSTRATIONS PASSED',timeout=600)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/flyash")\n')
  run('flyash-create',base+['--create',str(a.output/'flyash.zip')],'Factorio initialised')
  run('flyash',base+['--benchmark',str(a.output/'flyash.zip'),
@@ -182,6 +198,13 @@ try:
  setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-inserter-cleanup"]); setting.forced_value=true; setting.hidden=true\n')
  run('inserters-hidden',base+['--create',str(a.output/'inserters-hidden.zip')],
      'QUINITYN INSERTER OPT-OUT TESTS PASSED')
+ (harness/'tutorial_callbacks.lua').write_text('return helpers.json_to_table([==['+
+   json.dumps({'advanced-logistics':tutorials['advanced-logistics']})+']==])\n')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/tutorial_demonstrations")\n')
+ run('tutorial-inserters-hidden-create',base+['--create',str(a.output/'tutorial-inserters-hidden.zip')],'Factorio initialised')
+ run('tutorial-inserters-hidden',base+['--benchmark',str(a.output/'tutorial-inserters-hidden.zip'),
+     '--benchmark-ticks','40000','--benchmark-runs','1'],'QUINITYN TUTORIAL DEMONSTRATIONS PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/inserter_opt_out")\n')
  run('inserters-disable-reload',base+['--benchmark',str(a.output/'inserters-visible.zip'),
      '--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN INSERTER OPT-OUT RELOAD PASSED')
  setting_override.write_text('local setting=assert(data.raw["bool-setting"]["yuoki-inserter-cleanup"]); setting.forced_value=false; setting.hidden=true\n')

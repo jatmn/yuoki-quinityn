@@ -53,14 +53,24 @@ local function clear(state)
   end
   state.labels, state.entities = {}, {}
 end
+demo.stop = clear
+demo.research = research
 
 local function amounts(state, parts, x)
   for i, part in ipairs(parts) do
     local icon = "[" .. part.type .. "=" .. part.name .. "]"
     local prototype = prototypes[part.type][part.name]
+    local quantity = string.format("%.6g", part.amount or part.amount_min)
+    if part.amount_max and part.amount_max ~= part.amount_min then
+      quantity = quantity .. "–" .. string.format("%.6g", part.amount_max)
+    end
+    local probability = part.probability
+        and part.probability < 1
+        and { "quinityn-demo.probability", string.format("%.1f", part.probability * 100) }
+      or ""
     label(
       state,
-      { "", icon, " ", string.format("%.6g", part.amount or part.amount_min), " ", prototype.localised_name },
+      { "", icon, " ", quantity, " ", prototype.localised_name, probability },
       { x, -2.5 + i * 1.1 },
       nil,
       1.5
@@ -70,47 +80,69 @@ end
 
 local function begin_step(state)
   clear(state)
-  local step = processes[state.stage][state.step]
+  local step = state.steps[state.step]
   local recipe = prototypes.recipe[step[2]]
   assert(state.force.recipes[step[2]].enabled, "Tutorial recipe is not researched: " .. step[2])
   state.recipe = step[2]
+  state.batches = step[3] or 1
   state.started = game.tick
   state.completed, state.skipped_wait = nil, false
+  state.fluids = {}
   local machine = entity(state, step[1], { 0, 0 })
   state.machine = machine
   if machine.type == "assembling-machine" then
-    assert(machine.set_recipe(step[2]), "Tutorial machine rejects " .. step[2])
+    machine.set_recipe(step[2])
+    assert(machine.get_recipe() and machine.get_recipe().name == step[2], "Tutorial machine rejects " .. step[2])
   end
-  state.seconds = recipe.energy / machine.crafting_speed
+  state.seconds = recipe.energy / (machine.type == "character" and 1 or machine.crafting_speed)
   label(state, {
     "",
-    "[technology=quinityn-" .. state.stage .. "] ",
-    { "technology-name.quinityn-" .. state.stage },
+    "[technology=" .. state.technology .. "] ",
+    { "technology-name." .. state.technology },
     "  ",
     state.step,
     "/",
-    #processes[state.stage],
+    #state.steps,
   }, { 0, -7 })
-  label(state, { "", "[recipe=" .. step[2] .. "] ", recipe.localised_name }, { 0, -6 })
+  local product = recipe.products[1]
+  local recipe_name = { "?", recipe.localised_name, prototypes[product.type][product.name].localised_name, recipe.name }
+  label(state, { "", "[recipe=" .. step[2] .. "] ", recipe_name }, { 0, -6 })
   label(state, { "quinityn-demo.inputs" }, { -10, -3.3 }, { 0.6, 0.9, 1 })
   label(state, { "quinityn-demo.outputs" }, { 10, -3.3 }, { 0.7, 1, 0.6 })
   amounts(state, recipe.ingredients, -10)
   amounts(state, recipe.products, 10)
   label(state, machine.localised_name, { 0, 4.6 })
   label(state, { "quinityn-demo.duration", string.format("%.1f", state.seconds) }, { 0, 5.5 })
-  label(state, { "quinityn-demo." .. state.stage }, { 0, 7.2 }, { 1, 0.85, 0.5 }, 1.3)
+  label(state, state.notice or { "quinityn-demo." .. state.stage }, { 0, 7.2 }, { 1, 0.85, 0.5 }, 1.3)
   label(state, { "quinityn-demo.staged" }, { 0, 8.1 }, { 0.8, 0.8, 0.8 }, 1.2)
   state.status = label(state, { "quinityn-demo.running" }, { 0, -4.7 }, { 0.7, 1, 0.6 })
+
+  if machine.type == "character" then
+    for _, part in ipairs(recipe.ingredients) do
+      assert(part.type == "item")
+      assert(machine.insert({ name = part.name, count = part.amount }) == part.amount)
+    end
+    assert(machine.begin_crafting({ recipe = step[2], count = 1 }) == 1)
+    return
+  end
 
   -- An actual powered network, with a clearly labelled editor energy source.
   local power = entity(state, "electric-energy-interface", { -4, 4 })
   power.power_production = 100000000
   power.electric_buffer_size = 100000000
   entity(state, "substation", { -4, 1 })
+  entity(state, "substation", { 5, 6 })
+  local fusion = machine.name == "y-obninsk-reactor" or machine.name == "ye_rheinsberg"
+  local fuel_name = fusion and "y-fuel-reactor" or "coal"
   if machine.burner then
-    machine.get_fuel_inventory().insert({ name = "coal", count = 50 })
+    local fuel = fuel_name
+    assert(machine.get_fuel_inventory().insert({ name = fuel, count = 50 }) > 0)
   end
-  label(state, { "quinityn-demo." .. (machine.burner and "fuel" or "electric") }, { -5, 6.3 }, nil, 1)
+  label(state, {
+    "",
+    machine.burner and "[item=" .. fuel_name .. "] " or "",
+    { "quinityn-demo." .. (machine.burner and "fuel" or "electric") },
+  }, { -5, 6.3 }, nil, 1)
 
   -- A real input chest and inserter make consumption visible. Native crafting
   -- consumes exact supplied quantities; every output remains in the scene.
@@ -120,7 +152,8 @@ local function begin_step(state)
   entity(state, "small-electric-pole", { left - 0.5, machine.position.y + 2 })
   for _, part in ipairs(recipe.ingredients) do
     if part.type == "item" then
-      assert(input_chest.insert({ name = part.name, count = part.amount }) == part.amount, part.name)
+      local count = part.amount * state.batches
+      assert(input_chest.insert({ name = part.name, count = count }) == count, part.name)
     end
   end
   local edge = math.ceil(machine.bounding_box.right_bottom.x)
@@ -169,8 +202,8 @@ local function begin_step(state)
   end
 end
 
-function demo.start(stage, surface, force, full_duration)
-  assert(processes[stage], stage)
+function demo.start(stage, surface, force, full_duration, definition)
+  local steps = definition and definition.steps or assert(processes[stage], stage)
   local state = {
     stage = stage,
     step = 1,
@@ -179,8 +212,11 @@ function demo.start(stage, surface, force, full_duration)
     labels = {},
     entities = {},
     full_duration = full_duration,
+    steps = steps,
+    technology = definition and definition.technology or "quinityn-" .. stage,
+    notice = definition and definition.notice,
   }
-  research(state.force, "quinityn-" .. stage)
+  research(state.force, state.technology)
   -- Preview logistics are accelerated, explicitly labelled separately from
   -- the unmodified machine recipe and its full-duration regression.
   state.force.inserter_stack_size_bonus = 254
@@ -215,7 +251,7 @@ end
 
 function demo.update(state)
   local machine = state.machine
-  for _, fluid in ipairs(state.fluids) do
+  for _, fluid in ipairs(state.fluids or {}) do
     if fluid.remaining > 0 then
       local added = fluid.pipe.insert_fluid({
         name = fluid.name,
@@ -227,13 +263,20 @@ function demo.update(state)
   end
   -- Tutorials show the last eight seconds of long crafts after native input
   -- consumption. The separate engine regression runs the full native duration.
-  if not state.full_duration and not state.skipped_wait and machine.crafting_progress > 0 then
+  if
+    machine.type ~= "character"
+    and not state.full_duration
+    and not state.skipped_wait
+    and machine.crafting_progress > 0
+  then
     if state.seconds > 8 then
       machine.crafting_progress = math.max(machine.crafting_progress, 1 - 8 / state.seconds)
     end
     state.skipped_wait = true
   end
-  if machine.products_finished > 0 and not state.completed then
+  local finished = machine.type == "character" and machine.crafting_queue_size == 0
+    or machine.type ~= "character" and machine.products_finished >= state.batches
+  if finished and not state.completed then
     if machine.type == "assembling-machine" then
       assert(machine.get_recipe().name == state.recipe, "Wrong native recipe completed")
     end
@@ -241,8 +284,9 @@ function demo.update(state)
     state.status.text = { "quinityn-demo.complete" }
     log("QUINITYN BIOLOGY DEMO completed " .. state.stage .. "/" .. state.recipe)
   end
-  if state.completed and game.tick - state.completed >= 240 then
-    state.step = state.step % #processes[state.stage] + 1
+  local output = machine.type ~= "character" and machine.get_output_inventory()
+  if state.completed and game.tick - state.completed >= 240 and (not output or output.is_empty()) then
+    state.step = state.step % #state.steps + 1
     state.cycles = (state.cycles or 0) + 1
     begin_step(state)
   end
