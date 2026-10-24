@@ -163,11 +163,15 @@ finite={n for n,t in T.items() if n.startswith('quinityn-') and not n.startswith
 space_gated={'quinityn-'+n for n in ['advanced-modules','advanced-efficiency-module',
  'advanced-productivity-module','quantum-modules','combined-module','ultimate-efficiency-module',
  'science-module','quality-module','p3-factory','research-center','foundry-melting','asteroid-crushing',
- 'advanced-transmission','artillery-shells','logistic-requests','wide-logistic-requests','space-science']}
+ 'advanced-transmission','artillery-shells','logistic-requests','wide-logistic-requests','space-science',
+ 'arrival-vulcanus','arrival-fulgora','cimota-vulcanus','cimota-fulgora']}
 assert finite-techs==space_gated, 'Unexpected nonlocal research: '+str(sorted((finite-techs)^space_gated))
 for name in space_gated-{'quinityn-p3-factory','quinityn-foundry-melting','quinityn-asteroid-crushing',
- 'quinityn-advanced-transmission','quinityn-artillery-shells','quinityn-logistic-requests','quinityn-wide-logistic-requests'}:
+ 'quinityn-advanced-transmission','quinityn-artillery-shells','quinityn-logistic-requests','quinityn-wide-logistic-requests',
+ 'quinityn-arrival-vulcanus','quinityn-arrival-fulgora','quinityn-cimota-vulcanus','quinityn-cimota-fulgora'}:
  assert {i[0] for i in T[name]['unit']['ingredients'] if i[0] not in items}=={'space-science-pack'},name
+assert {'calcite','tungsten-ore','holmium-ore','scrap'}.isdisjoint(items), 'Planet resources leaked into local bootstrap'
+assert {'quinityn-cimota-resources','quinityn-cimota-fluids','quinityn-cimota-residues'}<=techs
 shell=T['quinityn-artillery-shells']
 assert {i[0] for i in shell['unit']['ingredients']}=={
  'automation-science-pack','logistic-science-pack','quinityn-research-data'}

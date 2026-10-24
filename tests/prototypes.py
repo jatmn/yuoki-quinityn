@@ -37,7 +37,10 @@ def ancestry(n,seen=None):
  for p in T[n].get('prerequisites',[]):result|=ancestry(p,seen|{n})
  return result
 for n in T:
- if n.startswith('quinityn-'):assert 'quinityn-arrival' in ancestry(n),n
+ if n in {'quinityn-arrival-vulcanus','quinityn-arrival-fulgora'}:
+  assert T[n]['prerequisites']==['planet-discovery-'+n.removeprefix('quinityn-arrival-')]
+  assert not T[n]['effects'] and T[n]['research_trigger']['type']=='scripted'
+ elif n.startswith('quinityn-'):assert 'quinityn-arrival' in ancestry(n),n
 plant_inf_recipes={
  'y-pipe-ec','y-pipe-h','y-pipe-hc','y-pipe-to-ground-ec','y-pipe-to-ground-hc','y-pipe-v',
  'y-powerlamp','y-substation-m','y-tank-1000','y-tinylamp','y_lampe_44basement_a','y_lampe_44basement_b',
@@ -45,6 +48,33 @@ plant_inf_recipes={
  'yi_pipe_underground_green'}
 def unlock_set(tech):
  return {e['recipe'] for e in T[tech].get('effects',[]) if e['type']=='unlock-recipe'}
+# The first full machine is useful locally without exposing exotic materials.
+basic_cimota={'y-atomic-constructor','y-liquid2uc','y-uc2crudeoil'}
+for item in ['iron-ore','copper-ore','coal','stone','wood']:
+ basic_cimota|={'y-ac-'+item+'2uc','y-ac-uc2'+item}
+assert unlock_set('quinityn-cimota')==basic_cimota, 'First Cimota still grants later conversions'
+cimota_groups={
+ 'cimota-resources':{'y-ac-y-res12uc','y-ac-uc2y-res1','y-ac-y-res22uc','y-ac-uc2y-res2','y-ac-uranium-ore2uc','y-ac-uc2uranium-ore'},
+ 'cimota-fluids':{'y-heavyoil2uc','y-lightoil2uc','y-lubricant2uc','y-petroleum','y-uc2liquid','y-ac-uc2plastic'},
+ 'cimota-residues':{'j-cw2uc-recipe','y-ac-crystal2uc','y-ac-mud2uc','y-ac-slag2uc','y-ac-toxic2uc'},
+ 'cimota-vulcanus':{'y-ac-calcite2uc','y-ac-uc2calcite','y-ac-tungsten-ore2uc','y-ac-uc2tungsten-ore'},
+ 'cimota-fulgora':{'y-ac-holmium-ore2uc','y-ac-uc2holmium-ore','y-ac-scrap2uc','y-ac-uc2scrap'},
+}
+for stage,recipes in cimota_groups.items():
+ assert unlock_set('quinityn-'+stage)==recipes,stage
+ for recipe in recipes:
+  assert unlocks[recipe]==['quinityn-'+stage],recipe
+assert unlocks['y-repair-krakon']==['quinityn-maintenance']
+assert len(basic_cimota|set.union(*cimota_groups.values())|{'y-repair-krakon'})==39
+for planet in ['vulcanus','fulgora']:
+ branch='quinityn-cimota-'+planet
+ assert 'quinityn-arrival-'+planet in ancestry(branch)
+ assert 'quinityn-arrival-'+('fulgora' if planet=='vulcanus' else 'vulcanus') not in ancestry(branch)
+ assert 'advanced-asteroid-processing' not in ancestry(branch)
+ assert D['tips-and-tricks-item'][branch]['trigger']=={'type':'research','technology':branch}
+ for recipe in cimota_groups['cimota-'+planet]:
+  assert not R[recipe].get('surface_conditions'),recipe
+print('PASS: all 39 Cimota assignments, paired planet gates and unchanged operating surfaces')
 # Farming remains useful before trade; machines, starters and their consumers
 # must share a reachable research path rather than merely exposing a recipe.
 assert unlocks['ye_trade_node']==['quinityn-trade'], 'Trade Node must follow its Laika-Gate ingredient'
@@ -168,7 +198,7 @@ for n in ['quinityn-mining-productivity','quinityn-plasma-damage']:
  assert ['quinityn-research-data',2] in T[n]['unit']['ingredients']
  assert T[n]['unit']['count_formula']=='1000*1.5^(L-1)'
 tips=[n for n in D['tips-and-tricks-item'] if n.startswith('quinityn-')]
-assert len(tips)==140
+assert len(tips)==145
 for name in tips:
  scene=D['tips-and-tricks-item'][name].get('simulation',{})
  assert scene.get('planet')=='quinityn' and scene.get('init') and scene.get('update'),name
@@ -386,7 +416,7 @@ assert T['planet-discovery-quinityn']['effects']==[
  {'type':'unlock-travel-to-space-platforms','modifier':True},
 ]
 for name,t in T.items():
- if not name.startswith('quinityn-'):continue
+ if not name.startswith('quinityn-') or name in {'quinityn-arrival-vulcanus','quinityn-arrival-fulgora'}:continue
  assert 'planet-discovery-quinityn' in ancestry(name),name
  if t.get('unit'):
   assert 'quinityn-research-data' in [i[0] for i in t['unit']['ingredients']],name
@@ -454,7 +484,7 @@ for tech,recipes in recycling_sole_owner.items():
   assert unlocks[recipe]==[tech],(recipe,unlocks.get(recipe))
 assert unlocks['y-coaldust-mixing']==unlocks['y-mixfuel-load']
 assert unlocks['y_mixedfuel2rocketfuel']==['quinityn-engines']
-assert unlocks['y-repair-krakon']==['quinityn-cimota']
+assert unlocks['y-repair-krakon']==['quinityn-maintenance']
 assert unlocks['y_repair_quantrinum']==['quinityn-quantum']
 comp_tech=unlocks['y_compensator_25'][0]
 assert 'quinityn-quantum' not in ancestry(comp_tech) and 'quinityn-quantum-power' not in ancestry(comp_tech)

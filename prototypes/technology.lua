@@ -36,6 +36,22 @@ for _, name in ipairs({ "hand-sort", "iron", "copper", "carbon", "stone", "timbe
   table.insert(landing.effects, unlock("quinityn-" .. name))
 end
 data:extend({ discovery, landing })
+-- These surveys record physical force-member arrivals independently of Cimota.
+-- Planet discovery alone, resource stock and remote viewing are not visit proof.
+for _, planet in ipairs({ "vulcanus", "fulgora" }) do
+  data:extend({
+    {
+      type = "technology",
+      name = "quinityn-arrival-" .. planet,
+      icon = data.raw.planet[planet].icon,
+      icon_size = data.raw.planet[planet].icon_size or 64,
+      prerequisites = { "planet-discovery-" .. planet },
+      effects = {},
+      research_trigger = { type = "scripted", trigger_description = { "quinityn.land-on-" .. planet } },
+      order = "y-a-" .. planet,
+    },
+  })
+end
 data:extend({
   {
     type = "technology",

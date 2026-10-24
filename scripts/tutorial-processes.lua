@@ -1,5 +1,55 @@
 -- Explicit recipe demonstrations for issue #24. Quantities come from live prototypes.
 return {
+  ["cimota-resources"] = {
+    technology = "quinityn-cimota-resources",
+    steps = {
+      { "y-atomic-constructor", "y-ac-y-res12uc" },
+      { "y-atomic-constructor", "y-ac-uc2y-res1" },
+      { "y-atomic-constructor", "y-ac-y-res22uc" },
+      { "y-atomic-constructor", "y-ac-uc2y-res2" },
+      { "y-atomic-constructor", "y-ac-uranium-ore2uc" },
+      { "y-atomic-constructor", "y-ac-uc2uranium-ore" },
+    },
+  },
+  ["cimota-fluids"] = {
+    technology = "quinityn-cimota-fluids",
+    steps = {
+      { "y-atomic-constructor", "y-heavyoil2uc" },
+      { "y-atomic-constructor", "y-lightoil2uc" },
+      { "y-atomic-constructor", "y-lubricant2uc" },
+      { "y-atomic-constructor", "y-petroleum" },
+      { "y-atomic-constructor", "y-uc2liquid" },
+      { "y-atomic-constructor", "y-ac-uc2plastic" },
+    },
+  },
+  ["cimota-residues"] = {
+    technology = "quinityn-cimota-residues",
+    steps = {
+      { "y-atomic-constructor", "j-cw2uc-recipe" },
+      { "y-atomic-constructor", "y-ac-crystal2uc" },
+      { "y-atomic-constructor", "y-ac-mud2uc" },
+      { "y-atomic-constructor", "y-ac-slag2uc" },
+      { "y-atomic-constructor", "y-ac-toxic2uc" },
+    },
+  },
+  ["cimota-vulcanus"] = {
+    technology = "quinityn-cimota-vulcanus",
+    steps = {
+      { "y-atomic-constructor", "y-ac-calcite2uc" },
+      { "y-atomic-constructor", "y-ac-uc2calcite" },
+      { "y-atomic-constructor", "y-ac-tungsten-ore2uc" },
+      { "y-atomic-constructor", "y-ac-uc2tungsten-ore" },
+    },
+  },
+  ["cimota-fulgora"] = {
+    technology = "quinityn-cimota-fulgora",
+    steps = {
+      { "y-atomic-constructor", "y-ac-holmium-ore2uc" },
+      { "y-atomic-constructor", "y-ac-uc2holmium-ore" },
+      { "y-atomic-constructor", "y-ac-scrap2uc" },
+      { "y-atomic-constructor", "y-ac-uc2scrap" },
+    },
+  },
   briefing = { technology = "planet-discovery-quinityn", steps = {} },
   bootstrap = {
     technology = "quinityn-arrival",
@@ -276,6 +326,7 @@ return {
   ["maintenance"] = {
     technology = "quinityn-maintenance",
     steps = {
+      { "assembling-machine-2", "y-repair-krakon" },
       { "y_maintance_workshop", "y_drillhead_repair" },
       { "assembling-machine-2", "y_maintance_workshop" },
       { "y_maintance_workshop", "y_toolhead_repair" },

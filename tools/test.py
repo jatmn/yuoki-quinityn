@@ -54,6 +54,24 @@ for seed in [1,42,8675309]:
 run('worldgen',[sys.executable,str(ROOT/'tests/worldgen.py'),str(a.output)],'PASS')
 run('runtime',base+['--benchmark',str(a.output/'seed-42.zip'),'--benchmark-ticks','15001','--benchmark-runs','1'],'QUINITYN RUNTIME TESTS PASSED')
 try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/cimota")\n')
+ run('cimota-create',base+['--create',str(a.output/'cimota.zip')],'QUINITYN CIMOTA SETUP PASSED')
+ run('cimota-reload',base+['--benchmark',str(a.output/'cimota.zip'),'--benchmark-ticks','1','--benchmark-runs','1'],'QUINITYN CIMOTA RELOAD PASSED')
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/cimota_migration")\n')
+ legacy=harness/'data-final-fixes.lua'
+ legacy.write_text('for name,t in pairs(data.raw.technology) do\n'
+  ' if name:match("^quinityn%-cimota%-") or name=="quinityn-maintenance" then\n'
+  '  for i=#(t.effects or {}),1,-1 do local e=t.effects[i];\n'
+  '   if e.type=="unlock-recipe" and (name~="quinityn-maintenance" or e.recipe=="y-repair-krakon") then\n'
+  '    table.insert(data.raw.technology["quinityn-cimota"].effects,table.remove(t.effects,i))\n'
+  '   end\n  end\n end\nend\n')
+ run('cimota-migration-create',base+['--create',str(a.output/'cimota-migration.zip')],'QUINITYN CIMOTA MIGRATION SETUP')
+ legacy.unlink()
+ run('cimota-migration-reload',base+['--benchmark',str(a.output/'cimota-migration.zip'),'--benchmark-ticks','601','--benchmark-runs','1'],'QUINITYN CIMOTA MIGRATION PASSED')
+finally:
+ (harness/'data-final-fixes.lua').unlink(missing_ok=True)
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/surplus_migration")\n')
  setting_override=harness/'settings-updates.lua'
  run('surplus-migration-create',base+['--create',str(a.output/'surplus-migration.zip')],'QUINITYN SURPLUS MIGRATION SETUP')

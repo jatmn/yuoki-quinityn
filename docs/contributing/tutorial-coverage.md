@@ -1,8 +1,24 @@
 # Tutorial coverage
 
-All 140 Quinityn tips have native simulations; there are no text-only exceptions.
+All 145 Quinityn tips have native simulations; there are no text-only exceptions.
 This mapping covers issue #24 and the merged gameplay/progression dependencies
 #25, #26 and #29–#39. IDs below omit the common `quinityn-` tip prefix.
+
+Issue #63 adds five conversion scenes, each visible only after its corresponding
+research. The Vulcanus and Fulgora research requires that force's physical
+arrival; preview scenes run on Quinityn because that is still a valid operating
+location. No scene grants arrival or research to the real playing force.
+
+| Issue | Tip | Trigger | Processes | Simulation |
+| --- | --- | --- | --- | --- |
+| #63 | `cimota-resources` | Mineral reconstruction | Both N4, F7 and uranium-ore directions | `tutorial-demo / cimota-resources` |
+| #63 | `cimota-fluids` | Chemical conversions | Oil fractions/lubricant recovery, plastic reconstruction, UC-A2 liquefaction | `tutorial-demo / cimota-fluids` |
+| #63 | `cimota-residues` | Residue recovery | Slag, dry mud, toxic dust, blue crystals and contaminated water recovery | `tutorial-demo / cimota-residues` |
+| #63 | `cimota-vulcanus` | Vulcanus conversions, after physical arrival | Both calcite and tungsten-ore directions | `tutorial-demo / cimota-vulcanus` |
+| #63 | `cimota-fulgora` | Fulgora conversions, after physical arrival | Both scrap and holmium-ore directions | `tutorial-demo / cimota-fulgora` |
+
+The original Cimota scene retains its basic local conversions. Maintenance now
+also demonstrates Krakon repair tools.
 
 The simulation column names the module and stage. Recipe rows use real machines,
 live prototype quantities, separate fluid ports, fuel and native input/output

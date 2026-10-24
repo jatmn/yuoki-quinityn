@@ -2,7 +2,47 @@
 
 [Documentation index](../README.md)
 
-The same progression is available inside Factorio through **140 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+The same progression is available inside Factorio through **145 Tips and Tricks chapters**, which appear at the relevant research milestones. Recipe and item links in those chapters open the game's own information views.
+
+## Cimota conversion stages
+
+The first full Cimota keeps the practical local resource loop. Its former 39
+unlocks are assigned below; machine speed, recipe quantities and operating
+surfaces are unchanged. The primitive, pre-science conversions remain separate.
+
+| Stage | Requirement | Former Cimota unlocks |
+| --- | --- | --- |
+| Cimota reconstruction | Yuoki power; 100 red/green/Quinityn packs | 13: full machine, ocean unicomp solidification, crude reconstruction, and both directions for coal, iron ore, copper ore, stone and wood |
+| Mineral reconstruction | Cimota and ore washing; 80 packs | 6: both directions for N4, F7 and uranium ore |
+| Chemical conversions | Cimota and refining; 120 packs | 6: heavy oil, light oil, lubricant and petroleum gas to UC-A2, UC-A2 to plastic, and solid UC-A2 to liquid unicomp |
+| Residue recovery | Cimota, crystal processing and washing; 100 packs | 5: slag, dry mud, toxic dust, blue crystals and contaminated water to UC-A2 |
+| Vulcanus conversions | Mineral reconstruction and Vulcanus field survey; 150 packs | 4: both directions for calcite and tungsten ore |
+| Fulgora conversions | Mineral reconstruction and Fulgora field survey; 150 packs | 4: both directions for scrap and holmium ore |
+| Existing Maintenance workshops | Its existing requirements | 1: Krakon repair tool |
+
+Each planetary field survey requires that force's discovery research and a
+physically present character. A teammate's landing counts for the same force;
+remote viewing, imported stock, another force's landing or discovery alone do
+not. Visits may happen before Cimota research. After the survey, complete the
+branch's lab research; arrival itself does not grant recipes. Both branches can
+be earned by ordinary exploration without using any locked conversion.
+**Calcite requires the Vulcanus visit too; Advanced asteroid processing is not
+an alternate Cimota unlock.** The conversions may then operate on Quinityn.
+
+Paired item directions stay together. The deliberate exception is ocean
+solidification at the first tier versus later solid-to-liquid conversion:
+the former is essential local feedstock, while the latter is an optional fluid
+handling capability. Crude reconstruction also stays early for the oil-processing
+milestone. Residues and upstream oil recovery are one-way recipes. The upstream
+heavy-oil conversion setting remains authoritative.
+
+On upgrade, completed Cimota and in-progress Cimota research retain their
+progress. Moved recipes require the new research; stored resources and machines
+are preserved. There is no blanket planetary unlock from old Cimota research or
+inventory. A character already on a discovered destination can qualify when the
+configuration reconciles. Historical visits were not recorded by older builds;
+return to the planet if nobody is currently there. New surveys persist across
+save/reload and follow native force research when forces merge.
 
 ## Arrive, then establish industry
 
@@ -35,7 +75,7 @@ Eight manufacturing milestones use native crafting triggers after their prerequi
 | First Yuoki factory | Durotal structures and reinforced gears, Conductive wire and basic chips | 20 basic chips | First-tier MF components and first factory |
 | Quinityn industrial science | Field survey | Mine an ash-coated Quinityn rock | Reveal industrial research data and dedicated Technic Sign qualification; factory still required to manufacture |
 
-A constructive budget reserves 600 red packs, 400 green packs, 260 Quinityn data packs, two labs, the first Yuoki factory, a Cimota, a Fatmice, its small electric motor and 500 coal. Its first 100 Quinityn packs use 100 finite rock flyash to unlock Power and Fatmice; native generation checks require at least 100 near the landing area. The remaining 160 packs use renewable ash through the actual unfiltered water/MF recipe. Build the Fatmice before spending the remaining science budget on Cimota and other research. The current material totals are recorded in [validation](../contributing/validation.md), before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
+A constructive budget reserves 720 red packs, 520 green packs, 380 Quinityn data packs, two labs, the first Yuoki factory, a Cimota, a Fatmice, its small electric motor and 500 coal. Its first 100 Quinityn packs use 100 finite rock flyash to unlock Power and Fatmice; native generation checks require at least 100 near the landing area. The remaining 280 packs use renewable ash through the actual unfiltered water/MF recipe. Build the Fatmice before spending the remaining science budget on Cimota, Washing and Mineral reconstruction. The current material totals are recorded in [validation](../contributing/validation.md), before incidental salvage or remote deposits. This is a finite-material check, not a speedrun or an assertion that no additional defenses will ever be needed.
 
 The new dedicated **Qualify a Technic Sign** recipe produces only one sign from 12 reinforced gears, 8 Durotal structures, 20 conductive wire and 4 basic Yuoki chips, with 30 seconds of recipe work. It unlocks with Quinityn industrial science and uses the same three factories on Quinityn. Reactor-fuel byproduct signs remain available and cheaper for the initial bootstrap.
 
