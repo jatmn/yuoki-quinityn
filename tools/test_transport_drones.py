@@ -4,6 +4,7 @@ import argparse
 import json
 import shutil
 import subprocess
+import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,11 +21,14 @@ def main():
     engine = args.factorio.resolve()
     output = args.output.resolve()
     output.mkdir(parents=True, exist_ok=True)
+    # Keep concurrent runs and interrupted legacy fixtures in separate directories.
+    output = Path(tempfile.mkdtemp(prefix='run-', dir=output))
+    print('Run directory:', output, flush=True)
 
     # The control retains Quinityn's items, so even their generated requests are
     # compared. Only its final rewrite is absent; dependency sources are intact.
     control = output / 'control-addon'
-    shutil.copytree(ROOT, control, dirs_exist_ok=True,
+    shutil.copytree(ROOT, control,
                     ignore=shutil.ignore_patterns('.git', 'build', '__pycache__'))
     (control / 'data-final-fixes.lua').unlink()
 

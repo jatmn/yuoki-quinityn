@@ -62,6 +62,9 @@ native selection, requester/buffer item and fluid delivery before Trade/Engines,
 and reloads a save with reconstructed legacy helper gates. Both default fuel and
 Yuoki hydrogen fuel settings are covered. Roads, drones and stock are injected;
 this is headless integration evidence, not a graphical or progression playthrough.
+Each focused invocation creates and prints a unique directory under `--output`
+(default `build/transport-drones`), retaining logs and saves there. Repeated or
+concurrent focused runs use separate files, including legacy-save fixtures.
 
 The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
 offspring, the engine's colony-building command and laser damage for all enemy
