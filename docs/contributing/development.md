@@ -50,6 +50,22 @@ The runner creates isolated mod links and an isolated game write directory insid
 
 The test harness is a separate test-only mod. It never ships in the playable zip. Native fixtures inject ingredients and power to isolate machinery, research and rocket behavior; the separate dependency and budget checks verify where the materials come from. Player landing uses a narrow facade because the headless API cannot create a LuaPlayer. These distinctions are recorded in [validation](validation.md).
 
+For Transport Drones compatibility, prepare an unmodified checkout of
+[`Klonan/Transport_Drones`](https://github.com/Klonan/Transport_Drones) at
+`c5d0ce2b1238d7f13373826979539d002be1168f` (2.1.4), then add
+`--transport-drones /absolute/path/to/Transport_Drones` to the command above.
+The focused check can also run via `tools/test_transport_drones.py` with the
+same engine, dependency and Transport Drones arguments. It compares every
+generated helper field against a control with Quinityn's final rewrite absent,
+retaining its local items in both loads. It checks zero Quinityn helper unlocks,
+native selection, requester/buffer item and fluid delivery before Trade/Engines,
+and reloads a save with reconstructed legacy helper gates. Both default fuel and
+Yuoki hydrogen fuel settings are covered. Roads, drones and stock are injected;
+this is headless integration evidence, not a graphical or progression playthrough.
+Each focused invocation creates and prints a unique directory under `--output`
+(default `build/transport-drones`), retaining logs and saves there. Repeated or
+concurrent focused runs use separate files, including legacy-save fixtures.
+
 The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
 offspring, the engine's colony-building command and laser damage for all enemy
 sizes. It also fires capture rockets using normal enemy targeting at both native
