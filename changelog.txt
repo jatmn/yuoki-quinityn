@@ -1,5 +1,6 @@
 ---------------------------------------------------------------------------------------------------
-Version: Unreleased
+Version: 0.1.1
+Date: 2026-10-24
   Features:
     - Stage Cimota conversions into basic, mineral, chemical, residue and planetary research. Calcite and tungsten require a force member to land on discovered Vulcanus; scrap and holmium require Fulgora. Discovery and remote viewing alone do not qualify.
     - Preserve primitive conversions and the local water-to-rocket route. Existing Cimota research and earned stock remain, while moved recipes require their new research. Add five matching conversion demonstrations.
