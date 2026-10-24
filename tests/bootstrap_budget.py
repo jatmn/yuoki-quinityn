@@ -1,4 +1,4 @@
-"""A constructive budget for rock-funded Fatmice, then scrubber-funded Cimota.
+"""A constructive budget for rock-funded Fatmice, then Cimota and ore renewal.
 
 Overprovisions the pre-Cimota science budget; reserves 500 coal for boilers,
 smelting and the separator. Uses only native recipes plus emergency hand dressing.
@@ -30,7 +30,10 @@ def supply(name,amount,path=()):
  stock[name]-=amount
 # Reserve the original pre-Cimota research plus Circuit network for the first
 # factory arithmetic combinator, with margin for basic automation technologies.
-goals={'automation-science-pack':600,'logistic-science-pack':400,
+renewal_packs=sum(D['technology'][name]['unit']['count']
+ for name in ['quinityn-washing','quinityn-cimota-resources'])
+total_data=260+renewal_packs
+goals={'automation-science-pack':600+renewal_packs,'logistic-science-pack':400+renewal_packs,
  'stone-furnace':2,'boiler':1,'steam-engine':1,'offshore-pump':1,'small-electric-pole':10,
  'quinityn-burner-separator':1,'lab':2,'y-crusher':1,'y-heat-form-press':1,
  'ye_fassembly1':1,'y-electric-air-heater':1,'y-emotor-s':1,'assembling-machine-1':2,'pipe':30,'coal':500,'burner-mining-drill':2,'burner-inserter':8}
@@ -54,11 +57,11 @@ rock_ash=used['y-pol-waste']
 # their real unfiltered recipe, including its water and electric-motor MF inputs.
 natural.remove('y-pol-waste')
 choice.update({'y-pol-waste':'y-rmvpol','y-mechanical-force':'y-mf1c'})
-supply('quinityn-research-data',260-first_packs)
+supply('quinityn-research-data',total_data-first_packs)
 supply('y-atomic-constructor',1)
 for ore in ['y-res1','y-res2']:
  print(ore,math.ceil(used[ore]),'/ 125000 starting units')
  assert used[ore]<=125000,'Insufficient starter ore: '+ore
 assert used['y-pol-waste']==rock_ash, 'Later science consumed additional finite ash'
-print('Rock flyash',rock_ash,'/ 100 verified starter sample units; remaining',260-first_packs,'packs use unfiltered scrubbing')
-print('PASS: finite rock ash reaches Fatmice; renewable ash then reaches Cimota, without salvage, imported items or remote deposits')
+print('Rock flyash',rock_ash,'/ 100 verified starter sample units; remaining',total_data-first_packs,'packs use unfiltered scrubbing')
+print('PASS: finite rock ash reaches Fatmice; renewable ash then funds Cimota and mineral reconstruction, without salvage, imported items or remote deposits')

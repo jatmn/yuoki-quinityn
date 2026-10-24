@@ -1,6 +1,48 @@
 -- Additional research families; shared by unlock assignment, technologies and the guide.
 return {
   {
+    name = "cimota-resources",
+    prerequisites = { "cimota", "washing" },
+    count = 80,
+    icon = "y-res1",
+    recipes = {
+      "y-ac-y-res12uc",
+      "y-ac-uc2y-res1",
+      "y-ac-y-res22uc",
+      "y-ac-uc2y-res2",
+      "y-ac-uranium-ore2uc",
+      "y-ac-uc2uranium-ore",
+    },
+  },
+  {
+    name = "cimota-fluids",
+    prerequisites = { "cimota", "refining" },
+    count = 120,
+    icon = "plastic-bar",
+    recipes = { "y-heavyoil2uc", "y-lightoil2uc", "y-lubricant2uc", "y-petroleum", "y-uc2liquid", "y-ac-uc2plastic" },
+  },
+  {
+    name = "cimota-residues",
+    prerequisites = { "cimota", "crystal-processing", "washing" },
+    count = 100,
+    icon = "y-crystal2",
+    recipes = { "j-cw2uc-recipe", "y-ac-crystal2uc", "y-ac-mud2uc", "y-ac-slag2uc", "y-ac-toxic2uc" },
+  },
+  {
+    name = "cimota-vulcanus",
+    prerequisites = { "cimota-resources", "arrival-vulcanus" },
+    count = 150,
+    icon = "tungsten-ore",
+    recipes = { "y-ac-calcite2uc", "y-ac-uc2calcite", "y-ac-tungsten-ore2uc", "y-ac-uc2tungsten-ore" },
+  },
+  {
+    name = "cimota-fulgora",
+    prerequisites = { "cimota-resources", "arrival-fulgora" },
+    count = 150,
+    icon = "holmium-ore",
+    recipes = { "y-ac-holmium-ore2uc", "y-ac-uc2holmium-ore", "y-ac-scrap2uc", "y-ac-uc2scrap" },
+  },
+  {
     name = "pressing",
     prerequisites = { "materials" },
     icon = "y-heat-form-press",

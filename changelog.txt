@@ -1,6 +1,8 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Features:
+    - Stage Cimota conversions into basic, mineral, chemical, residue and planetary research. Calcite and tungsten require a force member to land on discovered Vulcanus; scrap and holmium require Fulgora. Discovery and remote viewing alone do not qualify.
+    - Preserve primitive conversions and the local water-to-rocket route. Existing Cimota research and earned stock remain, while moved recipes require their new research. Add five matching conversion demonstrations.
     - Add a Quinityn discovery surface preview and animated demonstrations for every progression tip, including primitive conversions, continuous crusher sorting, fluid and power networks, equipment, Yuoki-derived rocket components and infinite research.
     - Add dedicated primitive-surplus and petrochemistry tips, and order all tips by their research prerequisites.
     - Split Yuoki power into separate fuel, solar, steam and repair researches instead of one bulk unlock.
@@ -10,7 +12,7 @@ Version: Unreleased
     - Added Quinityn-only Uni-touched Stomp-a-trons: half-size organic stompers with Spidertron bodies, yellow sensors and distinct blue-to-purple size palettes.
     - Local biter and spitter nests rarely produce Stomp-a-trons along their existing size evolution curves. They drop industrial salvage and ancient data, never wrigglers or pentapod eggs, and have 3%, 7% and 11% laser resistance.
     - Added Quinityn-only Uni-touched biters, spitters, worms and nests with purple tints that take 5% less laser damage. New colonies retain the variants; existing enemies are preserved.
-    - Added 140 native Tips and Tricks progression chapters.
+    - Added 145 native Tips and Tricks progression chapters.
   Changes:
     - Run substrat neutralization in a chemical plant, whose separate fluid connections support all four fluids; quantities, duration and research stay unchanged.
     - Separate Cimota science manufacture from trade. Prepare Fame and its machine before the Laika-Gate, require its quantum accumulator, and keep direct Merchant Sign generation with Mastery. Stage biological exports with their products while retaining early canned-corn exports and material imports.

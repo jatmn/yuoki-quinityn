@@ -22,25 +22,39 @@ function M.arrive(player)
   if
     not player
     or not player.valid
-    or (not player.character and not player.cutscene_character and player.physical_controller_type ~= defines.controllers.character)
-    or not is_quinityn(player.physical_surface)
+    or (
+      not player.character
+      and not player.cutscene_character
+      and player.physical_controller_type ~= defines.controllers.character
+    )
   then
+    return
+  end
+  local surface = player.physical_surface
+  local planet = surface and surface.planet and surface.planet.name
+  if planet ~= "quinityn" and planet ~= "vulcanus" and planet ~= "fulgora" then
     return
   end
   local force = player.force
   -- Discovery anchors this whole branch and must precede the scripted survey.
-  if not force.technologies["planet-discovery-quinityn"].researched then
+  if not force.technologies["planet-discovery-" .. planet].researched then
     return
   end
-  local tech = force.technologies["quinityn-arrival"]
+  local tech = force.technologies[planet == "quinityn" and "quinityn-arrival" or "quinityn-arrival-" .. planet]
   if tech and not tech.researched then
-    force.script_trigger_research("quinityn-arrival")
-    force.print({ "quinityn.arrival-message" })
+    force.script_trigger_research(tech.name)
+    if planet == "quinityn" then
+      force.print({ "quinityn.arrival-message" })
+    end
   end
   complete_bridges(force)
 end
 function M.research(event)
-  if event.research.name == "planet-discovery-quinityn" then
+  if
+    event.research.name == "planet-discovery-quinityn"
+    or event.research.name == "planet-discovery-vulcanus"
+    or event.research.name == "planet-discovery-fulgora"
+  then
     -- Discovery can finish after a character changes force while on Quinityn.
     for _, player in pairs(event.research.force.players) do
       M.arrive(player)

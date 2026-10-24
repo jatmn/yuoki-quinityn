@@ -143,6 +143,8 @@
     "quinityn-burner-separator",
     "quinityn-water"
   ],
+  "quinityn-arrival-fulgora": [],
+  "quinityn-arrival-vulcanus": [],
   "quinityn-artillery-shells": [
     "yi_artillery_shell"
   ],
@@ -311,8 +313,7 @@
     "y_turret_flame-recycling"
   ],
   "quinityn-bridge-cimota-recycling": [
-    "y-atomic-constructor-recycling",
-    "y-repair-krakon-recycling"
+    "y-atomic-constructor-recycling"
   ],
   "quinityn-bridge-combined-module-recycling": [
     "y_modul_red2-recycling"
@@ -497,6 +498,7 @@
     "y_sc11-recycling"
   ],
   "quinityn-bridge-maintenance-recycling": [
+    "y-repair-krakon-recycling",
     "y_maintance_workshop-recycling"
   ],
   "quinityn-bridge-mastery-recycling": [
@@ -833,45 +835,54 @@
     "y_turret_flame"
   ],
   "quinityn-cimota": [
-    "j-cw2uc-recipe",
-    "y-ac-calcite2uc",
     "y-ac-coal2uc",
     "y-ac-copper-ore2uc",
-    "y-ac-crystal2uc",
-    "y-ac-holmium-ore2uc",
     "y-ac-iron-ore2uc",
-    "y-ac-mud2uc",
-    "y-ac-scrap2uc",
-    "y-ac-slag2uc",
     "y-ac-stone2uc",
-    "y-ac-toxic2uc",
-    "y-ac-tungsten-ore2uc",
-    "y-ac-uc2calcite",
     "y-ac-uc2coal",
     "y-ac-uc2copper-ore",
-    "y-ac-uc2holmium-ore",
     "y-ac-uc2iron-ore",
-    "y-ac-uc2plastic",
-    "y-ac-uc2scrap",
     "y-ac-uc2stone",
-    "y-ac-uc2tungsten-ore",
-    "y-ac-uc2uranium-ore",
     "y-ac-uc2wood",
+    "y-ac-wood2uc",
+    "y-atomic-constructor",
+    "y-liquid2uc",
+    "y-uc2crudeoil"
+  ],
+  "quinityn-cimota-fluids": [
+    "y-ac-uc2plastic",
+    "y-heavyoil2uc",
+    "y-lightoil2uc",
+    "y-lubricant2uc",
+    "y-petroleum",
+    "y-uc2liquid"
+  ],
+  "quinityn-cimota-fulgora": [
+    "y-ac-holmium-ore2uc",
+    "y-ac-scrap2uc",
+    "y-ac-uc2holmium-ore",
+    "y-ac-uc2scrap"
+  ],
+  "quinityn-cimota-residues": [
+    "j-cw2uc-recipe",
+    "y-ac-crystal2uc",
+    "y-ac-mud2uc",
+    "y-ac-slag2uc",
+    "y-ac-toxic2uc"
+  ],
+  "quinityn-cimota-resources": [
+    "y-ac-uc2uranium-ore",
     "y-ac-uc2y-res1",
     "y-ac-uc2y-res2",
     "y-ac-uranium-ore2uc",
-    "y-ac-wood2uc",
     "y-ac-y-res12uc",
-    "y-ac-y-res22uc",
-    "y-atomic-constructor",
-    "y-heavyoil2uc",
-    "y-lightoil2uc",
-    "y-liquid2uc",
-    "y-lubricant2uc",
-    "y-petroleum",
-    "y-repair-krakon",
-    "y-uc2crudeoil",
-    "y-uc2liquid"
+    "y-ac-y-res22uc"
+  ],
+  "quinityn-cimota-vulcanus": [
+    "y-ac-calcite2uc",
+    "y-ac-tungsten-ore2uc",
+    "y-ac-uc2calcite",
+    "y-ac-uc2tungsten-ore"
   ],
   "quinityn-combined-module": [
     "y_modul_red2"
@@ -1094,6 +1105,7 @@
     "y_sc11"
   ],
   "quinityn-maintenance": [
+    "y-repair-krakon",
     "y_drillhead_repair",
     "y_maintance_workshop",
     "y_toolhead_repair"
