@@ -132,7 +132,7 @@ engine validation remains local. This CI matches the other Yuoki mod repositorie
 | Runtime Lua | Lua syntax, Luacheck, StyLua; addon packaging |
 | Test-only Lua | Lua checks only |
 | Python outside packaging tools, or `.ruff.toml` | Python syntax, Ruff lint and CI/release regressions; no game tests execute |
-| `tools/package.py` or `tools/validate_package.py` | Python syntax and packaging |
+| `tools/package.py` or `tools/validate_package.py` | Python syntax, Ruff lint, regressions and packaging |
 | `info.json`, locale, graphics, other shipped files | Metadata and package validation |
 | `.luacheckrc` or `.stylua.toml` | Lua checks on every tracked Lua file |
 | One validation workflow file | actionlint plus the workflow being changed |
@@ -147,8 +147,8 @@ paths are considered; deletions also select their affected checks. An unavailabl
 comparison revision fails the routing job instead of silently skipping validation.
 On pull requests, Lua syntax, lint and formatting check only added, modified or
 renamed Lua files, including changes between regular files and symlinks; deleted
-files are excluded. PRs that change `.luacheckrc`, `.stylua.toml` or
-`.github/workflows/lua.yml` check all tracked Lua files, so lint, formatter or
+files are excluded. The exception is PRs that change `.luacheckrc`, `.stylua.toml` or
+`.github/workflows/lua.yml`: they check all tracked Lua files, so lint, formatter or
 tool-version changes are validated against the baseline before merge. After merge,
 a push to `main` checks all tracked Lua files when the Lua surface changes. Configuration is parsed even when a PR changes no Lua
 files. The one-time repository-wide formatting baseline from
@@ -171,7 +171,7 @@ luac5.2 -p control.lua
 luacheck control.lua
 stylua --config-path .stylua.toml control.lua
 stylua --check --config-path .stylua.toml control.lua
-ruff check --config .ruff.toml tools tests
+git ls-files -z -- '*.py' | xargs -0 -r ruff check --config .ruff.toml --
 actionlint
 python3 tools/package.py
 python3 tools/validate_package.py
