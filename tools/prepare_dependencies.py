@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Fetch the exact 2.1 dependency sources; never modify upstream branches."""
-import argparse, json, subprocess
+import argparse, subprocess
 from pathlib import Path
 LOCK={
  'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'c865cf05d5009d7f2224b32900272d4b1f012f21'},

@@ -76,7 +76,8 @@ remain required for their applicable changes.
 For added or modified Lua files, use StyLua 2.5.2 with the root `.stylua.toml`,
 then run `stylua --check` on those files. The repository-wide formatting baseline
 is complete. PR CI checks syntax, Luacheck and formatting only on changed Lua
-files. After merge, pushes to `main` check all tracked Lua files when the Lua
+files, or on every Lua file when a PR changes the Luacheck/StyLua configuration
+or Lua workflow. After merge, pushes to `main` check all tracked Lua files when the Lua
 surface changes, including lint or formatter configuration changes.
 Leave unrelated Lua files untouched during ordinary work.
 

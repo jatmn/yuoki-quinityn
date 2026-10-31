@@ -50,8 +50,9 @@ remaining graphical-client validation.
 Format every added or modified Lua file with StyLua **2.5.2**, using the root
 `.stylua.toml`, before committing. Run `stylua --check` on those files afterward.
 The repository-wide formatting baseline is complete. PR CI checks only changed
-Lua files; pushes to `main` check all tracked Lua files when the Lua surface
-changes. Do not reformat untouched files as incidental cleanup.
+Lua files, except PRs that change the Luacheck/StyLua configuration or Lua
+workflow, which check all tracked Lua files; pushes to `main` check all tracked
+Lua files when the Lua surface changes. Do not reformat untouched files as incidental cleanup.
 See [development](docs/contributing/development.md#lightweight-ci)
 for the lint commands and which changes trigger each workflow.
 
