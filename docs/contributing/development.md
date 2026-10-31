@@ -119,17 +119,22 @@ complete Git diff, then invokes only the affected reusable validation workflows.
 This avoids GitHub's capped file list for event-level path filters. Unrelated
 validation jobs do not start runners; docs-only PRs pay only for change detection.
 Topic branch pushes do not trigger duplicate runs, and a new update cancels the
-superseded CI run for that PR. No CI job downloads or runs Factorio, Space Age,
-Yuoki or Engines; engine validation remains local.
+superseded CI run for that PR; each push to `main` has its own concurrency group,
+so a later documentation-only push cannot cancel an earlier push's full Lua checks.
+The router is loaded from the comparison revision, so a PR that edits it cannot
+disable its own validation. A final `CI result` job always runs and fails if any
+selected check failed or was cancelled; it is the stable check name to require in
+branch rules. No CI job downloads or runs Factorio, Space Age, Yuoki or Engines;
+engine validation remains local. This CI matches the other Yuoki mod repositories.
 
 | Changed surface | Checks that run |
 | --- | --- |
 | Runtime Lua | Lua syntax, Luacheck, StyLua; addon packaging |
 | Test-only Lua | Lua checks only |
-| Python outside packaging tools | Python syntax only; no game tests execute |
+| Python outside packaging tools, or `.ruff.toml` | Python syntax, Ruff lint and CI/release regressions; no game tests execute |
 | `tools/package.py` or `tools/validate_package.py` | Python syntax and packaging |
 | `info.json`, locale, graphics, other shipped files | Metadata and package validation |
-| `.luacheckrc` or `.stylua.toml` | Lua checks only |
+| `.luacheckrc` or `.stylua.toml` | Lua checks on every tracked Lua file |
 | One validation workflow file | actionlint plus the workflow being changed |
 | Dispatcher (`ci.yml`) or `tools/ci_changes.py` | All four validation workflows |
 | Release configuration/version records or release workflows | Python release tests and package validation; actionlint for workflows |
@@ -142,14 +147,16 @@ paths are considered; deletions also select their affected checks. An unavailabl
 comparison revision fails the routing job instead of silently skipping validation.
 On pull requests, Lua syntax, lint and formatting check only added, modified or
 renamed Lua files, including changes between regular files and symlinks; deleted
-files are excluded. After merge, a push to `main` checks all
-tracked Lua files when the Lua surface changes, including lint or formatter
-configuration changes. Configuration is parsed even when a PR changes no Lua
+files are excluded. PRs that change `.luacheckrc`, `.stylua.toml` or
+`.github/workflows/lua.yml` check all tracked Lua files, so lint, formatter or
+tool-version changes are validated against the baseline before merge. After merge,
+a push to `main` checks all tracked Lua files when the Lua surface changes. Configuration is parsed even when a PR changes no Lua
 files. The one-time repository-wide formatting baseline from
 [issue #9](https://github.com/jatmn/yuoki-quinityn/issues/9) is complete; ordinary
 PRs should leave unrelated Lua files untouched.
 
-The Lua workflow uses Lua 5.2 syntax, Luacheck 1.2.0 and StyLua 2.5.2. Factorio
+The Lua workflow uses Lua 5.2 syntax, Luacheck 1.2.0 and StyLua 2.5.2, as separate
+**Lua / Luacheck** (syntax and lint) and **Lua / StyLua** (formatting) checks. Factorio
 data/runtime globals are declared separately in `.luacheckrc`; line length is
 left to StyLua. The intentional empty heavy-oil opt-out in `data-final-fixes.lua`
 retains a file-local exemption; its unused bridge-loop index now uses `_` and
@@ -164,6 +171,7 @@ luac5.2 -p control.lua
 luacheck control.lua
 stylua --config-path .stylua.toml control.lua
 stylua --check --config-path .stylua.toml control.lua
+ruff check --config .ruff.toml tools tests
 actionlint
 python3 tools/package.py
 python3 tools/validate_package.py
@@ -177,7 +185,9 @@ git ls-files -z '*.lua' | xargs -0 -r luacheck --
 git ls-files -z '*.lua' | xargs -0 -r stylua --check --config-path .stylua.toml --
 ```
 
-The Python syntax step parses tracked `.py` files without importing or running them. Package
+The Python syntax step parses tracked `.py` files without importing or running them.
+Ruff 0.17.3 then lints them with the shared correctness-only `.ruff.toml` (E9 syntax
+errors and Pyflakes: undefined names, unused imports/variables; no style rules). Package
 validation checks metadata, the versioned ZIP root, every tracked release file
 and its bytes, required entrypoints/notices, developer-file exclusions and the
 SHA256 checksum. It also validates Factorio changelog formatting and matching
@@ -191,8 +201,10 @@ Python CI also runs `python3 tools/test_ci_changes.py`, a standard-library CI
 regression suite. It checks surface isolation and the real Git-to-router path
 with 3,500 documentation files followed by a Lua change, plus cross-surface
 renames, deletions, unusual filenames and an invalid comparison revision.
-Lua CI runs its focused file-selection case so workflow-only changes also check
-both directions of regular-file/symlink changes without scanning untouched Lua.
+It also proves that an edited router cannot disable its own checks, that
+configuration-only PRs select every Lua file, and that the file-selection step
+shared by the Luacheck and StyLua jobs stays identical. Lua CI runs the focused
+file-selection and compiler cases, including filenames beginning with `-`.
 
 ## Source layout
 

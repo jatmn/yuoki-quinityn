@@ -2,6 +2,7 @@
 """Regressions for CI routing and Lua selection; no game or dependency mods are loaded."""
 from pathlib import Path
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -13,11 +14,77 @@ from ci_changes import classify
 ROUTER = Path(__file__).with_name('ci_changes.py').resolve()
 
 
+def workflow_block(workflow, name):
+    text = (ROUTER.parents[1] / '.github/workflows' / workflow).read_text()
+    blocks = set()
+    # A step repeated across jobs (Lua file selection) must stay identical.
+    for step in text.split(f'      - name: {name}\n')[1:]:
+        lines = []
+        for line in step.split('      - name:', 1)[0].split('        run: |\n', 1)[1].splitlines():
+            if line.strip() and not line.startswith('          '):
+                break
+            lines.append(line)
+        blocks.add(textwrap.dedent('\n'.join(lines)))
+    if len(blocks) != 1:
+        raise AssertionError(f'{workflow}: expected one definition of {name!r}, found {len(blocks)}')
+    return blocks.pop()
+
+
 class RoutingTests(unittest.TestCase):
+    def test_dispatcher_does_not_execute_changed_router(self):
+        command = workflow_block('ci.yml', 'Route the complete Git diff')
+        for has_base_router in (True, False):
+            with self.subTest(has_base_router=has_base_router), \
+                    tempfile.TemporaryDirectory(prefix='quinityn-dispatch-') as directory:
+                root = Path(directory)
+
+                def git(*args):
+                    return subprocess.check_output([
+                        'git', '-c', 'user.name=CI test', '-c', 'user.email=ci@example.invalid', *args
+                    ], cwd=root, text=True).strip()
+
+                git('init', '-q')
+                (root / 'tools').mkdir()
+                router = root / 'tools/ci_changes.py'
+                if has_base_router:
+                    shutil.copy(ROUTER, router)
+                git('add', '.'); git('commit', '--allow-empty', '-qm', 'base')
+                base = git('rev-parse', 'HEAD')
+                router.write_text('print("lua=false\\npython=false\\npackage=false\\nworkflows=false")\n')
+                (root / 'control.lua').write_text('return (\n')
+                git('add', '.'); git('commit', '-qm', 'broken Lua with disabled router')
+                output = root / 'outputs'
+                scratch = root / 'scratch'
+                scratch.mkdir()
+                subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', command], cwd=root, check=True,
+                               env={**os.environ, 'BASE': base, 'GITHUB_OUTPUT': str(output),
+                                    'RUNNER_TEMP': str(scratch)})
+                self.assertEqual(set(output.read_text().splitlines()), {
+                    'lua=true', 'python=true', 'package=true', 'workflows=true'
+                })
+
+    @unittest.skipUnless(shutil.which('luac5.2'), 'Lua workflow installs the required Lua 5.2 compiler')
+    def test_lua_workflow_checks_option_like_names(self):
+        with tempfile.TemporaryDirectory(prefix='quinityn-lua-option-') as directory:
+            root = Path(directory)
+
+            def git(*args):
+                return subprocess.check_output([
+                    'git', '-c', 'user.name=CI test', '-c', 'user.email=ci@example.invalid', *args
+                ], cwd=root, text=True).strip()
+
+            git('init', '-q')
+            shutil.copy(ROUTER.parents[1] / '.luacheckrc', root / '.luacheckrc')
+            git('add', '.'); git('commit', '-qm', 'base')
+            base = git('rev-parse', 'HEAD')
+            (root / '-generated.lua').write_text('return true\n')
+            git('add', '.'); git('commit', '-qm', 'option-like Lua name')
+            for name in ('Select Lua files for this event', 'Check Lua syntax'):
+                subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', workflow_block('lua.yml', name)],
+                               cwd=root, env={**os.environ, 'BASE': base, 'EVENT_NAME': 'pull_request'}, check=True)
+
     def test_lua_workflow_selects_type_changes(self):
-        workflow = ROUTER.parents[1] / '.github/workflows/lua.yml'
-        step = workflow.read_text().split('      - name: Select Lua files for this event\n', 1)[1]
-        selection = textwrap.dedent(step.split('        run: |\n', 1)[1].split('      - name:', 1)[0])
+        selection = workflow_block('lua.yml', 'Select Lua files for this event')
         for starts_as_symlink in (False, True):
             with self.subTest(starts_as_symlink=starts_as_symlink), \
                     tempfile.TemporaryDirectory(prefix='quinityn-ci-type-') as directory:
@@ -51,9 +118,56 @@ class RoutingTests(unittest.TestCase):
                     [sys.executable, str(ROUTER), '--base', base], cwd=root, text=True
                 ).splitlines()
                 self.assertIn('lua=true', routed)
+                for event in ('pull_request', 'push'):
+                    subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', selection], cwd=root,
+                                   env={**os.environ, 'BASE': base, 'EVENT_NAME': event}, check=True)
+                    self.assertEqual((root / '.cache/ci-lua-files').read_bytes(),
+                                     b'control.lua\0' if event == 'pull_request'
+                                     else b'control.lua\0untouched.lua\0')
+
+    def test_lua_workflow_pr_and_push_manifests(self):
+        selection = workflow_block('lua.yml', 'Select Lua files for this event')
+        with tempfile.TemporaryDirectory(prefix='quinityn-lua-manifest-') as directory:
+            root = Path(directory)
+
+            def git(*args):
+                return subprocess.check_output([
+                    'git', '-c', 'user.name=CI test', '-c', 'user.email=ci@example.invalid', *args
+                ], cwd=root, text=True).strip()
+
+            def select(base, event):
                 subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', selection], cwd=root,
-                               env={**os.environ, 'BASE': base, 'EVENT_NAME': 'pull_request'}, check=True)
-                self.assertEqual((root / '.cache/ci-lua-files').read_bytes(), b'control.lua\0')
+                               env={**os.environ, 'BASE': base, 'EVENT_NAME': event}, check=True)
+                return set(filter(None, (root / '.cache/ci-lua-files').read_bytes().split(b'\0')))
+
+            git('init', '-q')
+            for name in ('untouched.lua', 'deleted.lua', 'old.lua'):
+                (root / name).write_text('return true\n')
+            git('add', '.'); git('commit', '-qm', 'base')
+            # Lint/formatter/toolchain changes must check the full baseline on both events.
+            for config in ('.luacheckrc', '.stylua.toml', '.github/workflows/lua.yml'):
+                base = git('rev-parse', 'HEAD')
+                (root / config).parent.mkdir(parents=True, exist_ok=True)
+                (root / config).write_text('# manifest fixture\n')
+                git('add', '.'); git('commit', '-qm', 'configuration')
+                for event in ('pull_request', 'push'):
+                    self.assertEqual(select(base, event),
+                                     {b'untouched.lua', b'deleted.lua', b'old.lua'})
+            base = git('rev-parse', 'HEAD')
+            unusual = 'new file\nwith $shell; characters.lua'
+            git('mv', 'old.lua', unusual)
+            git('rm', 'deleted.lua')
+            (root / '-added.lua').write_text('return false\n')
+            (root / 'untracked.lua').write_text('return true\n')
+            git('add', '--', '-added.lua'); git('commit', '-qm', 'rename, delete and add')
+            self.assertEqual(select(base, 'pull_request'), {os.fsencode(unusual), b'-added.lua'})
+            self.assertEqual(select(base, 'push'),
+                             {os.fsencode(unusual), b'-added.lua', b'untouched.lua'})
+            for event in ('pull_request', 'push'):
+                failed = subprocess.run(['bash', '-e', '-o', 'pipefail', '-c', selection],
+                                        cwd=root, capture_output=True,
+                                        env={**os.environ, 'BASE': 'missing-revision', 'EVENT_NAME': event})
+                self.assertNotEqual(failed.returncode, 0)
 
     def test_surface_selection(self):
         cases = [
@@ -67,6 +181,7 @@ class RoutingTests(unittest.TestCase):
             (['docs/development.md', 'AGENTS.md', 'CONTRIBUTING.md'], set()),
             (['.gitignore', '.github/CODEOWNERS', 'build/generated.txt'], set()),
             (['.luacheckrc', '.stylua.toml'], {'lua'}),
+            (['.ruff.toml'], {'python'}),
             (['.github/workflows/lua.yml'], {'lua', 'workflows'}),
             (['.github/workflows/python.yml'], {'python', 'workflows'}),
             (['.github/workflows/package.yml'], {'package', 'workflows'}),

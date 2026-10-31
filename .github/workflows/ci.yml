@@ -10,7 +10,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.run_id }}
   cancel-in-progress: true
 
 jobs:
@@ -31,24 +31,58 @@ jobs:
         id: paths
         env:
           BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
-        run: python3 tools/ci_changes.py --base "$BASE" >> "$GITHUB_OUTPUT"
+        run: |
+          git diff --check "$BASE" HEAD
+          # An edited router must not decide whether its own checks run.
+          git ls-tree "$BASE" -- tools/ci_changes.py > "$RUNNER_TEMP/ci-router-entry"
+          if [ -s "$RUNNER_TEMP/ci-router-entry" ]; then
+            git show "$BASE:tools/ci_changes.py" > "$RUNNER_TEMP/ci-router.py"
+            python3 "$RUNNER_TEMP/ci-router.py" --base "$BASE" >> "$GITHUB_OUTPUT"
+          else
+            # The initial installation has no base router: validate everything.
+            printf '%s\n' lua=true python=true package=true workflows=true >> "$GITHUB_OUTPUT"
+          fi
 
   lua:
+    name: Lua
     needs: changes
     if: needs.changes.outputs.lua == 'true'
     uses: ./.github/workflows/lua.yml
 
   python:
+    name: Python
     needs: changes
     if: needs.changes.outputs.python == 'true'
     uses: ./.github/workflows/python.yml
 
   package:
+    name: Package
     needs: changes
     if: needs.changes.outputs.package == 'true'
     uses: ./.github/workflows/package.yml
 
   actionlint:
+    name: Workflows
     needs: changes
     if: needs.changes.outputs.workflows == 'true'
     uses: ./.github/workflows/workflows.yml
+
+  # Stable name for a required status check: routed jobs are skipped or renamed
+  # depending on the diff, so require this job instead of the individual checks.
+  result:
+    name: CI result
+    needs: [changes, lua, python, package, actionlint]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 1
+    steps:
+      - name: Require every selected check to pass
+        env:
+          RESULTS: ${{ join(needs.*.result, ' ') }}
+        run: |
+          for result in $RESULTS; do
+            case "$result" in
+              success | skipped) ;;
+              *) echo "::error::A selected CI check finished with: $result"; exit 1 ;;
+            esac
+          done
