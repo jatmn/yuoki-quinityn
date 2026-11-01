@@ -47,6 +47,7 @@ local function clone(kind, name)
   entity.localised_name = { "entity-name.quinityn-enemy", { "entity-name." .. name } }
   entity.factoriopedia_simulation = nil
   entity.icons = { { icon = entity.icon, icon_size = entity.icon_size or 64, tint = violet_tint() } }
+  entity.icon = nil
   tint_visuals(entity)
   data:extend({ entity })
   return entity

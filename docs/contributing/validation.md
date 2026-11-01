@@ -4,6 +4,31 @@
 
 The earlier development checks used official Factorio **2.1.21 + Space Age** and the pinned, unmodified Yuoki/Engines 1.3.0 source revisions listed in [development](development.md#exact-dependency-revisions). The Cimota progression checks below use **2.1.23 + Space Age** with those same pins. Both dependencies now have released Mod Portal versions; this record describes the pinned source tests, not a new validation run against the published ZIPs. The [earlier development snapshot validation record](https://github.com/jatmn/yuoki-quinityn/blob/v0.1.0/docs/validation.md) remains available for the earlier preview.
 
+## Factorio 2.1.24 compliance — 2026-10-31
+
+The complete `tools/test.py` suite, including `--transport-drones` (2.1.4),
+passes with official headless **2.1.24 build 87808** and the Yuoki/Engines
+**1.3.1** pins, which are now also the declared minimum versions in
+`info.json`. Before this change, `tools/prepare_dependencies.py` could not prepare
+a fresh checkout: the previous Engines pin `dd13f42` belongs to no branch.
+
+The 2.1.22–2.1.24 API changes Quinityn uses (fluid-filter return type and
+`on_player_respawned` data) were already handled. Factorio's
+`--check-unused-prototype-data` reported 60 ignored fields in Quinityn's own
+prototypes: stale `icon` values beside tinted `icons`, the planet's
+`water`/`starting_area` keys (never part of 2.x planet generation settings),
+and Yuoki's Factorio 1.x fluid-box sizing copied onto the burner separator.
+They are removed, and the load step now fails if any return. A data dump
+comparison shows only those fields changed. The Nauvis–Quinityn route icon is
+now explicit because Space Age generates it from `planet.icon`, and it is
+identical to before.
+
+The remaining unused-field warnings come from the dependencies: 842 from
+Yuoki 1.3.1 and 576 from Engines 1.3.1. These include three `group` fields on
+the Engines air-filter recipes, which appear because Quinityn enables the
+Fatmice filter mode. Vanilla 2.1.24 data reports none. These are headless
+checks; no graphical client was run for this change.
+
 ## Cimota progression — 2026-10-24
 
 The native prototype regression fails against the original 39-unlock Cimota

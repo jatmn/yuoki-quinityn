@@ -317,7 +317,9 @@ prim=list(walk_sprites(separator['graphics_set']));orig=list(walk_sprites(source
 assert len(prim)==len(orig) and len(prim)>=1
 for before,after in zip(orig,prim): check_sprite(before, after)
 assert separator['graphics_set']!=source['graphics_set']
-assert separator['fluid_boxes']==source['fluid_boxes']
+# Only Yuoki's leftover Factorio 1.x sizing, which the engine ignores, is dropped.
+legacy_sizing={'base_area','base_level'}
+assert separator['fluid_boxes']==[{k:v for k,v in box.items() if k not in legacy_sizing} for box in source['fluid_boxes']]
 assert separator['circuit_connector']==D['assembling-machine']['chemical-plant']['circuit_connector']
 item_tint=channels(I['quinityn-burner-separator']['icons'][0]['tint'])
 for i,c in enumerate(purple): assert abs(item_tint[i]-c)<1e-6

@@ -27,7 +27,12 @@ def run(name,args,marker=None,timeout=180):
  print('PASS',name)
 # Each run starts from defaults; the option-off fixture persists mod-settings.dat.
 (mods/'mod-settings.dat').unlink(missing_ok=True)
-run('load',base+['--dump-data'],'Factorio initialised')
+run('load',base+['--dump-data','--check-unused-prototype-data'],'Factorio initialised')
+# Factorio silently ignores unknown or superseded prototype fields; reject them in prototypes named quinityn*.
+unused=[line for line in (a.output/'load.log').read_text().splitlines() if 'was not used' in line
+        and line.split('Value ROOT.',1)[-1].split('.')[1].startswith('quinityn')]
+if unused:print('\n'.join(unused));raise SystemExit('unused Quinityn prototype data; see '+str(a.output/'load.log'))
+print('PASS no unused data in quinityn* prototypes')
 dump=a.output/'runtime/script-output/data-raw-dump.json'
 # Exercise the callbacks actually attached to the loaded tips, not a parallel
 # list of helper calls. Keep the exported data in the existing test-only mod.

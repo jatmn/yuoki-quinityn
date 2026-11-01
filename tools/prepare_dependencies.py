@@ -3,8 +3,8 @@
 import argparse, subprocess
 from pathlib import Path
 LOCK={
- 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'c865cf05d5009d7f2224b32900272d4b1f012f21'},
- 'yi_engines':{'url':'https://github.com/jatmn/Yuoki-Engines-Factorio-2.0.git','commit':'dd13f421f68010fd0180cda4fb9273f9b582198e'},
+ 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'bafe79d0278afc61e0a2ccfc52905bba7bf5fffe'},
+ 'yi_engines':{'url':'https://github.com/jatmn/Yuoki-Engines-Factorio-2.x.git','commit':'3fc8761858e6d8d592ec1978ca51f7a57d44e882'},
 }
 def main():
  p=argparse.ArgumentParser();p.add_argument('--directory',type=Path,default=Path('build/dependencies'));a=p.parse_args()

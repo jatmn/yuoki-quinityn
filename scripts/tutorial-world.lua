@@ -47,9 +47,6 @@ local function port(s, machine, index, amount, temperature)
   local pipe = make(s, "pipe", c.target_position.x, c.target_position.y)
   if amount then
     local filter = machine.get_fluid_filter(index)
-    if type(filter) == "table" and not filter.object_name then
-      filter = filter.fluid
-    end
     local name = type(filter) == "string" and filter or filter.name
     s.supplies[#s.supplies + 1] = { pipe = pipe, name = name, amount = amount, temperature = temperature }
     text(s, { "", "[fluid=" .. name .. "] →" }, pipe.position.x, pipe.position.y - 1, 1)
