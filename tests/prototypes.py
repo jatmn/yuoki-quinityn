@@ -1082,20 +1082,37 @@ full=D['assembling-machine']['y-atomic-constructor']
 assert full['crafting_categories']==['yuoki-atomics'] and full['crafting_speed']==2 and full['energy_usage']=='1200kW'
 assert 'quinityn-primitive-conversion' not in D['character']['character']['crafting_categories']
 surplus_specs={
- 'quinityn-stone-to-uc':([('stone',40)],[('y-unicomp-a2',1)]),
- 'quinityn-wood-to-uc':([('wood',40)],[('y-unicomp-a2',1)]),
- 'quinityn-uc-to-coal':([('y-unicomp-a2',1)],[('coal',10)]),
- 'quinityn-uc-to-iron':([('y-unicomp-a2',1)],[('iron-ore',10)]),
- 'quinityn-uc-to-copper':([('y-unicomp-a2',1)],[('copper-ore',10)]),
+ 'quinityn-stone-to-uc':([('stone',40)],[('y-unicomp-a2',1)],'y-ac-stone2uc'),
+ 'quinityn-wood-to-uc':([('wood',40)],[('y-unicomp-a2',1)],'y-ac-wood2uc'),
+ 'quinityn-uc-to-coal':([('y-unicomp-a2',1)],[('coal',10)],'y-ac-uc2coal'),
+ 'quinityn-uc-to-iron':([('y-unicomp-a2',1)],[('iron-ore',10)],'y-ac-uc2iron-ore'),
+ 'quinityn-uc-to-copper':([('y-unicomp-a2',1)],[('copper-ore',10)],'y-ac-uc2copper-ore'),
 }
-for name,(ing,res) in surplus_specs.items():
+def arrow(direction):
+ return {'icon':'__Yuoki__/graphics/icons/atomics/atomics-'+direction+'-arrow.png','icon_size':128,'scale':0.25}
+for name,(ing,res,full_name) in surplus_specs.items():
  r=R[name]
  assert r['categories']==['quinityn-primitive-conversion'] and r['energy_required']==8
  assert r.get('enabled',True) is False and r['subgroup']=='quinityn-fieldwork' and r['order']==name
- assert not r.get('allow_productivity',True) and r.get('auto_recycle') is False
+ assert not r.get('allow_productivity',True) and r.get('auto_recycle') is False and r.get('allow_quality') is False
+ assert r['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
+ assert r['localised_name']==['recipe-name.'+name] and r['localised_description']==['recipe-description.'+name]
  assert [(p['name'],p['amount']) for p in r['ingredients']]==ing
  assert [(p['name'],p['amount']) for p in r['results']]==res
  assert unlocks[name]==['quinityn-surplus']
+ # Same material-and-arrow icon as the matching full Cimota recipe: down into UC, up out of UC.
+ assert r['icons']==R[full_name]['icons'],name
+ assert r['icons'][-1]==arrow('down' if res[0][0]=='y-unicomp-a2' else 'up'),name
+ assert R[full_name]['categories']==['yuoki-atomics'],full_name
+water=R['quinityn-water']
+assert water['categories']==['quinityn-separation'] and water['energy_required']==2
+assert water['ingredients']==[{'type':'fluid','name':'y-liquid-uc2','amount':1}]
+assert water['results']==[{'type':'fluid','name':'water','amount':100}]
+assert water.get('enabled',True) is False and water['localised_name']==['recipe-name.quinityn-water']
+assert water['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
+assert water['icons']==[{'icon':D['fluid']['water']['icon'],'icon_size':64,'scale':0.5},arrow('up')]
+# The primitive machine runs exactly water separation and the five one-way conversions.
+assert {n for n,r in R.items() if set(r.get('categories',['crafting']))&set(prim['crafting_categories'])}=={'quinityn-water',*surplus_specs}
 surplus=T['quinityn-surplus']
 assert surplus['prerequisites']==['quinityn-arrival'] and 'unit' not in surplus
 assert surplus['research_trigger']=={'type':'craft-item','item':'quinityn-burner-separator','count':1}

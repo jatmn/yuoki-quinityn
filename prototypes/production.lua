@@ -1,3 +1,4 @@
+-- luacheck: read globals yi
 local copy = table.deepcopy
 local primitive_tint = { 0.8, 0.45, 1 }
 local function item(name, count)
@@ -147,43 +148,41 @@ recipe(
   nil,
   5
 )
-recipe("quinityn-water", { fluid("y-liquid-uc2", 1) }, { fluid("water", 100) }, { "quinityn-separation" }, 2)
+-- Separator conversions use Yuoki's atomics builder for its material-and-arrow icons.
+-- Each registers one direction only: "down" is material -> unicomp, "up" is unicomp -> material.
+local function conversion(name, material, direction, category, seconds, options)
+  options.fields = {
+    name = name,
+    categories = { category },
+    energy_required = seconds,
+    enabled = false,
+    subgroup = "quinityn-fieldwork",
+    order = name,
+    localised_name = { "recipe-name." .. name },
+    surface_conditions = { { property = "quinityn-industry", min = 1, max = 1 } },
+    allow_productivity = false,
+  }
+  return yi.lib.recipe.atomics.make_recipe(material, direction, options)
+end
+conversion("quinityn-water", "water", "up", "quinityn-separation", 2, {
+  material_type = "fluid",
+  amount = 100,
+  unicomp = "y-liquid-uc2",
+  unicomp_type = "fluid",
+})
 data:extend({
   { type = "recipe-category", name = "quinityn-primitive-conversion" },
 })
-recipe(
-  "quinityn-stone-to-uc",
-  { item("stone", 40) },
-  { item("y-unicomp-a2", 1) },
-  { "quinityn-primitive-conversion" },
-  8
-)
-recipe("quinityn-wood-to-uc", { item("wood", 40) }, { item("y-unicomp-a2", 1) }, { "quinityn-primitive-conversion" }, 8)
-recipe("quinityn-uc-to-coal", { item("y-unicomp-a2", 1) }, { item("coal", 10) }, { "quinityn-primitive-conversion" }, 8)
-recipe(
-  "quinityn-uc-to-iron",
-  { item("y-unicomp-a2", 1) },
-  { item("iron-ore", 10) },
-  { "quinityn-primitive-conversion" },
-  8
-)
-recipe(
-  "quinityn-uc-to-copper",
-  { item("y-unicomp-a2", 1) },
-  { item("copper-ore", 10) },
-  { "quinityn-primitive-conversion" },
-  8
-)
-local stone_to_uc = data.raw.recipe["quinityn-stone-to-uc"]
-stone_to_uc.icons = {
-  { icon = data.raw.item["stone"].icon, icon_size = data.raw.item["stone"].icon_size or 64 },
-}
-stone_to_uc.localised_description = { "recipe-description.quinityn-stone-to-uc" }
-local wood_to_uc = data.raw.recipe["quinityn-wood-to-uc"]
-wood_to_uc.icons = { { icon = data.raw.item["wood"].icon, icon_size = data.raw.item["wood"].icon_size or 64 } }
-wood_to_uc.localised_description = { "recipe-description.quinityn-wood-to-uc" }
-for _, name in ipairs({ "quinityn-uc-to-coal", "quinityn-uc-to-iron", "quinityn-uc-to-copper" }) do
-  data.raw.recipe[name].localised_description = { "recipe-description." .. name }
+for _, spec in ipairs({
+  { "quinityn-stone-to-uc", "stone", "down", 40 },
+  { "quinityn-wood-to-uc", "wood", "down", 40 },
+  { "quinityn-uc-to-coal", "coal", "up", 10 },
+  { "quinityn-uc-to-iron", "iron-ore", "up", 10 },
+  { "quinityn-uc-to-copper", "copper-ore", "up", 10 },
+}) do
+  local name = spec[1]
+  local primitive = conversion(name, spec[2], spec[3], "quinityn-primitive-conversion", 8, { amount = spec[4] })
+  primitive.localised_description = { "recipe-description." .. name }
 end
 recipe(
   "quinityn-research-data",
