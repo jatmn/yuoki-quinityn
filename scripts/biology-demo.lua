@@ -167,10 +167,6 @@ local function begin_step(state)
   state.fluids = {}
   for index = 1, machine.fluids_count do
     local filter = machine.get_fluid_filter(index)
-    -- 2.1.21 returns FluidFilter; 2.1.22 returns its FluidID directly.
-    if type(filter) == "table" and not filter.object_name then
-      filter = filter.fluid
-    end
     local fluid_name = type(filter) == "string" and filter or filter and filter.name
     if fluid_name then
       local connections = machine.get_fluid_box_pipe_connections(index)
