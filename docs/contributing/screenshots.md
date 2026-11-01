@@ -82,10 +82,11 @@ and [artwork provenance](../../graphics/README.md#in-game-enemy-screenshots).
 
 ## Prepare a capture save
 
-Use the **graphical Factorio 2.1.21 client with Space Age**, the
-[pinned dependencies](development.md#exact-dependency-revisions) and the current
-Quinityn source. The historical preview predates the new creatures. Record
-the Quinityn commit, dependency versions and map seed with the resulting images.
+Use the **graphical Factorio client with Space Age** matching the
+[current test baseline](development.md#exact-dependency-revisions), its pinned
+dependencies and the current Quinityn source. The historical preview predates
+the new creatures. Record the Quinityn commit, dependency versions and map seed
+with the resulting images.
 
 Create a disposable test save and generate a fresh Quinityn surface. Use the
 map editor's surface and entity tools to arrange the exact Uni-touched
