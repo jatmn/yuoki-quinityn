@@ -18,7 +18,7 @@ not installation prerequisites.
 
 | Dependency | Commit | Purpose |
 | --- | --- | --- |
-| Yuoki 1.3.2 | `2372d6c1e933bd95e4437fa1f3003b9d53b69eea` | Reproducible source tests/builds |
+| Yuoki 1.3.2 | `2372d6c1e933bd95e4437fa1f3003b9d53b69eea` | Reproducible source tests/builds; includes `yi.lib.recipe.atomics.make_recipe` |
 | yi_engines 1.3.1 | `3fc8761858e6d8d592ec1978ca51f7a57d44e882` | Reproducible source tests/builds |
 | Factorio + Space Age | 2.1.24, build 87808 | Official headless Linux archive |
 
@@ -32,7 +32,9 @@ The script creates isolated checkouts under `build/dependencies`, verifies their
 
 Both pins are tagged releases (Yuoki 1.3.2, Engines 1.3.1), which include the
 Factorio 2.1.24 compatibility fixes, Yuoki's adjustable-inserter cleanup setting
-and the recipe-less Cimota direction that the primitive Cimota upgrade relies on. If an
+and the recipe-less Cimota direction that the primitive Cimota upgrade relies on.
+Yuoki also includes the one-way atomics recipe builder (`make_recipe`) used by
+the Primitive Cimota conversions. If an
 older pin is already prepared, pass `--directory` with a new empty directory
 and use it for the test/package `--dependencies` argument.
 The published preview still bundles the older Yuoki source build; it does not
