@@ -149,11 +149,12 @@ inside the archive, includes pending player notes under that upcoming version,
 and retains the numbered history. It does not change tracked files or generate
 gameplay prose.
 
-A nightly is published only when the addon changed. Nightly ZIPs are
-reproducible, so the workflow builds main and compares its SHA256SUMS with the
-newest nightly's. Identical bytes, such as an unchanged main or a CI- or
-documentation-only merge, skip publication and note it in the run summary. A
-stable release still produces a new nightly, because the upcoming version changes.
+Nightly ZIPs are reproducible, so the workflow builds main and compares its
+SHA256SUMS with the newest published nightly's. Matching checksums, such as
+after an unchanged main or a CI- or documentation-only merge, skip publication
+and note it in the run summary. A missing or unreadable previous checksum falls
+back to publication, even if the addon is unchanged. A stable release produces
+a new nightly because the upcoming version changes.
 
 Only the newest 14 nightly releases are kept. Each run deletes older nightly
 releases and their tags, whether or not it published. Stable and `v*` preview
