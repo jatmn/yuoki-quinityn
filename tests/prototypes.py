@@ -350,7 +350,7 @@ assert R['quinityn-low-density-structure']['order']==I['low-density-structure'][
 assert R['quinityn-processing-unit']['subgroup']==I['processing-unit']['subgroup']=='intermediate-product'
 assert R['quinityn-processing-unit']['order']==I['processing-unit']['order']=='b[circuits]-c[processing-unit]'
 for name in ['quinityn-hand-sort','quinityn-iron','quinityn-copper','quinityn-carbon','quinityn-stone','quinityn-timber',
-             'quinityn-burner-separator','quinityn-water','quinityn-technic-sign']:
+             'quinityn-burner-separator','quinityn-technic-sign']:
  assert R[name]['subgroup']=='quinityn-fieldwork' and R[name]['order']==name
 assert I['quinityn-salvage']['subgroup']==I['quinityn-burner-separator']['subgroup']=='quinityn-fieldwork'
 assert R['quinityn-research-data']['categories']==['quinityn-science']
@@ -1093,7 +1093,7 @@ def arrow(direction):
 for name,(ing,res,full_name) in surplus_specs.items():
  r=R[name]
  assert r['categories']==['quinityn-primitive-conversion'] and r['energy_required']==8
- assert r.get('enabled',True) is False and r['subgroup']=='quinityn-fieldwork' and r['order']==name
+ assert r.get('enabled',True) is False and r['order']==name
  assert not r.get('allow_productivity',True) and r.get('auto_recycle') is False and r.get('allow_quality') is False
  assert r['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
  assert r['localised_name']==['recipe-name.'+name] and r['localised_description']==['recipe-description.'+name]
@@ -1112,7 +1112,16 @@ assert water.get('enabled',True) is False and water['localised_name']==['recipe-
 assert water['surface_conditions']==[{'property':'quinityn-industry','min':1,'max':1}]
 assert water['icons']==[{'icon':D['fluid']['water']['icon'],'icon_size':64,'scale':0.5},arrow('up')]
 # The primitive machine runs exactly water separation and the five one-way conversions.
-assert {n for n,r in R.items() if set(r.get('categories',['crafting']))&set(prim['crafting_categories'])}=={'quinityn-water',*surplus_specs}
+prim_recipes={n for n,r in R.items() if set(r.get('categories',['crafting']))&set(prim['crafting_categories'])}
+assert prim_recipes=={'quinityn-water',*surplus_specs}
+# Its picker shows two Yuoki-tab rows like the full Cimota: into UC-A2 first, then out of it (water included).
+SG=D['item-subgroup']
+rows={}
+for n in sorted(prim_recipes,key=lambda n:(SG[R[n]['subgroup']]['order'],R[n]['subgroup'],R[n]['order'])):
+ rows.setdefault(R[n]['subgroup'],[]).append(n)
+assert list(rows.values())==[['quinityn-stone-to-uc','quinityn-wood-to-uc'],
+ ['quinityn-uc-to-coal','quinityn-uc-to-copper','quinityn-uc-to-iron','quinityn-water']],rows
+assert {SG[s]['group'] for s in rows}=={'yuoki'}
 surplus=T['quinityn-surplus']
 assert surplus['prerequisites']==['quinityn-arrival'] and 'unit' not in surplus
 assert surplus['research_trigger']=={'type':'craft-item','item':'quinityn-burner-separator','count':1}
