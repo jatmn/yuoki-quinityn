@@ -30,12 +30,13 @@ jobs:
           python3 tools/validate_package.py --nightly
       - name: Skip when the addon matches the newest nightly
         id: changed
+        shell: bash
         run: |
           # Nightly ZIPs are byte-for-byte reproducible, so identical checksums
           # mean main has no shipped change since the newest nightly (for example
           # an unchanged commit or a CI/docs-only merge).
-          gh release list --limit 200 --json tagName,publishedAt \
-            --jq '[.[] | select(.tagName | startswith("nightly-")) | select(.publishedAt != null)] | sort_by(.publishedAt) | reverse | .[].tagName' \
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            | jq -sr 'add | map(select(.tag_name | startswith("nightly-")) | select(.draft == false and .published_at != null)) | sort_by(.published_at) | reverse | .[].tag_name' \
             > build/nightlies.txt
           newest="$(head -n 1 build/nightlies.txt)"
           if [ -n "$newest" ] &&
@@ -77,11 +78,19 @@ jobs:
             fi
           done
       - name: Keep only the newest nightlies
+        shell: bash
         run: |
-          gh release list --limit 200 --json tagName,publishedAt \
-            --jq '[.[] | select(.tagName | startswith("nightly-")) | select(.publishedAt != null)] | sort_by(.publishedAt) | reverse | .[].tagName' \
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            | jq -sr 'add | map(select(.tag_name | startswith("nightly-")) | select(.draft == false and .published_at != null)) | sort_by(.published_at) | reverse | .[].tag_name' \
             | tail -n "+$((NIGHTLY_KEEP + 1))" > build/expired.txt
           while read -r tag; do
             echo "Deleting expired nightly $tag"
-            gh release delete "$tag" --cleanup-tag --yes
+            # Keep the release as the retry anchor until its tag is gone.
+            # A successful empty lookup also handles a previous partial cleanup.
+            gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$tag" \
+              --jq '.[].ref' > build/tag-refs.txt
+            if grep -Fxq "refs/tags/$tag" build/tag-refs.txt; then
+              gh api "repos/$GITHUB_REPOSITORY/git/refs/tags/$tag" --method DELETE
+            fi
+            gh release delete "$tag" --yes
           done < build/expired.txt

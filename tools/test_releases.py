@@ -357,5 +357,129 @@ class ReleaseTests(unittest.TestCase):
         self.assertEqual(git('rev-parse', 'HEAD'), foreign_head)
 
 
+class NightlyWorkflowTests(unittest.TestCase):
+    """Run the real workflow shell; only the remote GitHub boundary is simulated."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory(prefix='quinityn-nightly-')
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        (self.root / 'build/dist').mkdir(parents=True)
+        (self.root / 'build/dist/SHA256SUMS').write_text('same\n')
+        self.state_path = self.root / 'state.json'
+        self.gh = self.root / 'gh'
+        self.gh.write_text('#!' + sys.executable + '\n' + textwrap.dedent("""
+            import json, os, subprocess, sys
+            from pathlib import Path
+            p = Path(os.environ['TEST_STATE'])
+            s = json.loads(p.read_text())
+            a = sys.argv[1:]
+            if a[:2] == ['api', '--paginate']:
+                a = ['api', a[2], '--paginate', *a[3:]]
+            def save():
+                p.write_text(json.dumps(s))
+            if a[:2] == ['release', 'list']:
+                if s.get('fail') == 'list': sys.exit(1)
+                rows = s['releases'][:int(a[a.index('--limit') + 1])]
+                rows = [dict(tagName=r['tag_name'], publishedAt=r['published_at']) for r in rows]
+                subprocess.run(['jq', '-r', a[a.index('--jq') + 1]],
+                               input=json.dumps(rows), text=True, check=True)
+            elif a[0] == 'api' and '/releases?' in a[1]:
+                if s.get('fail') == 'list': sys.exit(1)
+                rows = s['releases']
+                if '--paginate' not in a: rows = rows[:100]
+                for start in range(0, len(rows), 100):
+                    print(json.dumps(rows[start:start + 100]))
+                if not rows: print('[]')
+            elif a[:2] == ['release', 'download']:
+                s['downloaded'] = a[2]; save()
+                if s.get('fail') == 'download': sys.exit(1)
+                Path(a[a.index('--output') + 1]).write_text(s.get('checksum', 'same\\n'))
+            elif a[0] == 'api' and '/git/matching-refs/tags/' in a[1]:
+                if s.get('fail') == 'lookup': sys.exit(1)
+                tag = a[1].split('/tags/', 1)[1]
+                for t in s['tags']:
+                    if t.startswith(tag): print('refs/tags/' + t)
+            elif a[0] == 'api' and '/git/refs/tags/' in a[1]:
+                if s.get('fail') == 'tag': sys.exit(1)
+                s['tags'].remove(a[1].split('/tags/', 1)[1]); save()
+            elif a[:2] == ['release', 'delete']:
+                if s.get('fail') == 'release': sys.exit(1)
+                s['releases'] = [r for r in s['releases'] if r['tag_name'] != a[2]]; save()
+                if '--cleanup-tag' in a:
+                    if s.get('fail') == 'tag': sys.exit(1)
+                    s['tags'].remove(a[2]); save()
+            else:
+                raise SystemExit('unexpected gh call: ' + repr(a))
+        """))
+        self.gh.chmod(0o755)
+
+    def inventory(self, count, **extra):
+        # Unique publication times, deliberately reversed by the producer.
+        rows = [{'tag_name': f'nightly-{i:04}', 'published_at': f'{i:04}-01-01T00:00:00Z',
+                 'draft': False} for i in range(1, count + 1)]
+        rows += [{'tag_name': 'v1.0.0', 'published_at': '9999-01-01T00:00:00Z', 'draft': False}]
+        self.state_path.write_text(json.dumps({
+            'releases': rows, 'tags': [r['tag_name'] for r in rows], **extra}))
+
+    def run_step(self, name, keep=14):
+        workflow = (ROOT / '.github/workflows/nightly.yml').read_text()
+        step = workflow.split('      - name: ' + name + '\n', 1)[1].split('      - name:', 1)[0]
+        script = textwrap.dedent(step.split('        run: |\n', 1)[1])
+        # Match Actions: unspecified Bash lacks pipefail; explicit Bash enables it.
+        shell = ['bash', '-e']
+        if '        shell: bash\n' in step:
+            shell += ['-o', 'pipefail']
+        return subprocess.run(shell + ['-c', script], cwd=self.root, capture_output=True,
+                              env={**os.environ, 'PATH': str(self.root) + os.pathsep + os.environ['PATH'],
+                                   'TEST_STATE': str(self.state_path), 'NIGHTLY_KEEP': str(keep),
+                                   'GITHUB_REPOSITORY': 'test/repo',
+                                   'GITHUB_OUTPUT': str(self.root / 'output'),
+                                   'GITHUB_STEP_SUMMARY': str(self.root / 'summary')})
+
+    def test_cleanup_listing_failure_is_not_empty_success(self):
+        self.inventory(15, fail='list')
+        self.assertNotEqual(self.run_step('Keep only the newest nightlies').returncode, 0)
+        self.assertEqual(len(json.loads(self.state_path.read_text())['releases']), 16)
+        self.inventory(0)
+        self.assertEqual(self.run_step('Keep only the newest nightlies').returncode, 0)
+
+    def test_cleanup_recovers_tag_lookup_tag_delete_and_release_delete_failures(self):
+        for failure in ['lookup', 'tag', 'release']:
+            with self.subTest(failure=failure):
+                self.inventory(15, fail=failure)
+                self.assertNotEqual(self.run_step('Keep only the newest nightlies').returncode, 0)
+                state = json.loads(self.state_path.read_text())
+                self.assertIn('nightly-0001', [r['tag_name'] for r in state['releases']])
+                # A prefix match is not the missing exact tag on the retry.
+                state['tags'].append('nightly-0001-extra')
+                state.pop('fail')
+                self.state_path.write_text(json.dumps(state))
+                self.assertEqual(self.run_step('Keep only the newest nightlies').returncode, 0)
+                state = json.loads(self.state_path.read_text())
+                expected = {f'nightly-{i:04}' for i in range(2, 16)} | {'v1.0.0'}
+                self.assertEqual(set(state['tags']), expected | {'nightly-0001-extra'})
+                self.assertEqual({r['tag_name'] for r in state['releases']}, expected)
+
+    def test_both_selectors_use_all_pages_and_publication_order(self):
+        self.inventory(366)
+        self.assertEqual(self.run_step('Skip when the addon matches the newest nightly').returncode, 0)
+        self.assertEqual(json.loads(self.state_path.read_text())['downloaded'], 'nightly-0366')
+        self.assertEqual((self.root / 'output').read_text(), 'publish=false\n')
+        self.assertEqual(self.run_step('Keep only the newest nightlies', keep=365).returncode, 0)
+        state = json.loads(self.state_path.read_text())
+        self.assertNotIn('nightly-0001', state['tags'])
+        self.assertEqual(len(state['releases']), 366)  # 365 nightly + stable
+        self.assertIn('v1.0.0', state['tags'])
+
+    def test_comparison_fallbacks(self):
+        for count, extra in [(0, {}), (1, {'checksum': 'different\n'}), (1, {'fail': 'download'})]:
+            with self.subTest(count=count, extra=extra):
+                self.inventory(count, **extra)
+                (self.root / 'output').write_text('')
+                self.assertEqual(self.run_step('Skip when the addon matches the newest nightly').returncode, 0)
+                self.assertEqual((self.root / 'output').read_text(), 'publish=true\n')
+
+
 if __name__ == '__main__':
     unittest.main()
