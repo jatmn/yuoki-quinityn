@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 5
     env:
       GH_TOKEN: ${{ github.token }}
+      NIGHTLY_KEEP: 14
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -27,7 +28,26 @@ jobs:
         run: |
           python3 tools/package.py --nightly
           python3 tools/validate_package.py --nightly
+      - name: Skip when the addon matches the newest nightly
+        id: changed
+        run: |
+          # Nightly ZIPs are byte-for-byte reproducible, so identical checksums
+          # mean main has no shipped change since the newest nightly (for example
+          # an unchanged commit or a CI/docs-only merge).
+          gh release list --limit 200 --json tagName,publishedAt \
+            --jq '[.[] | select(.tagName | startswith("nightly-")) | select(.publishedAt != null)] | sort_by(.publishedAt) | reverse | .[].tagName' \
+            > build/nightlies.txt
+          newest="$(head -n 1 build/nightlies.txt)"
+          if [ -n "$newest" ] &&
+            gh release download "$newest" --pattern SHA256SUMS --output build/newest-SHA256SUMS 2>/dev/null &&
+            cmp -s build/dist/SHA256SUMS build/newest-SHA256SUMS; then
+            echo "Addon unchanged since $newest; no new nightly." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo publish=false >> "$GITHUB_OUTPUT"
+          else
+            echo publish=true >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish only to GitHub
+        if: steps.changed.outputs.publish == 'true'
         run: |
           tag="nightly-$(date -u +%Y%m%d)-${GITHUB_SHA:0:12}-$GITHUB_RUN_ID"
           {
@@ -56,3 +76,12 @@ jobs:
               gh release upload "$tag" "$file"
             fi
           done
+      - name: Keep only the newest nightlies
+        run: |
+          gh release list --limit 200 --json tagName,publishedAt \
+            --jq '[.[] | select(.tagName | startswith("nightly-")) | select(.publishedAt != null)] | sort_by(.publishedAt) | reverse | .[].tagName' \
+            | tail -n "+$((NIGHTLY_KEEP + 1))" > build/expired.txt
+          while read -r tag; do
+            echo "Deleting expired nightly $tag"
+            gh release delete "$tag" --cleanup-tag --yes
+          done < build/expired.txt

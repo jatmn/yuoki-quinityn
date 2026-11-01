@@ -149,6 +149,16 @@ inside the archive, includes pending player notes under that upcoming version,
 and retains the numbered history. It does not change tracked files or generate
 gameplay prose.
 
+A nightly is published only when the addon changed. Nightly ZIPs are
+reproducible, so the workflow builds main and compares its SHA256SUMS with the
+newest nightly's. Identical bytes, such as an unchanged main or a CI- or
+documentation-only merge, skip publication and note it in the run summary. A
+stable release still produces a new nightly, because the upcoming version changes.
+
+Only the newest 14 nightly releases are kept. Each run deletes older nightly
+releases and their tags, whether or not it published. Stable and `v*` preview
+releases are never pruned. Change `NIGHTLY_KEEP` in the workflow to adjust this.
+
 Factorio supports only three numeric components, each at most 65535. Neither
 four-part versions nor prerelease suffixes can be used in info.json. Unique
 `nightly-<UTC date>-<commit>-<run ID>` GitHub tags identify builds; releases are
