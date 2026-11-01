@@ -90,8 +90,8 @@ separator.quality_affects_module_slots = false
 separator.quality_affects_energy_usage = false
 separator.energy_usage_quality_multiplier = nil
 separator.allowed_effects = {}
-separator.next_upgrade = nil
-separator.fast_replaceable_group = nil
+-- Keep the copied fast-replace group so planners, blueprints and hand replacement reach the full Cimota.
+separator.next_upgrade = "y-atomic-constructor"
 separator.localised_name = { "entity-name.quinityn-burner-separator" }
 tint_visible_sprites(separator.graphics_set)
 local separator_item = copy(data.raw.item["y-atomic-constructor"])

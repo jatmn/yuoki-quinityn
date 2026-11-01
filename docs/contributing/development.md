@@ -82,6 +82,16 @@ half-size body/leg geometry and referenced attack/death effects, including the
 absence of wrigglers, mineable egg shells and Gleba nest construction. These
 flat-arena fixtures do not establish graphical fidelity or combat balance.
 
+The primitive Cimota upgrade fixture places primitive machines running the
+water recipe and a stone conversion beside existing pipes on a flat Nauvis
+arena. It marks them with a blank and a configured upgrade planner and with an
+edited blueprint of the layout, lets construction robots replace them, and
+hand-replaces another through a character. It checks the position, kept pipes,
+returned machines, burner fuel and stranded ingredients. The headless API marks
+blueprint upgrades only in super-forced build mode, and the blueprint is edited
+directly rather than through the upgrade planner GUI. Robots, stock and power
+are injected; no graphical client is involved.
+
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
 eight affected recipes. A detection-only `bobinserters` stub activates the
 setting; it does not simulate recipe visibility or prove Bob's adjustment UI.

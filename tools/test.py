@@ -76,6 +76,13 @@ try:
 finally:
  (harness/'data-final-fixes.lua').unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+# Planner, blueprint, robot and hand replacement of the primitive Cimota.
+try:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/cimota_upgrade")\n')
+ run('cimota-upgrade-create',base+['--create',str(a.output/'cimota-upgrade.zip')],'QUINITYN CIMOTA UPGRADE SETUP PASSED')
+ run('cimota-upgrade',base+['--benchmark',str(a.output/'cimota-upgrade.zip'),'--benchmark-ticks','3000','--benchmark-runs','1'],'QUINITYN CIMOTA UPGRADE PASSED')
+finally:
+ (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 try:
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/surplus_migration")\n')
  setting_override=harness/'settings-updates.lua'
