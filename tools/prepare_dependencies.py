@@ -3,7 +3,7 @@
 import argparse, subprocess
 from pathlib import Path
 LOCK={
- 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'bafe79d0278afc61e0a2ccfc52905bba7bf5fffe'},
+ 'Yuoki':{'url':'https://github.com/jatmn/Yuoki-Factorio-2.x.git','commit':'2372d6c1e933bd95e4437fa1f3003b9d53b69eea'},
  'yi_engines':{'url':'https://github.com/jatmn/Yuoki-Engines-Factorio-2.x.git','commit':'3fc8761858e6d8d592ec1978ca51f7a57d44e882'},
 }
 def main():

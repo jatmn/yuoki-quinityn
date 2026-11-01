@@ -18,7 +18,7 @@ not installation prerequisites.
 
 | Dependency | Commit | Purpose |
 | --- | --- | --- |
-| Yuoki 1.3.1 | `bafe79d0278afc61e0a2ccfc52905bba7bf5fffe` | Reproducible source tests/builds |
+| Yuoki 1.3.2 | `2372d6c1e933bd95e4437fa1f3003b9d53b69eea` | Reproducible source tests/builds |
 | yi_engines 1.3.1 | `3fc8761858e6d8d592ec1978ca51f7a57d44e882` | Reproducible source tests/builds |
 | Factorio + Space Age | 2.1.24, build 87808 | Official headless Linux archive |
 
