@@ -19,6 +19,7 @@ jobs:
     timeout-minutes: 5
     env:
       GH_TOKEN: ${{ github.token }}
+      NIGHTLY_KEEP: 14
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -27,7 +28,27 @@ jobs:
         run: |
           python3 tools/package.py --nightly
           python3 tools/validate_package.py --nightly
+      - name: Skip when the addon matches the newest nightly
+        id: changed
+        shell: bash
+        run: |
+          # Nightly ZIPs are byte-for-byte reproducible, so identical checksums
+          # mean main has no shipped change since the newest nightly (for example
+          # an unchanged commit or a CI/docs-only merge).
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            | jq -sr 'add | map(select(.tag_name | startswith("nightly-")) | select(.draft == false and .published_at != null)) | sort_by(.published_at) | reverse | .[].tag_name' \
+            > build/nightlies.txt
+          newest="$(head -n 1 build/nightlies.txt)"
+          if [ -n "$newest" ] &&
+            gh release download "$newest" --pattern SHA256SUMS --output build/newest-SHA256SUMS 2>/dev/null &&
+            cmp -s build/dist/SHA256SUMS build/newest-SHA256SUMS; then
+            echo "Addon unchanged since $newest; no new nightly." | tee -a "$GITHUB_STEP_SUMMARY"
+            echo publish=false >> "$GITHUB_OUTPUT"
+          else
+            echo publish=true >> "$GITHUB_OUTPUT"
+          fi
       - name: Publish only to GitHub
+        if: steps.changed.outputs.publish == 'true'
         run: |
           tag="nightly-$(date -u +%Y%m%d)-${GITHUB_SHA:0:12}-$GITHUB_RUN_ID"
           {
@@ -56,3 +77,20 @@ jobs:
               gh release upload "$tag" "$file"
             fi
           done
+      - name: Keep only the newest nightlies
+        shell: bash
+        run: |
+          gh api --paginate "repos/$GITHUB_REPOSITORY/releases?per_page=100" \
+            | jq -sr 'add | map(select(.tag_name | startswith("nightly-")) | select(.draft == false and .published_at != null)) | sort_by(.published_at) | reverse | .[].tag_name' \
+            | tail -n "+$((NIGHTLY_KEEP + 1))" > build/expired.txt
+          while read -r tag; do
+            echo "Deleting expired nightly $tag"
+            # Keep the release as the retry anchor until its tag is gone.
+            # A successful empty lookup also handles a previous partial cleanup.
+            gh api "repos/$GITHUB_REPOSITORY/git/matching-refs/tags/$tag" \
+              --jq '.[].ref' > build/tag-refs.txt
+            if grep -Fxq "refs/tags/$tag" build/tag-refs.txt; then
+              gh api "repos/$GITHUB_REPOSITORY/git/refs/tags/$tag" --method DELETE
+            fi
+            gh release delete "$tag" --yes
+          done < build/expired.txt
