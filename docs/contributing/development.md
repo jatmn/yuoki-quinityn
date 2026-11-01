@@ -18,9 +18,9 @@ not installation prerequisites.
 
 | Dependency | Commit | Purpose |
 | --- | --- | --- |
-| Yuoki 1.3.0 | `c865cf05d5009d7f2224b32900272d4b1f012f21` | Reproducible source tests/builds |
-| yi_engines 1.3.0 | `dd13f421f68010fd0180cda4fb9273f9b582198e` | Reproducible source tests/builds |
-| Factorio + Space Age | 2.1.21, build 87673 | Official headless Linux archive |
+| Yuoki 1.3.1 | `bafe79d0278afc61e0a2ccfc52905bba7bf5fffe` | Reproducible source tests/builds |
+| yi_engines 1.3.1 | `3fc8761858e6d8d592ec1978ca51f7a57d44e882` | Reproducible source tests/builds |
+| Factorio + Space Age | 2.1.24, build 87808 | Official headless Linux archive |
 
 Prepare dependency source checkouts using Python 3 and Git:
 
@@ -30,13 +30,14 @@ python3 tools/prepare_dependencies.py
 
 The script creates isolated checkouts under `build/dependencies`, verifies their exact revisions, and refuses to overwrite a different or modified checkout. It does not patch source, edit an installed game, or change upstream branches.
 
-The Yuoki pin includes the merged Factorio 2.1 port and adjustable-inserter
-cleanup setting. If an older pin is already prepared, pass `--directory` with
-a new empty directory and use it for the test/package `--dependencies` argument.
+Both pins are the tagged 1.3.1 releases, which include the Factorio 2.1.24
+compatibility fixes and Yuoki's adjustable-inserter cleanup setting. If an
+older pin is already prepared, pass `--directory` with a new empty directory
+and use it for the test/package `--dependencies` argument.
 The published preview still bundles the older Yuoki source build; it does not
 track later source or Mod Portal releases.
 
-Get the official test engine from [Factorio's 2.1.21 headless download](https://factorio.com/get-download/2.1.21/headless/linux64). Extract it to a development directory. This repository does not redistribute the game.
+Get the official test engine from [Factorio's 2.1.24 headless download](https://factorio.com/get-download/2.1.24/headless/linux64). Extract it to a development directory. This repository does not redistribute the game.
 
 ## Run the checks
 
@@ -46,7 +47,7 @@ python3 tools/test.py \
   --dependencies build/dependencies
 ```
 
-The runner creates isolated mod links and an isolated game write directory inside `build/test`. Engine invocations are sequential. It checks actual loading, prototype contracts, zero-inventory resource/technology closure, finite starting-stock cost, terrain on three seeds, native walking routes across 20 seed/setting combinations, independent generation controls, native crafting milestones, ordinary-rock isolation on all planets, Quinityn flyash discovery, unfiltered/filtered Fatmice operation, alternate rocket fuel and runtime fixtures. It saves logs and temporary test maps under `build/test`.
+The runner creates isolated mod links and an isolated game write directory inside `build/test`. Engine invocations are sequential. It checks actual loading, that the engine uses every field of Quinityn's own prototypes (`--check-unused-prototype-data`), prototype contracts, zero-inventory resource/technology closure, finite starting-stock cost, terrain on three seeds, native walking routes across 20 seed/setting combinations, independent generation controls, native crafting milestones, ordinary-rock isolation on all planets, Quinityn flyash discovery, unfiltered/filtered Fatmice operation, alternate rocket fuel and runtime fixtures. It saves logs and temporary test maps under `build/test`.
 
 The test harness is a separate test-only mod. It never ships in the playable zip. Native fixtures inject ingredients and power to isolate machinery, research and rocket behavior; the separate dependency and budget checks verify where the materials come from. Player landing uses a narrow facade because the headless API cannot create a LuaPlayer. These distinctions are recorded in [validation](validation.md).
 

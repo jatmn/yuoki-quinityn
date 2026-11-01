@@ -164,6 +164,7 @@ for _, variant in ipairs(variants) do
       tint = util.color(variant.body),
     },
   }
+  unit.icon = nil
   unit.graphics_set = torso(variant)
   for _, field in ipairs({ "collision_box", "selection_box", "sticker_box" }) do
     unit[field] = half_box(unit[field])

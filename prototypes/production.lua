@@ -80,6 +80,11 @@ separator.energy_source = {
   effectivity = 1,
   emissions_per_minute = { pollution = 6 },
 }
+-- The copied Yuoki boxes still carry Factorio 1.x sizing; 2.x uses `volume`.
+for _, box in pairs(separator.fluid_boxes) do
+  box.base_area = nil
+  box.base_level = nil
+end
 separator.module_slots = 0
 separator.quality_affects_module_slots = false
 separator.quality_affects_energy_usage = false

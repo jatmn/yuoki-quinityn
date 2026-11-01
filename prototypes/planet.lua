@@ -48,8 +48,8 @@ for _, tr in pairs(land.transitions or {}) do
 end
 local planet = copy(data.raw.planet.nauvis)
 planet.name = "quinityn"
-planet.icon = "__space-age__/graphics/icons/fulgora.png"
-planet.icons = { { icon = planet.icon, icon_size = 64, tint = { 0.75, 0.4, 1 } } }
+planet.icon = nil
+planet.icons = { { icon = "__space-age__/graphics/icons/fulgora.png", icon_size = 64, tint = { 0.75, 0.4, 1 } } }
 planet.starmap_icon = "__space-age__/graphics/icons/starmap-planet-fulgora.png"
 planet.starmap_icon_size = 512
 planet.distance = 23
@@ -74,8 +74,6 @@ planet.surface_properties = {
 }
 planet.asteroid_spawn_definitions = copy(data.raw.planet.vulcanus.asteroid_spawn_definitions)
 planet.map_gen_settings = {
-  water = 1,
-  starting_area = 1.5,
   property_expression_names = {
     elevation = "quinityn_elevation",
     moisture = "0",
@@ -124,6 +122,14 @@ connection.name = "nauvis-quinityn"
 connection.to = "quinityn"
 connection.length = 15000
 connection.order = "d"
+-- Space Age derives default route icons from each planet's `icon`, which this
+-- planet replaces with tinted `icons`. Keep the same generated route layers.
+local nauvis = data.raw.planet.nauvis
+connection.icons = {
+  { icon = "__space-age__/graphics/icons/planet-route.png" },
+  { icon = nauvis.icon, icon_size = nauvis.icon_size or 64, scale = 0.333, shift = { -6, -6 } },
+  { icon = "__space-age__/graphics/icons/fulgora.png", icon_size = 64, scale = 0.333, shift = { 6, 6 } },
+}
 data:extend({
   { type = "surface-property", name = "quinityn-industry", default_value = 0 },
   {
@@ -489,6 +495,7 @@ for _, spec in ipairs({ { "big-rock", 0.0015, 2 }, { "huge-rock", 0.0004, 4 } })
   rock.factoriopedia_alternative = nil
   local tint = { 0.76, 0.64, 0.82 }
   rock.icons = { { icon = rock.icon, icon_size = rock.icon_size or 64, tint = tint } }
+  rock.icon = nil
   for _, sprite in pairs(rock.pictures) do
     sprite.tint = tint
   end
@@ -530,6 +537,7 @@ for _, source in ipairs({ "dry-tree", "dead-dry-hairy-tree" }) do
   tree.factoriopedia_alternative = nil
   tree.deconstruction_alternative = nil
   tree.icons = { { icon = tree.icon, icon_size = tree.icon_size or 64, tint = { 0.95, 0.68, 1 } } }
+  tree.icon = nil
   tree.map_color = { 0.55, 0.36, 0.62 }
   for _, sprite in pairs(tree.pictures) do
     sprite.tint = { 0.95, 0.68, 1 }
