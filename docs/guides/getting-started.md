@@ -10,10 +10,10 @@ source build for the terrain, progression and enemies described in today's guide
 
 | Component | Required by the mod | Recorded test baseline |
 | --- | --- | --- |
-| Factorio | 2.1.21 or later in the 2.1 series | 2.1.24, build 87808 |
-| Space Age | 2.1.21+ | Bundled with the pinned engine |
-| [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) | 1.3.0+ | 1.3.1 pinned source |
-| [Engines](https://mods.factorio.com/mod/yi_engines) | 1.3.0+ | 1.3.1 pinned source |
+| Factorio | 2.1.24 or later in the 2.1 series | 2.1.24, build 87808 |
+| Space Age | 2.1.24+ | Bundled with the pinned engine |
+| [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) | 1.3.1+ | 1.3.1 pinned source |
+| [Engines](https://mods.factorio.com/mod/yi_engines) | 1.3.1+ | 1.3.1 pinned source |
 
 Yuoki and Engines have released Factorio 2.1 versions. Install them through the
 in-game mod manager or their linked Mod Portal pages. Their older Factorio 2.0

@@ -8,9 +8,8 @@ The earlier development checks used official Factorio **2.1.21 + Space Age** and
 
 The complete `tools/test.py` suite, including `--transport-drones` (2.1.4),
 passes with official headless **2.1.24 build 87808** and the Yuoki/Engines
-**1.3.1** pins. It also passes on **2.1.21 build 87673** with the same pins and
-on 2.1.24 with the earlier 1.3.0 pins, which are still the declared minimum
-versions. Before this change, `tools/prepare_dependencies.py` could not prepare
+**1.3.1** pins, which are now also the declared minimum versions in
+`info.json`. Before this change, `tools/prepare_dependencies.py` could not prepare
 a fresh checkout: the previous Engines pin `dd13f42` belongs to no branch.
 
 The 2.1.22–2.1.24 API changes Quinityn uses (fluid-filter return type and

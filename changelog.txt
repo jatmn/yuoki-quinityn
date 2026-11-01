@@ -82,7 +82,8 @@ Version: Unreleased
     - Completed Yuoki logistics stays completed and keeps the 60-slot chest, the fast inserter, and the long inserter. Larger storage and requester or buffer chests require their new research on an existing save.
     - Existing completed technologies remain; recipes moved into new upgrade technologies require that new research.
     - Existing separator IDs are preserved. Existing generated terrain/ore is not rewritten; use a new map to see the revised starting area.
-    - Tested with Factorio 2.1.24 and Yuoki/Engines 1.3.1. Removed prototype fields that Factorio 2.1 ignores (replaced icons, old fluid-box sizing and planet generation keys); icons, machines and terrain generation are unchanged.
+    - Requires Factorio and Space Age 2.1.24 or later and Yuoki Industries and Engines 1.3.1 or later. Update the game and both mods before loading an existing save.
+    - Removed prototype fields that Factorio 2.1 ignores (replaced icons, old fluid-box sizing and planet generation keys); icons, machines and terrain generation are unchanged.
   Testing:
     - Added multi-seed native nest-to-landing paths across default and extreme liquid settings.
     - Added factory operation, F7 fuel, biter collision/pathfinding, localization and terrain-distribution checks.

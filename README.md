@@ -88,9 +88,9 @@ and [flyash guide](https://github.com/jatmn/yuoki-quinityn/blob/main/docs/guides
 
 ## Get started
 
-**Playable development preview.** Requires Factorio **2.1.21 or later in 2.1**,
-Space Age, [Yuoki Industries **1.3.0+**](https://mods.factorio.com/mod/Yuoki) and
-[Engines **1.3.0+**](https://mods.factorio.com/mod/yi_engines).
+**Playable development preview.** Requires Factorio **2.1.24 or later in 2.1**,
+Space Age, [Yuoki Industries **1.3.1+**](https://mods.factorio.com/mod/Yuoki) and
+[Engines **1.3.1+**](https://mods.factorio.com/mod/yi_engines).
 The recorded test baseline is **2.1.24** with pinned 1.3.1 dependency sources;
 later versions and other overhauls need separate testing.
 
