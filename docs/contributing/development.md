@@ -18,7 +18,7 @@ not installation prerequisites.
 
 | Dependency | Commit | Purpose |
 | --- | --- | --- |
-| Yuoki 1.3.1 | `bafe79d0278afc61e0a2ccfc52905bba7bf5fffe` | Reproducible source tests/builds |
+| Yuoki 1.3.2 | `2372d6c1e933bd95e4437fa1f3003b9d53b69eea` | Reproducible source tests/builds |
 | yi_engines 1.3.1 | `3fc8761858e6d8d592ec1978ca51f7a57d44e882` | Reproducible source tests/builds |
 | Factorio + Space Age | 2.1.24, build 87808 | Official headless Linux archive |
 
@@ -30,8 +30,9 @@ python3 tools/prepare_dependencies.py
 
 The script creates isolated checkouts under `build/dependencies`, verifies their exact revisions, and refuses to overwrite a different or modified checkout. It does not patch source, edit an installed game, or change upstream branches.
 
-Both pins are the tagged 1.3.1 releases, which include the Factorio 2.1.24
-compatibility fixes and Yuoki's adjustable-inserter cleanup setting. If an
+Both pins are tagged releases (Yuoki 1.3.2, Engines 1.3.1), which include the
+Factorio 2.1.24 compatibility fixes, Yuoki's adjustable-inserter cleanup setting
+and the recipe-less Cimota direction that the primitive Cimota upgrade relies on. If an
 older pin is already prepared, pass `--directory` with a new empty directory
 and use it for the test/package `--dependencies` argument.
 The published preview still bundles the older Yuoki source build; it does not
@@ -81,6 +82,18 @@ the off-planet spawn guard. Prototype checks cover the full evolution curves,
 half-size body/leg geometry and referenced attack/death effects, including the
 absence of wrigglers, mineable egg shells and Gleba nest construction. These
 flat-arena fixtures do not establish graphical fidelity or combat balance.
+
+The primitive Cimota upgrade fixture places primitive machines running the
+water recipe and a stone conversion beside existing pipes on a flat Nauvis
+arena. It marks them with a blank and a configured upgrade planner and with an
+edited blueprint of the layout, lets construction robots replace them, and
+hand-replaces another through a character. It checks the position and
+orientation, kept pipes, the pipe connection after choosing a full Cimota fluid
+recipe without rotating, returned machines, burner fuel and stranded
+ingredients. The headless API marks blueprint upgrades only in super-forced
+build mode, and the blueprint is edited directly rather than through the upgrade
+planner GUI. Robots, stock and power are injected; no graphical client is
+involved.
 
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
 eight affected recipes. A detection-only `bobinserters` stub activates the

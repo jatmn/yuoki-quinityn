@@ -114,7 +114,7 @@ GitHub releases and nightlies work without Factorio credentials. To connect
 stable releases to the Mod Portal:
 
 1. The required Factorio 2.1 dependencies are already available on the Mod Portal:
-   [Yuoki 1.3.1](https://mods.factorio.com/mod/Yuoki) and
+   [Yuoki 1.3.2](https://mods.factorio.com/mod/Yuoki) and
    [Engines 1.3.1](https://mods.factorio.com/mod/yi_engines). Their publication is
    managed separately; this repository uploads only Quinityn.
 2. On the [Factorio profile](https://factorio.com/profile), create an API key for
