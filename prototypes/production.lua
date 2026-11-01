@@ -39,6 +39,9 @@ local function with_product_group(name)
 end
 data:extend({
   { type = "item-subgroup", name = "quinityn-fieldwork", group = "yuoki", order = "00" },
+  -- Primitive Cimota picker rows, like the full Cimota: material -> unicomp, then unicomp -> material.
+  { type = "item-subgroup", name = "quinityn-conversion-down", group = "yuoki", order = "00-a" },
+  { type = "item-subgroup", name = "quinityn-conversion-up", group = "yuoki", order = "00-b" },
   { type = "recipe-category", name = "quinityn-separation" },
   { type = "recipe-category", name = "quinityn-science" },
 })
@@ -156,7 +159,7 @@ local function conversion(name, material, direction, category, seconds, options)
     categories = { category },
     energy_required = seconds,
     enabled = false,
-    subgroup = "quinityn-fieldwork",
+    subgroup = "quinityn-conversion-" .. direction,
     order = name,
     localised_name = { "recipe-name." .. name },
     surface_conditions = { { property = "quinityn-industry", min = 1, max = 1 } },
