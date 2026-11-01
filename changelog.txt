@@ -1,7 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Bugfixes:
-    - The Primitive Cimota Restructor can now be upgraded to the Cimota Restructor with upgrade planners (including a blank planner), upgraded blueprints, construction robots and hand fast-replacement. The machine keeps its position and pipes; burner fuel and ingredients for recipes the full Cimota cannot run are returned. The full Cimota cannot run primitive recipes, so the upgraded machine faces north until you rotate it after choosing a fluid recipe.
+    - The Primitive Cimota Restructor can now be upgraded to the Cimota Restructor with upgrade planners (including a blank planner), upgraded blueprints, construction robots and hand fast-replacement. The machine keeps its position, orientation and pipes; burner fuel and ingredients for recipes the full Cimota cannot run are returned, and you choose a new recipe afterwards. To allow this, a Cimota Restructor without a recipe can now be rotated and shows its pipe connections.
 ---------------------------------------------------------------------------------------------------
 Version: 0.1.1
 Date: 2026-11-01

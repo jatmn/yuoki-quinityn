@@ -86,11 +86,13 @@ The primitive Cimota upgrade fixture places primitive machines running the
 water recipe and a stone conversion beside existing pipes on a flat Nauvis
 arena. It marks them with a blank and a configured upgrade planner and with an
 edited blueprint of the layout, lets construction robots replace them, and
-hand-replaces another through a character. It checks the position, kept pipes,
-returned machines, burner fuel and stranded ingredients. The headless API marks
-blueprint upgrades only in super-forced build mode, and the blueprint is edited
-directly rather than through the upgrade planner GUI. Robots, stock and power
-are injected; no graphical client is involved.
+hand-replaces another through a character. It checks the position and
+orientation, kept pipes, the pipe connection after choosing a full Cimota fluid
+recipe without rotating, returned machines, burner fuel and stranded
+ingredients. The headless API marks blueprint upgrades only in super-forced
+build mode, and the blueprint is edited directly rather than through the upgrade
+planner GUI. Robots, stock and power are injected; no graphical client is
+involved.
 
 The inserter fixture uses Yuoki's real `yuoki-inserter-cleanup` setting and all
 eight affected recipes. A detection-only `bobinserters` stub activates the

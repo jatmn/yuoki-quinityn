@@ -29,12 +29,12 @@ local function check_layout(surface, force, record, label)
   assert(entity, label .. ": full Cimota replaced the primitive")
   assert(entity.position.x == record.position.x and entity.position.y == record.position.y, label .. " position")
   assert(not entity.get_recipe(), label .. ": unsupported primitive recipe is cleared")
+  assert(entity.direction == east, label .. ": replacement keeps the primitive's orientation")
   assert(record.pipe.valid and not record.pipe.to_be_deconstructed(), label .. ": surrounding pipe was kept")
-  -- The full Cimota cannot keep a primitive recipe. As with vanilla assemblers, the
-  -- engine faces a machine without a fluid recipe north, so the player rotates it once.
+  -- Choosing a supported fluid recipe connects the existing pipe without another rotation.
   force.recipes["y-liquid2uc"].enabled = true
   entity.set_recipe("y-liquid2uc")
-  entity.direction = east
+  assert(entity.direction == east, label .. ": fluid recipe keeps the orientation")
   local connected = false
   for _, neighbour in pairs(entity.get_fluid_box_neighbours(1)) do
     connected = connected or neighbour.entity == record.pipe
@@ -106,6 +106,7 @@ script.on_init(function()
   local upgraded = surface.create_entity({
     name = full,
     position = hand.position,
+    direction = east,
     force = force,
     fast_replace = true,
     character = character,
