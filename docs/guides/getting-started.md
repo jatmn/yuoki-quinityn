@@ -12,7 +12,7 @@ source build for the terrain, progression and enemies described in today's guide
 | --- | --- | --- |
 | Factorio | 2.1.24 or later in the 2.1 series | 2.1.24, build 87808 |
 | Space Age | 2.1.24+ | Bundled with the pinned engine |
-| [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) | 1.3.1+ | 1.3.1 pinned source |
+| [Yuoki Industries](https://mods.factorio.com/mod/Yuoki) | 1.3.2+ | 1.3.2 pinned source |
 | [Engines](https://mods.factorio.com/mod/yi_engines) | 1.3.1+ | 1.3.1 pinned source |
 
 Yuoki and Engines have released Factorio 2.1 versions. Install them through the
@@ -60,7 +60,7 @@ Its bundled dependency ZIPs are historical source builds and remain unchanged:
 | Yuoki 1.3.0 | [`ce7918f`](https://github.com/jatmn/Yuoki-Factorio-2.x/commit/ce7918f2b252f2d79ba86b9ae05d991e7af1f261) |
 | Engines 1.3.0 | [`dd13f42`](https://github.com/jatmn/Yuoki-Engines-Factorio-2.x/commit/dd13f421f68010fd0180cda4fb9273f9b582198e) |
 
-Current reproducible source builds instead pin the Yuoki and Engines 1.3.1
+Current reproducible source builds instead pin the Yuoki 1.3.2 and Engines 1.3.1
 releases, including the optional adjustable-inserter cleanup setting. For
 future downloadable builds, check the [release listing](https://github.com/jatmn/yuoki-quinityn/releases)
 and the notes attached to the particular snapshot.

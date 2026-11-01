@@ -80,11 +80,6 @@ separator.energy_source = {
   effectivity = 1,
   emissions_per_minute = { pollution = 6 },
 }
--- The copied Yuoki boxes still carry Factorio 1.x sizing; 2.x uses `volume`.
-for _, box in pairs(separator.fluid_boxes) do
-  box.base_area = nil
-  box.base_level = nil
-end
 separator.module_slots = 0
 separator.quality_affects_module_slots = false
 separator.quality_affects_energy_usage = false
@@ -92,9 +87,6 @@ separator.energy_usage_quality_multiplier = nil
 separator.allowed_effects = {}
 -- Keep the copied fast-replace group so planners, blueprints and hand replacement reach the full Cimota.
 separator.next_upgrade = "y-atomic-constructor"
--- The upgrade clears primitive-only recipes. A recipe-less full Cimota with its fluid boxes off
--- cannot hold a direction, so keep them on to let the replacement keep the old orientation.
-data.raw["assembling-machine"]["y-atomic-constructor"].fluid_boxes_off_when_no_fluid_recipe = false
 separator.localised_name = { "entity-name.quinityn-burner-separator" }
 tint_visible_sprites(separator.graphics_set)
 local separator_item = copy(data.raw.item["y-atomic-constructor"])

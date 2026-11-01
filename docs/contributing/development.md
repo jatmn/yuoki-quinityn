@@ -30,8 +30,9 @@ python3 tools/prepare_dependencies.py
 
 The script creates isolated checkouts under `build/dependencies`, verifies their exact revisions, and refuses to overwrite a different or modified checkout. It does not patch source, edit an installed game, or change upstream branches.
 
-Both pins are the tagged 1.3.1 releases, which include the Factorio 2.1.24
-compatibility fixes and Yuoki's adjustable-inserter cleanup setting. If an
+Both pins are tagged releases (Yuoki 1.3.2, Engines 1.3.1), which include the
+Factorio 2.1.24 compatibility fixes, Yuoki's adjustable-inserter cleanup setting
+and the recipe-less Cimota direction that the primitive Cimota upgrade relies on. If an
 older pin is already prepared, pass `--directory` with a new empty directory
 and use it for the test/package `--dependencies` argument.
 The published preview still bundles the older Yuoki source build; it does not
