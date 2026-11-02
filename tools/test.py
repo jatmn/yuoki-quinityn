@@ -5,6 +5,7 @@ from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
 p=argparse.ArgumentParser();p.add_argument('--factorio',type=Path,required=True);p.add_argument('--dependencies',type=Path,required=True);p.add_argument('--output',type=Path,default=ROOT/'build/test');p.add_argument('--transport-drones',type=Path)
 p.add_argument('--mining-drones',type=Path)
+p.add_argument('--milestones',type=Path)
 a=p.parse_args()
 a.factorio=a.factorio.resolve();a.dependencies=a.dependencies.resolve();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=True)
 mods=a.output/'mods';mods.mkdir(exist_ok=True)
@@ -255,6 +256,31 @@ finally:
  adjustable.rmdir()
  (mods/'mod-settings.dat').unlink(missing_ok=True)
  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
+# Milestones reads preset addons from remote interfaces in on_init. Check both
+# the test game and normal play, where the test-only functions are absent.
+if a.milestones:
+ (mods/'Milestones').symlink_to(a.milestones.resolve(),target_is_directory=True)
+ mod_list=json.loads((mods/'mod-list.json').read_text())
+ mod_list['mods'].append({'name':'Milestones','enabled':True})
+ loaded='Preset addons loaded: {"Yuoki Industries: Quinityn"}'
+ try:
+  (mods/'mod-list.json').write_text(json.dumps(mod_list))
+  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/milestones")\n')
+  run('milestones',base+['--create',str(a.output/'milestones.zip')],'QUINITYN MILESTONES TESTS PASSED')
+  for mod in mod_list['mods']:
+   if mod['name']=='quinityn-tests':mod['enabled']=False
+  (mods/'mod-list.json').write_text(json.dumps(mod_list))
+  run('milestones-normal',base+['--create',str(a.output/'milestones-normal.zip')],loaded)
+  for name in ['milestones','milestones-normal']:
+   text=(a.output/(name+'.log')).read_text()
+   if loaded not in text or 'Auto-detected preset used: Space Age' not in text or 'Please warn the mod author' in text:
+    raise SystemExit('Milestones did not load the Quinityn addon; see '+str(a.output/(name+'.log')))
+  print('PASS Milestones preset addon in test and normal games')
+ finally:
+  mod_list['mods']=[{'name':m['name'],'enabled':True} for m in mod_list['mods'] if m['name']!='Milestones']
+  (mods/'mod-list.json').write_text(json.dumps(mod_list))
+  (mods/'Milestones').unlink()
+  (harness/'control.lua').write_text('require("__yuoki-quinityn__/tests/runtime")\n')
 if a.transport_drones:
  run('transport-drones',[sys.executable,str(ROOT/'tools/test_transport_drones.py'),
      '--factorio',str(a.factorio),'--dependencies',str(a.dependencies),

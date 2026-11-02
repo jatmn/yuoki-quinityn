@@ -82,6 +82,18 @@ direct and hidden bridge gates. Depots, drones and reachable ore are injected.
 These headless fixtures leave graphical-client validation separate. Each run
 retains its logs and saves in a unique directory under `--output`.
 
+For the optional Milestones preset addon, prepare an unmodified checkout of
+[`Wiwiweb/FactorioMilestones`](https://github.com/Wiwiweb/FactorioMilestones) at
+`87bcc2088aafeaa2166e72c1944e06fcb19f832f` (1.5.3), then add
+`--milestones /absolute/path/to/FactorioMilestones` to the full test command.
+New games with and without the test harness must log that Milestones
+auto-detected the Space Age preset and loaded the Quinityn addon without
+validation errors. The harness also checks that every tracked item exists and
+every kill entry is a Quinityn enemy, not a Nauvis biter or Gleba stomper.
+Milestones only tracks forces with players, which the headless engine cannot
+create. Crediting the entries, starting equipment and the preset reset on an
+existing save need a graphical client.
+
 The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
 offspring, the engine's colony-building command and laser damage for all enemy
 sizes. It also fires capture rockets using normal enemy targeting at both native

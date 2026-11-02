@@ -188,17 +188,47 @@ script.on_event(defines.events.on_tick, function()
   storage.salvage_sort_migration_done = true
 end)
 
+-- The optional Milestones mod appends this addon to the active preset.
+-- It must be registered in normal play, not only beside the test mod.
+local remote_functions = {
+  milestones_preset_addons = function()
+    return {
+      ["Yuoki Industries: Quinityn"] = {
+        required_mods = { "yuoki-quinityn" },
+        milestones = {
+          { type = "group", name = "Science" },
+          { type = "item", name = "quinityn-research-data", quantity = 1 },
+          { type = "group", name = "Science at scale" },
+          { type = "item", name = "quinityn-research-data", quantity = 1000, next = "x10" },
+          { type = "group", name = "Progress" },
+          { type = "item", name = "yi_construction-robot", quantity = 1 },
+          { type = "item", name = "yi_logistic-robot", quantity = 1 },
+          { type = "item", name = "j_construction2-robot", quantity = 1 },
+          { type = "item", name = "j_logistic2-robot", quantity = 1 },
+          { type = "group", name = "Kills" },
+          { type = "kill", name = "quinityn-small-biter", quantity = 1 },
+          { type = "kill", name = "quinityn-medium-biter", quantity = 1 },
+          { type = "kill", name = "quinityn-big-biter", quantity = 1 },
+          { type = "kill", name = "quinityn-behemoth-biter", quantity = 1 },
+          { type = "kill", name = "quinityn-small-stomp-a-tron", quantity = 1 },
+          { type = "kill", name = "quinityn-medium-stomp-a-tron", quantity = 1 },
+          { type = "kill", name = "quinityn-big-stomp-a-tron", quantity = 1 },
+        },
+      },
+    }
+  end,
+}
+
 if script.active_mods["quinityn-tests"] then
-  remote.add_interface("yuoki-quinityn", {
-    offworld_crusher_tracked = function(unit_number)
-      local entity = storage.offworld_crushers and storage.offworld_crushers[unit_number]
-      return entity ~= nil and entity.valid
-    end,
-    clear_offworld_crusher_list = function()
-      storage.offworld_crushers = nil
-    end,
-    clear_salvage_sort_migration_flag = function()
-      storage.salvage_sort_migration_done = nil
-    end,
-  })
+  remote_functions.offworld_crusher_tracked = function(unit_number)
+    local entity = storage.offworld_crushers and storage.offworld_crushers[unit_number]
+    return entity ~= nil and entity.valid
+  end
+  remote_functions.clear_offworld_crusher_list = function()
+    storage.offworld_crushers = nil
+  end
+  remote_functions.clear_salvage_sort_migration_flag = function()
+    storage.salvage_sort_migration_done = nil
+  end
 end
+remote.add_interface("yuoki-quinityn", remote_functions)

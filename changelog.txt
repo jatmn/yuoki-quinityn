@@ -1,5 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
+  Features:
+    - Add optional Milestones support. With Milestones installed, your active preset also tracks Quinityn industrial research data (first and at scale), the first YI Constructor, YI Logistiker, YI Constructor Turbo and YI Logistiker Turbo produced, and first kills of each Quinityn native biter and Uni-touched Stomp-a-tron. Saves that already use Milestones keep their current list; use Reset in the Milestones settings to add the entries, after exporting any custom ones.
   Bugfixes:
     - Keep Mining Drones ore selectors under Mining Drones' control, so Durotal and Nuatreel can be mined before Yuoki industrial refining, including in existing saves affected by the old research gates.
 ---------------------------------------------------------------------------------------------------
