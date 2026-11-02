@@ -129,7 +129,8 @@ stable releases to the Mod Portal:
    source link; screenshots and longer presentation can be edited on the portal.
 4. Merge the next prepared release PR. The workflow creates the listing if
    absent, or uploads a new version if present. It verifies the portal's version,
-   filename and SHA1 against the uploaded ZIP.
+   filename and SHA1 against the uploaded ZIP, re-checking for up to about a
+   minute while the public listing catches up.
 
 The workflow never reads the upload key for nightlies or PR validation. Connecting
 the key enables portal publishing for future stable releases without a code edit.

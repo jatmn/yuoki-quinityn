@@ -154,6 +154,31 @@ class ReleaseTests(unittest.TestCase):
                 publish_mod.publish(self.out, self.tag, 'test-key', None)
             request.assert_not_called()
 
+    def test_upload_waits_for_a_lagging_portal_listing(self):
+        self.build()
+        uploaded = [{'upload_url': 'https://uploads.example.invalid/upload'}, {'success': True}]
+        with (patch.object(publish_mod, 'find_mod', side_effect=[
+                    {'releases': []}, {'releases': []}, {'releases': []}, self.portal_release()]),
+              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
+              patch.object(publish_mod.time, 'sleep') as sleep):
+            publish_mod.publish(self.out, self.tag, 'test-key', None)
+            self.assertEqual(sleep.call_count, 2)
+        with (patch.object(publish_mod, 'find_mod', return_value={'releases': []}) as find,
+              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
+              patch.object(publish_mod.time, 'sleep') as sleep):
+            with self.assertRaisesRegex(ValueError, 'verification is pending'):
+                publish_mod.publish(self.out, self.tag, 'test-key', None)
+            self.assertEqual(find.call_count, 1 + publish_mod.VERIFY_ATTEMPTS)
+            self.assertEqual(sleep.call_count, publish_mod.VERIFY_ATTEMPTS - 1)
+        mismatch = self.portal_release()
+        mismatch['releases'][0]['sha1'] = 'different'
+        with (patch.object(publish_mod, 'find_mod', side_effect=[{'releases': []}, mismatch]),
+              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
+              patch.object(publish_mod.time, 'sleep') as sleep):
+            with self.assertRaisesRegex(ValueError, 'different ZIP'):
+                publish_mod.publish(self.out, self.tag, 'test-key', None)
+            sleep.assert_not_called()
+
     def test_first_portal_publication_requires_explicit_license(self):
         self.build()
         with (patch.object(publish_mod, 'find_mod', return_value=None),
