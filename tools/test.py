@@ -3,7 +3,9 @@
 import argparse,json,subprocess,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-p=argparse.ArgumentParser();p.add_argument('--factorio',type=Path,required=True);p.add_argument('--dependencies',type=Path,required=True);p.add_argument('--output',type=Path,default=ROOT/'build/test');p.add_argument('--transport-drones',type=Path);a=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--factorio',type=Path,required=True);p.add_argument('--dependencies',type=Path,required=True);p.add_argument('--output',type=Path,default=ROOT/'build/test');p.add_argument('--transport-drones',type=Path)
+p.add_argument('--mining-drones',type=Path)
+a=p.parse_args()
 a.factorio=a.factorio.resolve();a.dependencies=a.dependencies.resolve();a.output=a.output.resolve();a.output.mkdir(parents=True,exist_ok=True)
 mods=a.output/'mods';mods.mkdir(exist_ok=True)
 for name,path in [('Yuoki',a.dependencies/'Yuoki'),('yi_engines',a.dependencies/'yi_engines'),('yuoki-quinityn',ROOT)]:
@@ -258,4 +260,9 @@ if a.transport_drones:
      '--factorio',str(a.factorio),'--dependencies',str(a.dependencies),
      '--transport-drones',str(a.transport_drones.resolve()),'--output',str(a.output/'transport-drones')],
      'PASS complete helper equality',timeout=1800)
+if a.mining_drones:
+ run('mining-drones',[sys.executable,str(ROOT/'tools/test_mining_drones.py'),
+     '--factorio',str(a.factorio),'--dependencies',str(a.dependencies),
+     '--mining-drones',str(a.mining_drones.resolve()),'--output',str(a.output/'mining-drones')],
+     'MINING UPGRADE PASSED',timeout=1800)
 print('All checks passed. Logs:',a.output)

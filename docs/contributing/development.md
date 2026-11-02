@@ -70,6 +70,18 @@ Each focused invocation creates and prints a unique directory under `--output`
 (default `build/transport-drones`), retaining logs and saves there. Repeated or
 concurrent focused runs use separate files, including legacy-save fixtures.
 
+For Mining Drones compatibility, prepare an unmodified checkout of
+[`Klonan/Mining_Drones`](https://github.com/Klonan/Mining_Drones) at
+`fe827d2aac19132875581db703f5850bcc2b17dd` (2.1.1), then add
+`--mining-drones /absolute/path/to/Mining_Drones` to the full test command.
+The focused `tools/test_mining_drones.py` accepts the same engine, dependency
+and Mining Drones arguments. It compares every generated selector and unlock
+with a Yuoki/Engines/Mining Drones control, checks native selection and actual
+Durotal/Nuatreel mining before refining, and reloads a save with reconstructed
+direct and hidden bridge gates. Depots, drones and reachable ore are injected.
+These headless fixtures leave graphical-client validation separate. Each run
+retains its logs and saves in a unique directory under `--output`.
+
 The enemy fixture uses flat arenas on Nauvis and Quinityn to check native nest
 offspring, the engine's colony-building command and laser damage for all enemy
 sizes. It also fires capture rockets using normal enemy targeting at both native

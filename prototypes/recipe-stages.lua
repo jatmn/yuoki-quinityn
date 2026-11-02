@@ -119,11 +119,16 @@ for _, name in ipairs({
 end
 local M = {}
 function M.owned(r)
-  -- These are Transport Drones' logistics selectors, even when their products
+  -- These are Transport/Mining Drones' depot selectors, even when their products
   -- or inherited subgroups belong to Yuoki or Quinityn. Leave their state and
   -- research ownership entirely to the depot mod.
   for _, category in pairs(r.categories or { r.category }) do
-    if category == "transport-drone-request" or category == "transport-fluid-request" or category == "fuel-depot" then
+    if
+      category == "transport-drone-request"
+      or category == "transport-fluid-request"
+      or category == "fuel-depot"
+      or category == "mining-depot"
+    then
       return false
     end
   end
