@@ -349,10 +349,25 @@ assert R['quinityn-low-density-structure']['subgroup']==I['low-density-structure
 assert R['quinityn-low-density-structure']['order']==I['low-density-structure']['order']=='d[rocket-parts]-a[low-density-structure]'
 assert R['quinityn-processing-unit']['subgroup']==I['processing-unit']['subgroup']=='intermediate-product'
 assert R['quinityn-processing-unit']['order']==I['processing-unit']['order']=='b[circuits]-c[processing-unit]'
-for name in ['quinityn-hand-sort','quinityn-iron','quinityn-copper','quinityn-carbon','quinityn-stone','quinityn-timber',
-             'quinityn-burner-separator','quinityn-technic-sign']:
- assert R[name]['subgroup']=='quinityn-fieldwork' and R[name]['order']==name
-assert I['quinityn-salvage']['subgroup']==I['quinityn-burner-separator']['subgroup']=='quinityn-fieldwork'
+# Fieldwork contains only the five manual resources, in material order.
+manual=['quinityn-carbon','quinityn-copper','quinityn-iron','quinityn-stone','quinityn-timber']
+assert sorted((n for n,r in R.items() if r.get('subgroup')=='quinityn-fieldwork' and not r.get('hidden',False)),
+              key=lambda n:R[n]['order'])==manual
+assert not any(p.get('subgroup')=='quinityn-fieldwork' for p in I.values())
+for name in manual:
+ assert R[name]['categories']==['hand-crafting']
+primitive=I['quinityn-burner-separator']
+assert R['quinityn-burner-separator']['subgroup']==primitive['subgroup']==I['y-atomic-constructor']['subgroup']
+assert R['quinityn-burner-separator']['order']==primitive['order']<I['y-atomic-constructor']['order']
+salvage=I['quinityn-salvage']
+assert R['quinityn-hand-sort']['subgroup']==salvage['subgroup']=='y-raw-material'
+assert R['quinityn-hand-sort']['order']==salvage['order']
+assert R['quinityn-technic-sign']['subgroup']==I['y_rwtechsign']['subgroup']
+assert R['quinityn-technic-sign']['order']==I['y_rwtechsign']['order']
+for name in [*manual,'quinityn-burner-separator','quinityn-salvage','quinityn-hand-sort','quinityn-technic-sign',
+             'quinityn-research-data','quinityn-foundation','quinityn-low-density-structure','quinityn-processing-unit']:
+ proto=R.get(name) or I[name]
+ assert not proto.get('hidden_in_factoriopedia',False),name
 assert R['quinityn-research-data']['categories']==['quinityn-science']
 assert R['quinityn-foundation']['categories']==['yuoki-formpress']
 assert R['quinityn-low-density-structure']['categories']==['crafting']

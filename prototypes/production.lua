@@ -96,7 +96,7 @@ tint_visible_sprites(separator.graphics_set)
 local separator_item = copy(data.raw.item["y-atomic-constructor"])
 separator_item.name = separator.name
 separator_item.place_result = separator.name
-separator_item.subgroup = "quinityn-fieldwork"
+separator_item.order = "a0[primitive-cimota]"
 separator_item.localised_name = { "entity-name.quinityn-burner-separator" }
 separator_item.icons = { { icon = "__Yuoki__/graphics/icons/cimota_64.png", icon_size = 64, tint = primitive_tint } }
 separator_item.icon = nil
@@ -108,7 +108,8 @@ data:extend({
     name = "quinityn-salvage",
     icon = "__yuoki-quinityn__/graphics/icons/quinityn-salvage.png",
     icon_size = 256,
-    subgroup = "quinityn-fieldwork",
+    subgroup = "y-raw-material",
+    order = "z[quinityn-salvage]",
     stack_size = 100,
     weight = 1000,
   },
@@ -135,6 +136,8 @@ recipe(
 )
 -- Sorting represents the input salvage, not just the first of four outputs.
 local sort = data.raw.recipe["quinityn-hand-sort"]
+sort.subgroup = data.raw.item["quinityn-salvage"].subgroup
+sort.order = data.raw.item["quinityn-salvage"].order
 sort.icons = { { icon = data.raw.item["quinityn-salvage"].icon, icon_size = 256 } }
 sort.main_product = ""
 sort.localised_description = { "recipe-description.quinityn-hand-sort" }
@@ -151,6 +154,7 @@ recipe(
   nil,
   5
 )
+with_product_group(separator.name)
 -- Separator conversions use Yuoki's atomics builder for its material-and-arrow icons.
 -- Each registers one direction only: "down" is material -> unicomp, "up" is unicomp -> material.
 local function conversion(name, material, direction, category, seconds, options)
@@ -209,6 +213,7 @@ recipe(
   { "quinityn-science" },
   30
 )
+with_product_group("quinityn-technic-sign")
 for _, name in ipairs({ "ye_fassembly1", "ye_fassembly2", "ye_fassembly_sp" }) do
   table.insert(data.raw["assembling-machine"][name].crafting_categories, "quinityn-science")
 end
@@ -249,8 +254,10 @@ with_product_group("quinityn-processing-unit")
 
 -- Emergency ore dressing cannot become a competing automated ore industry.
 -- Salvage sorting stays hand-craftable and also runs in Yuoki crushers.
-for _, name in ipairs({ "iron", "copper", "carbon", "stone", "timber" }) do
-  data.raw.recipe["quinityn-" .. name].categories = { "hand-crafting" }
+for index, name in ipairs({ "carbon", "copper", "iron", "stone", "timber" }) do
+  local manual = data.raw.recipe["quinityn-" .. name]
+  manual.categories = { "hand-crafting" }
+  manual.order = tostring(index)
 end
 data.raw.recipe["quinityn-hand-sort"].categories = { "hand-crafting", "y-crushing" }
 
