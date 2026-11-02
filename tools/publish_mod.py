@@ -64,7 +64,8 @@ def already_uploaded(mod, info, archive):
 
 
 def wait_for_release(info, archive):
-    # Reads start only within the window; the last one is still limited by its own timeout.
+    # Polling stops at the first check after the deadline. The last sleep ends at the
+    # deadline, so one final read may start then; it keeps its own request timeout.
     deadline = time.monotonic() + VERIFY_SECONDS
     while not already_uploaded(find_mod(info['name']), info, archive):
         remaining = deadline - time.monotonic()
