@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -13,6 +14,10 @@ import uuid
 from validate_package import ROOT, validate
 
 PORTAL = 'https://mods.factorio.com'
+# The public mod listing can lag a successful upload by a few seconds. Bound the
+# wait by wall-clock time, not attempts, so slow reads cannot outlast the job.
+VERIFY_SECONDS = 60
+VERIFY_DELAY_SECONDS = 5
 
 
 def request_json(url, fields=None, archive=None, token=None):
@@ -58,6 +63,18 @@ def already_uploaded(mod, info, archive):
     return False
 
 
+def wait_for_release(info, archive):
+    # Polling stops at the first check after the deadline. The last sleep ends at the
+    # deadline, so one final read may start then; it keeps its own request timeout.
+    deadline = time.monotonic() + VERIFY_SECONDS
+    while not already_uploaded(find_mod(info['name']), info, archive):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return False
+        time.sleep(min(VERIFY_DELAY_SECONDS, remaining))
+    return True
+
+
 def publish(output, tag, token, license_id):
     validate(output, tag=tag)
     if not token:
@@ -91,7 +108,7 @@ def publish(output, tag, token, license_id):
     result = request_json(upload_url, fields, archive=archive)
     if result.get('success') is not True:
         raise ValueError('Portal rejected the upload; verify its listing before retrying')
-    if not already_uploaded(find_mod(info['name']), info, archive):
+    if not wait_for_release(info, archive):
         raise ValueError('Upload returned success but portal verification is pending; retry this tag')
     print(f'Published {archive.name} to Factorio')
 
