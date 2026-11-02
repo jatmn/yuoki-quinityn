@@ -94,6 +94,11 @@ Space Age, [Yuoki Industries **1.3.2+**](https://mods.factorio.com/mod/Yuoki) an
 The recorded test baseline is **2.1.24** with pinned Yuoki 1.3.2 and Engines 1.3.1 sources;
 later versions and other overhauls need separate testing.
 
+**Optional: [Milestones](https://mods.factorio.com/mod/Milestones).** Quinityn adds
+a preset addon to your active Milestones preset. It tracks Quinityn industrial
+research data, your first Yuoki construction and logistic robots of both tiers,
+and first kills of Quinityn's native biters and Uni-touched Stomp-a-trons.
+
 Build the current source to try the features described here. The downloadable
 [0.1.0 preview](https://github.com/jatmn/yuoki-quinityn/releases/tag/v0.1.0-preview.2)
 is an older snapshot and **does not include the Uni-touched enemies**.
