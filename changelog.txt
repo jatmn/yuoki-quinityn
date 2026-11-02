@@ -1,4 +1,8 @@
 ---------------------------------------------------------------------------------------------------
+Version: Unreleased
+  Bugfixes:
+    - Keep Mining Drones ore selectors under Mining Drones' control, so Durotal and Nuatreel can be mined before Yuoki industrial refining, including in existing saves affected by the old research gates.
+---------------------------------------------------------------------------------------------------
 Version: 0.1.2
 Date: 2026-11-02
   Bugfixes:
