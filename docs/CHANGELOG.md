@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.3](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.2...v0.1.3) (2026-11-02)
+
+
+### Features
+
+* **compat:** add optional Milestones preset addon ([#82](https://github.com/jatmn/yuoki-quinityn/issues/82)) ([3ce4c56](https://github.com/jatmn/yuoki-quinityn/commit/3ce4c56130ea5614137579476b75416ff50fa2ae))
+
+
+### Bug Fixes
+
+* **compat:** preserve Mining Drones selector ownership ([#79](https://github.com/jatmn/yuoki-quinityn/issues/79)) ([58ae524](https://github.com/jatmn/yuoki-quinityn/commit/58ae5249ef835ef65728570b3e4be839ab1c7cf0))
+
+
+### CI
+
+* **release:** wait for the portal listing after a stable upload ([#77](https://github.com/jatmn/yuoki-quinityn/issues/77)) ([866a628](https://github.com/jatmn/yuoki-quinityn/commit/866a628ecbc75116d30e874e60951601b3d88f87))
+
 ## [0.1.2](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.1...v0.1.2) (2026-11-02)
 
 
