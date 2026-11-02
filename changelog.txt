@@ -1,6 +1,7 @@
 ---------------------------------------------------------------------------------------------------
 Version: Unreleased
   Bugfixes:
+    - Group the Primitive Cimota with its machine family, industrial salvage with its sorting process, and Technic Sign qualification with signs in Factoriopedia. Keep manual resources together ahead of the separate Cimota conversion rows.
     - The Primitive Cimota Restructor can now be upgraded to the Cimota Restructor with upgrade planners (including a blank planner), upgraded blueprints, construction robots and hand fast-replacement. The machine keeps its position, orientation and pipes; burner fuel and ingredients for recipes the full Cimota cannot run are returned, and you choose a new recipe afterwards. This requires Yuoki Industries 1.3.2 or later, where a Cimota without a recipe keeps its direction; the Primitive Cimota Restructor now does the same.
   Changes:
     - Primitive Cimota conversions now show the same material icons with up/down arrows as the full Cimota: stone and wood point down into UC-A2, coal, iron ore and copper ore point up out of it, and water separation shows water with an up arrow. Their recipes, timings and unlocks are unchanged.
