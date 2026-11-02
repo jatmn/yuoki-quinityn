@@ -154,30 +154,48 @@ class ReleaseTests(unittest.TestCase):
                 publish_mod.publish(self.out, self.tag, 'test-key', None)
             request.assert_not_called()
 
+    def upload_on_portal_clock(self, clock, listing, read_seconds=0):
+        """Upload, then answer verification read n with listing(n) on a simulated clock."""
+        clock.update(now=0, reads=-1)  # Read -1 is the pre-upload lookup.
+
+        def find_mod(_name):
+            read = clock['reads']
+            if read >= 0:
+                clock['now'] += read_seconds
+            clock['reads'] += 1
+            return listing(read)
+
+        def sleep(seconds):
+            clock['now'] += seconds
+
+        with (patch.object(publish_mod, 'find_mod', side_effect=find_mod),
+              patch.object(publish_mod, 'request_json', side_effect=[
+                    {'upload_url': 'https://uploads.example.invalid/upload'},
+                    {'success': True},
+                ]),
+              patch.object(publish_mod.time, 'monotonic', side_effect=lambda: clock['now']),
+              patch.object(publish_mod.time, 'sleep', side_effect=sleep)):
+            publish_mod.publish(self.out, self.tag, 'test-key', None)
+
     def test_upload_waits_for_a_lagging_portal_listing(self):
         self.build()
-        uploaded = [{'upload_url': 'https://uploads.example.invalid/upload'}, {'success': True}]
-        with (patch.object(publish_mod, 'find_mod', side_effect=[
-                    {'releases': []}, {'releases': []}, {'releases': []}, self.portal_release()]),
-              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
-              patch.object(publish_mod.time, 'sleep') as sleep):
-            publish_mod.publish(self.out, self.tag, 'test-key', None)
-            self.assertEqual(sleep.call_count, 2)
-        with (patch.object(publish_mod, 'find_mod', return_value={'releases': []}) as find,
-              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
-              patch.object(publish_mod.time, 'sleep') as sleep):
-            with self.assertRaisesRegex(ValueError, 'verification is pending'):
-                publish_mod.publish(self.out, self.tag, 'test-key', None)
-            self.assertEqual(find.call_count, 1 + publish_mod.VERIFY_ATTEMPTS)
-            self.assertEqual(sleep.call_count, publish_mod.VERIFY_ATTEMPTS - 1)
+        clock = {}
+        listed = self.portal_release()
+        self.upload_on_portal_clock(clock, lambda read: listed if read == 2 else {'releases': []})
+        self.assertEqual((clock['reads'], clock['now']), (3, 10))
+        # A listing that never appears is re-read every 5 seconds for one minute.
+        with self.assertRaisesRegex(ValueError, 'verification is pending'):
+            self.upload_on_portal_clock(clock, lambda read: {'releases': []})
+        self.assertEqual((clock['reads'], clock['now']), (13, 60))
+        # Slow reads cannot extend the window: reads start at 0 s and 50 s, none after 60 s.
+        with self.assertRaisesRegex(ValueError, 'verification is pending'):
+            self.upload_on_portal_clock(clock, lambda read: {'releases': []}, read_seconds=45)
+        self.assertEqual((clock['reads'], clock['now']), (2, 95))
         mismatch = self.portal_release()
         mismatch['releases'][0]['sha1'] = 'different'
-        with (patch.object(publish_mod, 'find_mod', side_effect=[{'releases': []}, mismatch]),
-              patch.object(publish_mod, 'request_json', side_effect=list(uploaded)),
-              patch.object(publish_mod.time, 'sleep') as sleep):
-            with self.assertRaisesRegex(ValueError, 'different ZIP'):
-                publish_mod.publish(self.out, self.tag, 'test-key', None)
-            sleep.assert_not_called()
+        with self.assertRaisesRegex(ValueError, 'different ZIP'):
+            self.upload_on_portal_clock(clock, lambda read: mismatch if read >= 0 else {'releases': []})
+        self.assertEqual((clock['reads'], clock['now']), (1, 0))
 
     def test_first_portal_publication_requires_explicit_license(self):
         self.build()

@@ -14,8 +14,9 @@ import uuid
 from validate_package import ROOT, validate
 
 PORTAL = 'https://mods.factorio.com'
-# The public mod listing can lag a successful upload by a few seconds.
-VERIFY_ATTEMPTS = 12
+# The public mod listing can lag a successful upload by a few seconds. Bound the
+# wait by wall-clock time, not attempts, so slow reads cannot outlast the job.
+VERIFY_SECONDS = 60
 VERIFY_DELAY_SECONDS = 5
 
 
@@ -63,12 +64,14 @@ def already_uploaded(mod, info, archive):
 
 
 def wait_for_release(info, archive):
-    for attempt in range(VERIFY_ATTEMPTS):
-        if attempt:
-            time.sleep(VERIFY_DELAY_SECONDS)
-        if already_uploaded(find_mod(info['name']), info, archive):
-            return True
-    return False
+    # Reads start only within the window; the last one is still limited by its own timeout.
+    deadline = time.monotonic() + VERIFY_SECONDS
+    while not already_uploaded(find_mod(info['name']), info, archive):
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            return False
+        time.sleep(min(VERIFY_DELAY_SECONDS, remaining))
+    return True
 
 
 def publish(output, tag, token, license_id):
