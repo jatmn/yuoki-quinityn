@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.2](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.1...v0.1.2) (2026-11-02)
+
+
+### Bug Fixes
+
+* **production:** build Primitive Cimota conversions with the Yuoki atomics helper ([#72](https://github.com/jatmn/yuoki-quinityn/issues/72)) ([86e7f38](https://github.com/jatmn/yuoki-quinityn/commit/86e7f38e947ac1f598dee191b906e339ce0300ae)), closes [#70](https://github.com/jatmn/yuoki-quinityn/issues/70)
+* **production:** let the primitive Cimota upgrade to the full Cimota ([#71](https://github.com/jatmn/yuoki-quinityn/issues/71)) ([c59ab3d](https://github.com/jatmn/yuoki-quinityn/commit/c59ab3d253f2eff306a16841faa3be2b2b069606))
+* **production:** organize Quinityn Factoriopedia families ([#76](https://github.com/jatmn/yuoki-quinityn/issues/76)) ([5411f0c](https://github.com/jatmn/yuoki-quinityn/commit/5411f0c82c45bf5d5f05c021dae365e0ac1808ec))
+* **production:** split Primitive Cimota conversions into direction rows ([#75](https://github.com/jatmn/yuoki-quinityn/issues/75)) ([de4f663](https://github.com/jatmn/yuoki-quinityn/commit/de4f6632d128b46c9600e5603b39699eab26dd4f)), closes [#70](https://github.com/jatmn/yuoki-quinityn/issues/70)
+
 ## [0.1.1](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.0...v0.1.1) (2026-11-01)
 
 
