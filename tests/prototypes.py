@@ -364,10 +364,11 @@ assert R['quinityn-hand-sort']['subgroup']==salvage['subgroup']=='y-raw-material
 assert R['quinityn-hand-sort']['order']==salvage['order']
 assert R['quinityn-technic-sign']['subgroup']==I['y_rwtechsign']['subgroup']
 assert R['quinityn-technic-sign']['order']==I['y_rwtechsign']['order']
-for name in [*manual,'quinityn-burner-separator','quinityn-salvage','quinityn-hand-sort','quinityn-technic-sign',
+for name in [*manual,'quinityn-burner-separator','quinityn-hand-sort','quinityn-technic-sign',
              'quinityn-research-data','quinityn-foundation','quinityn-low-density-structure','quinityn-processing-unit']:
- proto=R.get(name) or I[name]
- assert not proto.get('hidden_in_factoriopedia',False),name
+ assert not R[name].get('hidden_in_factoriopedia',False),('recipe',name)
+for proto in [primitive,salvage,science,I['quinityn-foundation']]:
+ assert not proto.get('hidden_in_factoriopedia',False),(proto['type'],proto['name'])
 assert R['quinityn-research-data']['categories']==['quinityn-science']
 assert R['quinityn-foundation']['categories']==['yuoki-formpress']
 assert R['quinityn-low-density-structure']['categories']==['crafting']
