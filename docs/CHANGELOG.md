@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.4](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.3...v0.1.4) (2026-11-22)
+
+
+### CI
+
+* enable owner-only Pullfrog reviews ([#85](https://github.com/jatmn/yuoki-quinityn/issues/85)) ([e997229](https://github.com/jatmn/yuoki-quinityn/commit/e9972299d1e84a374837c0bf00c6588d5a35319c))
+* update Pullfrog to v0.1.122 ([#83](https://github.com/jatmn/yuoki-quinityn/issues/83)) ([290aa11](https://github.com/jatmn/yuoki-quinityn/commit/290aa1103af221e1bd3ba1c5283fe4586b0299dc))
+
 ## [0.1.3](https://github.com/jatmn/yuoki-quinityn/compare/v0.1.2...v0.1.3) (2026-11-02)
 
 
